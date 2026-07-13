@@ -1,0 +1,1688 @@
+<!doctype html>
+<!-- Fareo v5.3 | Soft-Geometric rebuild | single-file PWA
+     Changelog v4.3 -> v4.4 (code review fixes):
+     [F1]  Levy rate of $0 no longer silently reverts to $1.20 (levyRate() helper).
+     [F2]  currentQuarter() fixed: last day of Q2/Q3/Q4 no longer reports Q1 (ISO string compare).
+     [F3]  All user-entered strings (payer/account names, regos) are HTML-escaped -> stored-XSS fixed.
+     [F4]  Editing an old shift then reloading no longer rewrites the draft date to today (draft._edit flag).
+     [F5]  Missing CSS var --on-fuel defined in all themes (pending-pay badge).
+     [F6]  Third-party Netlify script deferred so it can't block first paint / offline start. VERIFY it is intentional.
+     [F7]  Business-use % clamped 0-100 (0% allowed, >100% impossible).
+     [F8]  Reports fuel total now sums e.fuel (legacy/imported entries no longer undercounted).
+     [F9]  CSV export: proper quoting + spreadsheet formula-injection guard.
+     [F10] Custom report range auto-swaps inverted from/to dates.
+     [F11] NEW SETTING "Fuel handling": Reimbursed (added to pay, NOT claimed on tax) or
+           Driver-paid (excluded from pay, claimed as deduction + GST credit). Removes double counting.
+     [F12] NEW SETTING "GST base": set GST aside on full gross or on the driver's share.
+           Entries now store `share`; old entries fall back to gross x current pct.
+     [F13] Expenses: per-expense "Includes GST" toggle; income-tax deduction uses the
+           GST-exclusive amount when a GST credit is claimed (no double dip).
+     [F14] Reports "GST credits (1B)" tile now matches the BAS summary 1B exactly.
+     [F15] Levy card relabelled: it is a separate quarterly SRO return, not part of the BAS.
+           Levy is now subtracted in the estimated-net figure and shown in summaries.
+     [F16] Manual overrides / amount edits back-solve gross & share so GST and G1 stay consistent.
+     [F17] min="0" on count/amount inputs; export version string corrected. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0E1116">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Fareo">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon-v52.png">
+<link rel="icon" type="image/png" href="icon-192-v52.png">
+<title>Fareo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--pg:#F4F5F7;--card:#FFFFFF;--field:#EEF0F4;--bd:#E2E5EA;--bd2:#CDD2DB;--head:#14171F;--body:#3A3F4B;--mut:#5B6270;--inc:#047857;--inc-bg:#E7F6EE;--on-inc:#0F6E30;--fuel:#B45309;--fuel-fill:#C2670F;--fuel-bg:#FBEEE6;--on-fuel:#8A4E07;--hail:#1E3A8A;--hail-fill:#2447A6;--hail-bg:#E9EEFB;--levy:#6D28D9;--levy-bg:#F0EAFB;--on-levy:#5B21B6;--dgr:#C0392B;--dgr-bg:#FCEBEA;--on-dgr:#8E2A20;--fink:#C2410C;--acct:#0F766E;--qtext:#1E3A8A;--qsub:#41579C;--btn-fill:#047857;--btn-ink:#FFFFFF;--disbg:#E4E6EA;--disink:#8A9099;--navmut:#6B6B70;--grad-inc:linear-gradient(150deg,#F1FBF6,#E2F4EC);--shadow:0 1px 2px rgba(20,23,31,.05),0 8px 22px rgba(20,23,31,.07)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--pg:#0E1116;--card:#171D25;--field:#1E2530;--bd:#2A313C;--bd2:#384250;--head:#F2F4F8;--body:#C3C9D4;--mut:#8A93A3;--inc:#34D399;--inc-bg:#12271B;--on-inc:#7DE3B0;--fuel:#F5B36B;--fuel-fill:#E08A3C;--fuel-bg:#2A2013;--on-fuel:#F5C89A;--hail:#93B4F5;--hail-fill:#3B60C4;--hail-bg:#16203A;--levy:#C4ABF7;--levy-bg:#221A38;--on-levy:#CBB4FB;--dgr:#F58A8A;--dgr-bg:#2A1414;--on-dgr:#F5B0B0;--fink:#F7B27E;--acct:#2DD4BF;--qtext:#A9C4FB;--qsub:#8FA8E0;--btn-fill:#10B981;--btn-ink:#052E1B;--disbg:#141922;--disink:#5B6472;--navmut:#8A8A92;--grad-inc:linear-gradient(150deg,#142C1E,#0F2318);--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 26px rgba(0,0,0,.42)}}
+:root[data-theme="dark"]{--pg:#0E1116;--card:#171D25;--field:#1E2530;--bd:#2A313C;--bd2:#384250;--head:#F2F4F8;--body:#C3C9D4;--mut:#8A93A3;--inc:#34D399;--inc-bg:#12271B;--on-inc:#7DE3B0;--fuel:#F5B36B;--fuel-fill:#E08A3C;--fuel-bg:#2A2013;--on-fuel:#F5C89A;--hail:#93B4F5;--hail-fill:#3B60C4;--hail-bg:#16203A;--levy:#C4ABF7;--levy-bg:#221A38;--on-levy:#CBB4FB;--dgr:#F58A8A;--dgr-bg:#2A1414;--on-dgr:#F5B0B0;--fink:#F7B27E;--acct:#2DD4BF;--qtext:#A9C4FB;--qsub:#8FA8E0;--btn-fill:#10B981;--btn-ink:#052E1B;--disbg:#141922;--disink:#5B6472;--navmut:#8A8A92;--grad-inc:linear-gradient(150deg,#142C1E,#0F2318);--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 26px rgba(0,0,0,.42)}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--pg)}
+body{font-family:Outfit,system-ui,sans-serif;color:var(--body);color-scheme:light dark;padding-bottom:calc(78px + env(safe-area-inset-bottom))}
+.app{width:min(100%,440px);margin:0 auto;min-height:100vh;background:var(--pg)}
+input,select,textarea,button{font:inherit}
+.body-p{padding:2px 13px 8px}
+.top{display:flex;align-items:center;justify-content:space-between;padding:calc(10px + env(safe-area-inset-top)) 14px 8px}
+.av{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:var(--btn-fill);color:var(--btn-ink);font-weight:800;font-size:12px}
+.hi h4{margin:0;font-size:15px;font-weight:700;color:var(--head)}
+.hi p{margin:1px 0 0;font-size:11px;color:var(--mut)}
+.tg{display:flex;align-items:center;gap:6px}
+.wx{font-size:11px;color:var(--mut);border:1px solid var(--bd);background:var(--card);border-radius:999px;padding:5px 10px}
+.theme{width:32px;height:32px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--head);display:grid;place-items:center;cursor:pointer}
+.theme svg{width:16px;height:16px}
+.sub{font-size:23px;font-weight:800;margin:4px 0 11px;color:var(--head)}
+.sub small{display:block;font-size:11px;font-weight:500;color:var(--mut)}
+.subtabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin:2px 0 12px}
+.sst{display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 3px;border-radius:12px;border:1.5px solid var(--bd2);background:var(--card);color:var(--mut);font-weight:700;cursor:pointer}
+.sst b{font-size:15px}.sst span{font-size:10px}
+.sst.on{background:var(--btn-fill);color:var(--btn-ink);border-color:transparent}
+.sst.lock{opacity:.5}
+.sst.lock::after{content:"locked";font-size:8px;text-transform:uppercase;letter-spacing:.3px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:13px;margin-bottom:10px;box-shadow:var(--shadow)}
+.card h5{margin:0 0 9px;font-size:12px;font-weight:700;color:var(--head);display:flex;align-items:center;gap:7px}
+.dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+.hero{background:var(--grad-inc);border:1.5px solid var(--inc-bg)}
+.lbl{font-size:10px;letter-spacing:.5px;color:var(--mut);font-weight:700;text-transform:uppercase}
+.total{font-size:42px;font-weight:800;color:var(--inc);line-height:1;margin:5px 0 3px;font-variant-numeric:tabular-nums}
+.formula{font-size:11px;color:var(--mut);font-family:ui-monospace,monospace}
+.hrow{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:11px;border-top:1px dashed var(--bd2)}
+.hrow small{font-size:11px;color:var(--mut)}
+.step{display:flex;align-items:center;gap:7px}
+.step button{width:30px;height:30px;border-radius:8px;border:1.5px solid var(--inc);background:transparent;color:var(--inc);font-size:16px;font-weight:800;cursor:pointer}
+.step b{font-size:16px;min-width:46px;text-align:center;color:var(--head)}
+label.fl{display:block;font-size:11px;color:var(--mut);margin:8px 0 4px}
+input,select{width:100%;border-radius:9px;padding:10px;font-size:15px;background:var(--field);border:1.5px solid var(--bd2);color:var(--fink);-webkit-text-fill-color:var(--fink);font-weight:700}
+input:disabled,select:disabled{background:var(--disbg);color:var(--disink);-webkit-text-fill-color:var(--disink);font-weight:400}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.mini{display:grid;grid-template-columns:1fr 1fr 34px;gap:6px;margin-top:8px;align-items:center}
+.mini .x{background:transparent;border:1px solid var(--bd2);border-radius:8px;color:var(--mut);height:40px;cursor:pointer;-webkit-text-fill-color:var(--mut);font-weight:700}
+.add{width:100%;border:1.5px dashed var(--bd2);background:transparent;border-radius:9px;padding:10px;color:var(--body);font-weight:700;font-size:12px;cursor:pointer;margin-top:9px}
+.att{display:flex;align-items:center;gap:8px;justify-content:center;width:100%;background:transparent;border:1.5px dashed var(--dgr);border-radius:10px;padding:13px;color:var(--dgr);font-weight:700;cursor:pointer}
+.att.done{border-style:solid;border-color:var(--inc);color:var(--inc)}
+.att svg{width:17px;height:17px}
+.btn{width:100%;background:var(--btn-fill);border:0;color:var(--btn-ink);border-radius:12px;padding:14px;font-weight:800;font-size:15px;cursor:pointer;margin-top:2px}
+.btn.neutral{background:transparent;border:1.5px solid var(--bd2);color:var(--head)}
+.btn:active,.add:active,.att:active,.sst:active,.step button:active{transform:scale(.98)}
+.prev{white-space:pre-wrap;font-family:ui-monospace,monospace;font-size:10.5px;line-height:1.55;color:var(--body)}
+.steps{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin:2px 0 13px}
+.stp{cursor:pointer;text-align:center;background:transparent;border:0;padding:0}
+.stp i{display:block;height:5px;border-radius:999px;background:var(--bd2);transition:background .2s}
+.stp span{display:block;font-size:10.5px;font-weight:700;color:var(--mut);margin-top:6px}
+.stp.lit i{background:var(--inc)}
+.stp.on span{color:var(--inc)}
+.sfoot{display:flex;gap:10px;margin-top:12px;margin-bottom:4px}
+.sfoot .btn{margin-top:0}
+.sback{flex:0 0 104px}
+.snext{flex:1}
+.snext.faded{opacity:.45}
+.msg{font-size:11.5px;font-weight:600;border-radius:9px;padding:9px 11px;margin-bottom:9px;display:none}
+.msg.err{display:block;background:var(--dgr-bg);border:1px solid var(--dgr);color:var(--on-dgr)}
+.msg.ok{display:block;background:var(--inc-bg);border:1px solid var(--inc);color:var(--on-inc)}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tile{background:var(--field);border:1px solid var(--bd);border-radius:11px;padding:10px}
+.tile small{display:block;font-size:9.5px;color:var(--mut);text-transform:uppercase;letter-spacing:.3px}
+.tile b{font-size:17px;font-weight:800;color:var(--head);font-variant-numeric:tabular-nums}
+.tile.g b{color:var(--inc)}.tile.f b{color:var(--fuel)}.tile.v b{color:var(--levy)}
+.q{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
+.q button{border:2px solid var(--bd2);background:var(--card);border-radius:9px;padding:8px 2px;font-size:11px;font-weight:700;cursor:pointer;display:flex;flex-direction:column;align-items:center;color:var(--qtext);-webkit-text-fill-color:var(--qtext)}
+.q button small{font-size:8px;color:var(--qsub);font-weight:600}
+.q button.on{background:var(--inc-bg);color:var(--on-inc);-webkit-text-fill-color:var(--on-inc);border-color:var(--inc)}
+.q button.on small{color:var(--on-inc)}
+.drlabel{font-size:10px;color:var(--mut);font-weight:700;margin-top:13px;text-transform:uppercase;letter-spacing:.4px}
+.daterow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.datef{display:flex;flex-direction:column;gap:1px;background:var(--field);border:1.5px solid var(--bd2);border-radius:9px;padding:6px 10px}
+.datef small{font-size:9px;color:var(--mut);text-transform:uppercase;letter-spacing:.4px;font-weight:600}
+.datef input{border:0;background:transparent;padding:2px 0;font-size:13px}
+.tr{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--bd);font-size:12.5px;color:var(--body)}
+.tr:last-child{border-bottom:0}
+.tr .rg{color:var(--mut);font-size:11px}
+.tr .am{color:var(--inc);font-weight:700}
+.totrow{display:flex;justify-content:space-between;align-items:center;padding-top:11px;margin-top:4px;border-top:2px solid var(--head)}
+.totrow b{font-size:25px;font-weight:800;color:var(--inc)}
+#wkCard.credited{border-color:var(--inc);border-width:1.5px;box-shadow:0 0 0 1px var(--inc),var(--shadow)}
+#wkCard.credited::before{content:"\2713  Week credited \u2014 payment received";display:block;margin:-2px 0 10px;padding:8px 11px;background:var(--inc-bg);color:var(--on-inc);border:1px solid var(--inc);border-radius:9px;font-size:11.5px;font-weight:700;text-align:center}
+.totrow.credited{border-top-color:var(--inc)}
+.totrow.credited b{color:var(--inc)}
+.paid-stamp{display:inline-flex;align-items:center;gap:3px;background:var(--inc);color:var(--btn-ink);font-size:9px;font-weight:800;letter-spacing:.5px;border-radius:999px;padding:2px 8px;margin-left:6px;vertical-align:middle}
+#versionRow{cursor:pointer}
+.cl-tag{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;border-radius:5px;padding:3px 6px;flex:0 0 auto;min-width:64px;text-align:center}
+.cl-inc{background:var(--inc-bg);color:var(--on-inc)}
+.cl-hail{background:var(--hail-bg);color:var(--hail)}
+.cl-acct{background:var(--field);color:var(--acct)}
+.cl-dgr{background:var(--dgr-bg);color:var(--on-dgr)}
+.cl-mut{background:var(--field);color:var(--mut)}
+.cl-levy{background:var(--levy-bg);color:var(--on-levy)}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;border-radius:999px;padding:5px 12px;background:var(--inc-bg);color:var(--on-inc);border:1px solid var(--inc)}
+.wknav{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.wknav .wl{flex:1;text-align:center;font-weight:800;font-size:13px;color:var(--head)}
+.wknav button{width:42px;height:42px;border-radius:10px;border:1.5px solid var(--inc);background:transparent;color:var(--inc);font-size:19px;font-weight:800;cursor:pointer}
+.set{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 13px;border-bottom:1px solid var(--bd)}
+.set:last-child{border-bottom:0}
+.set .sl b{display:block;font-size:13.5px;font-weight:700;color:var(--head)}
+.set .sl p{margin:1px 0 0;font-size:10.5px;color:var(--mut)}
+.set input,.set select{width:96px;padding:8px;font-size:13px;text-align:right}
+.set select.wide{width:132px}
+.set.hot{background:var(--inc-bg)}
+.set .chev{color:var(--mut);font-size:18px}
+.grp{font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:var(--mut);font-weight:700;margin:0 0 7px 3px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{font-size:12px;font-weight:600;background:var(--field);border:1px solid var(--bd);border-radius:999px;padding:6px 8px 6px 12px;color:var(--body);display:inline-flex;align-items:center;gap:4px}
+.chip button{background:transparent;border:0;color:var(--mut);cursor:pointer;font-size:15px;line-height:1;padding:0 2px}
+.danger{color:var(--dgr)}
+.rep-hero{position:relative;overflow:hidden}
+.rep-doodle{position:absolute;right:-4px;top:-4px;width:76px;height:76px;opacity:.15;color:var(--inc);pointer-events:none}
+.rangebtn{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1.5px solid var(--bd2);border-radius:999px;padding:8px 14px;font-weight:700;font-size:12.5px;color:var(--head);cursor:pointer}
+.rangebtn svg{width:15px;height:15px;color:var(--inc)}
+.rangebtn .cv{margin-left:2px;color:var(--mut)}
+.ill{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;flex:0 0 auto}
+.ill svg{width:20px;height:20px}
+.ill-hail{background:var(--hail-bg);color:var(--hail)}
+.ill-fuel{background:var(--fuel-bg);color:var(--fuel-fill)}
+.ill-ded{background:var(--levy-bg);color:var(--levy)}
+.summ{display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.summ svg{width:16px;height:16px}
+.rep-csv{border-width:2.5px;border-style:solid;border-color:var(--inc);color:var(--inc)}
+.modal{position:fixed;inset:0;background:rgba(8,10,14,.55);display:none;align-items:flex-end;justify-content:center;z-index:60}
+.modal.show{display:flex}
+.sheet{width:100%;max-width:440px;background:var(--card);border-radius:22px 22px 0 0;padding:14px 16px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -12px 44px rgba(0,0,0,.34);max-height:90vh;overflow:auto}
+.grip{width:42px;height:5px;border-radius:99px;background:var(--bd2);margin:2px auto 12px}
+.sheet h3{margin:0 0 2px;font-size:19px;color:var(--head)}
+.sheet .csub{font-size:12px;color:var(--mut);margin:0 0 14px}
+.presets{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.preset{padding:12px;border:1.5px solid var(--bd2);border-radius:12px;background:var(--card);color:var(--head);font-weight:700;font-size:13px;cursor:pointer;text-align:left}
+.preset small{display:block;font-size:10px;color:var(--mut);font-weight:500;margin-top:2px}
+.preset.on{border-color:var(--inc);background:var(--inc-bg);color:var(--on-inc)}
+.preset.on small{color:var(--on-inc)}
+#printRoot{display:none}
+@media print{body{background:#fff;padding:0}.app,.nav,.toast,.modal{display:none!important}#printRoot{display:block!important}}
+.tx-eos input,.tx-eos select{color:var(--inc);-webkit-text-fill-color:var(--inc)}
+.tx-cash input,.tx-cash select{color:var(--levy);-webkit-text-fill-color:var(--levy)}
+.tx-square input,.tx-square select{color:var(--acct);-webkit-text-fill-color:var(--acct)}
+.fuel-op{display:flex;align-items:center;gap:8px;margin-top:7px;padding:7px 8px;border:1.5px solid var(--bd2);border-radius:8px;background:var(--card);color:var(--body);font-size:12px;font-weight:700;cursor:pointer;user-select:none}
+.fuel-op small{font-weight:500;color:var(--mut);font-size:10px}
+.fuel-op.on{border-color:var(--fuel-fill);background:var(--fuel-bg);color:var(--fuel)}
+.fuel-op.on small{color:var(--fuel)}
+.fuel-box{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--bd2);display:grid;place-items:center;flex:0 0 auto;font-size:13px;font-weight:800;color:var(--btn-ink);background:var(--card)}
+.fuel-box.on{background:var(--fuel-fill);border-color:var(--fuel-fill);color:#fff}
+.fuelblock{border:1px solid var(--bd);border-radius:10px;padding:8px;margin-top:8px}
+.tx-runs input,.tx-runs select{color:var(--hail);-webkit-text-fill-color:var(--hail)}
+.tx-fuel input,.tx-fuel select{color:var(--fuel);-webkit-text-fill-color:var(--fuel)}
+.tx-hail input{color:var(--dgr);-webkit-text-fill-color:var(--dgr)}
+.sub-amt{margin-left:auto;font-weight:800;font-size:14px;font-variant-numeric:tabular-nums}
+input[type=number]{-moz-appearance:textfield}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.hailwrap{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--dgr-bg);border:1px solid var(--dgr);border-radius:12px;padding:12px 14px;margin-top:2px}
+.hailamt small{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:var(--on-dgr);font-weight:700}
+.hailamt b{display:block;font-size:27px;font-weight:800;color:var(--dgr);line-height:1.15;font-variant-numeric:tabular-nums}
+.hailamt span{font-size:10px;color:var(--on-dgr)}
+.counter{display:flex;align-items:center;gap:3px;background:var(--card);border:1.5px solid var(--dgr);border-radius:999px;padding:4px}
+.counter button{width:34px;height:34px;border-radius:999px;border:0;background:var(--dgr-bg);color:var(--dgr);font-size:20px;font-weight:800;cursor:pointer;display:grid;place-items:center}
+.counter input{width:44px;border:0;background:transparent;text-align:center;font-size:18px;font-weight:800;color:var(--dgr);-webkit-text-fill-color:var(--dgr);padding:0}
+.badge.st-cur{background:var(--hail-bg);color:var(--hail);border-color:var(--hail)}
+.badge.st-cred{background:var(--inc-bg);color:var(--on-inc);border-color:var(--inc)}
+.badge.st-new{background:var(--levy-bg);color:var(--on-levy);border-color:var(--levy)}
+.badge.st-pend{background:var(--fuel-bg);color:var(--on-fuel);border-color:var(--fuel-fill)}
+.tx-acct input,.tx-acct select{color:var(--acct);-webkit-text-fill-color:var(--acct)}
+.tgl{width:46px;height:28px;border-radius:999px;border:1.5px solid var(--bd2);background:var(--field);position:relative;cursor:pointer;flex:0 0 auto}
+.tgl::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--mut);transition:.18s}
+.tgl.on{background:var(--inc-bg);border-color:var(--inc)}
+.tgl.on::after{left:22px;background:var(--inc)}
+.levy-head{display:flex;align-items:center;gap:11px;margin-bottom:13px}
+.levy-shield{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;background:var(--hail-bg);color:var(--hail);flex:0 0 auto}
+.levy-shield svg{width:22px;height:22px}
+.levy-head b{display:block;font-size:16px;font-weight:800;color:var(--head)}
+.levy-head p{margin:1px 0 0;font-size:11.5px;color:var(--mut)}
+.levy-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:stretch}
+.levy-panel{background:var(--field);border:1px solid var(--bd);border-radius:14px;padding:15px 8px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px}
+.levy-panel.accent{background:var(--hail-bg);border-color:var(--hail)}
+.lp-ico{color:var(--mut)}.levy-panel.accent .lp-ico{color:var(--hail)}
+.lp-ico svg{width:24px;height:24px}
+.lp-val{font-size:30px;font-weight:800;color:var(--head);line-height:1;font-variant-numeric:tabular-nums}
+.levy-panel.accent .lp-val{color:var(--hail)}
+.lp-lbl{font-size:9.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--mut);font-weight:700}
+.levy-op{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;color:var(--mut)}
+.op-s{font-size:18px;font-weight:700}
+.op-rate{font-size:12px;font-weight:700;color:var(--head)}
+.levy-foot{display:flex;gap:7px;align-items:flex-start;margin-top:12px;padding-top:11px;border-top:1px solid var(--bd);font-size:11px;color:var(--mut);line-height:1.45}
+.levy-foot svg{width:14px;height:14px;flex:0 0 auto;margin-top:1px;color:var(--hail)}
+.levy-foot b{color:var(--head)}
+.filterrow{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin-bottom:12px;scrollbar-width:none}
+.filterrow::-webkit-scrollbar{display:none}
+.filt{flex:1 0 auto;min-width:62px;display:flex;flex-direction:column;align-items:center;gap:5px;padding:9px 8px;border:1px solid var(--bd2);border-radius:12px;background:var(--card);color:var(--mut);font-size:11px;font-weight:700;cursor:pointer}
+.filt svg{width:16px;height:16px}
+.filt.on{background:var(--inc);color:var(--btn-ink);-webkit-text-fill-color:var(--btn-ink);border-color:transparent}
+.ph-head{display:flex;align-items:center;gap:11px;margin-bottom:13px}
+.ph-ico{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:var(--inc-bg);color:var(--inc);flex:0 0 auto}
+.ph-ico.fuel{background:var(--fuel-bg);color:var(--fuel)}
+.ph-ico svg{width:20px;height:20px}
+.ph-t{flex:1;min-width:0}
+.ph-t b{display:block;font-size:16px;font-weight:800;color:var(--head)}
+.ph-t p{margin:1px 0 0;font-size:11px;color:var(--mut)}
+.ph-pill{font-size:11px;font-weight:700;color:var(--inc);background:var(--inc-bg);border:1px solid var(--inc);border-radius:999px;padding:4px 11px;flex:0 0 auto}
+.ph-pill.fuel{color:var(--fuel);background:var(--fuel-bg);border-color:var(--fuel-fill)}
+.ph-add{width:40px;height:40px;border-radius:12px;background:var(--inc);color:var(--btn-ink);border:0;display:grid;place-items:center;cursor:pointer;flex:0 0 auto}
+.ph-add.fuel{background:var(--fuel-fill);margin-right:7px}
+.rcpt-badge{display:inline-grid;place-items:center;min-width:34px;height:24px;border-radius:6px;background:var(--field);color:var(--mut);font-size:9px;font-weight:800;letter-spacing:.5px}
+.rcpt-row:active{opacity:.6}
+.ph-add svg{width:20px;height:20px}
+.ph-hero{background:var(--field);border:1px solid var(--bd);border-radius:16px;padding:18px 14px;text-align:center;margin-bottom:13px}
+.ph-lbl{font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--inc);font-weight:800}
+.ph-net{font-size:42px;font-weight:800;color:var(--inc);line-height:1;margin:6px 0 5px;font-variant-numeric:tabular-nums}
+.ph-sub{font-size:11.5px;color:var(--mut)}
+.ph-stats{display:grid;grid-template-columns:1fr 1fr 1fr}
+.ph-stats>div{padding:0 11px;border-left:1px solid var(--bd)}
+.ph-stats>div:first-child{padding-left:0;border-left:0}
+.ph-stats small{display:block;font-size:9.5px;text-transform:uppercase;letter-spacing:.3px;color:var(--mut);font-weight:700;margin-bottom:3px}
+.ph-stats b{font-size:16px;font-weight:800;color:var(--head);font-variant-numeric:tabular-nums}
+.tri{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:8px}
+.tri-p{background:var(--field);border:1px solid var(--bd);border-radius:12px;padding:11px 10px}
+.tri-p small{display:block;font-size:9.5px;text-transform:uppercase;letter-spacing:.3px;color:var(--mut);font-weight:700;line-height:1.2}
+.tri-p b{display:block;margin-top:5px;font-size:18px;font-weight:800;color:var(--head);font-variant-numeric:tabular-nums}
+.tri-p.accent-fuel{background:var(--fuel-bg);border-color:var(--fuel-fill)}
+.tri-p.accent-fuel b,.tri-p.accent-fuel small{color:var(--fuel)}
+.tri-p.accent-inc{background:var(--inc-bg);border-color:var(--inc)}
+.tri-p.accent-inc small{color:var(--on-inc)}
+.cardfoot{text-align:center;font-size:11.5px;color:var(--mut);margin-top:12px;padding-top:11px;border-top:1px solid var(--bd)}
+.ded-empty{text-align:center;padding:20px 10px 4px}
+.ded-empty svg{width:30px;height:30px;color:var(--mut);opacity:.55}
+.ded-empty b{display:block;margin-top:8px;font-size:15px;color:var(--head)}
+.ded-empty span{display:block;margin-top:3px;font-size:12px;color:var(--mut)}
+.catrow{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:7px;margin-bottom:6px}
+.catrow button{display:flex;flex-direction:column;align-items:center;gap:5px;padding:11px 3px;border:1px solid var(--bd2);border-radius:12px;background:var(--card);color:var(--mut);font-size:10.5px;font-weight:700;cursor:pointer}
+.catrow button svg{width:17px;height:17px}
+.catrow button.on{border-color:var(--inc);background:var(--inc-bg);color:var(--inc)}
+.exprow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 0;border-bottom:1px solid var(--bd)}
+.exprow label{font-size:14px;color:var(--mut);flex:0 0 auto}
+.er-r{display:flex;align-items:center;gap:5px;flex:1;justify-content:flex-end}
+.er-r input{width:100%;text-align:right;border:0;background:transparent;padding:0;font-size:16px;font-weight:700;color:var(--fink);-webkit-text-fill-color:var(--fink)}
+.er-r .pre{color:var(--mut);font-size:15px;flex:0 0 auto}
+.explabel{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--mut);font-weight:700;margin:14px 0 8px}
+.pickopt{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card);border:1.5px solid var(--bd2);border-radius:13px;padding:14px;margin-bottom:9px;cursor:pointer;text-align:left}
+.pickopt b{display:block;font-size:14.5px;color:var(--head);font-weight:800}
+.pickopt small{display:block;font-size:11.5px;color:var(--mut);margin-top:2px}
+.pickopt svg{width:18px;height:18px;color:var(--mut);flex:0 0 auto}
+#fbConfig{width:100%;min-height:66px;border-radius:9px;padding:9px;background:var(--field);border:1.5px solid var(--bd2);color:var(--fink);-webkit-text-fill-color:var(--fink);font-family:ui-monospace,monospace;font-size:12px;margin-bottom:8px;resize:vertical}
+.wk-row{cursor:pointer}
+.tr.wk-row:active{opacity:.55}
+input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text-fill-color:var(--mut)!important;opacity:.4}
+.screen{display:none}.screen.on{display:block}
+.nav{position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(414px,calc(100% - 20px));display:grid;grid-template-columns:repeat(5,1fr);gap:3px;background:var(--card);border:1px solid var(--bd);border-radius:999px;padding:7px 6px;box-shadow:var(--shadow);z-index:20}
+.nav button{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9px;color:var(--navmut);background:transparent;border:0;padding:4px 0;cursor:pointer}
+.nav button svg{width:19px;height:19px}
+.nav button.on{color:var(--inc)}
+.nav button.center{color:var(--btn-ink);background:var(--btn-fill);border-radius:16px;font-weight:800;padding:7px 0}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(16px);background:var(--head);color:var(--pg);border-radius:999px;padding:10px 15px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:.2s;z-index:50}
+.advtoggle{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px 15px;margin-bottom:10px;cursor:pointer;box-shadow:var(--shadow);text-align:left}
+.advtoggle b{display:block;font-size:13.5px;font-weight:700;color:var(--head)}
+.advtoggle small{display:block;font-size:10.5px;color:var(--mut);margin-top:1px}
+.advtoggle .chev{color:var(--mut);font-size:20px;transition:transform .2s}
+.advtoggle.open .chev{transform:rotate(90deg)}
+.help{display:inline-grid;place-items:center;width:16px;height:16px;border-radius:50%;border:1.3px solid var(--bd2);color:var(--mut);font-size:10px;font-weight:800;cursor:pointer;flex:0 0 auto;vertical-align:middle;margin-left:5px;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.help:active{background:var(--field);border-color:var(--mut)}
+.help-pop{position:fixed;z-index:70;max-width:260px;background:var(--head);color:var(--pg);font-size:11.5px;line-height:1.5;font-weight:500;border-radius:10px;padding:10px 12px;box-shadow:0 8px 26px rgba(0,0,0,.35);opacity:0;transform:translateY(4px);transition:opacity .12s,transform .12s;pointer-events:none}
+.help-pop.show{opacity:1;transform:translateY(0)}
+.help-pop b{color:#fff}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<main class="app">
+  <div class="top">
+    <div style="display:flex;gap:9px;align-items:center">
+      <div class="av">FA</div>
+      <div class="hi"><h4 id="greet">Hey, Driver</h4><p id="today">Today</p></div>
+    </div>
+    <div class="tg"><div class="wx" id="wx">Fareo</div>
+      <button class="theme" id="themeBtn" aria-label="Theme"></button></div>
+  </div>
+  <div class="body-p">
+
+  <section class="screen on" data-tab="shift">
+    <div class="steps" id="steps">
+      <button class="stp lit on" data-sub="1"><i></i><span>Log Shift</span></button>
+      <button class="stp" data-sub="2"><i></i><span>Attach</span></button>
+      <button class="stp" data-sub="3"><i></i><span>Review</span></button>
+    </div>
+    <div class="msg" id="msg"></div>
+    <div data-pane="1">
+      <div class="card hero">
+        <div class="lbl">Net take-home</div>
+        <div class="total" id="total">$0.00</div>
+        <div class="formula" id="formula">(0 x 0.55) - 0</div>
+        <button class="btn neutral" id="clearShift" style="margin-top:12px;padding:10px;font-size:12px;border-color:var(--dgr);color:var(--dgr)">Clear all fields</button>
+      </div>
+      <div class="card tx-eos"><h5><span class="dot" style="background:var(--inc)"></span>EOS Takings<span class="help" data-help="Your EFTPOS terminal total (electronic card payments only). Cash is entered separately." aria-label="Help">?</span><span class="sub-amt" id="eosSub" style="color:var(--inc)">$0</span></h5>
+        <div id="eosRows"></div><button class="add" id="addEos">+ Add EOS</button></div>
+      <div class="card tx-cash"><h5><span class="dot" style="background:var(--levy)"></span>Cash Fares<span class="help" data-help="Cash collected from passengers. Counted in gross revenue, but deducted from your operator settlement because you already hold it." aria-label="Help">?</span><span class="sub-amt" id="cashSub" style="color:var(--levy)">$0</span></h5>
+        <div id="cashRows"></div><button class="add" id="addCash">+ Add Cash Payer</button></div>
+      <div class="card tx-square"><h5><span class="dot" style="background:var(--acct)"></span>Square Payments<span class="help" data-help="Taken on your own Square reader. Treated like cash (you hold the money), but tracked separately in reports." aria-label="Help">?</span><span class="sub-amt" id="squareSub" style="color:var(--acct)">$0</span></h5>
+        <div id="squareRows"></div><button class="add" id="addSquare">+ Add Square Payer</button></div>
+      <div class="card tx-runs"><h5><span class="dot" style="background:var(--hail-fill)"></span>Passenger Runs<span class="help" data-help="Short fixed-price passenger runs at $5 each. Enter how many you did." aria-label="Help">?</span><span class="sub-amt" id="runsSub" style="color:var(--hail)">$0</span></h5>
+        <label class="fl">Runs (&#36;5 each)</label><input id="runs" type="number" min="0" inputmode="numeric" placeholder="0"></div>
+      <div class="card tx-acct"><h5><span class="dot" style="background:var(--acct)"></span>Accounts<span class="help" data-help="Invoiced or account jobs billed through the operator. Counted in gross; operator pays your share." aria-label="Help">?</span><span class="sub-amt" id="acctSub" style="color:var(--acct)">$0</span></h5>
+        <div id="acctRows"></div><button class="add" id="addAcct">+ Add Account</button></div>
+      <div id="customCards"></div>
+      <div class="card tx-fuel" style="margin-bottom:0"><h5><span class="dot" style="background:var(--fuel-fill)"></span>Fuel<span class="help" data-help="Log each fill-up. Tick <b>Paid by operator</b> for fuel on the operator's card (not added to your settlement). Fuel you pay yourself is reimbursed. Either way it's tax-deductible \u2014 keep receipts." aria-label="Help">?</span><span class="sub-amt" id="fuelSub" style="color:var(--fuel)">$0</span></h5>
+        <div id="fuelRows"></div><button class="add" id="addFuel">+ Add Fuel Fill-up</button></div>
+    </div>
+    <div data-pane="2" style="display:none">
+      <div class="card tx-hail"><h5><span class="dot" style="background:var(--dgr)"></span>Hail Trips<span class="help" data-help="Number of rank or street-hail trips. These attract the state CPV levy (per-trip). Booked trips are excluded \u2014 the booking service pays their levy." aria-label="Help">?</span><span class="sub-amt" id="levyTag" style="color:var(--dgr)">$0.00 levy</span></h5>
+        <div class="hailwrap">
+          <div class="hailamt"><small>Private levy</small><b id="levyAmt">$0.00</b><span id="levyRate">$1.20 / trip</span></div>
+          <div class="counter"><button type="button" id="hailMinus">&minus;</button><input id="hail" type="number" min="0" inputmode="numeric" placeholder="0"><button type="button" id="hailPlus">+</button></div>
+        </div></div>
+      <div class="card" style="margin-bottom:0"><h5><span class="dot" style="background:var(--dgr)"></span>Receipt Upload<span class="help" data-help="A receipt photo plus the hail-trip count are required before you can share the end-of-shift report." aria-label="Help">?</span></h5>
+        <button class="att" id="rcpt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg><span id="rcptTxt">Attach receipt photo</span></button>
+        <input id="rcptFile" type="file" accept="image/*,application/pdf" style="display:none"></div>
+    </div>
+    <div data-pane="3" style="display:none">
+      <div class="card"><h5><span class="dot" style="background:var(--head)"></span>Vehicle Rego <span class="danger" style="font-size:10px;margin-left:auto">required</span></h5>
+        <select id="rego"></select></div>
+      <div class="card"><h5><span class="dot" style="background:var(--inc)"></span>WhatsApp Preview</h5><div class="prev" id="prev"></div></div>
+      <button class="btn neutral" id="saveOnly">Save to Weekly only</button>
+    </div>
+    <div class="sfoot" id="sfoot">
+      <button class="btn neutral sback" id="sback">Back</button>
+      <button class="btn snext" id="snext">Next</button>
+    </div>
+  </section>
+
+  <section class="screen" data-tab="weekly">
+    <div class="sub">Weekly <small id="wkRange">This week</small></div>
+    <div id="wkBadge" style="margin-bottom:10px"></div>
+    <div class="wknav"><button id="wkPrev">&lsaquo;</button><span class="wl" id="wkLabel">This week</span><button id="wkNext">&rsaquo;</button></div>
+    <div class="card" id="wkCard"><div id="wkRows"></div>
+      <div class="totrow" id="wkTotalRow"><span style="color:var(--mut);font-size:12px;font-weight:600">TOTAL <span id="wkPaidStamp" class="paid-stamp" style="display:none">&#10003; PAID</span></span><b id="wkTotal">$0.00</b></div></div>
+    <button class="btn neutral" id="shareWeek">Share Week</button>
+    <button class="btn neutral" id="wkAdd" style="margin-top:9px">+ Add / override entry</button>
+  </section>
+
+  <section class="screen" data-tab="reports">
+    <div class="sub">Reports <small>Tax &amp; compliance</small></div>
+
+    <p class="grp" style="margin:2px 0 8px 3px">Filter</p>
+    <div class="filterrow" id="filterRow">
+      <button data-k="today" class="filt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg><span>Today</span></button>
+      <button data-k="7days" class="filt on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16M8 14h2M14 14h2M8 17h2"/></svg><span>7 Days</span></button>
+      <button data-k="quarter" class="filt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 20V11M10 20V5M15 20v-6M20 20V8"/></svg><span>Quarter</span></button>
+      <button data-k="fy" class="filt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15l5-5 4 4 7-8"/><path d="M17 6h4v4"/></svg><span>Fin Year</span></button>
+      <button data-k="custom" class="filt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 8h9M18 8h2M4 16h2M11 16h9"/><circle cx="15.5" cy="8" r="2"/><circle cx="8.5" cy="16" r="2"/></svg><span>Custom</span></button>
+    </div>
+
+    <div class="card">
+      <div class="ph-head">
+        <span class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg></span>
+        <div class="ph-t"><b>Financial Pulse <span class="help" data-help="Net take-home is your total driver settlement for the period. Est. net profit subtracts GST set aside, deductible expenses and the CPV levy." aria-label="Help">?</span></b><p>Income overview</p></div>
+        <span class="ph-pill" id="pulseShifts">0 shifts</span>
+      </div>
+      <div class="ph-hero">
+        <div class="ph-lbl">Net take-home</div>
+        <div class="ph-net" id="repTake">$0.00</div>
+        <div class="ph-sub">Driver settlement total for period</div>
+      </div>
+      <div class="ph-stats">
+        <div><small>Gross revenue</small><b id="repGross">$0.00</b></div>
+        <div><small>Est. net profit</small><b id="repNet" style="color:var(--inc)">$0.00</b></div>
+        <div><small>GST set aside</small><b id="repGst">$0.00</b></div>
+      </div>
+      <div class="cardfoot" id="pulseFoot">Est. net = take-home &minus; GST &minus; expenses &minus; levy</div>
+    </div>
+
+    <div class="card" id="mixCard">
+      <div class="ph-head">
+        <span class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1z"/><path d="M2 10h20M7 15h4"/></svg></span>
+        <div class="ph-t"><b>Payment Mix</b><p>Revenue by transaction type</p></div>
+      </div>
+      <div id="mixRows"></div>
+    </div>
+
+    <div class="card">
+      <div class="levy-head">
+        <span class="levy-shield"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="m9 12 2 2 4-4"/></svg></span>
+        <div><b>Levy Compliance <span class="help" data-help="The Commercial Passenger Vehicle levy is charged per rank/hail trip and lodged as a separate quarterly return with the SRO — it does NOT go on your BAS." aria-label="Help">?</span></b><p>Hail trip reporting &middot; SRO quarterly return</p></div>
+      </div>
+      <div class="levy-grid">
+        <div class="levy-panel">
+          <span class="lp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l1.4-3.8A2 2 0 0 1 8.3 7.9h7.4a2 2 0 0 1 1.9 1.3L19 13"/><path d="M4 13h16v4H4z"/><circle cx="7.5" cy="17.3" r="1.3"/><circle cx="16.5" cy="17.3" r="1.3"/></svg></span>
+          <div class="lp-val" id="repHailN">0</div>
+          <div class="lp-lbl">Hail trips</div>
+        </div>
+        <div class="levy-op"><span class="op-s">&times;</span><span class="op-rate" id="repRate">$1.20</span><span class="op-s">=</span></div>
+        <div class="levy-panel accent">
+          <span class="lp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.2L14 21l-2-1.2L10 21l-2-1.2L6 21z"/><path d="M9 8h6M9 12h6"/></svg></span>
+          <div class="lp-val" id="repLevy">$0.00</div>
+          <div class="lp-lbl">Levy owed</div>
+        </div>
+      </div>
+      <div class="levy-foot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span>Lodged separately with the SRO (not on the BAS) &middot; due within 30 days of quarter end &middot; Rate: <b id="repRate2">$1.20</b>/trip &middot; Formula: Trips &times; Rate</span></div>
+      <button class="add rep-csv" id="csvBtn" style="margin-top:12px">Export CSV</button></div>
+
+    <div class="card">
+      <div class="ph-head">
+        <span class="ph-ico fuel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg></span>
+        <div class="ph-t"><b>Fuel Consumption <span class="help" data-help="All fuel is tax-deductible (you hold the receipt). Fuel you paid yourself is also reimbursed in your settlement; operator-card fuel is not." aria-label="Help">?</span></b><p id="fuelSubTitle">Operating cost</p></div>
+        <span class="ph-pill fuel" id="fuelEntries">0 entries</span>
+      </div>
+      <div class="tri">
+        <div class="tri-p accent-fuel"><small>Total fuel spend</small><b id="fTotal">$0.00</b></div>
+        <div class="tri-p"><small>Avg per fill</small><b id="fAvg">$0.00</b></div>
+        <div class="tri-p"><small>Entries</small><b id="fCount">0</b></div>
+      </div>
+      <div class="cardfoot" id="fuelFoot">Fuel costs recorded per shift appear here</div>
+    </div>
+
+    <div class="card">
+      <div class="ph-head">
+        <span class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.2L14 21l-2-1.2L10 21l-2-1.2L6 21z"/><path d="M9 8h6M9 12h6"/></svg></span>
+        <div class="ph-t"><b>Tax &amp; Deductions <span class="help" data-help="GST credits (1B) = 1/11 of GST-inclusive expenses and fuel. Deductible expenses use the GST-exclusive amount when a credit is claimed, scaled by business-use %." aria-label="Help">?</span></b><p>ATO-ready &middot; 1A / 1B &middot; <span id="dedCount">0</span> items</p></div>
+        <button class="ph-add fuel" id="addFuelExp" aria-label="Add fuel expense" title="Add fuel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg></button>
+        <button class="ph-add" id="addExp" aria-label="Add expense" title="Add expense"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+      </div>
+      <div class="two">
+        <div class="tri-p accent-inc"><small>GST credits (1B)</small><b id="repGstCred" style="color:var(--inc)">$0.00</b></div>
+        <div class="tri-p"><small>Deductible expenses</small><b id="repDeduct">$0.00</b></div>
+      </div>
+      <div id="recurSection" style="display:none;margin-top:10px">
+        <div class="explabel">Recurring expenses</div>
+        <div id="recurRows"></div>
+      </div>
+      <div id="dedRows"></div>
+      <div class="ded-empty" id="dedEmpty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.2L14 21l-2-1.2L10 21l-2-1.2L6 21z"/><path d="M9 8h6M9 12h6"/></svg><b>No deductions yet</b><span>Tap + to log tolls, cleaning or maintenance</span></div>
+    </div>
+
+    <button class="btn neutral" id="summaryBtn" style="margin-bottom:0"><span class="summ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.7 4.3L18 9l-4.3 1.7L12 15l-1.7-4.3L6 9l4.3-1.7z"/></svg>Generate summary</span></button>
+  </section>
+
+  <section class="screen" data-tab="refresh">
+    <div class="sub">Refresh <small>Cache &amp; updates</small></div>
+    <div class="card" style="text-align:center;padding:24px 14px">
+      <div style="width:54px;height:54px;border-radius:50%;background:var(--inc-bg);color:var(--inc);display:grid;place-items:center;margin:0 auto 12px;border:1px solid var(--inc)"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/></svg></div>
+      <b style="font-size:15px;color:var(--head)">Clear cache &amp; check for updates</b>
+      <p style="font-size:11.5px;color:var(--mut);margin:6px 0 14px">Keeps your saved shifts and settings.</p>
+      <button class="btn" id="refreshBtn">Refresh now</button></div>
+  </section>
+
+  <section class="screen" data-tab="settings">
+    <div class="sub">Settings <small>Defaults &amp; data</small></div>
+
+    <p class="grp">Essentials</p>
+    <div class="card" style="padding:0">
+      <div class="set hot"><div class="sl"><b>Driver Percentage Share</b><p>Global &middot; flows to every calc</p></div><input id="setPct" type="number" min="0" max="100" inputmode="decimal"></div>
+      <div class="set"><div class="sl"><b>Hail Trip Levy</b><p>Per trip ($) &middot; 0 allowed if BSP pays</p></div><input id="setLevy" type="number" min="0" inputmode="decimal"></div>
+      <div class="set"><div class="sl"><b>Cash &amp; Square GST-free <span class="help" data-help="When on, cash and Square fares are excluded from your GST-on-sales calculation (treated as GST-free income). EFTPOS, accounts and runs stay GST-inclusive." aria-label="Help">?</span></b><p>Exclude cash-type fares from GST</p></div><button class="tgl" id="setCashGst" aria-label="Toggle cash GST-free"></button></div>
+      <div class="set"><div class="sl"><b>Week Cycle</b><p>Which day your week starts</p></div><select id="setWeek"></select></div>
+      <div class="set" style="display:block"><div class="sl"><b>Vehicle Regos</b></div>
+        <div class="two" style="grid-template-columns:1fr auto"><input id="newRego" placeholder="e.g. 5088M" autocapitalize="characters"><button class="add" id="addRego" style="margin:0;width:auto;padding:10px 14px">Add</button></div>
+        <div class="chips" id="regoChips"></div></div>
+    </div>
+
+    <button class="advtoggle" id="advToggle"><span><b>Advanced settings</b><small>Tax model, payment types, appearance, sync, backup</small></span><span class="chev" id="advChev">&rsaquo;</span></button>
+
+    <div id="advWrap" style="display:none">
+      <p class="grp">Shift defaults</p>
+      <div class="card" style="padding:0">
+        <div class="set"><div class="sl"><b>Default Fuel</b><p>New shift forms</p></div><select id="setFuel"><option>Diesel</option><option>Petrol</option><option>LPG</option></select></div>
+        <div class="set"><div class="sl"><b>Credited On</b><p>Payday milestone after week ends</p></div><select id="setCredit"></select></div>
+        <div class="set"><div class="sl"><b>Name Autocomplete</b><p>Suggest past payer &amp; account names</p></div><button class="tgl" id="setAuto" aria-label="Toggle autocomplete"></button></div>
+      </div>
+
+      <p class="grp">Tax model</p>
+      <div class="card" style="padding:0">
+        <div class="set"><div class="sl"><b>GST Base <span class="help" data-help="Whether GST (1/11) is set aside on your full gross fares or only your driver share. Match this to your bailment agreement \u2014 ask your operator or tax agent which applies." aria-label="Help">?</span></b><p>Amount GST is set aside on</p></div><select id="setGstBase" class="wide"><option value="gross">Full gross</option><option value="share">Driver share</option></select></div>
+      </div>
+
+      <p class="grp">Payment Types</p>
+      <div class="card">
+        <div class="sl" style="margin-bottom:10px"><b>Custom income types <span class="help" data-help="Built-ins are EFTPOS, Cash, Square, Runs and Accounts. Add your own types here (e.g. PayPal, vouchers, tips) and they appear as cards in the calculator." aria-label="Help">?</span></b></div>
+        <div id="payTypeChips" class="chips" style="margin-bottom:10px"></div>
+        <button class="btn neutral" id="addPayType">+ Add payment type</button>
+      </div>
+
+      <p class="grp">Appearance</p>
+      <div class="card" style="padding:0">
+        <div class="set"><div class="sl"><b>Theme</b><p>Match phone, or force</p></div><select id="setTheme" style="width:120px"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></div>
+      </div>
+
+      <p class="grp">Backup</p>
+      <div class="card" style="padding:0">
+        <div class="set" id="exportBtn"><div class="sl"><b>Export backup</b><p>Save all data to a file (Drive / email)</p></div><span class="chev">&darr;</span></div>
+        <div class="set" id="importBtn"><div class="sl"><b>Restore backup</b><p>Load data from a saved file</p></div><span class="chev">&uarr;</span></div>
+      </div>
+
+      <p class="grp">Cloud Sync</p>
+      <div class="card">
+        <div class="sl" style="margin-bottom:8px"><b>Multi-device Sync <span class="help" data-help="Optional. Set up a free Firebase project once and sign in with the same email on each phone to keep them in sync. Data stays on your device until you sign in." aria-label="Help">?</span></b><p id="syncState">Off &middot; local only</p></div>
+        <textarea id="fbConfig" placeholder="Paste your Firebase config here"></textarea>
+        <div class="two"><input id="syncEmail" type="email" placeholder="Email" autocomplete="username"><input id="syncPass" type="password" placeholder="Password" autocomplete="current-password"></div>
+        <div class="two" style="margin-top:8px"><button class="btn neutral" id="syncSignin">Sign in</button><button class="btn" id="syncCreate">Create account</button></div>
+        <button class="btn neutral" id="syncOut" style="display:none;margin-top:8px">Sign out</button>
+      </div>
+
+      <p class="grp">Data &amp; maintenance</p>
+      <div class="card" style="padding:0">
+        <div class="set" id="archiveLink"><div class="sl"><b>Receipt Archive</b><p>Stored receipts for tax audit &middot; <span id="archiveCount">0</span> saved</p></div><span class="chev">&rsaquo;</span></div>
+        <div class="set" id="clearCache"><div class="sl"><b>Clear Cache &amp; Refresh</b><p>Checks for updates</p></div><span class="chev">&rsaquo;</span></div>
+        <div class="set" id="newFy"><div class="sl"><b class="danger">Start New Financial Year</b><p>Clear shifts &amp; income &middot; keep settings</p></div><span class="chev danger">&rsaquo;</span></div>
+      </div>
+    </div>
+
+    <p class="grp">About</p>
+    <div class="card" style="padding:0;margin-bottom:0">
+      <div class="set" id="versionRow"><div class="sl"><b>Version</b><p id="versionLine">Fareo 4.9 &middot; tap for release notes</p></div><span class="badge">PWA</span></div>
+    </div>
+  </section>
+
+  </div>
+</main>
+
+<datalist id="nameList"></datalist>
+<input type="file" id="expRcptFile" accept="image/*,application/pdf" style="display:none">
+<input type="file" id="importFile" accept="application/json,.json" style="display:none">
+<div class="modal" id="rangeModal"><div class="sheet">
+  <div class="grip"></div><h3 id="rangeTitle">Custom range</h3><p class="csub">Pick a timeframe for your report.</p>
+  <div id="customRange" style="margin-top:11px">
+    <div class="daterow"><div class="datef"><small>From</small><input type="date" id="repFrom"></div><div class="datef"><small>To</small><input type="date" id="repTo"></div></div>
+    <button class="btn" id="applyCustom" style="margin-top:10px">Apply range</button>
+  </div>
+</div></div>
+<div class="modal" id="summaryModal"><div class="sheet">
+  <div class="grip"></div>
+  <div id="summaryBody"></div>
+  <div class="two" style="margin-top:14px"><button class="btn neutral" id="shareSummary">Share</button><button class="btn" id="pdfBtn">Save as PDF</button></div>
+  <button class="btn neutral" id="closeSummary" style="margin-top:9px">Close</button>
+</div></div>
+<div id="printRoot"></div>
+<div class="modal" id="expModal"><div class="sheet">
+  <div class="grip"></div><h3>Add Expense</h3>
+  <div class="catrow" id="catRow" style="margin-top:10px">
+    <button data-cat="Tolls"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l1.4-3.8A2 2 0 0 1 8.3 7.9h7.4a2 2 0 0 1 1.9 1.3L19 13"/><path d="M4 13h16v4H4z"/><circle cx="7.5" cy="17.3" r="1.2"/><circle cx="16.5" cy="17.3" r="1.2"/></svg><span>Tolls</span></button>
+    <button data-cat="Cleaning"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.7 4.3L18 9l-4.3 1.7L12 15l-1.7-4.3L6 9l4.3-1.7z"/><path d="M18.5 14l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg><span>Cleaning</span></button>
+    <button data-cat="Maintenance"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3.5 17.5 6.5 20.5l5.8-5.8a4 4 0 0 0 5.4-5.4l-2.4 2.4-2.4-.6-.6-2.4z"/></svg><span>Maintenance</span></button>
+    <button data-cat="Other" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="8" cy="12" r=".9" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r=".9" fill="currentColor" stroke="none"/><circle cx="16" cy="12" r=".9" fill="currentColor" stroke="none"/></svg><span>Other</span></button>
+  </div>
+  <div class="exprow"><label>Description</label><div class="er-r"><input id="expDesc" placeholder="e.g. CityLink toll"></div></div>
+  <div class="exprow"><label>Amount</label><div class="er-r"><span class="pre">$</span><input id="expAmt" type="number" min="0" inputmode="decimal" placeholder="0.00"></div></div>
+  <div class="exprow"><label>Business Use %</label><div class="er-r"><input id="expBu" type="number" min="0" max="100" inputmode="numeric" value="100"><span class="pre">%</span></div></div>
+  <div class="exprow"><label>Price includes GST</label><div class="er-r"><button class="tgl on" id="expGst" aria-label="Toggle GST"></button></div></div>
+  <div class="exprow"><label>Recurring</label><div class="er-r"><button class="tgl" id="expRecur" aria-label="Toggle recurring"></button></div></div>
+  <div id="expRecurOpts" style="display:none">
+    <div class="exprow"><label>Frequency</label><div class="er-r"><select id="expFreq" style="width:130px;text-align:right"><option value="weekly">Weekly</option><option value="fortnightly">Fortnightly</option><option value="monthly" selected>Monthly</option></select></div></div>
+  </div>
+  <div class="exprow"><label id="expDateLabel">Date</label><div class="er-r"><input id="expDate" type="date"></div></div>
+  <div class="explabel">Attach receipt</div>
+  <button class="att" id="expRcpt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.2L14 21l-2-1.2L10 21l-2-1.2L6 21z"/><path d="M9 8h6M9 12h6"/></svg><span id="expRcptTxt">Attach Receipt</span></button>
+  <div class="two" style="margin-top:14px"><button class="btn neutral" id="expCancel">Cancel</button><button class="btn" id="expSave">Save Expense</button></div>
+</div></div>
+<div class="modal" id="quarterModal"><div class="sheet">
+  <div class="grip"></div><h3>Choose quarter</h3><p class="csub" id="qFy">Financial year</p>
+  <div class="presets" id="qGrid"></div>
+</div></div>
+<div class="modal" id="sumPick"><div class="sheet">
+  <div class="grip"></div><h3>Summary type</h3><p class="csub">Choose what to generate.</p>
+  <button class="pickopt" id="pickIncome"><span><b>Smart summary</b><small>Income overview &amp; totals</small></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></button>
+  <button class="pickopt" id="pickBas"><span><b>BAS prep (ATO)</b><small>Activity statement: 1A / 1B / 8A / 8B</small></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></button>
+</div></div>
+<div class="modal" id="entryModal"><div class="sheet">
+  <div class="grip"></div><h3 id="entryTitle">Edit entry</h3>
+  <div class="exprow"><label>Date</label><div class="er-r"><input id="enDate" type="date"></div></div>
+  <div class="exprow"><label>Rego</label><div class="er-r"><select id="enRego"></select></div></div>
+  <div class="exprow"><label>Amount <span class="help" data-help="Changing the amount re-estimates this shift's gross and GST from your driver share percentage." aria-label="Help">?</span></label><div class="er-r"><span class="pre">$</span><input id="enAmt" type="number" min="0" inputmode="decimal"></div></div>
+  <button class="btn" id="enCalc" style="margin-top:12px">Edit full shift in calculator</button>
+  <div class="two" style="margin-top:9px"><button class="btn neutral" id="enDelete" style="border-color:var(--dgr);color:var(--dgr)">Delete</button><button class="btn" id="enSave">Save changes</button></div>
+</div></div>
+<div class="modal" id="payTypeModal"><div class="sheet">
+  <div class="grip"></div><h3 id="ptTitle">Add payment type</h3>
+  <p class="csub">Define a custom income source for your calculator.</p>
+  <div class="exprow"><label>Name</label><div class="er-r"><input id="ptName" placeholder="e.g. PayPal, Voucher, Tips" maxlength="24"></div></div>
+  <div class="explabel">Who collects the money?</div>
+  <div class="two">
+    <button class="preset" id="ptColOp" data-col="operator"><span>Operator</span><small>Pays you your %</small></button>
+    <button class="preset on" id="ptColDr" data-col="driver"><span>Driver (you)</span><small>You already hold it</small></button>
+  </div>
+  <div class="exprow"><label>Flat rate per unit <span class="help" data-help="Leave blank to enter a dollar amount. Set a value (e.g. 5) to enter a count instead \u2014 the app multiplies count \u00d7 rate, like Passenger Runs." aria-label="Help">?</span></label><div class="er-r"><span class="pre">$</span><input id="ptRate" type="number" min="0" inputmode="decimal" placeholder="blank = enter $ amount"></div></div>
+  <div class="exprow"><label>Advanced formula <span class="help" data-help="Write your own settlement math. Variables: <b>amount</b> (or count\u00d7rate), <b>pct</b> (driver share 0-1), <b>gross</b>, <b>count</b>. Operators: + \u2212 * / ( ). Overrides the collector picker." aria-label="Help">?</span></label><div class="er-r"><button class="tgl" id="ptFxToggle" aria-label="Toggle formula"></button></div></div>
+  <div id="ptFxWrap" style="display:none">
+    <input id="ptFx" placeholder="amount*pct - amount" style="font-family:ui-monospace,monospace;font-size:13px">
+    <p style="font-size:10.5px;color:var(--mut);margin:6px 0 0"><span id="ptFxTest" style="color:var(--inc)"></span></p>
+  </div>
+  <div class="two" style="margin-top:14px"><button class="btn neutral" id="ptCancel">Cancel</button><button class="btn" id="ptSave">Save type</button></div>
+</div></div>
+<div class="modal" id="changelogModal"><div class="sheet">
+  <div class="grip"></div>
+  <h3>What&rsquo;s new in Fareo</h3>
+  <p class="csub" id="clCurrent"></p>
+  <div id="changelogBody"></div>
+  <button class="btn neutral" id="clClose" style="margin-top:14px">Close</button>
+</div></div>
+<input type="file" id="fuelRcptFile" accept="image/*,application/pdf" style="display:none">
+<div class="modal" id="fuelModal"><div class="sheet">
+  <div class="grip"></div><h3>Add Fuel Expense</h3>
+  <p class="csub">Manual fuel receipt for tax — independent of logged shifts. GST auto-calculated.</p>
+  <div class="exprow"><label>Amount</label><div class="er-r"><span class="pre">$</span><input id="fmAmt" type="number" min="0" inputmode="decimal" placeholder="0.00"></div></div>
+  <div class="exprow"><label>Fuel type</label><div class="er-r"><select id="fmType" style="width:130px;text-align:right"><option>Diesel</option><option>Petrol</option><option>LPG</option></select></div></div>
+  <div class="exprow"><label>Date</label><div class="er-r"><input id="fmDate" type="date"></div></div>
+  <div class="explabel">Attach receipt (optional)</div>
+  <button class="att" id="fmRcpt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.2L14 21l-2-1.2L10 21l-2-1.2L6 21z"/><path d="M9 8h6M9 12h6"/></svg><span id="fmRcptTxt">Attach Receipt</span></button>
+  <div class="two" style="margin-top:14px"><button class="btn neutral" id="fmCancel">Cancel</button><button class="btn" id="fmSave">Save Fuel</button></div>
+</div></div>
+<div class="modal" id="archiveModal"><div class="sheet">
+  <div class="grip"></div><h3>Receipt Archive</h3>
+  <p class="csub">All attached receipts, kept for tax-audit compliance.</p>
+  <input id="archiveSearch" placeholder="Search by description, type or date" style="margin-bottom:10px">
+  <div id="archiveList"></div>
+  <div class="ded-empty" id="archiveEmpty" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.2L14 21l-2-1.2L10 21l-2-1.2L6 21z"/><path d="M9 8h6M9 12h6"/></svg><b>No receipts stored</b><span>Attach receipts to fuel or expenses to build your archive</span></div>
+  <button class="btn neutral" id="archiveClose" style="margin-top:14px">Close</button>
+</div></div>
+<div class="modal" id="rcptViewModal"><div class="sheet">
+  <div class="grip"></div><h3 id="rvTitle">Receipt</h3>
+  <p class="csub" id="rvMeta"></p>
+  <div id="rvBody" style="text-align:center;margin:10px 0"></div>
+  <div class="two" style="margin-top:12px"><button class="btn neutral" id="rvDelete" style="border-color:var(--dgr);color:var(--dgr)">Delete</button><button class="btn neutral" id="rvClose">Close</button></div>
+</div></div>
+<nav class="nav">
+  <button data-go="weekly"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-8M22 19V3"/></svg>Weekly</button>
+  <button data-go="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-7"/></svg>Reports</button>
+  <button class="center" data-go="shift"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/><path d="M12 3.5v6M4.2 16.5l5.2-3M19.8 16.5l-5.2-3"/></svg>Shift</button>
+  <button data-go="refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/></svg>Refresh</button>
+  <button data-go="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1-2 3.4-.2-.1a1.7 1.7 0 0 0-1.9-.1 1.7 1.7 0 0 0-.9 1.5V22H9.2v-.3a1.7 1.7 0 0 0-.9-1.5 1.7 1.7 0 0 0-1.9.1l-.2.1-2-3.4.1-.1A1.7 1.7 0 0 0 4.6 15 1.7 1.7 0 0 0 3 14H2v-4h1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1 2-3.4.2.1a1.7 1.7 0 0 0 1.9.1A1.7 1.7 0 0 0 9.2 2V2h5.6v.3a1.7 1.7 0 0 0 .9 1.5 1.7 1.7 0 0 0 1.9-.1l.2-.1 2 3.4-.1.1A1.7 1.7 0 0 0 19.4 9 1.7 1.7 0 0 0 21 10h1v4h-1a1.7 1.7 0 0 0-1.6 1Z"/></svg>Settings</button>
+</nav>
+<div class="toast" id="toast"></div>
+
+<script>
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return [].slice.call((r||document).querySelectorAll(s))};
+var money=function(v){return '$'+(Number(v)||0).toFixed(2)};
+var nn=function(v){var x=Number(v);return isFinite(x)&&x>0?x:0};
+var todayStr=function(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+var parseD=function(s){var p=String(s).split('-').map(Number);return new Date(p[0],(p[1]||1)-1,p[2]||1)};
+function pad2(n){return String(n).padStart(2,'0')}
+function fmtDayDMY(ds){var d=parseD(ds);return d.toLocaleDateString('en-AU',{weekday:'long'})+' '+pad2(d.getDate())+'/'+pad2(d.getMonth()+1)+'/'+d.getFullYear()}
+var load=function(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}};
+var save=function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){} if(typeof scheduleSync==='function')scheduleSync();};
+var RUN=5, RATE=1.20;
+/* ---------- version & release notes ----------
+   Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
+   of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
+   Bug Fix, Maintenance, Tax. */
+var APP_VERSION='5.3';
+var CHANGELOG=[
+  {v:'5.3',date:'July 13, 2026',notes:[
+    ['Bug Fix','Fixed sharing (weekly, end-of-shift and tax summary). Native share is now tried first, with automatic clipboard copy and image download as fallbacks if the share sheet is unavailable or cancelled.'],
+    ['Feature','Added a Share button to the tax/BAS summary so you can send figures as text.']
+  ]},
+  {v:'5.2',date:'July 12, 2026',notes:[
+    ['UI/UX','New FARE-O app icon (taxi-cap dollar mark on a teal-to-gold gradient), shown when you install the app to your home screen.']
+  ]},
+  {v:'5.1',date:'July 11, 2026',notes:[
+    ['Feature','Add fuel expenses manually in Tax Reports \u2014 works just like the shift fuel tracker, with automatic GST and deduction.'],
+    ['Feature','Optional receipt attachment on fuel and expense entries (skip it if you don\u2019t have the receipt yet).'],
+    ['Feature','New hidden Receipt Archive (Advanced settings) that stores every attached receipt for tax-audit compliance, organised by type and date.'],
+    ['Maintenance','Receipts are compressed on save and included in backups; full regression pass on all existing features.']
+  ]},
+  {v:'5.0',date:'July 11, 2026',notes:[
+    ['Tax','Cash and Square fares now default to GST-free, with a toggle in Essentials to switch them back to GST-inclusive.'],
+    ['UI/UX','Reorganised Settings into Essentials plus a collapsible Advanced section so the everyday controls are front and centre.'],
+    ['Integration','Fuel Consumption tracker now feeds directly into the Tax & Deductions report as an auto line, with GST (1/11) calculated automatically.'],
+    ['UI/UX','Credited weeks now show a clear green banner, a highlighted card border and a PAID stamp on the weekly total.'],
+    ['Bug Fix','Help tooltips now open on a single tap/click instead of the broken press-and-hold.'],
+    ['Feature','Added this release-notes history — tap the version number any time to see what changed.'],
+    ['UI/UX','New app icon using the Fareo logo with a transparent background.'],
+    ['Maintenance','Full audit: fixed the business-use % defaulting to 0 when left blank, plus layout and button checks across the app.']
+  ]},
+  {v:'4.9',date:'July 11, 2026',notes:[
+    ['UI/UX','Converted every inline explanation into a compact ? help marker.'],
+    ['Integration','Operator message preview now lists fuel only when you paid for it yourself.']
+  ]},
+  {v:'4.8',date:'July 11, 2026',notes:[
+    ['Feature','Single "Paid by operator" checkbox per fuel fill-up, with a confirmation prompt.'],
+    ['Tax','All fuel is tax-deductible (receipt held); only operator-paid fuel is excluded from settlement.']
+  ]},
+  {v:'4.7',date:'July 11, 2026',notes:[
+    ['Feature','Square payments as a distinct income type, tracked separately in reports.'],
+    ['Feature','Custom payment types with an operator/driver picker, flat rates and an optional safe formula.'],
+    ['UI/UX','Added a Payment Mix breakdown to Reports.']
+  ]},
+  {v:'4.6',date:'July 6, 2026',notes:[
+    ['Feature','Recurring expenses (phone, wifi, subscriptions) that auto-expand across report periods.']
+  ]},
+  {v:'4.5',date:'July 6, 2026',notes:[
+    ['Bug Fix','Corrected gross revenue: EFTPOS is electronic-only, cash added separately.'],
+    ['UI/UX','Added a Clear button and removed the redundant driver-share stepper from the calculator.'],
+    ['Bug Fix','Refresh now properly clears caches and reloads the latest version.']
+  ]},
+  {v:'4.4',date:'July 6, 2026',notes:[
+    ['Maintenance','Major code-review pass: fixed levy $0 handling, quarter boundaries, XSS escaping, CSV quoting and more.']
+  ]}
+];
+
+var settings=load('fareo_settings',{pct:55,levy:1.20,fuel:'Diesel',regos:['5088M'],theme:'system',weekStart:4,creditedDay:5,autocomplete:true,fuelMode:'reimbursed',gstBase:'gross'});
+function migrateSettings(){
+  if(!settings.regos||!settings.regos.length)settings.regos=['5088M'];
+  if(settings.creditedDay==null)settings.creditedDay=5;
+  if(settings.autocomplete==null)settings.autocomplete=true;
+  if(settings.fuelMode!=='driver'&&settings.fuelMode!=='reimbursed')settings.fuelMode='reimbursed';
+  if(settings.gstBase!=='share'&&settings.gstBase!=='gross')settings.gstBase='gross';
+  /* Cash & Square fares default to GST-free (excluded from GST-on-sales). */
+  if(settings.cashGstFree==null)settings.cashGstFree=true;
+  /* Custom payment/income types. Built-ins (EOS, Cash, Square, Runs, Accounts) are implicit. */
+  if(!Array.isArray(settings.payTypes))settings.payTypes=[];
+}
+migrateSettings();
+var DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+var entries=load('fareo_entries',[]);
+var deductions=load('fareo_deductions',[]);
+var recurring=load('fareo_recurring',[]);
+var fuelManual=load('fareo_fuelManual',[]);   /* manual fuel expenses added in Reports */
+var receipts=load('fareo_receipts',[]);        /* receipt archive: {id,dataUrl,name,kind,...} */
+var draft=load('fareo_draft',null)||{date:todayStr(),eos:[0],cash:[{name:'',amount:0}],square:[{name:'',amount:0}],runs:0,accounts:[],fuel:[{amount:0,type:settings.fuel,opPaid:false}],hail:'',rego:'',receipt:false,receiptName:'',custom:{}};
+/* Backfill new draft shapes so older drafts don't crash */
+if(!draft.fuel)draft.fuel=[{amount:0,type:settings.fuel,opPaid:false}];
+draft.fuel.forEach(function(f){
+  /* migrate legacy `reimbursed` flag -> opPaid. Old: reimbursed:true = company card (not added). */
+  if(f.opPaid==null)f.opPaid=(f.reimbursed===true);
+  delete f.reimbursed;
+});
+if(!draft.square)draft.square=[{name:'',amount:0}];
+if(!draft.custom)draft.custom={};
+/* [F4] Only reset date/rego for a fresh draft. */
+if(!draft._edit){draft.date=todayStr();draft.rego='';}
+draft.receipt=false;draft.receiptName='';
+var receiptFile=null;
+var repRange={from:null,to:null,name:""};
+
+function toast(t){var e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(function(){e.classList.remove('show')},1800)}
+/* ---------- tap/click help tooltips ----------
+   A .help marker (?) reveals its explanation on a single tap or click.
+   Tap again (or anywhere else) to dismiss. Works the same on touch and mouse. */
+var helpPop=null,helpFor=null;
+function helpEl(){if(!helpPop){helpPop=document.createElement('div');helpPop.className='help-pop';document.body.appendChild(helpPop)}return helpPop}
+function showHelp(marker){
+  var txt=marker.getAttribute('data-help');if(!txt)return;
+  var p=helpEl();p.innerHTML=txt;p.style.opacity='0';p.classList.add('show');helpFor=marker;
+  requestAnimationFrame(function(){
+    var r=marker.getBoundingClientRect(),pw=p.offsetWidth,ph=p.offsetHeight,pad=8;
+    var left=Math.min(Math.max(pad,r.left+r.width/2-pw/2),window.innerWidth-pw-pad);
+    var top=r.top-ph-8; if(top<pad)top=r.bottom+8;   /* flip below if no room above */
+    p.style.left=left+'px';p.style.top=top+'px';p.style.opacity='';
+  });
+}
+function hideHelp(){if(helpPop){helpPop.classList.remove('show')}helpFor=null}
+(function bindHelp(){
+  /* Single delegated click handler. On touch, the browser fires one click after
+     tap, so this covers both without the old press-and-hold race. */
+  document.addEventListener('click',function(e){
+    var m=e.target.closest&&e.target.closest('.help');
+    if(m){e.preventDefault();e.stopPropagation();
+      if(helpFor===m)hideHelp(); else showHelp(m);
+      return;}
+    if(helpPop&&helpPop.classList.contains('show'))hideHelp();
+  },true);
+  window.addEventListener('scroll',function(){if(helpPop&&helpPop.classList.contains('show'))hideHelp()},true);
+})();
+/* Build a help marker span. Content is escaped-safe. */
+function help(txt){return '<span class="help" data-help="'+esc(txt)+'" aria-label="Help">?</span>'}
+function persist(){save('fareo_settings',settings);save('fareo_entries',entries);save('fareo_deductions',deductions);save('fareo_recurring',recurring);save('fareo_fuelManual',fuelManual);save('fareo_draft',draft)}
+function saveReceipts(){save('fareo_receipts',receipts)}
+var names=load('fareo_names',[]);
+function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function addName(n){n=(n||'').trim();if(n&&names.indexOf(n)<0){names.push(n);save('fareo_names',names);renderNames()}}
+/* ---------- receipt archive ----------
+   Receipts are stored as compressed data URLs in a separate key (not cloud-synced,
+   since images are large). Images are downscaled to <=1200px and re-encoded as
+   JPEG ~0.7 to stay within localStorage quota; PDFs are stored as-is. */
+function compressImage(file){return new Promise(function(res){
+  if(!file){res(null);return}
+  if(file.type==='application/pdf'){var fr=new FileReader();fr.onload=function(){res(fr.result)};fr.onerror=function(){res(null)};fr.readAsDataURL(file);return}
+  var img=new Image(),url=URL.createObjectURL(file);
+  img.onload=function(){
+    var max=1200,w=img.width,h=img.height;
+    if(w>max||h>max){if(w>=h){h=Math.round(h*max/w);w=max}else{w=Math.round(w*max/h);h=max}}
+    var c=document.createElement('canvas');c.width=w;c.height=h;
+    c.getContext('2d').drawImage(img,0,0,w,h);
+    URL.revokeObjectURL(url);
+    try{res(c.toDataURL('image/jpeg',0.7))}catch(e){res(null)}
+  };
+  img.onerror=function(){URL.revokeObjectURL(url);res(null)};
+  img.src=url;
+})}
+/* Store a receipt, return its id (or null). meta: {kind,desc,amount,date,category} */
+function storeReceipt(dataUrl,name,type,meta){
+  if(!dataUrl)return null;
+  var rec={id:'r'+Date.now()+Math.random().toString(36).slice(2,6),dataUrl:dataUrl,name:name||'receipt',type:type||'image',
+    kind:meta.kind||'expense',desc:meta.desc||'',amount:meta.amount||0,date:meta.date||todayStr(),category:meta.category||'',createdAt:Date.now()};
+  receipts.push(rec);
+  try{saveReceipts()}catch(e){receipts.pop();toast('Storage full — receipt not saved');return null}
+  return rec.id;
+}
+function getReceipt(id){for(var i=0;i<receipts.length;i++)if(receipts[i].id===id)return receipts[i];return null}
+function deleteReceipt(id){receipts=receipts.filter(function(r){return r.id!==id});saveReceipts()}
+function renderNames(){var dl=$('#nameList');if(dl)dl.innerHTML=names.map(function(n){return '<option value="'+esc(n)+'">'}).join('')}
+/* [F1] Levy rate helper: $0 is a valid rate (e.g. all trips covered by a BSP
+   affiliation agreement). Only invalid/missing values fall back to RATE. */
+function levyRate(){var v=Number(settings.levy);return (isFinite(v)&&v>=0)?v:RATE}
+/* [F7] Business-use clamp: 0-100 allowed, nothing else. Blank/invalid -> 100. */
+function clampBu(v){if(v==null||String(v).trim()==='')return 100;var x=Number(v);if(!isFinite(x))return 100;return Math.max(0,Math.min(100,x))}
+/* [F12]/[F16] Driver share of an entry. New entries store it; legacy entries
+   fall back to gross x current pct. */
+function entryShare(e){var s=Number(e.share);if(isFinite(s)&&s>=0)return s;return (Number(e.gross)||0)*(settings.pct/100)}
+/* [F16] Back-solve gross from a manually entered take-home so GST/G1 stay consistent.
+   take = gross*pct - cash + fuel  =>  gross = (take + cash - fuel)/pct */
+/* Back-solve gross from a manually entered take-home for override entries.
+   Uses only I-paid fuel since that's the part reimbursed into the settlement. */
+function backSolveGross(take,cash,fuelIPaid){var p=settings.pct/100;var g=p>0?((Number(take)||0)+(Number(cash)||0)-(Number(fuelIPaid)||0))/p:(Number(take)||0);return Math.max(0,g)}
+
+/* ---------- theme ---------- */
+var sunSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6 19 19M19 5l-1.4 1.4M6.4 17.6 5 19"/></svg>';
+var moonSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>';
+function effectiveDark(){if(settings.theme==='dark')return true;if(settings.theme==='light')return false;return matchMedia('(prefers-color-scheme: dark)').matches}
+function applyTheme(){var r=document.documentElement;if(settings.theme==='system')r.removeAttribute('data-theme');else r.setAttribute('data-theme',settings.theme);$('#themeBtn').innerHTML=effectiveDark()?sunSvg:moonSvg;var m=$('meta[name=theme-color]');if(m)m.content=effectiveDark()?'#0E1116':'#F4F5F7'}
+
+/* ---------- safe formula evaluator ----------
+   Tokenized shunting-yard. Only accepts numbers, the whitelisted variable names
+   (amount, pct, gross, count), + - * / ( ) and decimals. No eval / new Function,
+   so a malicious formula string (e.g. from a synced/imported backup) cannot run code. */
+function safeFormula(expr,vars){
+  if(expr==null||String(expr).trim()==='')return null;
+  var s=String(expr).toLowerCase();
+  var toks=s.match(/(\d+\.?\d*|\.\d+|amount|pct|gross|count|[()+\-*/])/g);
+  if(!toks)return null;
+  /* reject if anything is left over after removing valid tokens (stray letters etc.) */
+  if(toks.join('').replace(/\s/g,'')!==s.replace(/\s/g,''))return null;
+  var out=[],ops=[],prec={'+':1,'-':1,'*':2,'/':2};
+  function apply(op){var b=out.pop(),a=out.pop();if(a==null||b==null)throw 0;
+    out.push(op==='+'?a+b:op==='-'?a-b:op==='*'?a*b:(b===0?0:a/b))}
+  try{
+    for(var i=0;i<toks.length;i++){var t=toks[i];
+      if(/^[\d.]+$/.test(t))out.push(parseFloat(t));
+      else if(t==='amount'||t==='pct'||t==='gross'||t==='count')out.push(Number(vars[t])||0);
+      else if(t==='('){ops.push(t)}
+      else if(t===')'){while(ops.length&&ops[ops.length-1]!=='(')apply(ops.pop());ops.pop()}
+      else{while(ops.length&&prec[ops[ops.length-1]]>=prec[t])apply(ops.pop());ops.push(t)}
+    }
+    while(ops.length)apply(ops.pop());
+  }catch(e){return null}
+  var r=out.pop();return (out.length===0&&isFinite(r))?r:null}
+
+/* ---------- calc ---------- */
+function eosT(){return draft.eos.reduce(function(a,b){return a+nn(b)},0)}
+function cashT(){return draft.cash.reduce(function(a,b){return a+nn(b.amount)},0)}
+function squareT(){return draft.square.reduce(function(a,b){return a+nn(b.amount)},0)}
+function acctT(){return draft.accounts.reduce(function(a,b){return a+nn(b.amount)},0)}
+function fuelT(){return draft.fuel.reduce(function(a,b){return a+nn(b.amount)},0)}
+/* Fuel `opPaid` flag: true = paid on the OPERATOR's card, false/undefined = I paid.
+   Settlement: I-paid fuel is added (operator pays me back); operator-paid is not.
+   Tax: ALL fuel is deductible + GST-creditable because I hold the receipt either way. */
+function fuelOpPaidT(){return draft.fuel.reduce(function(a,b){return a+(b.opPaid===true?nn(b.amount):0)},0)}
+function fuelIPaidT(){return draft.fuel.reduce(function(a,b){return a+(b.opPaid===true?0:nn(b.amount))},0)}
+/* Custom pay-type raw amount: flat-rate types multiply the entered count by rate */
+function customAmt(pt){var v=draft.custom[pt.id];var raw=nn(v);return (pt.rate!=null&&pt.rate!=='')?raw*Number(pt.rate):raw}
+function customTotalT(){return settings.payTypes.reduce(function(a,pt){return a+customAmt(pt)},0)}
+/* Gross = total fare revenue across every income source (fuel excluded). */
+function grossT(){return eosT()+cashT()+squareT()+nn(draft.runs)*RUN+acctT()+customTotalT()}
+/* A custom type's contribution to the operator settlement. */
+function customSettle(pt){var amt=customAmt(pt),p=settings.pct/100;
+  if(pt.formula){var r=safeFormula(pt.formula,{amount:amt,pct:p,gross:grossT(),count:nn(draft.custom[pt.id])});if(r!=null)return r}
+  return pt.collector==='driver'?(amt*p-amt):(amt*p)}
+/* Settlement (what the operator pays out):
+   operator-collected income  -> + amount×pct   (EOS, Runs, Accounts, custom operator types)
+   driver-collected income     -> + amount×pct − amount  (Cash, Square, custom driver types)
+   fuel I paid myself          -> + amount  (operator reimburses what I spent)
+   fuel on operator's card     -> not added (operator paid it directly) */
+function takeT(){
+  var p=settings.pct/100;
+  var t=(eosT()+nn(draft.runs)*RUN+acctT())*p;   /* operator-collected built-ins */
+  t+=cashT()*p-cashT();                            /* cash (driver) */
+  t+=squareT()*p-squareT();                        /* square (driver) */
+  settings.payTypes.forEach(function(pt){t+=customSettle(pt)});
+  t+=fuelIPaidT();                                 /* fuel I paid -> reimbursed to me */
+  return t}
+function levyT(){return nn(draft.hail)*levyRate()}
+
+function rowInputs(){
+  var LA=settings.autocomplete?' list="nameList"':'';
+  $('#eosRows').innerHTML=draft.eos.map(function(v,i){return '<div class="two" style="grid-template-columns:1fr 34px"><input type="number" min="0" inputmode="decimal" data-eos="'+i+'" value="'+esc(v||'')+'" placeholder="EOS '+(i+1)+'"><button class="x" data-deos="'+i+'">&times;</button></div>'}).join('');
+  $('#cashRows').innerHTML=draft.cash.map(function(r,i){return '<div class="mini"><input data-cn="'+i+'"'+LA+' value="'+esc(r.name||'')+'" placeholder="Payer"><input type="number" min="0" inputmode="decimal" data-ca="'+i+'" value="'+esc(r.amount||'')+'" placeholder="Amount"><button class="x" data-dc="'+i+'">&times;</button></div>'}).join('');
+  $('#squareRows').innerHTML=draft.square.map(function(r,i){return '<div class="mini"><input data-sn="'+i+'"'+LA+' value="'+esc(r.name||'')+'" placeholder="Payer"><input type="number" min="0" inputmode="decimal" data-sa="'+i+'" value="'+esc(r.amount||'')+'" placeholder="Amount"><button class="x" data-ds="'+i+'">&times;</button></div>'}).join('');
+  $('#acctRows').innerHTML=draft.accounts.map(function(r,i){return '<div class="mini"><input data-an="'+i+'"'+LA+' value="'+esc(r.name||'')+'" placeholder="Account"><input type="number" min="0" inputmode="decimal" data-aa="'+i+'" value="'+esc(r.amount||'')+'" placeholder="Amount"><button class="x" data-da="'+i+'">&times;</button></div>'}).join('');
+  /* Custom pay-type cards */
+  $('#customCards').innerHTML=settings.payTypes.map(function(pt){
+    var flat=(pt.rate!=null&&pt.rate!=='');
+    var val=draft.custom[pt.id];
+    var sub=money(customAmt(pt));
+    var helpTxt=(flat?('Flat rate $'+Number(pt.rate).toFixed(2)+' per unit \u2014 enter a count. '):'Enter a dollar amount. ')+(pt.formula?'Uses your custom formula.':(pt.collector==='driver'?'You collect this (deducted from settlement, like cash).':'Operator collects this (pays your share).'));
+    return '<div class="card"><h5><span class="dot" style="background:var(--fink)"></span>'+esc(pt.name)+'<span class="help" data-help="'+esc(helpTxt)+'" aria-label="Help">?</span><span class="sub-amt" style="color:var(--fink)">'+sub+'</span></h5>'
+      +'<input type="number" min="0" inputmode="decimal" data-custom="'+esc(pt.id)+'" value="'+esc(val==null?'':val)+'" placeholder="'+(flat?'Count':'Amount')+'" style="color:var(--fink);-webkit-text-fill-color:var(--fink)"></div>'
+  }).join('');
+  /* Fuel rows with 'Paid by operator' checkbox */
+  $('#fuelRows').innerHTML=draft.fuel.map(function(r,i){
+    var o=['Diesel','Petrol','LPG'].map(function(t){return '<option'+(t===r.type?' selected':'')+'>'+t+'</option>'}).join('');
+    var op=r.opPaid===true;
+    return '<div class="fuelblock"><div class="mini"><select data-ft="'+i+'">'+o+'</select><input type="number" min="0" inputmode="decimal" data-fa="'+i+'" value="'+esc(r.amount||'')+'" placeholder="Amount"><button class="x" data-df="'+i+'">&times;</button></div>'
+      +'<label class="fuel-op'+(op?' on':'')+'" data-fop="'+i+'"><span class="fuel-box'+(op?' on':'')+'">'+(op?'\u2713':'')+'</span>Paid by operator <small>(not added to settlement)</small></label></div>'
+  }).join('');
+  $('#runs').value=draft.runs||'';$('#hail').value=draft.hail;
+  var rg=$('#rego');rg.innerHTML='<option value="">Choose rego…</option>'+settings.regos.map(function(r){return '<option value="'+esc(r)+'"'+(r===draft.rego?' selected':'')+'>'+esc(r)+'</option>'}).join('');
+}
+function render(){
+  var g=grossT(),t=takeT(),op=fuelOpPaidT();
+  $('#total').textContent=money(t);
+  /* Settlement formula: gross×pct, less driver-held (cash+square), plus fuel I paid (reimbursed) */
+  var held=cashT()+squareT();
+  $('#formula').textContent='('+g.toFixed(2)+' × '+(settings.pct/100).toFixed(2)+') − '+held.toFixed(2)+' + '+fuelIPaidT().toFixed(2)+(op>0?' ('+money(op)+' op. fuel excl.)':'');
+  $('#eosSub').textContent=money(eosT());
+  $('#cashSub').textContent=money(cashT());
+  $('#squareSub').textContent=money(squareT());
+  $('#runsSub').textContent=money(nn(draft.runs)*RUN);
+  $('#acctSub').textContent=money(acctT());
+  $('#fuelSub').textContent=money(fuelT());
+  $('#levyAmt').textContent=money(levyT());
+  $('#levyTag').textContent=money(levyT())+' levy';
+  $('#levyRate').textContent=money(levyRate())+' / trip';
+  updateFooter();
+  buildPreview();persist();
+}
+function docsOk(){return draft.receipt && String(draft.hail).trim()!==''}
+function buildPreview(){
+  var L=[];
+  L.push('*Shift Report \u2014 '+fmtDayDMY(draft.date)+'*');
+  L.push('\ud83d\ude90 *Rego:* '+(draft.rego||'Not set'));
+  if(eosT()>0)L.push('\ud83d\udcb3 *EOS:* '+money(eosT()));
+  if(cashT()>0){var cb=draft.cash.filter(function(c){return nn(c.amount)>0}).map(function(c){return (c.name||'Cash')+' '+money(nn(c.amount))}).join(', ');L.push('\ud83d\udcb5 *Cash:* '+money(cashT())+(cb?' ('+cb+')':''));}
+  if(squareT()>0){var sb=draft.square.filter(function(c){return nn(c.amount)>0}).map(function(c){return (c.name||'Square')+' '+money(nn(c.amount))}).join(', ');L.push('\ud83d\udcf1 *Square:* '+money(squareT())+(sb?' ('+sb+')':''));}
+  if(nn(draft.runs)>0)L.push('\ud83d\ude95 *Run ('+nn(draft.runs)+'):* '+money(nn(draft.runs)*RUN));
+  if(acctT()>0){var ab=draft.accounts.filter(function(a){return nn(a.amount)>0}).map(function(a){return (a.name||'Account')+' '+money(nn(a.amount))}).join(', ');L.push('\ud83e\uddfe *Accounts:* '+money(acctT())+(ab?' ('+ab+')':''));}
+  settings.payTypes.forEach(function(pt){var amt=customAmt(pt);if(amt>0)L.push('\u2795 *'+pt.name+':* '+money(amt));});
+  /* Only fuel I paid appears in the operator message — that's what they reimburse.
+     Operator-paid fuel is omitted (they already have it on their card). */
+  if(fuelIPaidT()>0)L.push('\u26fd *Fuel:* '+money(fuelIPaidT()));
+  L.push('');
+  L.push('\ud83d\udcb0 *TOTAL EARNINGS: '+money(takeT())+'*');
+  $('#prev').textContent=L.join('\n');
+}
+
+/* ---------- shift interactions ---------- */
+document.addEventListener('input',function(e){
+  var d=e.target.dataset;var v=e.target.value;
+  if(d.eos!=null)draft.eos[d.eos]=v;
+  else if(d.cn!=null)draft.cash[d.cn].name=v;
+  else if(d.ca!=null)draft.cash[d.ca].amount=v;
+  else if(d.sn!=null)draft.square[d.sn].name=v;
+  else if(d.sa!=null)draft.square[d.sa].amount=v;
+  else if(d.an!=null)draft.accounts[d.an].name=v;
+  else if(d.aa!=null)draft.accounts[d.aa].amount=v;
+  else if(d.custom!=null){draft.custom[d.custom]=v;render();
+    /* update just this card's subtotal live without full re-render of inputs */
+    return;}
+  else if(d.fa!=null)draft.fuel[d.fa].amount=v;
+  else if(e.target.id==='runs')draft.runs=v;
+  else if(e.target.id==='hail')draft.hail=v;
+  else return;
+  render();
+});
+document.addEventListener('change',function(e){
+  var d=e.target.dataset;
+  if(d.ft!=null){draft.fuel[d.ft].type=e.target.value;render()}
+  else if(e.target.id==='rego'){draft.rego=e.target.value;buildPreview();persist();if(typeof updateFooter==='function')updateFooter();}
+  if(d.cn!=null||d.an!=null||d.sn!=null)addName(e.target.value);
+});
+document.addEventListener('click',function(e){
+  var d=e.target.dataset;var t=e.target;
+  /* fuel "paid by operator" checkbox — confirm when CHECKING to avoid mistakes */
+  var opLabel=t.closest&&t.closest('[data-fop]');
+  if(opLabel){var i=opLabel.dataset.fop;var cur=draft.fuel[i].opPaid===true;
+    if(!cur){ /* about to check it */
+      if(!confirm('Mark this fuel as paid by the operator?\n\nIt will NOT be added to your settlement (you won\u2019t be paid back for it). It stays tax-deductible.')){return}
+      draft.fuel[i].opPaid=true;
+    }else{draft.fuel[i].opPaid=false;}
+    rowInputs();render();return;}
+  if(t.closest&&t.closest('.x')){var b=t.closest('.x');d=b.dataset;
+    if(d.deos!=null){draft.eos.splice(d.deos,1);if(!draft.eos.length)draft.eos=[0]}
+    if(d.dc!=null){draft.cash.splice(d.dc,1);if(!draft.cash.length)draft.cash=[{name:'',amount:0}]}
+    if(d.ds!=null){draft.square.splice(d.ds,1);if(!draft.square.length)draft.square=[{name:'',amount:0}]}
+    if(d.da!=null)draft.accounts.splice(d.da,1);
+    if(d.df!=null){draft.fuel.splice(d.df,1);if(!draft.fuel.length)draft.fuel=[{amount:0,type:settings.fuel,opPaid:false}]}
+    rowInputs();render();return;}
+});
+function freshDraft(keepRego){return {date:todayStr(),eos:[0],cash:[{name:'',amount:0}],square:[{name:'',amount:0}],runs:0,accounts:[],fuel:[{amount:0,type:settings.fuel,opPaid:false}],hail:'',rego:keepRego||'',receipt:false,receiptName:'',custom:{}}}
+$('#addEos').onclick=function(){draft.eos.push(0);rowInputs();render()};
+$('#addCash').onclick=function(){draft.cash.push({name:'',amount:0});rowInputs();render()};
+$('#addSquare').onclick=function(){draft.square.push({name:'',amount:0});rowInputs();render()};
+$('#addAcct').onclick=function(){draft.accounts.push({name:'',amount:0});rowInputs();render()};
+$('#addFuel').onclick=function(){draft.fuel.push({amount:0,type:settings.fuel,opPaid:false});rowInputs();render()};
+$('#hailMinus').onclick=function(){draft.hail=Math.max(0,nn(draft.hail)-1);$('#hail').value=draft.hail;render()};
+$('#hailPlus').onclick=function(){draft.hail=nn(draft.hail)+1;$('#hail').value=draft.hail;render()};
+$('#rcpt').onclick=function(){$('#rcptFile').click()};
+$('#rcptFile').onchange=function(e){var f=e.target.files[0];receiptFile=f||null;draft.receipt=!!f;draft.receiptName=f?f.name:'';$('#rcpt').classList.toggle('done',draft.receipt);$('#rcptTxt').textContent=draft.receipt?'Receipt attached':'Attach receipt photo';render()};
+$('#clearShift').onclick=function(){
+  draft=freshDraft('');
+  receiptFile=null;var rc=$('#rcpt');if(rc){rc.classList.remove('done');$('#rcptTxt').textContent='Attach receipt photo';}
+  persist();rowInputs();render();setSub(1);toast('Cleared');
+};
+
+/* sub-tabs */
+var curSub=1;
+function setSub(n){
+  if(n===3&&!docsOk()){n=2;var m=$('#msg');m.textContent='Attach a receipt and enter hail trips first.';m.className='msg err';toast('Attach step required')}else{$('#msg').className='msg'}
+  curSub=n;
+  [1,2,3].forEach(function(k){$('[data-pane="'+k+'"]').style.display=k===n?'block':'none'});
+  $$('.stp').forEach(function(el){var k=+el.dataset.sub;el.classList.toggle('lit',k<=n);el.classList.toggle('on',k===n)});
+  updateFooter();window.scrollTo({top:0,behavior:'smooth'});
+}
+function updateFooter(){
+  var next=$('#snext'),back=$('#sback');if(!next)return;
+  back.style.visibility=curSub>1?'visible':'hidden';
+  next.textContent=curSub<3?'Next':'Share End of Shift';
+  var blocked=(curSub===2&&!docsOk())||(curSub===3&&!draft.rego);
+  next.classList.toggle('faded',blocked);
+}
+function nextStep(){
+  if(curSub===1){setSub(2);return}
+  if(curSub===2){if(docsOk())setSub(3);else{var m=$('#msg');m.textContent='Attach a receipt and enter the hail trips count first.';m.className='msg err';toast('Fill the Attach step');window.scrollTo({top:0,behavior:'smooth'})}return}
+  if(curSub===3){if(draft.rego)doShare();else{var m2=$('#msg');m2.textContent='Choose a vehicle rego to share.';m2.className='msg err';toast('Rego required')}}
+}
+$('#snext').onclick=nextStep;
+$('#sback').onclick=function(){if(curSub>1)setSub(curSub-1)};
+$$('.stp').forEach(function(b){b.onclick=function(){setSub(+b.dataset.sub)}});
+
+function shareText(){buildPreview();return $('#prev').textContent}
+async function doShare(){
+  var txt=shareText();
+  var f=receiptFile;
+  /* Try native share FIRST (while we still have the user gesture), then save. */
+  var shared=false;
+  if(navigator.share){
+    try{
+      if(f&&navigator.canShare&&navigator.canShare({files:[f]})){
+        await navigator.share({files:[f],text:txt,title:'Fareo Shift'});
+      }else{
+        await navigator.share({text:txt,title:'Fareo Shift'});
+        if(f)toast('Shared \u2014 now attach the receipt photo');
+      }
+      shared=true;
+    }catch(e){
+      if(e&&e.name==='AbortError'){ /* cancelled: still save below */ }
+      else{ /* share failed: fall back to clipboard */ copyToClipboard(txt,'Shift summary copied to clipboard'); shared=true; }
+    }
+  }else{
+    /* No native share (desktop etc.): copy to clipboard. */
+    copyToClipboard(txt,'Shift summary copied to clipboard');
+    shared=true;
+  }
+  saveShift(true);
+}
+$('#saveOnly').onclick=function(){if(!draft.rego){toast('Choose a rego first');return}saveShift(false)};
+
+function saveShift(shared){
+  var g=grossT();
+  var custom={};settings.payTypes.forEach(function(pt){var a=customAmt(pt);if(a>0)custom[pt.id]=a});
+  var e={id:Date.now(),date:draft.date,rego:draft.rego,take:takeT(),gross:g,share:g*(settings.pct/100),cash:cashT(),square:squareT(),
+    fuel:fuelT(),fuelIPaid:fuelIPaidT(),fuelOpPaid:fuelOpPaidT(),fuelByType:{Diesel:0,Petrol:0,LPG:0},
+    custom:custom,hail:nn(draft.hail),eos:eosT(),runs:nn(draft.runs),receipt:draft.receipt,
+    fuelCount:draft.fuel.filter(function(f){return nn(f.amount)>0}).length,
+    snap:JSON.parse(JSON.stringify({date:draft.date,rego:draft.rego,eos:draft.eos,cash:draft.cash,square:draft.square,accounts:draft.accounts,runs:draft.runs,fuel:draft.fuel,hail:draft.hail,custom:draft.custom}))};
+  draft.fuel.forEach(function(f){e.fuelByType[f.type]=(e.fuelByType[f.type]||0)+nn(f.amount)});
+  draft.cash.forEach(function(c){addName(c.name)});draft.square.forEach(function(c){addName(c.name)});draft.accounts.forEach(function(a){addName(a.name)});
+  entries=entries.filter(function(x){return !(x.date===e.date&&x.rego===e.rego)});
+  entries.push(e);save('fareo_entries',entries);
+  toast(shared?'Saved & sharing…':'Saved to Weekly');
+  draft=freshDraft('');receiptFile=null;
+  var rc=$('#rcpt');if(rc){rc.classList.remove('done');$('#rcptTxt').textContent='Attach receipt photo';}
+  persist();rowInputs();render();setSub(1);
+}
+
+/* ---------- weekly ---------- */
+var wkOffset=0;
+function weekStartOf(d){var x=new Date(d);var s=settings.weekStart;var diff=((x.getDay()-s)+7)%7;x.setDate(x.getDate()-diff);x.setHours(0,0,0,0);return x}
+function statusFor(base,end){
+  var t=new Date();t.setHours(0,0,0,0);var td=iso(t),bs=iso(base),es=iso(end);
+  if(td>=bs&&td<=es)return{t:'Current week',c:'st-cur'};
+  if(td<bs)return{t:'New week',c:'st-new'};
+  var cd=new Date(end);do{cd.setDate(cd.getDate()+1)}while(cd.getDay()!==settings.creditedDay);
+  var f=cd.toLocaleDateString('en-AU',{weekday:'short',day:'2-digit',month:'short'});
+  return t>=cd?{t:'Credited',c:'st-cred'}:{t:'Pays '+f,c:'st-pend'};
+}
+function renderWeekly(){
+  var base=weekStartOf(new Date());base.setDate(base.getDate()+wkOffset*7);
+  var end=new Date(base);end.setDate(base.getDate()+6);
+  var fmt=function(dt){return dt.toLocaleDateString('en-AU',{day:'2-digit',month:'short'})};
+  $('#wkLabel').textContent='Week of '+fmt(base);
+  $('#wkRange').textContent=fmt(base)+' – '+fmt(end);
+  var bs=iso(base),es=iso(end);
+  var rows=entries.filter(function(e){return e.date>=bs&&e.date<=es}).sort(function(a,b){return a.date<b.date?-1:1});
+  var tot=rows.reduce(function(a,b){return a+(Number(b.take)||0)},0);
+  $('#wkRows').innerHTML=rows.map(function(e){return '<div class="tr wk-row" data-id="'+esc(e.id)+'"><span>'+parseD(e.date).toLocaleDateString('en-AU',{weekday:'short',day:'2-digit',month:'short'})+'</span><span class="rg">'+esc(e.rego||'')+'</span><span class="am">'+money(e.take)+'</span></div>'}).join('')||'<p style="color:var(--mut);font-size:12.5px;padding:8px 0">No shifts this week yet.</p>';
+  $('#wkTotal').textContent=money(tot);
+  var st=statusFor(base,end);$('#wkBadge').innerHTML='<span class="badge '+st.c+'">'+(st.c==='st-cred'?'\u2713 ':'')+st.t+'</span>';
+  /* Credited-week visual cue: highlight the card and stamp the total row */
+  var credited=(st.c==='st-cred');
+  var card=$('#wkCard');
+  if(card)card.classList.toggle('credited',credited);
+  var stamp=$('#wkPaidStamp');
+  if(stamp)stamp.style.display=credited?'inline-flex':'none';
+  var tr=$('#wkTotalRow');
+  if(tr)tr.classList.toggle('credited',credited);
+}
+$('#wkPrev').onclick=function(){wkOffset--;renderWeekly()};
+$('#wkNext').onclick=function(){wkOffset++;renderWeekly()};
+function weekData(){var base=weekStartOf(new Date());base.setDate(base.getDate()+wkOffset*7);var end=new Date(base);end.setDate(base.getDate()+6);var bs=iso(base),es=iso(end);var rows=entries.filter(function(e){return e.date>=bs&&e.date<=es}).sort(function(a,b){return a.date<b.date?-1:1});var tot=rows.reduce(function(a,b){return a+(Number(b.take)||0)},0);var fmt=function(dt){return dt.toLocaleDateString('en-AU',{day:'2-digit',month:'short'})};return{rows:rows,tot:tot,label:'Week of '+fmt(base),range:fmt(base)+' - '+fmt(end)}}
+function roundRect(x,rx,ry,w,h,r){x.beginPath();x.moveTo(rx+r,ry);x.arcTo(rx+w,ry,rx+w,ry+h,r);x.arcTo(rx+w,ry+h,rx,ry+h,r);x.arcTo(rx,ry+h,rx,ry,r);x.arcTo(rx,ry,rx+w,ry,r);x.closePath()}
+function buildWeekImage(){return new Promise(function(res){try{
+  var W=weekData(),dpr=2,pad=28,rowH=52,headH=112,footH=84,WD=720,H=headH+Math.max(W.rows.length,1)*rowH+footH;
+  var c=document.createElement('canvas');c.width=WD*dpr;c.height=H*dpr;var x=c.getContext('2d');x.scale(dpr,dpr);
+  x.fillStyle='#0E1116';x.fillRect(0,0,WD,H);
+  x.fillStyle='#171D25';roundRect(x,16,16,WD-32,H-32,22);x.fill();
+  x.fillStyle='#34D399';x.font='700 15px system-ui,sans-serif';x.fillText('FAREO \u00b7 WEEKLY',pad+8,pad+20);
+  x.fillStyle='#F2F4F8';x.font='800 30px system-ui,sans-serif';x.fillText(W.label,pad+8,pad+54);
+  x.fillStyle='#8A93A3';x.font='500 16px system-ui,sans-serif';x.fillText(W.range,pad+8,pad+80);
+  var y=headH+8;
+  if(!W.rows.length){x.fillStyle='#8A93A3';x.font='500 18px system-ui,sans-serif';x.fillText('No shifts this week',pad+8,y+18);}
+  W.rows.forEach(function(e){
+    x.strokeStyle='#242c38';x.beginPath();x.moveTo(pad+8,y-4);x.lineTo(WD-pad-8,y-4);x.stroke();
+    var d=parseD(e.date).toLocaleDateString('en-AU',{weekday:'short',day:'2-digit',month:'short'});
+    x.fillStyle='#EAEAEE';x.font='600 19px system-ui,sans-serif';x.textAlign='left';x.fillText(d,pad+8,y+24);
+    x.fillStyle='#8A93A3';x.font='500 16px system-ui,sans-serif';x.fillText(e.rego||'',pad+250,y+24);
+    x.fillStyle='#34D399';x.font='800 20px system-ui,sans-serif';x.textAlign='right';x.fillText(money(e.take),WD-pad-8,y+24);
+    y+=rowH;
+  });
+  x.textAlign='left';x.strokeStyle='#34D399';x.lineWidth=2;x.beginPath();x.moveTo(pad+8,y+4);x.lineTo(WD-pad-8,y+4);x.stroke();x.lineWidth=1;
+  x.fillStyle='#8A93A3';x.font='700 15px system-ui,sans-serif';x.fillText('TOTAL',pad+8,y+42);
+  x.fillStyle='#34D399';x.font='800 34px system-ui,sans-serif';x.textAlign='right';x.fillText(money(W.tot),WD-pad-8,y+46);x.textAlign='left';
+  c.toBlob(function(b){res(b?new File([b],'fareo-week.png',{type:'image/png'}):null)},'image/png');
+}catch(err){res(null)}})}
+async function shareWeek(){
+  var W=weekData();
+  if(!W.rows.length){toast('No shifts this week to share');return}
+  /* Text: just range + total. The table image carries the per-day detail. */
+  var txt=W.range+'\n*Total: '+money(W.tot)+'*';
+  var file=null;
+  try{file=await buildWeekImage();}catch(e){file=null;}
+  /* Try native share with the image first, then text-only, then fallbacks. */
+  if(navigator.share){
+    try{
+      if(file&&navigator.canShare&&navigator.canShare({files:[file]})){
+        await navigator.share({files:[file],text:txt,title:'Fareo Weekly'});
+        return;
+      }
+      await navigator.share({text:txt,title:'Fareo Weekly'});
+      if(file)toast('Shared \u2014 now attach the saved image');
+      return;
+    }catch(e){
+      if(e&&e.name==='AbortError')return;   /* user cancelled the sheet */
+      /* otherwise fall through to download + clipboard */
+    }
+  }
+  /* Fallback 1: download the image so the user can attach it manually. */
+  if(file){
+    try{var u=URL.createObjectURL(file);var a=document.createElement('a');a.href=u;a.download='fareo-week.png';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},1500);}catch(e){}
+  }
+  /* Fallback 2: copy the text to clipboard so nothing is lost. */
+  copyToClipboard(txt,'Week summary copied \u2014 image downloaded');
+}
+/* Robust clipboard copy with a legacy fallback; shows a toast on success. */
+function copyToClipboard(text,okMsg){
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){toast(okMsg||'Copied')}).catch(function(){legacyCopy(text,okMsg)});
+  }else{legacyCopy(text,okMsg)}
+}
+function legacyCopy(text,okMsg){
+  try{var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.focus();ta.select();document.execCommand('copy');ta.remove();toast(okMsg||'Copied')}catch(e){toast('Could not share automatically')}
+}
+$('#shareWeek').onclick=shareWeek;
+
+/* ---------- weekly override / edit ---------- */
+var curEntryId=null;
+function fillEnRego(sel){$('#enRego').innerHTML='<option value="">Choose rego...</option>'+settings.regos.map(function(r){return '<option value="'+esc(r)+'"'+(r===sel?' selected':'')+'>'+esc(r)+'</option>'}).join('')}
+function openEntry(id){var e=entries.filter(function(x){return String(x.id)===String(id)})[0];if(!e)return;curEntryId=e.id;$('#entryTitle').textContent='Edit entry';$('#enDate').value=e.date;fillEnRego(e.rego);$('#enAmt').value=(Number(e.take)||0).toFixed(2);$('#enCalc').style.display='block';$('#enDelete').style.display='block';showModal('entryModal')}
+function openAddEntry(){curEntryId=null;$('#entryTitle').textContent='Add entry';$('#enDate').value=todayStr();fillEnRego('');$('#enAmt').value='';$('#enCalc').style.display='none';$('#enDelete').style.display='none';showModal('entryModal')}
+function loadEntryToCalc(e){var sp=e.snap;
+  if(sp){draft={_edit:true,date:sp.date,rego:sp.rego,eos:(sp.eos&&sp.eos.length)?sp.eos.slice():[0],cash:(sp.cash&&sp.cash.length)?JSON.parse(JSON.stringify(sp.cash)):[{name:'',amount:0}],square:(sp.square&&sp.square.length)?JSON.parse(JSON.stringify(sp.square)):[{name:'',amount:0}],accounts:sp.accounts?JSON.parse(JSON.stringify(sp.accounts)):[],runs:sp.runs||0,fuel:(sp.fuel&&sp.fuel.length)?JSON.parse(JSON.stringify(sp.fuel)):[{amount:0,type:settings.fuel,opPaid:false}],hail:(sp.hail!=null?sp.hail:''),receipt:false,receiptName:'',custom:sp.custom?JSON.parse(JSON.stringify(sp.custom)):{}};
+    draft.fuel.forEach(function(f){if(f.opPaid==null)f.opPaid=(f.reimbursed===true);delete f.reimbursed});}
+  else{draft={_edit:true,date:e.date,rego:e.rego,eos:[e.eos||0],cash:[{name:'',amount:e.cash||0}],square:[{name:'',amount:e.square||0}],accounts:[],runs:e.runs||0,fuel:[{amount:e.fuel||0,type:'Diesel',opPaid:(e.fuelOpPaid>0?true:false)}],hail:(e.hail!=null?e.hail:''),receipt:false,receiptName:'',custom:e.custom?JSON.parse(JSON.stringify(e.custom)):{}};}
+  persist();rowInputs();render();}
+if($('#wkAdd'))$('#wkAdd').onclick=openAddEntry;
+if($('#wkRows'))$('#wkRows').addEventListener('click',function(ev){var row=ev.target.closest&&ev.target.closest('.wk-row');if(row)openEntry(row.dataset.id)});
+if($('#enSave'))$('#enSave').onclick=function(){var date=$('#enDate').value,rego=$('#enRego').value,amt=nn($('#enAmt').value);if(!date){toast('Pick a date');return}if(!rego){toast('Choose a rego');return}
+  if(curEntryId!=null){var e=entries.filter(function(x){return String(x.id)===String(curEntryId)})[0];if(e){entries=entries.filter(function(x){return !(x.date===date&&x.rego===rego&&String(x.id)!==String(curEntryId))});
+    e.date=date;e.rego=rego;
+    /* [F16] keep gross/share/GST consistent when the amount is edited by hand */
+    if(Math.abs((Number(e.take)||0)-amt)>0.005){e.take=amt;e.gross=backSolveGross(amt,e.cash||0,e.fuel||0);e.share=e.gross*(settings.pct/100);e.manual=true;}
+  }}
+  else{var g=backSolveGross(amt,0,0);entries=entries.filter(function(x){return !(x.date===date&&x.rego===rego)});entries.push({id:Date.now(),date:date,rego:rego,take:amt,gross:g,share:g*(settings.pct/100),cash:0,fuel:0,fuelByType:{Diesel:0,Petrol:0,LPG:0},hail:0,eos:g,runs:0,fuelCount:0,override:true});}
+  save('fareo_entries',entries);closeModal('entryModal');renderWeekly();toast('Saved')};
+if($('#enDelete'))$('#enDelete').onclick=function(){if(curEntryId==null)return;if(confirm('Delete this entry?')){entries=entries.filter(function(x){return String(x.id)!==String(curEntryId)});save('fareo_entries',entries);closeModal('entryModal');renderWeekly();toast('Entry deleted')}};
+if($('#enCalc'))$('#enCalc').onclick=function(){var e=entries.filter(function(x){return String(x.id)===String(curEntryId)})[0];if(!e)return;loadEntryToCalc(e);closeModal('entryModal');go('shift');setSub(1);toast('Loaded - adjust & save')};
+/* ---------- reports ---------- */
+function showModal(id){$('#'+id).classList.add('show')}
+function closeModal(id){$('#'+id).classList.remove('show')}
+$$('.modal').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)m.classList.remove('show')})});
+function fyStart(d){var y=d.getFullYear(),m=d.getMonth()+1;return m>=7?y:y-1}
+function iso(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+/* [F2] compare whole days as ISO strings so the last day of a quarter matches it */
+function currentQuarter(){var y=fyStart(new Date());var qs=[[new Date(y,6,1),new Date(y,8,30)],[new Date(y,9,1),new Date(y,11,31)],[new Date(y+1,0,1),new Date(y+1,2,31)],[new Date(y+1,3,1),new Date(y+1,5,30)]];var t=iso(new Date());for(var k=0;k<4;k++){if(t>=iso(qs[k][0])&&t<=iso(qs[k][1]))return qs[k]}return qs[0]}
+function filterRange(key){var t=new Date();
+  if(key==='today'){var d=iso(t);return[d,d,'Today']}
+  if(key==='7days'){var s7=new Date(t);s7.setDate(t.getDate()-6);return[iso(s7),iso(t),'7 Days']}
+  if(key==='quarter'){var q=currentQuarter();return[iso(q[0]),iso(q[1]),'Quarter']}
+  if(key==='fy'){var fy=fyStart(t);return[iso(new Date(fy,6,1)),iso(new Date(fy+1,5,30)),'Fin Year']}
+  return[repRange.from,repRange.to,'Custom']}
+function quartersList(){var y=fyStart(new Date());return [{l:'Q1',m:'Jul - Sep',f:new Date(y,6,1),t:new Date(y,8,30)},{l:'Q2',m:'Oct - Dec',f:new Date(y,9,1),t:new Date(y,11,31)},{l:'Q3',m:'Jan - Mar',f:new Date(y+1,0,1),t:new Date(y+1,2,31)},{l:'Q4',m:'Apr - Jun',f:new Date(y+1,3,1),t:new Date(y+1,5,30)}]}
+function openQuarter(){var qs=quartersList(),y=fyStart(new Date());$('#qFy').textContent='FY'+String(y).slice(2)+'-'+String(y+1).slice(2);$('#qGrid').innerHTML=qs.map(function(x){var f=iso(x.f),t=iso(x.t);var on=(repRange.from===f&&repRange.to===t);return '<button class="preset'+(on?' on':'')+'" data-f="'+f+'" data-t="'+t+'"><span>'+x.l+'</span><small>'+x.m+'</small></button>'}).join('');$$('#qGrid .preset').forEach(function(b){b.onclick=function(){repRange.from=b.dataset.f;repRange.to=b.dataset.t;repRange.name='Quarter';renderReports();closeModal('quarterModal')}});showModal('quarterModal')}
+function setFilter(key){if(key==='custom'){openCustom();return}if(key==='quarter'){openQuarter();return}var r=filterRange(key);repRange.from=r[0];repRange.to=r[1];repRange.name=r[2];renderReports()}
+function openCustom(){$('#repFrom').value=repRange.from||'';$('#repTo').value=repRange.to||'';showModal('rangeModal')}
+/* Expand a recurring template into virtual deduction instances that fall within [from, to].
+   Returns an array of {name, amount, category, bu, gst, date, _recurring:true, _rid:id}. */
+function expandRecurring(from,to){
+  var out=[];
+  recurring.forEach(function(r){
+    if(!r.start||!r.freq)return;
+    var d=parseD(r.start),end=parseD(to),fr=r.freq;
+    /* cap at 366 iterations to prevent runaway on very old start dates */
+    for(var i=0;i<366;i++){
+      var ds=iso(d);
+      if(ds>to)break;
+      if(ds>=from){out.push({name:r.name,amount:r.amount,category:r.category||'Other',bu:r.bu,gst:r.gst,date:ds,_recurring:true,_rid:r.id})}
+      /* advance to next occurrence */
+      if(fr==='weekly'){d.setDate(d.getDate()+7)}
+      else if(fr==='fortnightly'){d.setDate(d.getDate()+14)}
+      else{/* monthly */ d.setMonth(d.getMonth()+1)}
+    }
+  });
+  return out}
+function inRange(d){return(!repRange.from||d>=repRange.from)&&(!repRange.to||d<=repRange.to)}
+/* single source of truth for all report figures */
+function rangeAgg(){
+  var es=entries.filter(function(e){return inRange(e.date)});
+  var inc=es.reduce(function(a,b){return a+(Number(b.take)||0)},0);
+  var gross=es.reduce(function(a,b){return a+(Number(b.gross)||0)},0);
+  var share=es.reduce(function(a,b){return a+entryShare(b)},0);
+  /* Cash & Square treated as GST-free income when the toggle is on: subtract them
+     from the GST base (both the gross and share variants) before dividing by 11. */
+  var cashSquare=es.reduce(function(a,b){return a+(Number(b.cash)||0)+(Number(b.square)||0)},0);
+  var gstFree=settings.cashGstFree?cashSquare:0;
+  var gstBaseAmt=(settings.gstBase==='share'?share:gross)-gstFree;
+  if(gstBaseAmt<0)gstBaseAmt=0;
+  var gst=gstBaseAmt/11;
+  var hailN=es.reduce(function(a,b){return a+(Number(b.hail)||0)},0),levy=hailN*levyRate();
+  var fD=es.reduce(function(a,b){return a+(b.fuelByType?(Number(b.fuelByType.Diesel)||0):0)},0),fP=es.reduce(function(a,b){return a+(b.fuelByType?(Number(b.fuelByType.Petrol)||0):0)},0),fL=es.reduce(function(a,b){return a+(b.fuelByType?(Number(b.fuelByType.LPG)||0):0)},0);
+  var fuel=es.reduce(function(a,b){return a+(Number(b.fuel)||0)},0);
+  /* Fuel split by who paid (display only). opPaid fuel is excluded from settlement,
+     but ALL fuel is tax-deductible + GST-creditable (driver holds the receipt).
+     Legacy fallback: older entries used fuelPocket(I-paid)/fuelCompany(op-paid). */
+  var fuelIPaid=es.reduce(function(a,b){
+    if(b.fuelIPaid!=null)return a+Number(b.fuelIPaid);
+    if(b.fuelPocket!=null)return a+Number(b.fuelPocket);       /* pre-4.8 name */
+    return a+(Number(b.fuel)||0);                               /* oldest: all I-paid */
+  },0);
+  var fuelOpPaid=es.reduce(function(a,b){
+    if(b.fuelOpPaid!=null)return a+Number(b.fuelOpPaid);
+    if(b.fuelCompany!=null)return a+Number(b.fuelCompany);      /* pre-4.8 name */
+    return a;
+  },0);
+  var fc=es.reduce(function(a,b){return a+(b.fuelCount!=null?b.fuelCount:(b.fuel>0?1:0))},0);
+  /* Manual fuel expenses added in Reports (independent of shifts). */
+  var fmList=fuelManual.filter(function(m){return inRange(m.date)});
+  var fuelManualTotal=fmList.reduce(function(a,m){return a+nn(m.amount)},0);
+  var fmCount=fmList.length;
+  var fuelAll=fuel+fuelManualTotal;   /* combined fuel for tax purposes */
+  /* Payment mix for the report breakdown */
+  var mixEftpos=es.reduce(function(a,b){return a+(Number(b.eos)||0)},0);
+  var mixCash=es.reduce(function(a,b){return a+(Number(b.cash)||0)},0);
+  var mixSquare=es.reduce(function(a,b){return a+(Number(b.square)||0)},0);
+  var mixRuns=es.reduce(function(a,b){return a+(Number(b.runs)||0)*RUN},0);
+  var mixCustom=es.reduce(function(a,b){var s=0;if(b.custom)Object.keys(b.custom).forEach(function(k){s+=Number(b.custom[k])||0});return a+s},0);
+  /* Combine one-off deductions + expanded recurring instances */
+  var allDed=deductions.filter(function(d){return inRange(d.date)});
+  if(repRange.from&&repRange.to)allDed=allDed.concat(expandRecurring(repRange.from,repRange.to));
+  var expCred=0,expDed=0,dn=0;
+  allDed.forEach(function(d){var bu=clampBu(d.bu==null?100:d.bu)/100;var amt=nn(d.amount);var hasGst=d.gst!==false;
+    if(hasGst){expCred+=amt/11*bu;expDed+=amt*10/11*bu}else{expDed+=amt*bu}dn++});
+  /* ALL fuel (shift-logged + manual) is deductible + GST-creditable.
+     Fuel is GST-inclusive, so credit = 1/11, deduction = 10/11. */
+  var fuelCred=fuelAll/11,fuelDed=fuelAll*10/11;
+  var oneB=expCred+fuelCred;
+  var dedTotal=expDed+fuelDed;
+  var net=inc-gst-dedTotal-levy;
+  return{es:es,inc:inc,gross:gross,share:share,gstBaseAmt:gstBaseAmt,gst:gst,hailN:hailN,levy:levy,fD:fD,fP:fP,fL:fL,fuel:fuelAll,fuelShift:fuel,fuelManual:fuelManualTotal,fmCount:fmCount,fmList:fmList,fuelIPaid:fuelIPaid,fuelOpPaid:fuelOpPaid,fc:fc+fmCount,fcShift:fc,expCred:expCred,expDed:expDed,fuelCred:fuelCred,fuelDed:fuelDed,oneB:oneB,dedTotal:dedTotal,dn:dn,net:net,shifts:es.length,allDed:allDed,mixEftpos:mixEftpos,mixCash:mixCash,mixSquare:mixSquare,mixRuns:mixRuns,mixCustom:mixCustom}}
+function renderReports(){
+  if(!repRange.name){var r0=filterRange('7days');repRange.from=r0[0];repRange.to=r0[1];repRange.name=r0[2]}
+  var a=rangeAgg();
+  $$('#filterRow .filt').forEach(function(b){var lbl={today:'Today','7days':'7 Days',quarter:'Quarter',fy:'Fin Year',custom:'Custom'}[b.dataset.k];b.classList.toggle('on',repRange.name===lbl)});
+  $('#pulseShifts').textContent=a.shifts+' shift'+(a.shifts===1?'':'s');
+  $('#repTake').textContent=money(a.inc);$('#repGross').textContent=money(a.gross);$('#repNet').textContent=money(a.net);$('#repGst').textContent=money(a.gst);
+  $('#pulseFoot').textContent='Est. net = take-home \u2212 GST'+(settings.gstBase==='share'?' (on driver share)':' (on full gross)')+' \u2212 expenses \u2212 levy';
+  $('#repHailN').textContent=a.hailN;$('#repLevy').textContent=money(a.levy);$('#repRate').textContent=money(levyRate());$('#repRate2').textContent=money(levyRate());
+  $('#fTotal').textContent=money(a.fuel);$('#fAvg').textContent=money(a.fc?a.fuel/a.fc:0);$('#fCount').textContent=a.fc;$('#fuelEntries').textContent=a.fc+' entr'+(a.fc===1?'y':'ies');
+  $('#fuelSubTitle').textContent='Tax-deductible operating cost';
+  $('#fuelFoot').textContent=(a.fuelManual>0)
+    ? ('Shift fuel '+money(a.fuelShift)+' + manual '+money(a.fuelManual)+' \u00b7 all deductible + GST credit '+money(a.fuelCred))
+    : (a.fuelOpPaid>0
+      ? ('I paid '+money(a.fuelIPaid)+' (reimbursed in settlement) \u00b7 operator paid '+money(a.fuelOpPaid)+' (excluded) \u00b7 all deductible + GST credit')
+      : 'All fuel I paid \u2014 reimbursed in settlement and fully deductible + GST credit');
+  /* Payment mix */
+  var mix=[['EFTPOS (EOS)',a.mixEftpos,'var(--inc)'],['Cash',a.mixCash,'var(--levy)'],['Square',a.mixSquare,'var(--acct)'],['Runs',a.mixRuns,'var(--hail)'],['Custom types',a.mixCustom,'var(--fink)']].filter(function(m){return m[1]>0});
+  var mixTot=mix.reduce(function(s,m){return s+m[1]},0)||1;
+  $('#mixCard').style.display=mixTot>1?'block':'none';
+  $('#mixRows').innerHTML=mix.map(function(m){var pct=(m[1]/mixTot*100).toFixed(0);return '<div class="tr" style="grid-template-columns:1fr auto auto"><span><span class="dot" style="display:inline-block;background:'+m[0+2]+';margin-right:6px"></span>'+esc(m[0])+'</span><span class="rg">'+pct+'%</span><span class="am" style="color:'+m[2]+'">'+money(m[1])+'</span></div>'}).join('');
+  $('#repGstCred').textContent=money(a.oneB);$('#repDeduct').textContent=money(a.dedTotal);$('#dedCount').textContent=a.dn+a.fc;
+  /* Auto fuel line from the shift tracker (GST auto-calculated 1/11). */
+  var fuelLine='';
+  if(a.fuelShift>0){
+    fuelLine='<div class="tr" style="background:var(--fuel-bg);border-radius:8px;padding-left:8px;padding-right:8px"><span><b style="color:var(--fuel)">Fuel</b> <span class="rg" style="color:var(--fuel)">auto \u00b7 from tracker \u00b7 GST '+money(a.fuelShift/11)+'</span></span><span class="rg">'+a.fcShift+' fill'+(a.fcShift===1?'':'s')+'</span><span class="am" style="color:var(--fuel)">'+money(a.fuelShift)+'</span></div>';
+  }
+  /* Manual fuel expenses (added in Reports), each deletable, with receipt indicator. */
+  var manualLines=a.fmList.slice().sort(function(x,y){return x.date<y.date?1:-1}).map(function(m){
+    var rc=m.receiptId?' <span class="rg" style="color:var(--acct)">\ud83d\udcce</span>':'';
+    return '<div class="tr" style="background:var(--fuel-bg);border-radius:8px;padding-left:8px;padding-right:8px;grid-template-columns:1fr auto auto"><span><b style="color:var(--fuel)">Fuel ('+esc(m.type)+')</b>'+rc+' <span class="rg" style="color:var(--fuel)">manual \u00b7 GST '+money(nn(m.amount)/11)+'</span></span><span class="rg">'+esc(m.date)+'</span><span class="am" style="color:var(--fuel)">'+money(m.amount)+'</span><button class="x" data-delfm="'+esc(m.id)+'" style="background:transparent;border:1px solid var(--dgr);border-radius:8px;color:var(--dgr);width:26px;height:26px;cursor:pointer;font-weight:700;margin-left:6px">&times;</button></div>';
+  }).join('');
+  /* One-off + recurring deductions combined, sorted by date */
+  var ds=a.allDed.sort(function(x,y){return x.date<y.date?1:-1});
+  $('#dedRows').innerHTML=fuelLine+manualLines+ds.map(function(d){var rc=d.receiptId?' <span class="rg" style="color:var(--acct)">\ud83d\udcce</span>':'';return '<div class="tr"><span>'+esc(d.name)+rc+(d._recurring?' <span class="rg" style="color:var(--levy)">\u21BB</span>':'')+' <span class="rg">'+esc(d.category||'')+(d.gst===false?' \u00b7 no GST':'')+'</span></span><span class="rg">'+esc(d.date)+'</span><span class="am" style="color:var(--inc)">'+money(d.amount)+'</span></div>'}).join('');
+  $$('#dedRows [data-delfm]').forEach(function(b){b.onclick=function(){var id=Number(b.dataset.delfm);if(confirm('Remove this manual fuel expense?')){fuelManual=fuelManual.filter(function(m){return m.id!==id});save('fareo_fuelManual',fuelManual);renderReports();toast('Fuel expense removed')}}});
+  $('#dedEmpty').style.display=(ds.length||a.fuel>0)?'none':'block';
+  /* Recurring templates list with delete */
+  var hasRecur=recurring.length>0;
+  $('#recurSection').style.display=hasRecur?'block':'none';
+  if(hasRecur){var freqLabel={weekly:'Weekly',fortnightly:'Fortnightly',monthly:'Monthly'};
+    $('#recurRows').innerHTML=recurring.map(function(r){return '<div class="tr" style="grid-template-columns:1fr auto auto auto"><span>'+esc(r.name)+'</span><span class="rg">'+esc(freqLabel[r.freq]||r.freq)+'</span><span class="am" style="color:var(--inc)">'+money(r.amount)+'</span><button class="x" data-delrecur="'+r.id+'" style="background:transparent;border:1px solid var(--dgr);border-radius:8px;color:var(--dgr);width:28px;height:28px;cursor:pointer;font-weight:700">&times;</button></div>'}).join('');
+    $$('[data-delrecur]').forEach(function(b){b.onclick=function(){var rid=Number(b.dataset.delrecur);if(confirm('Remove this recurring expense?')){recurring=recurring.filter(function(r){return r.id!==rid});save('fareo_recurring',recurring);renderReports();toast('Recurring expense removed')}}});}
+}
+$$('#filterRow .filt').forEach(function(b){b.onclick=function(){setFilter(b.dataset.k)}});
+/* [F10] auto-swap inverted ranges */
+$('#applyCustom').onclick=function(){var f=$('#repFrom').value,t=$('#repTo').value;if(!f||!t){toast('Pick both dates');return}if(f>t){var tmp=f;f=t;t=tmp;toast('Dates were swapped')}repRange.from=f;repRange.to=t;repRange.name='Custom';renderReports();closeModal('rangeModal')};
+var expCat='Other',expRcptFile=null,expGstOn=true,expRecurOn=false;
+function openExp(){expCat='Other';expRcptFile=null;expGstOn=true;expRecurOn=false;
+  $$('#catRow button').forEach(function(x){x.classList.toggle('on',x.dataset.cat==='Other')});
+  $('#expDesc').value='';$('#expAmt').value='';$('#expBu').value='100';
+  $('#expGst').classList.add('on');$('#expRecur').classList.remove('on');
+  $('#expRecurOpts').style.display='none';$('#expFreq').value='monthly';
+  $('#expDateLabel').textContent='Date';$('#expDate').value=todayStr();
+  $('#expRcptTxt').textContent='Attach Receipt';$('#expRcpt').classList.remove('done');
+  showModal('expModal')}
+$('#addExp').onclick=openExp;
+$$('#catRow button').forEach(function(b){b.onclick=function(){expCat=b.dataset.cat;$$('#catRow button').forEach(function(x){x.classList.toggle('on',x===b)})}});
+$('#expGst').onclick=function(){expGstOn=!expGstOn;this.classList.toggle('on',expGstOn)};
+$('#expRecur').onclick=function(){expRecurOn=!expRecurOn;this.classList.toggle('on',expRecurOn);
+  $('#expRecurOpts').style.display=expRecurOn?'block':'none';
+  $('#expDateLabel').textContent=expRecurOn?'Starts from':'Date'};
+$('#expRcpt').onclick=function(){$('#expRcptFile')&&$('#expRcptFile').click()};
+$('#expCancel').onclick=function(){closeModal('expModal')};
+$('#expSave').onclick=async function(){
+  var amt=nn($('#expAmt').value);if(!amt){toast('Enter an amount');return}
+  var name=$('#expDesc').value.trim()||expCat;
+  var bu=clampBu($('#expBu').value);
+  var date=$('#expDate').value||todayStr();
+  /* store receipt (optional) */
+  var rcptId=null;
+  if(expRcptFile){var du=await compressImage(expRcptFile);rcptId=storeReceipt(du,expRcptFile.name,expRcptFile.type==='application/pdf'?'pdf':'image',{kind:'expense',desc:name,amount:amt,date:date,category:expCat});}
+  if(expRecurOn){
+    recurring.push({id:Date.now(),name:name,amount:amt,category:expCat,bu:bu,gst:expGstOn,
+      freq:$('#expFreq').value,start:date,receiptId:rcptId});
+    save('fareo_recurring',recurring);
+    closeModal('expModal');renderReports();toast('Recurring expense added');
+  }else{
+    deductions.push({id:Date.now(),name:name,amount:amt,category:expCat,bu:bu,gst:expGstOn,date:date,receiptId:rcptId});
+    save('fareo_deductions',deductions);
+    closeModal('expModal');renderReports();toast('Expense added');
+  }
+};
+/* ---- manual fuel expense (Reports) ---- */
+var fmRcptFile=null;
+function openFuelExp(){fmRcptFile=null;$('#fmAmt').value='';$('#fmType').value=settings.fuel||'Diesel';$('#fmDate').value=todayStr();$('#fmRcptTxt').textContent='Attach Receipt';$('#fmRcpt').classList.remove('done');showModal('fuelModal')}
+if($('#addFuelExp'))$('#addFuelExp').onclick=openFuelExp;
+if($('#fmRcpt'))$('#fmRcpt').onclick=function(){$('#fuelRcptFile').click()};
+if($('#fuelRcptFile'))$('#fuelRcptFile').onchange=function(e){fmRcptFile=e.target.files[0]||null;$('#fmRcptTxt').textContent=fmRcptFile?'Receipt attached':'Attach Receipt';$('#fmRcpt').classList.toggle('done',!!fmRcptFile)};
+if($('#fmCancel'))$('#fmCancel').onclick=function(){closeModal('fuelModal')};
+if($('#fmSave'))$('#fmSave').onclick=async function(){
+  var amt=nn($('#fmAmt').value);if(!amt){toast('Enter an amount');return}
+  var date=$('#fmDate').value||todayStr();var type=$('#fmType').value;
+  var rcptId=null;
+  if(fmRcptFile){var du=await compressImage(fmRcptFile);rcptId=storeReceipt(du,fmRcptFile.name,fmRcptFile.type==='application/pdf'?'pdf':'image',{kind:'fuel',desc:'Fuel ('+type+')',amount:amt,date:date,category:'Fuel'});}
+  fuelManual.push({id:Date.now(),amount:amt,type:type,date:date,receiptId:rcptId});
+  save('fareo_fuelManual',fuelManual);
+  closeModal('fuelModal');renderReports();toast('Fuel expense added');
+};
+/* ---- receipt archive ---- */
+function openArchive(){renderArchive('');showModal('archiveModal')}
+function renderArchive(q){
+  q=(q||'').toLowerCase();
+  var list=receipts.slice().sort(function(a,b){return b.createdAt-a.createdAt})
+    .filter(function(r){return !q||((r.desc||'')+' '+(r.category||'')+' '+(r.date||'')+' '+(r.kind||'')).toLowerCase().indexOf(q)>=0});
+  $('#archiveEmpty').style.display=list.length?'none':'block';
+  $('#archiveList').innerHTML=list.map(function(r){
+    var ico=r.type==='pdf'?'PDF':'IMG';
+    return '<div class="tr rcpt-row" data-rid="'+esc(r.id)+'" style="grid-template-columns:auto 1fr auto;cursor:pointer"><span class="rcpt-badge">'+ico+'</span><span>'+esc(r.desc||'Receipt')+' <span class="rg">'+esc(r.category||r.kind)+' \u00b7 '+esc(r.date)+'</span></span><span class="am" style="color:var(--inc)">'+money(r.amount)+'</span></div>';
+  }).join('');
+  $$('#archiveList .rcpt-row').forEach(function(row){row.onclick=function(){viewReceipt(row.dataset.rid)}});
+}
+if($('#archiveSearch'))$('#archiveSearch').oninput=function(){renderArchive(this.value)};
+if($('#archiveClose'))$('#archiveClose').onclick=function(){closeModal('archiveModal')};
+var rvCurrent=null;
+function viewReceipt(id){var r=getReceipt(id);if(!r)return;rvCurrent=id;
+  $('#rvTitle').textContent=r.desc||'Receipt';
+  $('#rvMeta').textContent=(r.category||r.kind)+' \u00b7 '+r.date+' \u00b7 '+money(r.amount);
+  $('#rvBody').innerHTML=r.type==='pdf'
+    ?'<a href="'+r.dataUrl+'" download="'+esc(r.name)+'" class="btn neutral" style="display:inline-block;text-decoration:none">Open / download PDF</a>'
+    :'<img src="'+r.dataUrl+'" alt="receipt" style="max-width:100%;max-height:60vh;border-radius:10px">';
+  showModal('rcptViewModal');
+}
+if($('#rvClose'))$('#rvClose').onclick=function(){closeModal('rcptViewModal')};
+if($('#rvDelete'))$('#rvDelete').onclick=function(){if(rvCurrent&&confirm('Delete this receipt permanently?')){deleteReceipt(rvCurrent);closeModal('rcptViewModal');renderArchive($('#archiveSearch').value||'');renderReports();toast('Receipt deleted')}};
+function summaryHTML(light){var a=rangeAgg();
+  var c=light?{head:'#141414',mut:'#6b6b70',inc:'#047857',line:'#eaeaea',card:'#f5f6f8'}:{head:'var(--head)',mut:'var(--mut)',inc:'var(--inc)',line:'var(--bd)',card:'var(--field)'};
+  function r(l,v,st){return '<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid '+c.line+'"><span style="color:'+c.mut+';font-size:13px">'+l+'</span><span style="color:'+(st?c.inc:c.head)+';font-weight:'+(st?800:700)+';font-size:'+(st?16:14)+'px">'+v+'</span></div>'}
+  return '<div style="font-family:Outfit,system-ui,sans-serif;color:'+c.head+'">'
+    +'<h3 style="margin:0 0 2px;font-size:20px;color:'+c.head+'">Fareo summary</h3>'
+    +'<p style="margin:0 0 14px;color:'+c.mut+';font-size:12.5px">'+esc(repRange.name)+(a.shifts?' · '+a.shifts+' shifts':'')+'</p>'
+    +'<div style="background:'+c.card+';border-radius:14px;padding:15px;margin-bottom:12px;text-align:center">'
+      +'<div style="font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:'+c.mut+';font-weight:700">Net take-home</div>'
+      +'<div style="font-size:36px;font-weight:800;color:'+c.inc+';margin-top:4px">'+money(a.inc)+'</div></div>'
+    +r('Gross revenue',money(a.gross),true)
+    +r('Driver share',money(a.share))
+    +r('GST set aside (1/11 of '+(settings.gstBase==='share'?'driver share':'full gross')+')',money(a.gst))
+    +r('CPV levy ('+a.hailN+' hail trips) — SRO return',money(a.levy))
+    +r('Fuel ('+a.fc+' fills): I paid '+money(a.fuelIPaid)+', operator paid '+money(a.fuelOpPaid),money(a.fuel))
+    +r('GST credits (1B)',money(a.oneB))+r('Deductible expenses',money(a.dedTotal))
+    +r('Est. net after GST, expenses & levy',money(a.net),true)
+    +'<p style="margin:14px 0 0;color:'+c.mut+';font-size:10.5px">Estimate only — confirm figures with your tax agent. Generated by Fareo · '+new Date().toLocaleDateString('en-AU')+'</p></div>'}
+var curSummaryMode='income';
+function basSummaryHTML(light){var a=rangeAgg();
+  var c=light?{head:'#141414',mut:'#6b6b70',line:'#eaeaea',card:'#f5f6f8',teal:'#0F766E',red:'#B42318',grn:'#047857'}:{head:'var(--head)',mut:'var(--mut)',line:'var(--bd)',card:'var(--field)',teal:'#2DD4BF',red:'var(--dgr)',grn:'var(--inc)'};
+  /* [F12] G1/1A use the configured GST base; [F14] 1B comes from the shared aggregate */
+  var g1=a.gstBaseAmt,oneA=a.gstBaseAmt/11,oneB=a.oneB,net=oneA-oneB;
+  function box(code,label,val,strong){return '<div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid '+c.line+'"><span style="min-width:38px;text-align:center;border:1.5px solid '+c.teal+';color:'+c.teal+';border-radius:8px;padding:5px 4px;font-weight:800;font-size:13px">'+code+'</span><span style="flex:1;color:'+c.mut+';font-size:12.5px">'+label+'</span><span style="color:'+c.head+';font-weight:'+(strong?800:700)+';font-size:14px">'+val+'</span></div>'}
+  return '<div style="font-family:Outfit,system-ui,sans-serif;color:'+c.head+'">'
+    +'<h3 style="margin:0 0 2px;font-size:20px;color:'+c.head+'">BAS prep summary</h3>'
+    +'<p style="margin:0 0 4px;color:'+c.mut+';font-size:12.5px">'+esc(repRange.name)+' &middot; Goods &amp; services tax (GST)</p>'
+    +'<p style="margin:0 0 14px;color:'+c.mut+';font-size:11px">Enter these on your ATO activity statement. Sales base: '+(settings.gstBase==='share'?'driver share':'full gross')+'.</p>'
+    +box('G1','Total sales (GST inclusive)',money(g1))
+    +'<div style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:'+c.mut+';font-weight:700;margin:10px 0 2px">You owe ATO</div>'
+    +box('1A','GST on sales',money(oneA),true)
+    +'<div style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:'+c.mut+';font-weight:700;margin:10px 0 2px">ATO owes you</div>'
+    +box('1B','GST on purchases (expenses + fuel)',money(oneB),true)
+    +box('8A','Subtotal — you owe',money(oneA))
+    +box('8B','Subtotal — ATO owes',money(oneB))
+    +'<div style="background:'+c.card+';border-radius:12px;padding:14px;margin-top:14px;text-align:center">'
+      +'<div style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:'+c.mut+';font-weight:700">'+(net>=0?'Amount payable to ATO':'Refund from ATO')+'</div>'
+      +'<div style="font-size:30px;font-weight:800;margin-top:4px;color:'+(net>=0?c.red:c.grn)+'">'+money(Math.abs(net))+'</div></div>'
+    +'<p style="margin:12px 0 0;color:'+c.mut+';font-size:10.5px">CPV levy ('+money(a.levy)+' for this period) is lodged separately with the SRO — it does not go on the BAS.</p>'
+    +'<p style="margin:6px 0 0;color:'+c.mut+';font-size:10.5px">Estimate only \u2014 confirm with your BAS/tax agent. Fareo &middot; '+new Date().toLocaleDateString('en-AU')+'</p></div>'}
+function openSummary(mode){curSummaryMode=mode;$('#summaryBody').innerHTML=(mode==='bas'?basSummaryHTML(false):summaryHTML(false));closeModal('sumPick');showModal('summaryModal')}
+$('#summaryBtn').onclick=function(){showModal('sumPick')};
+$('#pickIncome').onclick=function(){openSummary('income')};
+$('#pickBas').onclick=function(){openSummary('bas')};
+$('#closeSummary').onclick=function(){closeModal('summaryModal')};
+function summaryText(mode){
+  var a=rangeAgg();var L=[];
+  L.push('*Fareo '+(mode==='bas'?'BAS':'Income')+' Summary*');
+  L.push(repRange.name||'Selected period');
+  L.push('');
+  if(mode==='bas'){
+    L.push('G1 Total sales: '+money(a.gstBaseAmt));
+    L.push('1A GST on sales: '+money(a.gst));
+    L.push('1B GST credits: '+money(a.oneB));
+    L.push('Net GST: '+money(a.gst-a.oneB));
+  }else{
+    L.push('Take-home: '+money(a.inc));
+    L.push('Gross: '+money(a.gross));
+    L.push('GST set aside: '+money(a.gst));
+    L.push('Deductions: '+money(a.dedTotal));
+    L.push('Levy: '+money(a.levy));
+    L.push('Est. net: '+money(a.net));
+  }
+  L.push('');L.push('Shifts: '+a.shifts+' \u00b7 via Fareo');
+  return L.join('\n');
+}
+async function shareSummary(){
+  var txt=summaryText(curSummaryMode);
+  if(navigator.share){
+    try{await navigator.share({text:txt,title:'Fareo Summary'});return;}
+    catch(e){if(e&&e.name==='AbortError')return;}
+  }
+  copyToClipboard(txt,'Summary copied to clipboard');
+}
+if($('#shareSummary'))$('#shareSummary').onclick=shareSummary;
+$('#pdfBtn').onclick=function(){$('#printRoot').innerHTML='<div style="padding:26px;max-width:520px;margin:0 auto">'+(curSummaryMode==='bas'?basSummaryHTML(true):summaryHTML(true))+'</div>';setTimeout(function(){window.print()},60)};
+$('#expRcptFile')&&($('#expRcptFile').onchange=function(e){expRcptFile=e.target.files[0]||null;$('#expRcptTxt').textContent=expRcptFile?'Receipt attached':'Attach Receipt';$('#expRcpt').classList.toggle('done',!!expRcptFile)});
+/* [F9] CSV: quote fields, escape quotes, guard non-numeric values that start
+   with a formula trigger so Excel/Sheets can't execute them */
+function csvCell(v){v=String(v==null?'':v);if(!/^-?\d+(\.\d+)?$/.test(v)&&/^[=+\-@\t]/.test(v))v="'"+v;if(/[",\n\r]/.test(v))v='"'+v.replace(/"/g,'""')+'"';return v}
+$('#csvBtn').onclick=function(){var rows=[['Date','Rego','TakeHome','Gross','DriverShare','EFTPOS','Cash','Square','Runs','FuelTotal','FuelIPaid','FuelOpPaid','HailTrips']];
+  entries.filter(function(e){return inRange(e.date)}).forEach(function(e){var fi=(e.fuelIPaid!=null?Number(e.fuelIPaid):(e.fuelPocket!=null?Number(e.fuelPocket):Number(e.fuel)||0));var fo=(e.fuelOpPaid!=null?Number(e.fuelOpPaid):(e.fuelCompany!=null?Number(e.fuelCompany):0));rows.push([e.date,e.rego,(Number(e.take)||0).toFixed(2),(Number(e.gross)||0).toFixed(2),entryShare(e).toFixed(2),(Number(e.eos)||0).toFixed(2),(Number(e.cash)||0).toFixed(2),(Number(e.square)||0).toFixed(2),((Number(e.runs)||0)*RUN).toFixed(2),(Number(e.fuel)||0).toFixed(2),fi.toFixed(2),fo.toFixed(2),Number(e.hail)||0])});
+  var csv=rows.map(function(r){return r.map(csvCell).join(',')}).join('\r\n');
+  var bl=new Blob([csv],{type:'text/csv'}),u=URL.createObjectURL(bl),an=document.createElement('a');an.href=u;an.download='fareo-report.csv';an.click();setTimeout(function(){URL.revokeObjectURL(u)},1000);toast('CSV exported')};
+/* ---------- settings ---------- */
+function renderSettings(){
+  $('#setPct').value=settings.pct;$('#setLevy').value=settings.levy;$('#setFuel').value=settings.fuel;$('#setTheme').value=settings.theme;
+  $('#setGstBase').value=settings.gstBase;
+  $('#setCashGst').classList.toggle('on',!!settings.cashGstFree);
+  var ac=$('#archiveCount');if(ac)ac.textContent=receipts.length;
+  var sc=$('#setCredit');sc.innerHTML=DAYS.map(function(d,i){return '<option value="'+i+'">'+d+'</option>'}).join('');sc.value=String(settings.creditedDay);
+  var sw=$('#setWeek');sw.innerHTML=DAYS.map(function(d,i){return '<option value="'+i+'">'+d+'</option>'}).join('');sw.value=String(settings.weekStart);
+  $('#setAuto').classList.toggle('on',!!settings.autocomplete);
+  $('#regoChips').innerHTML=settings.regos.map(function(r){return '<span class="chip">'+esc(r)+'<button data-rr="'+esc(r)+'">&times;</button></span>'}).join('');
+  $$('#regoChips [data-rr]').forEach(function(b){b.onclick=function(){settings.regos=settings.regos.filter(function(x){return x!==b.dataset.rr});if(!settings.regos.length)settings.regos=['5088M'];persist();renderSettings();rowInputs()}});
+  /* Payment type chips */
+  var ptc=$('#payTypeChips');
+  if(ptc){ptc.innerHTML=settings.payTypes.length?settings.payTypes.map(function(pt){var tag=pt.formula?'ƒx':(pt.collector==='driver'?'you':'op')+(pt.rate?' ·$'+pt.rate:'');return '<span class="chip">'+esc(pt.name)+' <span class="rg" style="font-size:10px;color:var(--mut)">'+esc(tag)+'</span><button data-delpt="'+esc(pt.id)+'">&times;</button></span>'}).join(''):'<span style="font-size:11.5px;color:var(--mut)">No custom types yet.</span>';
+    $$('#payTypeChips [data-delpt]').forEach(function(b){b.onclick=function(){var id=b.dataset.delpt;if(confirm('Remove this payment type? Saved shifts keep their recorded amounts.')){settings.payTypes=settings.payTypes.filter(function(p){return String(p.id)!==String(id)});delete draft.custom[id];persist();renderSettings();rowInputs();render();toast('Payment type removed')}}});}
+}
+/* ---- Payment type editor ---- */
+var ptCollector='driver',ptFxOn=false;
+function openPayType(){ptCollector='driver';ptFxOn=false;
+  $('#ptTitle').textContent='Add payment type';
+  $('#ptName').value='';$('#ptRate').value='';$('#ptFx').value='';$('#ptFxTest').textContent='';
+  $('#ptColOp').classList.remove('on');$('#ptColDr').classList.add('on');
+  $('#ptFxToggle').classList.remove('on');$('#ptFxWrap').style.display='none';
+  showModal('payTypeModal')}
+if($('#addPayType'))$('#addPayType').onclick=openPayType;
+$('#ptColOp').onclick=function(){ptCollector='operator';this.classList.add('on');$('#ptColDr').classList.remove('on')};
+$('#ptColDr').onclick=function(){ptCollector='driver';this.classList.add('on');$('#ptColOp').classList.remove('on')};
+$('#ptFxToggle').onclick=function(){ptFxOn=!ptFxOn;this.classList.toggle('on',ptFxOn);$('#ptFxWrap').style.display=ptFxOn?'block':'none';ptTestFx()};
+function ptTestFx(){if(!ptFxOn){$('#ptFxTest').textContent='';return}
+  var r=safeFormula($('#ptFx').value,{amount:100,pct:settings.pct/100,gross:100,count:1});
+  $('#ptFxTest').textContent=r==null?'⚠ invalid formula':('✓ $100 → '+money(r))}
+$('#ptFx').oninput=ptTestFx;
+$('#ptCancel').onclick=function(){closeModal('payTypeModal')};
+$('#ptSave').onclick=function(){
+  var name=$('#ptName').value.trim();if(!name){toast('Name required');return}
+  var rateRaw=$('#ptRate').value.trim();var rate=rateRaw===''?null:(Number(rateRaw)||0);
+  var fx=null;
+  if(ptFxOn){var f=$('#ptFx').value.trim();if(f){if(safeFormula(f,{amount:1,pct:0.5,gross:1,count:1})==null){toast('Formula is invalid');return}fx=f}}
+  settings.payTypes.push({id:'pt'+Date.now(),name:name,collector:ptCollector,rate:rate,formula:fx});
+  persist();closeModal('payTypeModal');renderSettings();rowInputs();render();toast('Payment type added')};
+$('#setPct').oninput=function(){var v=parseFloat(this.value);settings.pct=isFinite(v)?Math.max(0,Math.min(100,v)):55;persist();render()};
+/* [F1] 0 is a legitimate levy rate */
+$('#setLevy').oninput=function(){var v=parseFloat(this.value);settings.levy=(isFinite(v)&&v>=0)?v:0;persist();render()};
+$('#setFuel').onchange=function(){settings.fuel=this.value;persist()};
+/* Fuel mode removed — always reimbursed */
+$('#setGstBase').onchange=function(){settings.gstBase=this.value;persist();toast(this.value==='share'?'GST set aside on driver share':'GST set aside on full gross')};
+$('#setCashGst').onclick=function(){settings.cashGstFree=!settings.cashGstFree;persist();this.classList.toggle('on',settings.cashGstFree);renderReports();toast(settings.cashGstFree?'Cash & Square: GST-free':'Cash & Square: GST-inclusive')};
+if($('#advToggle'))$('#advToggle').onclick=function(){var w=$('#advWrap');var open=w.style.display==='none';w.style.display=open?'block':'none';this.classList.toggle('open',open)};
+if($('#archiveLink'))$('#archiveLink').onclick=openArchive;
+/* ---- release notes modal ---- */
+var TAG_COLORS={'Feature':'inc','UI/UX':'hail','Integration':'acct','Bug Fix':'dgr','Maintenance':'mut','Tax':'levy'};
+function renderChangelog(){
+  var cur=CHANGELOG[0];
+  var cc=$('#clCurrent');if(cc)cc.textContent='Version '+APP_VERSION+' \u00b7 '+(cur?cur.date:'');
+  var html=CHANGELOG.map(function(rel){
+    var items=rel.notes.map(function(n){
+      var col=TAG_COLORS[n[0]]||'mut';
+      return '<div style="display:flex;gap:8px;padding:6px 0;align-items:flex-start"><span class="cl-tag cl-'+col+'">'+esc(n[0])+'</span><span style="flex:1;font-size:12px;color:var(--body);line-height:1.45">'+esc(n[1])+'</span></div>';
+    }).join('');
+    return '<div style="margin-bottom:16px"><div style="display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid var(--bd);padding-bottom:6px;margin-bottom:4px"><b style="font-size:15px;color:var(--head)">Version '+esc(rel.v)+'</b><span style="font-size:11px;color:var(--mut)">'+esc(rel.date)+'</span></div>'+items+'</div>';
+  }).join('');
+  var cb=$('#changelogBody');if(cb)cb.innerHTML=html;
+}
+if($('#versionRow'))$('#versionRow').onclick=function(){renderChangelog();showModal('changelogModal')};
+if($('#clClose'))$('#clClose').onclick=function(){closeModal('changelogModal')};
+$('#setTheme').onchange=function(){settings.theme=this.value;persist();applyTheme()};
+$('#setCredit').onchange=function(){settings.creditedDay=parseInt(this.value,10);persist();renderWeekly();toast('Credited on '+DAYS[settings.creditedDay])};
+$('#setWeek').onchange=function(){settings.weekStart=parseInt(this.value,10);persist();wkOffset=0;renderWeekly();toast('Week starts '+DAYS[settings.weekStart])};
+$('#setAuto').onclick=function(){settings.autocomplete=!settings.autocomplete;persist();this.classList.toggle('on',settings.autocomplete);rowInputs();toast(settings.autocomplete?'Autocomplete on':'Autocomplete off')};
+$('#addRego').onclick=function(){var v=$('#newRego').value.trim().toUpperCase();if(!v){toast('Enter a rego');return}if(settings.regos.indexOf(v)<0)settings.regos.push(v);$('#newRego').value='';persist();renderSettings();rowInputs();toast('Rego added')};
+$('#newFy').onclick=function(){if(confirm('Clear all shifts, income, deductions and manual fuel for a fresh financial year? Settings and the receipt archive are kept.')){entries=[];deductions=[];recurring=recurring;fuelManual=[];draft=freshDraft(settings.regos[0]||'');persist();toast('New financial year started');rowInputs();render();renderWeekly();renderReports()}};
+async function fullRefresh(){
+  toast('Clearing caches…');
+  try{
+    /* 1. Unregister all service workers so stale SW doesn't re-cache old assets */
+    if('serviceWorker' in navigator){
+      var regs=await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(function(r){return r.unregister()}));
+    }
+    /* 2. Delete every entry in Cache Storage (the SW cache, precache, runtime, etc.) */
+    if('caches' in window){
+      var keys=await caches.keys();
+      await Promise.all(keys.map(function(k){return caches.delete(k)}));
+    }
+  }catch(e){/* offline or blocked — still reload */}
+  /* 3. Hard reload bypassing HTTP cache */
+  toast('Reloading…');
+  setTimeout(function(){location.reload(true)},400);
+}
+$('#clearCache').onclick=fullRefresh;
+$('#refreshBtn').onclick=fullRefresh;
+
+/* ---------- backup + cloud sync ---------- */
+var SYNC_KEYS=['fareo_settings','fareo_entries','fareo_deductions','fareo_recurring','fareo_fuelManual','fareo_draft','fareo_names'];
+function allData(){var o={};SYNC_KEYS.forEach(function(k){var v=localStorage.getItem(k);if(v!=null)o[k]=v});return o}
+/* Backup includes receipts (for a full audit-safe export); cloud sync does not. */
+function allDataFull(){var o=allData();var r=localStorage.getItem('fareo_receipts');if(r!=null)o['fareo_receipts']=r;return o}
+function applyData(d){Object.keys(d||{}).forEach(function(k){if(k.indexOf('fareo_')===0){var v=d[k];try{localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v))}catch(_){}}})}
+$('#exportBtn').onclick=function(){var dump={app:'fareo',ver:APP_VERSION,exported:new Date().toISOString(),data:allDataFull()};var b=new Blob([JSON.stringify(dump,null,2)],{type:'application/json'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download='fareo-backup-'+todayStr()+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},1200);toast('Backup saved')};
+$('#importBtn').onclick=function(){$('#importFile').click()};
+$('#importFile').onchange=function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var obj=JSON.parse(r.result);var d=obj.data||obj;if(!d||typeof d!=='object')throw 0;if(confirm('Restore this backup? It replaces the data on this device.')){applyData(d);toast('Restored - reloading');setTimeout(function(){location.reload()},700)}}catch(_){toast('Invalid backup file')}};r.readAsText(f);e.target.value=''};
+function deviceId(){var id=localStorage.getItem('fareo_device');if(!id){id='d'+Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('fareo_device',id)}return id}
+function parseCfg(t){if(!t)return null;t=String(t).trim().replace(/^(export\s+)?(const|let|var)\s+[\w$]+\s*=\s*/,'').replace(/;\s*$/,'');var m=t.match(/\{[\s\S]*\}/);if(m)t=m[0];try{return JSON.parse(t)}catch(e){try{return (new Function('return ('+t+')'))()}catch(e2){return null}}}
+var fb={app:null,auth:null,db:null,authM:null,fsM:null,uid:null,email:''},syncOn=false,syncTimer=null,applyingRemote=false;
+function setSyncState(t){var el=$('#syncState');if(el)el.textContent=t;var out=$('#syncOut');if(out)out.style.display=syncOn?'block':'none'}
+async function fbInit(cfg){if(fb.app)return;var A=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');fb.authM=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');fb.fsM=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');fb.app=A.initializeApp(cfg);fb.auth=fb.authM.getAuth(fb.app);fb.db=fb.fsM.getFirestore(fb.app)}
+function docRef(){return fb.fsM.doc(fb.db,'fareo_users',fb.uid)}
+async function syncConnect(create){try{
+  var cfg=parseCfg($('#fbConfig').value.trim());if(!cfg||!cfg.apiKey){toast('Invalid Firebase config');return}
+  var email=$('#syncEmail').value.trim(),pass=$('#syncPass').value;if(!email||!pass){toast('Enter email and password');return}
+  setSyncState('Connecting...');localStorage.setItem('fareo_fbcfg',JSON.stringify(cfg));
+  await fbInit(cfg);
+  if(create)await fb.authM.createUserWithEmailAndPassword(fb.auth,email,pass);else await fb.authM.signInWithEmailAndPassword(fb.auth,email,pass);
+  localStorage.setItem('fareo_sync_on','1');afterAuth(fb.auth.currentUser);
+}catch(e){setSyncState('Error: '+((e&&e.code)||(e&&e.message)||'failed'));toast('Sync failed')}}
+async function afterAuth(user){
+  if(!user){syncOn=false;setSyncState('Off - local only');return}
+  fb.uid=user.uid;fb.email=user.email;syncOn=true;setSyncState('Connecting...');
+  try{
+    var snap=await fb.fsM.getDoc(docRef());var localTs=Number(localStorage.getItem('fareo_updatedAt')||0);
+    if(snap.exists()){var rem=snap.data();if((rem.updatedAt||0)>=localTs){applyingRemote=true;applyData(rem.data);localStorage.setItem('fareo_updatedAt',String(rem.updatedAt||Date.now()));applyingRemote=false;reloadAll()}else{pushNow()}}else{pushNow()}
+    fb.fsM.onSnapshot(docRef(),function(sn){if(!sn.exists())return;var r2=sn.data();if(r2._device===deviceId())return;if((r2.updatedAt||0)>Number(localStorage.getItem('fareo_updatedAt')||0)){applyingRemote=true;applyData(r2.data);localStorage.setItem('fareo_updatedAt',String(r2.updatedAt||Date.now()));applyingRemote=false;reloadAll();toast('Synced from another device')}});
+    setSyncState('On - '+fb.email);
+  }catch(e){setSyncState('Sync error - check Firestore rules')}
+}
+function pushNow(){if(!syncOn||!fb.uid||!fb.fsM)return;var ts=Date.now();localStorage.setItem('fareo_updatedAt',String(ts));fb.fsM.setDoc(docRef(),{data:allData(),updatedAt:ts,_device:deviceId()}).then(function(){setSyncState('On - saved')}).catch(function(){setSyncState('Offline - will retry')})}
+function scheduleSync(){if(!syncOn||applyingRemote)return;clearTimeout(syncTimer);syncTimer=setTimeout(pushNow,900)}
+async function syncSignOut(){try{if(fb.auth)await fb.authM.signOut(fb.auth)}catch(_){}syncOn=false;localStorage.removeItem('fareo_sync_on');setSyncState('Off - local only');toast('Signed out (data kept on device)')}
+function reloadAll(){settings=load('fareo_settings',settings)||settings;migrateSettings();entries=load('fareo_entries',[])||[];deductions=load('fareo_deductions',[])||[];recurring=load('fareo_recurring',[])||[];fuelManual=load('fareo_fuelManual',[])||[];receipts=load('fareo_receipts',[])||[];names=load('fareo_names',[])||[];try{renderNames();rowInputs();render();var a=document.querySelector('.screen.on');if(a){var t=a.dataset.tab;if(t==='weekly')renderWeekly();if(t==='reports')renderReports();if(t==='settings')renderSettings()}}catch(_){}}
+if($('#syncSignin'))$('#syncSignin').onclick=function(){syncConnect(false)};
+if($('#syncCreate'))$('#syncCreate').onclick=function(){syncConnect(true)};
+if($('#syncOut'))$('#syncOut').onclick=syncSignOut;
+(function autoConnect(){try{var cfg=localStorage.getItem('fareo_fbcfg');if(cfg&&localStorage.getItem('fareo_sync_on')){var pre=$('#fbConfig');if(pre)pre.value=cfg;fbInit(JSON.parse(cfg)).then(function(){fb.authM.onAuthStateChanged(fb.auth,function(u){afterAuth(u)})}).catch(function(){setSyncState('Off - local only')})}}catch(_){}})();
+/* ---------- nav ---------- */
+function go(tab){$$('.screen').forEach(function(s){s.classList.toggle('on',s.dataset.tab===tab)});
+  $$('.nav button').forEach(function(b){if(!b.classList.contains('center'))b.classList.toggle('on',b.dataset.go===tab)});
+  if(tab==='weekly')renderWeekly();if(tab==='reports')renderReports();if(tab==='settings')renderSettings();
+  window.scrollTo({top:0});}
+$$('.nav button').forEach(function(b){b.onclick=function(){go(b.dataset.go)}});
+$('#themeBtn').onclick=function(){settings.theme=effectiveDark()?'light':'dark';persist();applyTheme()};
+
+/* ---------- init ---------- */
+$('#today').textContent=new Date().toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long'});
+var _vl=$('#versionLine');if(_vl)_vl.textContent='Fareo '+APP_VERSION+' \u00b7 tap for release notes';
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(){if(settings.theme==='system')applyTheme()});
+applyTheme();renderNames();rowInputs();render();setSub(1);
+if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})}
+</script>
+</body>
+</html>
