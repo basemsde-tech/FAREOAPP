@@ -453,6 +453,7 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
 
     <div class="filterrow" id="filterRow">
       <button data-k="today" class="filt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg><span>Today</span></button>
+      <button data-k="week" class="filt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h1M12 14h1M16 14h1M8 18h1M12 18h1"/></svg><span>This Week</span></button>
       <button data-k="7days" class="filt on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16M8 14h2M14 14h2M8 17h2"/></svg><span>7 Days</span></button>
       <button data-k="quarter" class="filt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 20V11M10 20V5M15 20v-6M20 20V8"/></svg><span>Quarter</span></button>
       <button data-k="fy" class="filt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15l5-5 4 4 7-8"/><path d="M17 6h4v4"/></svg><span>Fin Year</span></button>
@@ -743,8 +744,11 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='5.6';
+var APP_VERSION='5.7';
 var CHANGELOG=[
+  {v:'5.7',date:'July 25, 2026',notes:[
+    ['Feature','Added a “This Week” filter button in Reports that shows the current week cycle based on your configured week start day (e.g. Thursday to Wednesday).']
+  ]},
   {v:'5.6',date:'July 25, 2026',notes:[
     ['UI/UX','Revised and streamlined the Reports tab — removed two redundant cards (Levy Compliance and Fuel Consumption).'],
     ['UI/UX','Levy data condensed into a single inline row inside Financial Pulse: hail trips × rate = levy owed.'],
@@ -1411,6 +1415,7 @@ function renderDeadlines(){
 function currentQuarter(){var y=fyStart(new Date());var qs=[[new Date(y,6,1),new Date(y,8,30)],[new Date(y,9,1),new Date(y,11,31)],[new Date(y+1,0,1),new Date(y+1,2,31)],[new Date(y+1,3,1),new Date(y+1,5,30)]];var t=iso(new Date());for(var k=0;k<4;k++){if(t>=iso(qs[k][0])&&t<=iso(qs[k][1]))return qs[k]}return qs[0]}
 function filterRange(key){var t=new Date();
   if(key==='today'){var d=iso(t);return[d,d,'Today']}
+  if(key==='week'){var ws=weekStartOf(new Date());var we=new Date(ws);we.setDate(ws.getDate()+6);return[iso(ws),iso(we),'This Week']}
   if(key==='7days'){var s7=new Date(t);s7.setDate(t.getDate()-6);return[iso(s7),iso(t),'7 Days']}
   if(key==='quarter'){var q=currentQuarter();return[iso(q[0]),iso(q[1]),'Quarter']}
   if(key==='fy'){var fy=fyStart(t);return[iso(new Date(fy,6,1)),iso(new Date(fy+1,5,30)),'Fin Year']}
@@ -1497,7 +1502,7 @@ function renderReports(){
   renderDeadlines();
   if(!repRange.name){var r0=filterRange('7days');repRange.from=r0[0];repRange.to=r0[1];repRange.name=r0[2]}
   var a=rangeAgg();
-  $$('#filterRow .filt').forEach(function(b){var lbl={today:'Today','7days':'7 Days',quarter:'Quarter',fy:'Fin Year',custom:'Custom'}[b.dataset.k];b.classList.toggle('on',repRange.name===lbl)});
+  $$('#filterRow .filt').forEach(function(b){var lbl={today:'Today',week:'This Week','7days':'7 Days',quarter:'Quarter',fy:'Fin Year',custom:'Custom'}[b.dataset.k];b.classList.toggle('on',repRange.name===lbl)});
   $('#pulseShifts').textContent=a.shifts+' shift'+(a.shifts===1?'':'s');
   $('#repTake').textContent=money(a.inc);$('#repGross').textContent=money(a.gross);$('#repNet').textContent=money(a.net);$('#repGst').textContent=money(a.gst);
   $('#pulseFoot').textContent='GST on '+(settings.gstBase==='share'?'driver share':'full gross')+(settings.cashGstFree?' \u00b7 cash/Square excluded':'');
