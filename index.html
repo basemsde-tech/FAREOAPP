@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Fareo v6.1 | Soft-Geometric rebuild | single-file PWA
+<!-- Fareo v6.2 | Soft-Geometric rebuild | single-file PWA
      Changelog v4.3 -> v4.4 (code review fixes):
      [F1]  Levy rate of $0 no longer silently reverts to $1.20 (levyRate() helper).
      [F2]  currentQuarter() fixed: last day of Q2/Q3/Q4 no longer reports Q1 (ISO string compare).
@@ -898,8 +898,11 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='6.1';
+var APP_VERSION='6.2';
 var CHANGELOG=[
+  {v:'6.2',date:'August 28, 2026',notes:[
+    ['UI/UX','Share Week sends a plain date-range + total message. The table image is day, date, rego, and amount only.']
+  ]},
   {v:'6.1',date:'August 28, 2026',notes:[
     ['Feature','Income vs costs bar chart: exact take-home and costs for each day, month, or AU quarter, matching the Reports filter.'],
     ['Feature','All Time filter on Reports, spanning every saved shift and cost.'],
@@ -1432,35 +1435,47 @@ function renderWeekly(){
 $('#wkPrev').onclick=function(){wkOffset--;renderWeekly()};
 $('#wkNext').onclick=function(){wkOffset++;renderWeekly()};
 function weekData(){var base=weekStartOf(new Date());base.setDate(base.getDate()+wkOffset*7);var end=new Date(base);end.setDate(base.getDate()+6);var bs=iso(base),es=iso(end);var rows=entries.filter(function(e){return e.date>=bs&&e.date<=es}).sort(function(a,b){return a.date<b.date?-1:1});var tot=rows.reduce(function(a,b){return a+(Number(b.take)||0)},0);return{rows:rows,tot:tot,label:fmtDMY(base)+' \u2013 '+fmtDMY(end),range:fmtDayDMY(base)+' \u2013 '+fmtDayDMY(end)}}
-function roundRect(x,rx,ry,w,h,r){x.beginPath();x.moveTo(rx+r,ry);x.arcTo(rx+w,ry,rx+w,ry+h,r);x.arcTo(rx+w,ry+h,rx,ry+h,r);x.arcTo(rx,ry+h,rx,ry,r);x.arcTo(rx,ry,rx+w,ry,r);x.closePath()}
 function buildWeekImage(){return new Promise(function(res){try{
-  var W=weekData(),dpr=2,pad=28,rowH=52,headH=112,footH=84,WD=720,H=headH+Math.max(W.rows.length,1)*rowH+footH;
+  var W=weekData(),dpr=2,pad=32,rowH=44,headH=70,colH=32,footH=58,WD=720;
+  var n=Math.max(W.rows.length,1);
+  var H=headH+colH+n*rowH+footH;
   var c=document.createElement('canvas');c.width=WD*dpr;c.height=H*dpr;var x=c.getContext('2d');x.scale(dpr,dpr);
-  x.fillStyle='#0E1116';x.fillRect(0,0,WD,H);
-  x.fillStyle='#171D25';roundRect(x,16,16,WD-32,H-32,22);x.fill();
-  x.fillStyle='#34D399';x.font='700 15px system-ui,sans-serif';x.fillText('FAREO \u00b7 WEEKLY',pad+8,pad+20);
-  x.fillStyle='#F2F4F8';x.font='800 30px system-ui,sans-serif';x.fillText(W.label,pad+8,pad+54);
-  x.fillStyle='#8A93A3';x.font='500 16px system-ui,sans-serif';x.fillText(W.range,pad+8,pad+80);
-  var y=headH+8;
-  if(!W.rows.length){x.fillStyle='#8A93A3';x.font='500 18px system-ui,sans-serif';x.fillText('No shifts this week',pad+8,y+18);}
+  x.fillStyle='#F7F8FA';x.fillRect(0,0,WD,H);
+  x.fillStyle='#111827';x.font='700 22px system-ui,sans-serif';
+  x.fillText(W.label,pad,44);
+  var y=headH;
+  x.fillStyle='#9CA3AF';x.font='700 11px system-ui,sans-serif';
+  x.fillText('DAY',pad,y);
+  x.fillText('DATE',pad+78,y);
+  x.fillText('REGO',pad+248,y);
+  x.textAlign='right';x.fillText('AMOUNT',WD-pad,y);x.textAlign='left';
+  x.strokeStyle='#E5E7EB';x.lineWidth=1;x.beginPath();x.moveTo(pad,y+10);x.lineTo(WD-pad,y+10);x.stroke();
+  y=headH+colH;
+  var days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  if(!W.rows.length){x.fillStyle='#9CA3AF';x.font='500 15px system-ui,sans-serif';x.fillText('No shifts',pad,y+18);}
   W.rows.forEach(function(e){
-    x.strokeStyle='#242c38';x.beginPath();x.moveTo(pad+8,y-4);x.lineTo(WD-pad-8,y-4);x.stroke();
-    var d=fmtDayDMY(e.date);
-    x.fillStyle='#EAEAEE';x.font='600 19px system-ui,sans-serif';x.textAlign='left';x.fillText(d,pad+8,y+24);
-    x.fillStyle='#8A93A3';x.font='500 16px system-ui,sans-serif';x.fillText(e.rego||'',pad+250,y+24);
-    x.fillStyle='#34D399';x.font='800 20px system-ui,sans-serif';x.textAlign='right';x.fillText(money(e.take),WD-pad-8,y+24);
+    var d=asDate(e.date);
+    x.fillStyle='#111827';x.font='600 15px system-ui,sans-serif';
+    x.fillText(days[d.getDay()],pad,y+20);
+    x.font='500 15px system-ui,sans-serif';
+    x.fillText(fmtDMY(e.date),pad+78,y+20);
+    x.fillStyle='#4B5563';
+    x.fillText(e.rego||'\u2014',pad+248,y+20);
+    x.fillStyle='#111827';x.font='700 15px system-ui,sans-serif';x.textAlign='right';
+    x.fillText(money(e.take),WD-pad,y+20);x.textAlign='left';
     y+=rowH;
   });
-  x.textAlign='left';x.strokeStyle='#34D399';x.lineWidth=2;x.beginPath();x.moveTo(pad+8,y+4);x.lineTo(WD-pad-8,y+4);x.stroke();x.lineWidth=1;
-  x.fillStyle='#8A93A3';x.font='700 15px system-ui,sans-serif';x.fillText('TOTAL',pad+8,y+42);
-  x.fillStyle='#34D399';x.font='800 34px system-ui,sans-serif';x.textAlign='right';x.fillText(money(W.tot),WD-pad-8,y+46);x.textAlign='left';
+  x.strokeStyle='#111827';x.beginPath();x.moveTo(pad,y+2);x.lineTo(WD-pad,y+2);x.stroke();
+  x.fillStyle='#6B7280';x.font='700 12px system-ui,sans-serif';
+  x.fillText('TOTAL',pad,y+36);
+  x.fillStyle='#111827';x.font='800 22px system-ui,sans-serif';x.textAlign='right';
+  x.fillText(money(W.tot),WD-pad,y+38);x.textAlign='left';
   c.toBlob(function(b){res(b?new File([b],'fareo-week.png',{type:'image/png'}):null)},'image/png');
 }catch(err){res(null)}})}
 async function shareWeek(){
   var W=weekData();
   if(!W.rows.length){toast('No shifts this week to share');return}
-  /* Text: just range + total. The table image carries the per-day detail. */
-  var txt='*Week '+W.range+'*\n'+W.rows.map(function(e){return fmtDayDMY(e.date)+'  '+ (e.rego||'')+'  '+money(e.take)}).join('\n')+'\n*Total: '+money(W.tot)+'*';
+  var txt=W.label+'\nTotal '+money(W.tot);
   var file=null;
   try{file=await buildWeekImage();}catch(e){file=null;}
   /* Try native share with the image first, then text-only, then fallbacks. */
