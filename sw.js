@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fareo-v5.9';
+const CACHE_NAME = 'fareo-v6.0';
 
 /* Local, same-origin assets only. cache.addAll() is atomic — if any entry fails
    the whole install fails, so cross-origin URLs (e.g. Google Fonts) are NOT listed
