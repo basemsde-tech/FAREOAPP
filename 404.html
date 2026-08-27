@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Fareo v5.6 | Soft-Geometric rebuild | single-file PWA
+<!-- Fareo v5.8 | Soft-Geometric rebuild | single-file PWA
      Changelog v4.3 -> v4.4 (code review fixes):
      [F1]  Levy rate of $0 no longer silently reverts to $1.20 (levyRate() helper).
      [F2]  currentQuarter() fixed: last day of Q2/Q3/Q4 no longer reports Q1 (ISO string compare).
@@ -299,12 +299,48 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 /* Fuel stat row inside Tax & Deductions */
 .fuel-stat-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--bd);margin:8px 0 4px;font-size:12px;color:var(--body)}
 .fuel-stat-row b{font-size:13px}
+.tax-gstbar{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin:10px 0 12px;padding:10px 11px;background:var(--field);border:1px solid var(--bd);border-radius:12px;font-size:11.5px;color:var(--mut);line-height:1.35}
+.tax-gstbar b{color:var(--head);font-variant-numeric:tabular-nums}
+.tax-gstbar .pay{color:var(--dgr);font-weight:800}
+.tax-gstbar .ref{color:var(--inc);font-weight:800}
+.tax-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 4px}
+.tax-add{display:flex;align-items:center;justify-content:center;gap:7px;padding:11px 10px;border-radius:12px;border:1.5px solid var(--inc);background:var(--inc-bg);color:var(--on-inc);font-weight:800;font-size:13px;cursor:pointer}
+.tax-add.fuel{border-color:var(--fuel-fill);background:var(--fuel-bg);color:var(--fuel)}
+.tax-add svg{width:16px;height:16px}
+.tax-hint{font-size:11.5px;color:var(--on-fuel);background:var(--fuel-bg);border:1px solid var(--fuel);border-radius:10px;padding:8px 11px;margin:8px 0;line-height:1.4}
+.ded-row{display:grid;grid-template-columns:1fr auto 28px;gap:8px;align-items:center;padding:11px 0;border-bottom:1px solid var(--bd)}
+.ded-row:last-child{border-bottom:0}
+.ded-row.fuel{background:var(--fuel-bg);border-radius:10px;padding:10px 8px;margin:0 0 6px;border-bottom:0}
+.ded-row .nm{display:block;font-size:13px;font-weight:700;color:var(--head)}
+.ded-row.fuel .nm{color:var(--fuel)}
+.ded-row .meta{display:block;font-size:10.5px;color:var(--mut);margin-top:2px}
+.ded-row .am{text-align:right}
+.ded-row .am b{display:block;font-size:14px;font-weight:800;color:var(--inc);font-variant-numeric:tabular-nums}
+.ded-row.fuel .am b{color:var(--fuel)}
+.ded-row .am small{display:block;font-size:9.5px;color:var(--mut);font-weight:600;margin-top:1px}
+.ded-x{width:28px;height:28px;border-radius:8px;border:1px solid var(--bd2);background:transparent;color:var(--mut);font-weight:700;cursor:pointer;line-height:1}
+.ded-x.kill{border-color:var(--dgr);color:var(--dgr)}
+.basguide-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:transparent;border:1.5px dashed var(--bd2);border-radius:12px;padding:12px 13px;margin-top:12px;cursor:pointer;text-align:left}
+.basguide-toggle b{display:block;font-size:13px;font-weight:700;color:var(--head)}
+.basguide-toggle small{display:block;font-size:10.5px;color:var(--mut);margin-top:1px}
+.basguide-toggle .chev{color:var(--mut);font-size:20px;transition:transform .2s}
+.basguide-toggle.open .chev{transform:rotate(90deg)}
+.basguide{padding:2px 2px 4px}
+.bas-step{display:flex;gap:10px;margin:0 0 11px}
+.bas-n{width:22px;height:22px;border-radius:999px;background:var(--inc-bg);color:var(--on-inc);border:1px solid var(--inc);display:grid;place-items:center;font-size:11px;font-weight:800;flex:0 0 auto;margin-top:1px}
+.bas-step p{margin:0;font-size:12.5px;color:var(--body);line-height:1.45}
+.bas-step p b{color:var(--head)}
+.bas-note{font-size:11.5px;color:var(--mut);background:var(--field);border-radius:10px;padding:10px 12px;margin:8px 0 12px;line-height:1.45}
+.bas-note b{color:var(--head)}
+.tax-live{font-size:11.5px;color:var(--on-inc);background:var(--inc-bg);border-radius:9px;padding:8px 11px;margin:8px 0 0;line-height:1.4}
+.ph-pill.tap{cursor:pointer}
 /* Report bottom actions row */
 .rep-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:4px}
 .rcpt-badge{display:inline-grid;place-items:center;min-width:34px;height:24px;border-radius:6px;background:var(--field);color:var(--mut);font-size:9px;font-weight:800;letter-spacing:.5px}
 .rcpt-row:active{opacity:.6}
 .ph-add svg{width:20px;height:20px}
 .ph-hero{background:var(--field);border:1px solid var(--bd);border-radius:16px;padding:18px 14px;text-align:center;margin-bottom:13px}
+.ph-hero.tap{cursor:pointer}
 .ph-lbl{font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--inc);font-weight:800}
 .ph-net{font-size:42px;font-weight:800;color:var(--inc);line-height:1;margin:6px 0 5px;font-variant-numeric:tabular-nums}
 .ph-sub{font-size:11.5px;color:var(--mut)}
@@ -313,6 +349,39 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .ph-stats>div:first-child{padding-left:0;border-left:0}
 .ph-stats small{display:block;font-size:9.5px;text-transform:uppercase;letter-spacing:.3px;color:var(--mut);font-weight:700;margin-bottom:3px}
 .ph-stats b{font-size:16px;font-weight:800;color:var(--head);font-variant-numeric:tabular-nums}
+.pulse-delta{display:none;margin:8px auto 0;align-items:center;justify-content:center;gap:5px;font-size:12px;font-weight:700;border-radius:999px;padding:4px 11px;width:fit-content}
+.pulse-delta.on{display:inline-flex}
+.pulse-delta.up{background:var(--inc-bg);color:var(--on-inc)}
+.pulse-delta.down{background:var(--dgr-bg);color:var(--on-dgr)}
+.pulse-delta.flat{background:var(--card);color:var(--mut);border:1px solid var(--bd)}
+.pulse-keep{margin:0 0 13px}
+.pulse-keep-track{height:8px;border-radius:99px;background:var(--bd);overflow:hidden}
+.pulse-keep-track i{display:block;height:100%;width:0;background:var(--inc);border-radius:99px}
+.pulse-keep-lbl{display:flex;justify-content:space-between;gap:8px;font-size:11px;color:var(--mut);margin-top:6px;font-weight:600}
+.pulse-keep-lbl b{color:var(--head)}
+.pulse-park{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.pulse-park button{text-align:left;background:var(--field);border:1px solid var(--bd);border-radius:12px;padding:10px 11px;cursor:pointer;color:inherit}
+.pulse-park small{display:block;font-size:9.5px;text-transform:uppercase;letter-spacing:.3px;color:var(--mut);font-weight:700}
+.pulse-park b{display:block;margin-top:4px;font-size:16px;font-weight:800;color:var(--head);font-variant-numeric:tabular-nums}
+.pulse-park .sub{display:block;font-size:10.5px;color:var(--mut);margin-top:3px;font-weight:500}
+.q-switch{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:0 0 12px}
+.q-switch button{padding:8px 2px;border:1.5px solid var(--bd2);border-radius:10px;background:var(--card);color:var(--mut);font-weight:800;font-size:12px;cursor:pointer}
+.q-switch button small{display:block;font-size:8.5px;font-weight:600;margin-top:2px;letter-spacing:.2px}
+.q-switch button.on{background:var(--inc);color:var(--btn-ink);border-color:transparent;-webkit-text-fill-color:var(--btn-ink)}
+.q-switch button.on small{color:var(--btn-ink);-webkit-text-fill-color:var(--btn-ink);opacity:.9}
+.q-prog{height:6px;border-radius:99px;background:var(--bd);overflow:hidden;margin:2px 0 6px}
+.q-prog i{display:block;height:100%;width:0;background:var(--inc);border-radius:99px}
+.q-prog-lbl{font-size:11px;color:var(--mut);margin-bottom:12px;font-weight:600}
+.cyc-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:0 0 12px}
+.cyc-day{background:var(--field);border:1px solid var(--bd);border-radius:10px;padding:7px 1px 6px;text-align:center}
+.cyc-day small{display:block;font-size:9px;font-weight:700;color:var(--mut);text-transform:uppercase}
+.cyc-day b{display:block;margin-top:3px;font-size:10.5px;font-weight:800;color:var(--mut);font-variant-numeric:tabular-nums}
+.cyc-day.has b{color:var(--inc)}
+.cyc-day.today{border-color:var(--inc);background:var(--inc-bg)}
+.cyc-day.today small{color:var(--on-inc)}
+.cyc-pay{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 11px;background:var(--field);border:1px solid var(--bd);border-radius:12px;margin:0 0 12px;font-size:12px;color:var(--body)}
+.cyc-pay b{color:var(--head)}
+.cyc-bridge{font-size:12px;color:var(--body);line-height:1.45;margin-top:11px;padding:10px 12px;background:var(--field);border-radius:12px;cursor:pointer;border:0;width:100%;text-align:left}
 .tri{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:8px}
 .tri-p{background:var(--field);border:1px solid var(--bd);border-radius:12px;padding:11px 10px}
 .tri-p small{display:block;font-size:9.5px;text-transform:uppercase;letter-spacing:.3px;color:var(--mut);font-weight:700;line-height:1.2}
@@ -449,49 +518,71 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
   </section>
 
   <section class="screen" data-tab="reports">
-    <div class="sub">Reports <small>Tax &amp; compliance</small></div>
+    <div class="sub">Reports <small>Pay cycle · GST &amp; levy</small></div>
 
     <div class="filterrow" id="filterRow">
       <button data-k="today" class="filt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg><span>Today</span></button>
-      <button data-k="week" class="filt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h1M12 14h1M16 14h1M8 18h1M12 18h1"/></svg><span>This Week</span></button>
-      <button data-k="7days" class="filt on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16M8 14h2M14 14h2M8 17h2"/></svg><span>7 Days</span></button>
+      <button data-k="week" class="filt on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h1M12 14h1M16 14h1M8 18h1M12 18h1"/></svg><span>This Week</span></button>
+      <button data-k="7days" class="filt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16M8 14h2M14 14h2M8 17h2"/></svg><span>7 Days</span></button>
       <button data-k="quarter" class="filt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 20V11M10 20V5M15 20v-6M20 20V8"/></svg><span>Quarter</span></button>
       <button data-k="fy" class="filt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15l5-5 4 4 7-8"/><path d="M17 6h4v4"/></svg><span>Fin Year</span></button>
       <button data-k="custom" class="filt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 8h9M18 8h2M4 16h2M11 16h9"/><circle cx="15.5" cy="8" r="2"/><circle cx="8.5" cy="16" r="2"/></svg><span>Custom</span></button>
     </div>
 
-    <div class="card" id="deadlineCard" style="padding:12px 13px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-        <div>
-          <div style="font-size:13px;font-weight:700;color:var(--head)">Upcoming Deadlines <span class="help" data-help="BAS is lodged quarterly with the ATO. The CPV levy is lodged quarterly with the SRO Victoria. Amounts are estimates from your logged shifts — confirm with your tax agent before lodging." aria-label="Help">?</span></div>
-          <div style="font-size:11px;color:var(--mut)" id="dlQLabel">Q1 · Jul – Sep</div>
-        </div>
-        <span style="font-size:10px;font-weight:700;color:var(--mut);letter-spacing:.3px;text-transform:uppercase">Current quarter</span>
+    <div class="card" id="deadlineCard" style="padding:13px">
+      <div class="ph-head">
+        <span class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></span>
+        <div class="ph-t"><b>GST &amp; levy quarters</b><p id="dlQLabel">Q1 · Jul – Sep</p></div>
+        <span class="ph-pill" id="dlLodgePill">This quarter</span>
       </div>
-      <div class="dl-grid" id="deadlineRows"></div>
+      <div class="q-switch" id="qSwitch"></div>
+      <div class="q-prog"><i id="qProgFill"></i></div>
+      <div class="q-prog-lbl" id="qProgLbl">Quarter progress</div>
+      <div class="pulse-park">
+        <button type="button" id="qGstTile">
+          <small>GST · BAS / ATO</small>
+          <b id="qGstAmt">$0.00</b>
+          <span class="sub" id="qGstSub">1A $0 · 1B $0</span>
+        </button>
+        <button type="button" id="qLevyTile">
+          <small>Hail levy · SRO</small>
+          <b id="qLevyAmt" style="color:var(--levy)">$0.00</b>
+          <span class="sub" id="qLevySub">0 trips · not on the BAS</span>
+        </button>
+      </div>
+      <div class="dl-grid" id="deadlineRows" style="margin-top:12px"></div>
     </div>
 
-    <div class="card">
+    <div class="card" id="pulseCard">
       <div class="ph-head">
         <span class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg></span>
-        <div class="ph-t"><b>Financial Pulse <span class="help" data-help="Net take-home is your total driver settlement for the period. Est. net subtracts GST, deductible expenses and CPV levy." aria-label="Help">?</span></b><p>Income overview</p></div>
-        <span class="ph-pill" id="pulseShifts">0 shifts</span>
+        <div class="ph-t"><b>This cycle</b><p id="pulseSub">Pay week</p></div>
+        <span class="ph-pill tap" id="pulseShifts">0 shifts</span>
       </div>
-      <div class="ph-hero">
-        <div class="ph-lbl">Net take-home</div>
+      <div class="ph-hero tap" id="pulseHero" role="button" tabindex="0">
+        <div class="ph-lbl" id="pulseHeroLbl">This cycle take-home</div>
         <div class="ph-net" id="repTake">$0.00</div>
-        <div class="ph-sub">Driver settlement total for period</div>
+        <div class="ph-sub" id="pulseHeroSub">Your pay week</div>
+        <div class="pulse-delta" id="pulseDelta"></div>
+      </div>
+      <div id="cycBadgeWrap" style="text-align:center;margin:-4px 0 12px"></div>
+      <div class="cyc-strip" id="cycStrip"></div>
+      <div class="cyc-pay" id="cycPay"><span>Payday</span><b id="cycPayLbl">—</b></div>
+      <div class="pulse-keep" id="pulseKeep">
+        <div class="pulse-keep-track"><i id="pulseKeepFill"></i></div>
+        <div class="pulse-keep-lbl"><span><b id="pulseKeepPct">0%</b> yours this cycle</span><span id="pulseOpLbl">operator 0%</span></div>
       </div>
       <div class="ph-stats">
-        <div><small>Gross revenue</small><b id="repGross">$0.00</b></div>
-        <div><small>Est. net profit</small><b id="repNet" style="color:var(--inc)">$0.00</b></div>
-        <div><small>GST set aside</small><b id="repGst">$0.00</b></div>
+        <div><small>Gross on meter</small><b id="repGross">$0.00</b></div>
+        <div><small>Per shift</small><b id="pulseAvg">$0.00</b></div>
+        <div><small>Days on</small><b id="pulseDays">0/7</b></div>
       </div>
-      <div class="levy-inline">
-        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 13l1.4-3.8A2 2 0 0 1 8.3 7.9h7.4a2 2 0 0 1 1.9 1.3L19 13"/><path d="M4 13h16v4H4z"/><circle cx="7.5" cy="17.3" r="1.3"/><circle cx="16.5" cy="17.3" r="1.3"/></svg>
-        <span>CPV levy: <b id="repHailN">0</b> hail trips &times; <b id="repRate">$1.20</b>/trip = <b id="repLevy" style="color:var(--levy)">$0.00</b></span>
-        <span class="rg" style="margin-left:auto;white-space:nowrap">SRO · separate</span>
-      </div>
+      <div id="repNet" style="display:none"></div>
+      <div id="repGst" style="display:none"></div>
+      <div id="repHailN" style="display:none"></div>
+      <div id="repRate" style="display:none"></div>
+      <div id="repLevy" style="display:none"></div>
+      <button class="cyc-bridge" id="pulseInsight" type="button">Log a shift to start this cycle.</button>
       <div class="cardfoot" id="pulseFoot"></div>
     </div>
 
@@ -503,28 +594,40 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
       <div id="mixRows"></div>
     </div>
 
-    <div class="card">
+    <div class="card" id="taxCard">
       <div class="ph-head">
         <span class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.2L14 21l-2-1.2L10 21l-2-1.2L6 21z"/><path d="M9 8h6M9 12h6"/></svg></span>
-        <div class="ph-t"><b>Tax &amp; Deductions <span class="help" data-help="GST credits (1B) = 1/11 of GST-inclusive expenses and fuel. Deductible expenses use the GST-exclusive amount when a credit is claimed, scaled by business-use %." aria-label="Help">?</span></b><p>ATO-ready · 1A / 1B · <span id="dedCount">0</span> items</p></div>
-        <button class="ph-add fuel" id="addFuelExp" aria-label="Add fuel expense" title="Add fuel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg></button>
-        <button class="ph-add" id="addExp" aria-label="Add expense" title="Add expense"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+        <div class="ph-t"><b>Tax &amp; Deductions</b><p>Claim GST back · log costs · <span id="dedCount">0</span> items</p></div>
+        <button class="ph-pill tap" id="taxGstNet" type="button" title="Open BAS figures">Pay $0.00</button>
       </div>
       <div class="two">
-        <div class="tri-p accent-inc"><small>GST credits (1B)</small><b id="repGstCred" style="color:var(--inc)">$0.00</b></div>
-        <div class="tri-p"><small>Deductible expenses</small><b id="repDeduct">$0.00</b></div>
+        <div class="tri-p accent-inc"><small>GST you can claim · 1B</small><b id="repGstCred" style="color:var(--inc)">$0.00</b></div>
+        <div class="tri-p"><small>Costs you can deduct</small><b id="repDeduct">$0.00</b></div>
+      </div>
+      <div class="tax-gstbar" id="taxGstBar">
+        <span>GST on fares (1A) <b id="tax1A">$0.00</b></span>
+        <span>&minus;</span>
+        <span>claim (1B) <b id="tax1Bmini">$0.00</b></span>
+        <span style="margin-left:auto"><span id="taxNetLabel" class="pay">Pay ATO</span> <b id="taxNetAmt">$0.00</b></span>
+      </div>
+      <div class="tax-actions">
+        <button class="tax-add fuel" id="addFuelExp" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg>+ Fuel</button>
+        <button class="tax-add" id="addExp" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>+ Expense</button>
       </div>
       <div class="fuel-stat-row" id="fuelStatRow">
         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="color:var(--fuel);flex:0 0 auto"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg>
         <span><b id="fTotal" style="color:var(--fuel)">$0.00</b> fuel · <span id="fuelEntries" style="color:var(--mut)">0 entries</span></span>
         <span id="fuelFoot" class="rg" style="margin-left:auto;text-align:right"></span>
       </div>
+      <div class="tax-hint" id="taxHint" style="display:none"></div>
       <div id="recurSection" style="display:none;margin-top:10px">
-        <div class="explabel">Recurring expenses</div>
+        <div class="explabel">Repeats every period</div>
         <div id="recurRows"></div>
       </div>
       <div id="dedRows"></div>
-      <div class="ded-empty" id="dedEmpty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.2L14 21l-2-1.2L10 21l-2-1.2L6 21z"/><path d="M9 8h6M9 12h6"/></svg><b>No deductions yet</b><span>Tap + to log tolls, cleaning or maintenance</span></div>
+      <div class="ded-empty" id="dedEmpty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.2L14 21l-2-1.2L10 21l-2-1.2L6 21z"/><path d="M9 8h6M9 12h6"/></svg><b>Nothing to claim yet</b><span>Add fuel or a cost (tolls, wash, repairs). Snap the receipt if you have it.</span></div>
+      <button class="basguide-toggle" id="basGuideToggle" type="button"><span><b>How to lodge your BAS</b><small>Hidden until you need it · simple steps</small></span><span class="chev">&rsaquo;</span></button>
+      <div id="basGuide" style="display:none"></div>
     </div>
 
     <div class="rep-actions">
@@ -628,30 +731,34 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
 <div class="modal" id="summaryModal"><div class="sheet">
   <div class="grip"></div>
   <div id="summaryBody"></div>
+  <button class="basguide-toggle" id="basHowToggle" type="button" style="display:none"><span><b>How to copy these into the ATO form</b><small>Tap to show · plain English</small></span><span class="chev">&rsaquo;</span></button>
+  <div id="basHowBody" style="display:none"></div>
   <div class="two" style="margin-top:14px"><button class="btn neutral" id="shareSummary">Share</button><button class="btn" id="pdfBtn">Save as PDF</button></div>
   <button class="btn neutral" id="closeSummary" style="margin-top:9px">Close</button>
 </div></div>
 <div id="printRoot"></div>
 <div class="modal" id="expModal"><div class="sheet">
-  <div class="grip"></div><h3>Add Expense</h3>
+  <div class="grip"></div><h3>Add a cost</h3>
+  <p class="csub">What you paid for the taxi. We’ll split GST for you.</p>
   <div class="catrow" id="catRow" style="margin-top:10px">
     <button data-cat="Tolls"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l1.4-3.8A2 2 0 0 1 8.3 7.9h7.4a2 2 0 0 1 1.9 1.3L19 13"/><path d="M4 13h16v4H4z"/><circle cx="7.5" cy="17.3" r="1.2"/><circle cx="16.5" cy="17.3" r="1.2"/></svg><span>Tolls</span></button>
     <button data-cat="Cleaning"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.7 4.3L18 9l-4.3 1.7L12 15l-1.7-4.3L6 9l4.3-1.7z"/><path d="M18.5 14l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg><span>Cleaning</span></button>
-    <button data-cat="Maintenance"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3.5 17.5 6.5 20.5l5.8-5.8a4 4 0 0 0 5.4-5.4l-2.4 2.4-2.4-.6-.6-2.4z"/></svg><span>Maintenance</span></button>
+    <button data-cat="Maintenance"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3.5 17.5 6.5 20.5l5.8-5.8a4 4 0 0 0 5.4-5.4l-2.4 2.4-2.4-.6-.6-2.4z"/></svg><span>Repairs</span></button>
     <button data-cat="Other" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="8" cy="12" r=".9" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r=".9" fill="currentColor" stroke="none"/><circle cx="16" cy="12" r=".9" fill="currentColor" stroke="none"/></svg><span>Other</span></button>
   </div>
-  <div class="exprow"><label>Description</label><div class="er-r"><input id="expDesc" placeholder="e.g. CityLink toll"></div></div>
-  <div class="exprow"><label>Amount</label><div class="er-r"><span class="pre">$</span><input id="expAmt" type="number" min="0" inputmode="decimal" placeholder="0.00"></div></div>
-  <div class="exprow"><label>Business Use %</label><div class="er-r"><input id="expBu" type="number" min="0" max="100" inputmode="numeric" value="100"><span class="pre">%</span></div></div>
-  <div class="exprow"><label>Price includes GST</label><div class="er-r"><button class="tgl on" id="expGst" aria-label="Toggle GST"></button></div></div>
-  <div class="exprow"><label>Recurring</label><div class="er-r"><button class="tgl" id="expRecur" aria-label="Toggle recurring"></button></div></div>
+  <div class="exprow"><label>What for?</label><div class="er-r"><input id="expDesc" placeholder="e.g. CityLink toll"></div></div>
+  <div class="exprow"><label>Amount on receipt</label><div class="er-r"><span class="pre">$</span><input id="expAmt" type="number" min="0" inputmode="decimal" placeholder="0.00"></div></div>
+  <p class="tax-live" id="expGstHint">Type the amount on the receipt</p>
+  <div class="exprow"><label>Business use % <span class="help" data-help="If this cost was only for the taxi, leave 100. If you also used it privately, drop the % — only the taxi share is claimed." aria-label="Help">?</span></label><div class="er-r"><input id="expBu" type="number" min="0" max="100" inputmode="numeric" value="100"><span class="pre">%</span></div></div>
+  <div class="exprow"><label>Price includes GST <span class="help" data-help="Most Australian receipts include GST. Leave this on. Turn it off only if the receipt says GST-free (or no ABN)." aria-label="Help">?</span></label><div class="er-r"><button class="tgl on" id="expGst" aria-label="Toggle GST"></button></div></div>
+  <div class="exprow"><label>Repeats <span class="help" data-help="Turn on for the same bill every week or month (e.g. insurance). Fareo adds it each period so you don’t re-type it." aria-label="Help">?</span></label><div class="er-r"><button class="tgl" id="expRecur" aria-label="Toggle recurring"></button></div></div>
   <div id="expRecurOpts" style="display:none">
-    <div class="exprow"><label>Frequency</label><div class="er-r"><select id="expFreq" style="width:130px;text-align:right"><option value="weekly">Weekly</option><option value="fortnightly">Fortnightly</option><option value="monthly" selected>Monthly</option></select></div></div>
+    <div class="exprow"><label>How often?</label><div class="er-r"><select id="expFreq" style="width:130px;text-align:right"><option value="weekly">Weekly</option><option value="fortnightly">Fortnightly</option><option value="monthly" selected>Monthly</option></select></div></div>
   </div>
   <div class="exprow"><label id="expDateLabel">Date</label><div class="er-r"><input id="expDate" type="date"></div></div>
-  <div class="explabel">Attach receipt</div>
-  <button class="att" id="expRcpt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.2L14 21l-2-1.2L10 21l-2-1.2L6 21z"/><path d="M9 8h6M9 12h6"/></svg><span id="expRcptTxt">Attach Receipt</span></button>
-  <div class="two" style="margin-top:14px"><button class="btn neutral" id="expCancel">Cancel</button><button class="btn" id="expSave">Save Expense</button></div>
+  <div class="explabel">Receipt photo (smart to keep)</div>
+  <button class="att" id="expRcpt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.2L14 21l-2-1.2L10 21l-2-1.2L6 21z"/><path d="M9 8h6M9 12h6"/></svg><span id="expRcptTxt">Attach receipt</span></button>
+  <div class="two" style="margin-top:14px"><button class="btn neutral" id="expCancel">Cancel</button><button class="btn" id="expSave">Save cost</button></div>
 </div></div>
 <div class="modal" id="quarterModal"><div class="sheet">
   <div class="grip"></div><h3>Choose quarter</h3><p class="csub" id="qFy">Financial year</p>
@@ -660,7 +767,7 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
 <div class="modal" id="sumPick"><div class="sheet">
   <div class="grip"></div><h3>Summary type</h3><p class="csub">Choose what to generate.</p>
   <button class="pickopt" id="pickIncome"><span><b>Smart summary</b><small>Income overview &amp; totals</small></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></button>
-  <button class="pickopt" id="pickBas"><span><b>BAS prep (ATO)</b><small>Activity statement: 1A / 1B / 8A / 8B</small></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></button>
+  <button class="pickopt" id="pickBas"><span><b>BAS prep (ATO)</b><small>Copy G1, 1A and 1B — with a simple how-to</small></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></button>
 </div></div>
 <div class="modal" id="entryModal"><div class="sheet">
   <div class="grip"></div><h3 id="entryTitle">Edit entry</h3>
@@ -696,9 +803,10 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
 </div></div>
 <input type="file" id="fuelRcptFile" accept="image/*,application/pdf" style="display:none">
 <div class="modal" id="fuelModal"><div class="sheet">
-  <div class="grip"></div><h3>Add Fuel Expense</h3>
-  <p class="csub">Manual fuel receipt for tax — independent of logged shifts. GST auto-calculated.</p>
-  <div class="exprow"><label>Amount</label><div class="er-r"><span class="pre">$</span><input id="fmAmt" type="number" min="0" inputmode="decimal" placeholder="0.00"></div></div>
+  <div class="grip"></div><h3>Add fuel</h3>
+  <p class="csub">A fill-up that isn’t on a logged shift. GST is taken off automatically.</p>
+  <div class="exprow"><label>Amount on receipt</label><div class="er-r"><span class="pre">$</span><input id="fmAmt" type="number" min="0" inputmode="decimal" placeholder="0.00"></div></div>
+  <p class="tax-live" id="fmGstHint">Type the pump total</p>
   <div class="exprow"><label>Fuel type</label><div class="er-r"><select id="fmType" style="width:130px;text-align:right"><option>Diesel</option><option>Petrol</option><option>LPG</option></select></div></div>
   <div class="exprow"><label>Date</label><div class="er-r"><input id="fmDate" type="date"></div></div>
   <div class="explabel">Attach receipt (optional)</div>
@@ -744,8 +852,18 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='5.7';
+var APP_VERSION='5.9';
 var CHANGELOG=[
+  {v:'5.9',date:'August 27, 2026',notes:[
+    ['UI/UX','Financial Pulse now tracks your pay-week cycle: day strip, payday, vs last cycle, and how this week feeds GST and levy.'],
+    ['Tax','GST and hail-levy quarter tracker: switch Q1–Q4, progress through the quarter, 1A/1B split, refunds, and overdue lodgement.']
+  ]},
+  {v:'5.8',date:'August 27, 2026',notes:[
+    ['UI/UX','Financial Pulse is smarter: per-shift average, vs last period, you-vs-operator keep bar, parked GST/levy tiles, and a one-line insight.'],
+    ['UI/UX','Tax & Deductions rebuilt: plain-English GST tiles, labelled + Fuel / + Expense, live GST split, and tappable Pay/Refund to open BAS figures.'],
+    ['Tax','Hidden “How to lodge your BAS” guide in simple words, plus the same steps inside the BAS summary sheet.'],
+    ['Bug Fix','One-off expenses can now be removed from the Tax & Deductions list.']
+  ]},
   {v:'5.7',date:'July 25, 2026',notes:[
     ['Feature','Added a “This Week” filter button in Reports that shows the current week cycle based on your configured week start day (e.g. Thursday to Wednesday).']
   ]},
@@ -850,6 +968,7 @@ if(!draft._edit){draft.date=todayStr();draft.rego='';}
 draft.receipt=false;draft.receiptName='';
 var receiptFile=null;
 var repRange={from:null,to:null,name:""};
+var trackQ=null;
 
 function toast(t){var e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(function(){e.classList.remove('show')},1800)}
 /* ---------- tap/click help tooltips ----------
@@ -1217,6 +1336,19 @@ function statusFor(base,end){
   var f=cd.toLocaleDateString('en-AU',{weekday:'short',day:'2-digit',month:'short'});
   return t>=cd?{t:'Credited',c:'st-cred'}:{t:'Pays '+f,c:'st-pend'};
 }
+function cycleOf(offset){
+  var base=weekStartOf(new Date());
+  base.setDate(base.getDate()+(offset||0)*7);
+  var end=new Date(base);end.setDate(base.getDate()+6);
+  return{base:base,end:end,from:iso(base),to:iso(end),st:statusFor(base,end)};
+}
+function cycleName(){
+  return DAYS[settings.weekStart].slice(0,3)+'\u2013'+DAYS[(settings.weekStart+6)%7].slice(0,3);
+}
+function creditOn(end){
+  var cd=new Date(end);do{cd.setDate(cd.getDate()+1)}while(cd.getDay()!==settings.creditedDay);
+  return cd;
+}
 function renderWeekly(){
   var base=weekStartOf(new Date());base.setDate(base.getDate()+wkOffset*7);
   var end=new Date(base);end.setDate(base.getDate()+6);
@@ -1353,45 +1485,51 @@ function friendlyDate(s){
      Q2 Oct–Dec  → 31 Jan
      Q3 Jan–Mar  → 30 Apr
      Q4 Apr–Jun  → 31 Jul */
+function dueDatesFor(q,qTo){
+  var y=qTo.getFullYear();
+  if(q==='Q1')return{bas:new Date(y,9,28),levy:new Date(y,9,31)};
+  if(q==='Q2')return{bas:new Date(y+1,1,28),levy:new Date(y+1,0,31)};
+  if(q==='Q3')return{bas:new Date(y,3,28),levy:new Date(y,3,30)};
+  return{bas:new Date(y,6,28),levy:new Date(y,6,31)};
+}
+function currentQuarterKey(){
+  var t=iso(new Date()),qs=quartersList();
+  for(var i=0;i<qs.length;i++){if(t>=iso(qs[i].f)&&t<=iso(qs[i].t))return qs[i].l}
+  return 'Q1';
+}
+function selectedQuarter(){
+  var qs=quartersList(),key=trackQ||currentQuarterKey();
+  for(var i=0;i<qs.length;i++){if(qs[i].l===key)return qs[i]}
+  return qs[0];
+}
+function daysUntilDate(d){return Math.ceil((d-(new Date()))/(1000*60*60*24))}
+function fmtDateShort(d){return d.toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'})}
+function aggBetween(from,to){
+  var s={from:repRange.from,to:repRange.to,name:repRange.name};
+  repRange.from=from;repRange.to=to;
+  var a=rangeAgg();
+  repRange.from=s.from;repRange.to=s.to;repRange.name=s.name;
+  return a;
+}
 function currentDeadlines(){
-  var now=new Date(); var m=now.getMonth()+1; var y=now.getFullYear();
-  /* which quarter are we in? */
-  var q,qFrom,qTo,basDue,levyDue;
-  if(m>=7&&m<=9){q='Q1';qFrom=new Date(y,6,1);qTo=new Date(y,8,30);basDue=new Date(y,9,28);levyDue=new Date(y,9,31);}
-  else if(m>=10&&m<=12){q='Q2';qFrom=new Date(y,9,1);qTo=new Date(y,11,31);basDue=new Date(y+1,1,28);levyDue=new Date(y+1,0,31);}
-  else if(m>=1&&m<=3){q='Q3';qFrom=new Date(y,0,1);qTo=new Date(y,2,31);basDue=new Date(y,3,28);levyDue=new Date(y,3,30);}
-  else{q='Q4';qFrom=new Date(y,3,1);qTo=new Date(y,5,30);basDue=new Date(y,6,28);levyDue=new Date(y,6,31);}
-  function daysUntil(d){return Math.ceil((d-now)/(1000*60*60*24))}
-  function fmt(d){return d.toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'})}
-  var qFromStr=iso(qFrom),qToStr=iso(qTo);
-  /* calc GST and levy for this quarter from entries */
-  var qEntries=entries.filter(function(e){return e.date>=qFromStr&&e.date<=qToStr});
-  var qGross=qEntries.reduce(function(a,b){return a+(Number(b.gross)||0)},0);
-  var qShare=qEntries.reduce(function(a,b){return a+(Number(b.share)||0)},0);
-  var qCash=qEntries.reduce(function(a,b){return a+(Number(b.cash)||0)+(Number(b.square)||0)},0);
-  var qFuel=qEntries.reduce(function(a,b){return a+(Number(b.fuel)||0)},0)+
-            fuelManual.filter(function(f){return f.date>=qFromStr&&f.date<=qToStr}).reduce(function(a,b){return a+nn(b.amount)},0);
-  var qHail=qEntries.reduce(function(a,b){return a+(Number(b.hail)||0)},0);
-  var qQed=deductions.filter(function(d){return d.date>=qFromStr&&d.date<=qToStr});
-  var gstFree=settings.cashGstFree?qCash:0;
-  var gstBase=(settings.gstBase==='share'?qShare:qGross)-gstFree;
-  if(gstBase<0)gstBase=0;
-  var gst1A=gstBase/11;
-  var expCred=0;
-  qQed.forEach(function(d){var bu=clampBu(d.bu==null?100:d.bu)/100;var amt=nn(d.amount);if(d.gst!==false)expCred+=amt/11*bu});
-  var gst1B=expCred+qFuel/11;
-  var netGst=Math.max(0,gst1A-gst1B);
-  var levy=qHail*levyRate();
-  return{q:q,basDue:basDue,levyDue:levyDue,basLabel:'BAS — '+q+' ('+q==='Q1'?'Jul–Sep':q==='Q2'?'Oct–Dec':q==='Q3'?'Jan–Mar':'Apr–Jun)'+') due '+fmt(basDue),basDays:daysUntil(basDue),basDueFmt:fmt(basDue),levyDays:daysUntil(levyDue),levyDueFmt:fmt(levyDue),netGst:netGst,gst1A:gst1A,gst1B:gst1B,levy:levy,qHail:qHail,shifts:qEntries.length};
+  var row=selectedQuarter();
+  var dues=dueDatesFor(row.l,row.t);
+  var a=aggBetween(iso(row.f),iso(row.t));
+  var net=a.gst-a.oneB;
+  return{q:row.l,from:row.f,to:row.t,months:row.m,basDue:dues.bas,levyDue:dues.levy,basDays:daysUntilDate(dues.bas),levyDays:daysUntilDate(dues.levy),basDueFmt:fmtDateShort(dues.bas),levyDueFmt:fmtDateShort(dues.levy),netGst:net,gst1A:a.gst,gst1B:a.oneB,levy:a.levy,qHail:a.hailN,shifts:a.shifts,inc:a.inc};
 }
 function dlBadgeClass(days){return days<=14?'dl-hot':days<=30?'dl-warn':'dl-safe'}
 function dlUrgencyLabel(days){return days<=14?'Urgent':days<=30?'Soon':'On track'}
 function dlBox(days,name,dueStr,amount,amtNote){
-  var cls=dlBadgeClass(days);
+  var overdue=days<0,dueToday=days===0;
+  var cls=overdue?'dl-hot':dlBadgeClass(days);
+  var chip=overdue?'Overdue':(dueToday?'Due today':dlUrgencyLabel(days));
+  var dayNum=overdue?Math.abs(days):days;
+  var unit=overdue?'days late':(dueToday?'today':'days left');
   return '<div class="dl-box '+cls+'">'
-    +'<div class="dl-chip">'+dlUrgencyLabel(days)+'</div>'
-    +'<div class="dl-days">'+days+'</div>'
-    +'<div class="dl-unit">days left</div>'
+    +'<div class="dl-chip">'+chip+'</div>'
+    +'<div class="dl-days">'+(dueToday?'0':dayNum)+'</div>'
+    +'<div class="dl-unit">'+unit+'</div>'
     +'<div class="dl-divider"></div>'
     +'<div class="dl-amount">'+amount+'</div>'
     +'<div class="dl-due">'+esc(amtNote)+'</div>'
@@ -1402,9 +1540,41 @@ function dlBox(days,name,dueStr,amount,amtNote){
 function renderDeadlines(){
   var el=$('#deadlineRows');if(!el)return;
   var dl=currentDeadlines();
-  var qNames={'Q1':'Jul – Sep','Q2':'Oct – Dec','Q3':'Jan – Mar','Q4':'Apr – Jun'};
-  var ql=$('#dlQLabel');if(ql)ql.textContent=dl.q+' · '+qNames[dl.q];
-  el.innerHTML=dlBox(dl.basDays,'BAS · ATO',dl.basDueFmt,money(dl.netGst),'net GST owing')
+  var now=new Date();now.setHours(0,0,0,0);
+  var qFrom=dl.from,qTo=dl.to;
+  var total=Math.round((qTo-qFrom)/86400000)+1;
+  var elapsed=Math.round((now-qFrom)/86400000)+1;
+  if(elapsed<0)elapsed=0;if(elapsed>total)elapsed=total;
+  var pct=total?Math.round(elapsed/total*100):0;
+  var inQ=now>=qFrom&&now<=qTo;
+  var after=now>qTo;
+  var ql=$('#dlQLabel');if(ql)ql.textContent=dl.q+' · '+dl.months+(inQ?' · in progress':(after?' · closed':' · upcoming'));
+  var pill=$('#dlLodgePill');
+  if(pill){
+    if(dl.basDays<0)pill.textContent='BAS overdue';
+    else if(dl.basDays===0)pill.textContent='BAS due today';
+    else if(after)pill.textContent='Lodge in '+dl.basDays+'d';
+    else pill.textContent=pct+'% through';
+  }
+  var fill=$('#qProgFill');if(fill)fill.style.width=pct+'%';
+  var pl=$('#qProgLbl');
+  if(pl){
+    if(after)pl.textContent='Quarter ended · lodge BAS by '+dl.basDueFmt+' · levy by '+dl.levyDueFmt;
+    else if(elapsed<=0)pl.textContent='Starts '+qFrom.toLocaleDateString('en-AU',{day:'numeric',month:'short'})+' · '+total+' days';
+    else pl.textContent='Day '+elapsed+' of '+total+' · '+(total-elapsed)+' days left in the quarter';
+  }
+  var gstPay=dl.netGst>=0;
+  var ga=$('#qGstAmt');if(ga){ga.textContent=(gstPay?'Pay ':'Refund ')+money(Math.abs(dl.netGst));ga.style.color=gstPay?'var(--dgr)':'var(--inc)'}
+  var gs=$('#qGstSub');if(gs)gs.textContent='1A '+money(dl.gst1A)+' · 1B '+money(dl.gst1B)+' · due '+dl.basDueFmt;
+  var la=$('#qLevyAmt');if(la)la.textContent=money(dl.levy);
+  var ls=$('#qLevySub');if(ls)ls.textContent=dl.qHail+' hail trip'+(dl.qHail!==1?'s':'')+' · due '+dl.levyDueFmt+' · not BAS';
+  var qs=quartersList(),cur=currentQuarterKey(),key=trackQ||cur;
+  var sw=$('#qSwitch');
+  if(sw){
+    sw.innerHTML=qs.map(function(x){return '<button type="button" data-q="'+x.l+'" class="'+(x.l===key?'on':'')+'">'+x.l+'<small>'+x.m+'</small></button>'}).join('');
+    $$('#qSwitch button').forEach(function(b){b.onclick=function(){trackQ=b.dataset.q;renderDeadlines()}});
+  }
+  el.innerHTML=dlBox(dl.basDays,'BAS · ATO',dl.basDueFmt,money(Math.abs(dl.netGst)),gstPay?'net GST to pay':'refund from ATO')
               +dlBox(dl.levyDays,'CPV Levy · SRO',dl.levyDueFmt,money(dl.levy),dl.qHail+' hail trip'+(dl.qHail!==1?'s':''));
   var urgentDays=Math.min(dl.basDays,dl.levyDays);
   var card=$('#deadlineCard');
@@ -1444,6 +1614,39 @@ function expandRecurring(from,to){
   });
   return out}
 function inRange(d){return(!repRange.from||d>=repRange.from)&&(!repRange.to||d<=repRange.to)}
+function previousPeriod(from,to,name){
+  if(!from||!to)return null;
+  var f=parseD(from),t=parseD(to);
+  var days=Math.round((t-f)/86400000)+1;
+  if(days<1)return null;
+  var nt=new Date(f);nt.setDate(nt.getDate()-1);
+  var nf=new Date(nt);nf.setDate(nt.getDate()-days+1);
+  var label={Today:'yesterday','This Week':'last week','7 Days':'previous 7 days',Quarter:'last quarter','Fin Year':'last financial year',Custom:'the previous stretch'}[name]||'last period';
+  return{from:iso(nf),to:iso(nt),label:label};
+}
+function pulseInsight(a,prev,prevTake,prevShifts){
+  if(!a.shifts)return 'No shifts in this period yet. Log one on Shift to see how you are tracking.';
+  var bits=[];
+  var avg=a.inc/a.shifts;
+  bits.push(money(avg)+' average per shift');
+  if(prev&&(prevShifts||a.inc)){
+    if(prevTake<=0&&a.inc>0)bits.push('first activity vs '+prev.label);
+    else if(prevTake>0){
+      var pct=Math.round((a.inc-prevTake)/prevTake*100);
+      if(Math.abs(pct)<3)bits.push('about even vs '+prev.label);
+      else bits.push((pct>=0?'up ':'down ')+Math.abs(pct)+'% vs '+prev.label);
+    }
+  }
+  if(a.es&&a.es.length>1){
+    var best=a.es.slice().sort(function(x,y){return (Number(y.take)||0)-(Number(x.take)||0)})[0];
+    if(best&&nn(best.take)){
+      var d=parseD(best.date);
+      bits.push('best '+pad2(d.getDate())+'/'+pad2(d.getMonth()+1)+' '+money(best.take));
+    }
+  }
+  if(a.levy>0)bits.push('levy '+money(a.levy)+' goes to the SRO, not the BAS');
+  return bits.join(' · ')+'.';
+}
 /* single source of truth for all report figures */
 function rangeAgg(){
   var es=entries.filter(function(e){return inRange(e.date)});
@@ -1498,16 +1701,95 @@ function rangeAgg(){
   var dedTotal=expDed+fuelDed;
   var net=inc-gst-dedTotal-levy;
   return{es:es,inc:inc,gross:gross,share:share,gstBaseAmt:gstBaseAmt,gst:gst,hailN:hailN,levy:levy,fD:fD,fP:fP,fL:fL,fuel:fuelAll,fuelShift:fuel,fuelManual:fuelManualTotal,fmCount:fmCount,fmList:fmList,fuelIPaid:fuelIPaid,fuelOpPaid:fuelOpPaid,fc:fc+fmCount,fcShift:fc,expCred:expCred,expDed:expDed,fuelCred:fuelCred,fuelDed:fuelDed,oneB:oneB,dedTotal:dedTotal,dn:dn,net:net,shifts:es.length,allDed:allDed,mixEftpos:mixEftpos,mixCash:mixCash,mixSquare:mixSquare,mixRuns:mixRuns,mixCustom:mixCustom}}
+function renderCyclePulse(){
+  var cyc=cycleOf(0),last=cycleOf(-1);
+  var a=aggBetween(cyc.from,cyc.to);
+  var lastA=aggBetween(last.from,last.to);
+  var fmt=function(dt){return dt.toLocaleDateString('en-AU',{day:'numeric',month:'short'})};
+  var name=cycleName();
+  var sub=$('#pulseSub');if(sub)sub.textContent=name+' · '+fmt(cyc.base)+' – '+fmt(cyc.end);
+  $('#pulseShifts').textContent=a.shifts+' shift'+(a.shifts===1?'':'s');
+  $('#repTake').textContent=money(a.inc);
+  $('#repGross').textContent=money(a.gross);
+  var rn=$('#repNet');if(rn)rn.textContent=money(a.net);
+  var avgEl=$('#pulseAvg');if(avgEl)avgEl.textContent=a.shifts?money(a.inc/a.shifts):money(0);
+  var daysWorked={};
+  a.es.forEach(function(e){daysWorked[e.date]=1});
+  var nDays=Object.keys(daysWorked).length;
+  var pd=$('#pulseDays');if(pd)pd.textContent=nDays+'/7';
+  var heroLbl=$('#pulseHeroLbl');if(heroLbl)heroLbl.textContent='This cycle take-home';
+  var heroSub=$('#pulseHeroSub');if(heroSub)heroSub.textContent=a.shifts?'Tap to open this week':'No shifts logged this cycle yet';
+  var keepPct=a.gross>0?Math.round((a.share||0)/a.gross*100):(Number(settings.pct)||0);
+  if(keepPct<0)keepPct=0;if(keepPct>100)keepPct=100;
+  var fill=$('#pulseKeepFill'),kp=$('#pulseKeepPct'),op=$('#pulseOpLbl'),keepBox=$('#pulseKeep');
+  if(fill)fill.style.width=keepPct+'%';
+  if(kp)kp.textContent=keepPct+'%';
+  if(op)op.textContent='operator '+(100-keepPct)+'%';
+  if(keepBox)keepBox.style.display=a.gross>0?'block':'none';
+  var delta=$('#pulseDelta');
+  if(delta){
+    if(a.shifts||lastA.shifts){
+      var cls='flat',txt='Even vs last cycle';
+      if(lastA.inc<=0&&a.inc>0){cls='up';txt='New vs last cycle'}
+      else if(lastA.inc>0){
+        var pct=Math.round((a.inc-lastA.inc)/lastA.inc*100);
+        if(pct>=3){cls='up';txt='Up '+pct+'% vs last cycle'}
+        else if(pct<=-3){cls='down';txt='Down '+Math.abs(pct)+'% vs last cycle'}
+        else txt='About even vs last cycle';
+      }
+      delta.className='pulse-delta on '+cls;delta.textContent=txt;
+    }else{delta.className='pulse-delta';delta.textContent=''}
+  }
+  var strip=$('#cycStrip');
+  if(strip){
+    var today=iso(new Date());
+    var html='';
+    for(var i=0;i<7;i++){
+      var d=new Date(cyc.base);d.setDate(cyc.base.getDate()+i);
+      var ds=iso(d);
+      var take=a.es.filter(function(e){return e.date===ds}).reduce(function(s,e){return s+(Number(e.take)||0)},0);
+      var day=DAYS[d.getDay()].slice(0,2);
+      html+='<div class="cyc-day'+(ds===today?' today':'')+(take?' has':'')+'"><small>'+day+'</small><b>'+(take?Math.round(take):'\u00b7')+'</b></div>';
+    }
+    strip.innerHTML=html;
+  }
+  var badge=$('#cycBadgeWrap');
+  if(badge)badge.innerHTML='<span class="badge '+cyc.st.c+'">'+(cyc.st.c==='st-cred'?'\u2713 ':'')+cyc.st.t+'</span>';
+  var pay=creditOn(cyc.end);
+  var payEl=$('#cycPayLbl');
+  if(payEl){
+    var payStr=pay.toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'short'});
+    if(cyc.st.c==='st-cur')payEl.textContent='Expected '+payStr;
+    else if(cyc.st.c==='st-pend')payEl.textContent=payStr;
+    else if(cyc.st.c==='st-cred')payEl.textContent='Credited '+payStr;
+    else payEl.textContent=payStr;
+  }
+  var q=selectedQuarter();
+  var qA=aggBetween(iso(q.f),iso(q.t));
+  var ins=$('#pulseInsight');
+  if(ins){
+    if(!a.shifts)ins.textContent='Log a shift to start this '+name+' cycle. GST and levy for '+q.l+' are tracked above.';
+    else{
+      var bits=[nDays+' day'+(nDays===1?'':'s')+' on'];
+      if(a.gst)bits.push(money(a.gst)+' GST this cycle');
+      if(a.levy)bits.push(money(a.levy)+' levy this cycle');
+      bits.push(q.l+' running GST '+(qA.gst-qA.oneB>=0?'pay ':'refund ')+money(Math.abs(qA.gst-qA.oneB))+' · levy '+money(qA.levy));
+      ins.textContent=bits.join(' · ')+'. Tap for quarter tracker.';
+    }
+  }
+  var foot=$('#pulseFoot');
+  if(foot)foot.textContent='Cycle starts '+DAYS[settings.weekStart]+'. Payday is the next '+DAYS[settings.creditedDay]+' after the week ends. Change this in Settings.';
+  var rg=$('#repGst');if(rg)rg.textContent=money(a.gst);
+  var rh=$('#repHailN');if(rh)rh.textContent=a.hailN;
+  var rr=$('#repRate');if(rr)rr.textContent=money(levyRate());
+  var rl=$('#repLevy');if(rl)rl.textContent=money(a.levy);
+}
 function renderReports(){
   renderDeadlines();
-  if(!repRange.name){var r0=filterRange('7days');repRange.from=r0[0];repRange.to=r0[1];repRange.name=r0[2]}
+  if(!repRange.name){var r0=filterRange('week');repRange.from=r0[0];repRange.to=r0[1];repRange.name=r0[2]}
   var a=rangeAgg();
   $$('#filterRow .filt').forEach(function(b){var lbl={today:'Today',week:'This Week','7days':'7 Days',quarter:'Quarter',fy:'Fin Year',custom:'Custom'}[b.dataset.k];b.classList.toggle('on',repRange.name===lbl)});
-  $('#pulseShifts').textContent=a.shifts+' shift'+(a.shifts===1?'':'s');
-  $('#repTake').textContent=money(a.inc);$('#repGross').textContent=money(a.gross);$('#repNet').textContent=money(a.net);$('#repGst').textContent=money(a.gst);
-  $('#pulseFoot').textContent='GST on '+(settings.gstBase==='share'?'driver share':'full gross')+(settings.cashGstFree?' \u00b7 cash/Square excluded':'');
-  /* Levy inline in Financial Pulse — hail trips × rate = levy for the filtered period */
-  $('#repHailN').textContent=a.hailN;$('#repLevy').textContent=money(a.levy);$('#repRate').textContent=money(levyRate());
+  renderCyclePulse();
   /* Fuel stat row in Tax & Deductions */
   $('#fTotal').textContent=money(a.fuel);
   $('#fuelEntries').textContent=a.fc+' entr'+(a.fc===1?'y':'ies');
@@ -1523,20 +1805,42 @@ function renderReports(){
   $('#mixCard').style.display=mixTot>1?'block':'none';
   $('#mixRows').innerHTML=mix.map(function(m){var pct=(m[1]/mixTot*100).toFixed(0);return '<div class="tr" style="grid-template-columns:1fr auto auto"><span><span class="dot" style="display:inline-block;background:'+m[0+2]+';margin-right:6px"></span>'+esc(m[0])+'</span><span class="rg">'+pct+'%</span><span class="am" style="color:'+m[2]+'">'+money(m[1])+'</span></div>'}).join('');
   $('#repGstCred').textContent=money(a.oneB);$('#repDeduct').textContent=money(a.dedTotal);$('#dedCount').textContent=a.dn+a.fc;
-  /* Auto fuel line from the shift tracker (GST auto-calculated 1/11). */
+  var netGst=a.gst-a.oneB;
+  var pay=netGst>=0;
+  var pill=$('#taxGstNet');
+  if(pill){pill.textContent=(pay?'Pay ':'Refund ')+money(Math.abs(netGst));pill.style.color=pay?'var(--dgr)':'var(--inc)';pill.style.borderColor=pay?'var(--dgr)':'var(--inc)';pill.style.background=pay?'var(--dgr-bg)':'var(--inc-bg)'}
+  var t1=$('#tax1A'),t1b=$('#tax1Bmini'),tn=$('#taxNetAmt'),tl=$('#taxNetLabel');
+  if(t1)t1.textContent=money(a.gst);if(t1b)t1b.textContent=money(a.oneB);if(tn)tn.textContent=money(Math.abs(netGst));
+  if(tl){tl.textContent=pay?'Pay ATO':'Refund';tl.className=pay?'pay':'ref'}
+  var noRcpt=a.allDed.filter(function(d){return !d._recurring&&!d.receiptId}).length+a.fmList.filter(function(m){return !m.receiptId}).length;
+  var hint=$('#taxHint');
+  if(hint){
+    if(noRcpt>0){hint.style.display='block';hint.textContent=noRcpt+' cost'+(noRcpt===1?' has':'s have')+' no receipt photo. Keep snaps — the ATO can ask later.'}
+    else hint.style.display='none';
+  }
+  function gstBit(amt,hasGst){amt=nn(amt);if(hasGst===false)return 'no GST · deduct '+money(amt);return 'claim '+money(amt/11)}
+  function dedRow(opts){
+    var kill=opts.delAttr?'<button class="ded-x kill" '+opts.delAttr+' aria-label="Remove">&times;</button>':'<span></span>';
+    return '<div class="ded-row'+(opts.fuel?' fuel':'')+'"'+(opts.rid?' data-rid="'+esc(opts.rid)+'" style="cursor:pointer"':'')+'><div><span class="nm">'+opts.name+'</span><span class="meta">'+opts.meta+'</span></div><div class="am"><b>'+money(opts.amt)+'</b><small>'+opts.sub+'</small></div>'+kill+'</div>';
+  }
   var fuelLine='';
   if(a.fuelShift>0){
-    fuelLine='<div class="tr" style="background:var(--fuel-bg);border-radius:8px;padding-left:8px;padding-right:8px"><span><b style="color:var(--fuel)">Fuel</b> <span class="rg" style="color:var(--fuel)">auto \u00b7 from tracker \u00b7 GST '+money(a.fuelShift/11)+'</span></span><span class="rg">'+a.fcShift+' fill'+(a.fcShift===1?'':'s')+'</span><span class="am" style="color:var(--fuel)">'+money(a.fuelShift)+'</span></div>';
+    fuelLine=dedRow({fuel:true,name:'Fuel from shifts',meta:'Auto from tracker · '+a.fcShift+' fill'+(a.fcShift===1?'':'s'),amt:a.fuelShift,sub:gstBit(a.fuelShift,true)});
   }
-  /* Manual fuel expenses (added in Reports), each deletable, with receipt indicator. */
   var manualLines=a.fmList.slice().sort(function(x,y){return x.date<y.date?1:-1}).map(function(m){
-    var rc=m.receiptId?' <span class="rg" style="color:var(--acct)">\ud83d\udcce</span>':'';
-    return '<div class="tr" style="background:var(--fuel-bg);border-radius:8px;padding-left:8px;padding-right:8px;grid-template-columns:1fr auto auto"><span><b style="color:var(--fuel)">Fuel ('+esc(m.type)+')</b>'+rc+' <span class="rg" style="color:var(--fuel)">manual \u00b7 GST '+money(nn(m.amount)/11)+'</span></span><span class="rg">'+esc(m.date)+'</span><span class="am" style="color:var(--fuel)">'+money(m.amount)+'</span><button class="x" data-delfm="'+esc(m.id)+'" style="background:transparent;border:1px solid var(--dgr);border-radius:8px;color:var(--dgr);width:26px;height:26px;cursor:pointer;font-weight:700;margin-left:6px">&times;</button></div>';
+    return dedRow({fuel:true,name:'Fuel ('+esc(m.type)+')',meta:esc(m.date)+(m.receiptId?' · receipt':' · no receipt'),amt:m.amount,sub:gstBit(m.amount,true),delAttr:'data-delfm="'+esc(m.id)+'"',rid:m.receiptId||''});
   }).join('');
-  /* One-off + recurring deductions combined, sorted by date */
   var ds=a.allDed.sort(function(x,y){return x.date<y.date?1:-1});
-  $('#dedRows').innerHTML=fuelLine+manualLines+ds.map(function(d){var rc=d.receiptId?' <span class="rg" style="color:var(--acct)">\ud83d\udcce</span>':'';return '<div class="tr"><span>'+esc(d.name)+rc+(d._recurring?' <span class="rg" style="color:var(--levy)">\u21BB</span>':'')+' <span class="rg">'+esc(d.category||'')+(d.gst===false?' \u00b7 no GST':'')+'</span></span><span class="rg">'+esc(d.date)+'</span><span class="am" style="color:var(--inc)">'+money(d.amount)+'</span></div>'}).join('');
-  $$('#dedRows [data-delfm]').forEach(function(b){b.onclick=function(){var id=Number(b.dataset.delfm);if(confirm('Remove this manual fuel expense?')){fuelManual=fuelManual.filter(function(m){return m.id!==id});save('fareo_fuelManual',fuelManual);renderReports();toast('Fuel expense removed')}}});
+  var catLabel={Tolls:'Tolls',Cleaning:'Cleaning',Maintenance:'Repairs',Other:'Other'};
+  $('#dedRows').innerHTML=fuelLine+manualLines+ds.map(function(d){
+    var cat=catLabel[d.category]||d.category||'';
+    var meta=esc(cat)+(cat?' · ':'')+esc(d.date)+(d._recurring?' · repeats':'')+(d.receiptId?' · receipt':'');
+    var del=d._recurring?'':(d.id!=null?'data-deld="'+esc(d.id)+'"':'');
+    return dedRow({name:esc(d.name)+(d._recurring?'':'') ,meta:meta,amt:d.amount,sub:gstBit(d.amount,d.gst!==false),delAttr:del,rid:d.receiptId||'',fuel:false});
+  }).join('');
+  $$('#dedRows [data-delfm]').forEach(function(b){b.onclick=function(e){e.stopPropagation();var id=Number(b.dataset.delfm);if(confirm('Remove this fuel expense?')){fuelManual=fuelManual.filter(function(m){return m.id!==id});save('fareo_fuelManual',fuelManual);renderReports();toast('Fuel expense removed')}}});
+  $$('#dedRows [data-deld]').forEach(function(b){b.onclick=function(e){e.stopPropagation();var id=Number(b.dataset.deld);if(confirm('Remove this expense?')){deductions=deductions.filter(function(d){return d.id!==id});save('fareo_deductions',deductions);renderReports();toast('Expense removed')}}});
+  $$('#dedRows [data-rid]').forEach(function(row){row.onclick=function(){if(row.dataset.rid)viewReceipt(row.dataset.rid)}});
   $('#dedEmpty').style.display=(ds.length||a.fuel>0)?'none':'block';
   /* Recurring templates list with delete */
   var hasRecur=recurring.length>0;
@@ -1549,17 +1853,40 @@ $$('#filterRow .filt').forEach(function(b){b.onclick=function(){setFilter(b.data
 /* [F10] auto-swap inverted ranges */
 $('#applyCustom').onclick=function(){var f=$('#repFrom').value,t=$('#repTo').value;if(!f||!t){toast('Pick both dates');return}if(f>t){var tmp=f;f=t;t=tmp;toast('Dates were swapped')}repRange.from=f;repRange.to=t;repRange.name='Custom';renderReports();closeModal('rangeModal')};
 var expCat='Other',expRcptFile=null,expGstOn=true,expRecurOn=false;
+var expPlace={Tolls:'e.g. CityLink trip',Cleaning:'e.g. car wash',Maintenance:'e.g. oil change',Other:'e.g. what did you pay for?'};
+function updateExpGstHint(){
+  var el=$('#expGstHint');if(!el)return;
+  var amt=nn($('#expAmt').value),bu=clampBu($('#expBu').value)/100;
+  if(!amt){el.textContent='Type the amount on the receipt';return}
+  if(expGstOn)el.textContent='GST you can claim '+money(amt/11*bu)+' · cost after GST '+money(amt*10/11*bu)+(bu<1?' (taxi share only)':'');
+  else el.textContent='No GST to claim · deduct '+money(amt*bu)+' as a cost';
+}
+function updateFmGstHint(){
+  var el=$('#fmGstHint');if(!el)return;
+  var amt=nn($('#fmAmt').value);
+  if(!amt){el.textContent='Type the pump total';return}
+  el.textContent='GST you can claim '+money(amt/11)+' · deduct '+money(amt*10/11)+' as a cost';
+}
 function openExp(){expCat='Other';expRcptFile=null;expGstOn=true;expRecurOn=false;
   $$('#catRow button').forEach(function(x){x.classList.toggle('on',x.dataset.cat==='Other')});
   $('#expDesc').value='';$('#expAmt').value='';$('#expBu').value='100';
+  $('#expDesc').placeholder=expPlace.Other;
   $('#expGst').classList.add('on');$('#expRecur').classList.remove('on');
   $('#expRecurOpts').style.display='none';$('#expFreq').value='monthly';
   $('#expDateLabel').textContent='Date';$('#expDate').value=todayStr();
-  $('#expRcptTxt').textContent='Attach Receipt';$('#expRcpt').classList.remove('done');
+  $('#expRcptTxt').textContent='Attach receipt';$('#expRcpt').classList.remove('done');
+  updateExpGstHint();
   showModal('expModal')}
 $('#addExp').onclick=openExp;
-$$('#catRow button').forEach(function(b){b.onclick=function(){expCat=b.dataset.cat;$$('#catRow button').forEach(function(x){x.classList.toggle('on',x===b)})}});
-$('#expGst').onclick=function(){expGstOn=!expGstOn;this.classList.toggle('on',expGstOn)};
+$$('#catRow button').forEach(function(b){b.onclick=function(){
+  var prev=expCat;expCat=b.dataset.cat;
+  $$('#catRow button').forEach(function(x){x.classList.toggle('on',x===b)});
+  var desc=$('#expDesc');
+  if(!desc.value.trim()||desc.value===prev)desc.placeholder=expPlace[expCat]||expPlace.Other;
+}});
+$('#expGst').onclick=function(){expGstOn=!expGstOn;this.classList.toggle('on',expGstOn);updateExpGstHint()};
+if($('#expAmt'))$('#expAmt').oninput=updateExpGstHint;
+if($('#expBu'))$('#expBu').oninput=updateExpGstHint;
 $('#expRecur').onclick=function(){expRecurOn=!expRecurOn;this.classList.toggle('on',expRecurOn);
   $('#expRecurOpts').style.display=expRecurOn?'block':'none';
   $('#expDateLabel').textContent=expRecurOn?'Starts from':'Date'};
@@ -1586,7 +1913,8 @@ $('#expSave').onclick=async function(){
 };
 /* ---- manual fuel expense (Reports) ---- */
 var fmRcptFile=null;
-function openFuelExp(){fmRcptFile=null;$('#fmAmt').value='';$('#fmType').value=settings.fuel||'Diesel';$('#fmDate').value=todayStr();$('#fmRcptTxt').textContent='Attach Receipt';$('#fmRcpt').classList.remove('done');showModal('fuelModal')}
+function openFuelExp(){fmRcptFile=null;$('#fmAmt').value='';$('#fmType').value=settings.fuel||'Diesel';$('#fmDate').value=todayStr();$('#fmRcptTxt').textContent='Attach Receipt';$('#fmRcpt').classList.remove('done');updateFmGstHint();showModal('fuelModal')}
+if($('#fmAmt'))$('#fmAmt').oninput=updateFmGstHint;
 if($('#addFuelExp'))$('#addFuelExp').onclick=openFuelExp;
 if($('#fmRcpt'))$('#fmRcpt').onclick=function(){$('#fuelRcptFile').click()};
 if($('#fuelRcptFile'))$('#fuelRcptFile').onchange=function(e){fmRcptFile=e.target.files[0]||null;$('#fmRcptTxt').textContent=fmRcptFile?'Receipt attached':'Attach Receipt';$('#fmRcpt').classList.toggle('done',!!fmRcptFile)};
@@ -1663,9 +1991,72 @@ function basSummaryHTML(light){var a=rangeAgg();
     +'<div style="background:'+c.card+';border-radius:12px;padding:14px;margin-top:14px;text-align:center">'
       +'<div style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:'+c.mut+';font-weight:700">'+(net>=0?'Amount payable to ATO':'Refund from ATO')+'</div>'
       +'<div style="font-size:30px;font-weight:800;margin-top:4px;color:'+(net>=0?c.red:c.grn)+'">'+money(Math.abs(net))+'</div></div>'
-    +'<p style="margin:12px 0 0;color:'+c.mut+';font-size:10.5px">CPV levy ('+money(a.levy)+' for this period) is lodged separately with the SRO — it does not go on the BAS.</p>'
-    +'<p style="margin:6px 0 0;color:'+c.mut+';font-size:10.5px">Estimate only \u2014 confirm with your BAS/tax agent. Fareo &middot; '+new Date().toLocaleDateString('en-AU')+'</p></div>'}
-function openSummary(mode){curSummaryMode=mode;$('#summaryBody').innerHTML=(mode==='bas'?basSummaryHTML(false):summaryHTML(false));closeModal('sumPick');showModal('summaryModal')}
+    +'<p style="margin:12px 0 0;color:'+c.mut+';font-size:10.5px">Hail-trip levy ('+money(a.levy)+' this period) is a <b>separate</b> SRO form — do not type it on the BAS.</p>'
+    +'<p style="margin:6px 0 0;color:'+c.mut+';font-size:10.5px">Helper only \u2014 check with your tax agent before you lodge. Fareo &middot; '+new Date().toLocaleDateString('en-AU')+'</p></div>'}
+function basHowHTML(){
+  return '<div class="basguide">'
+    +'<p class="bas-note">A BAS is the ATO form you lodge every 3 months. Fareo works out the GST boxes. The hail-trip (CPV) levy is a <b>different</b> form for the SRO in Victoria — leave it off the BAS.</p>'
+    +'<div class="bas-step"><span class="bas-n">1</span><p><b>Show this quarter.</b> BAS periods are Jul–Sep, Oct–Dec, Jan–Mar and Apr–Jun. Use the Quarter filter at the top so the numbers match that period.</p></div>'
+    +'<div class="bas-step"><span class="bas-n">2</span><p><b>Log every cost.</b> Add fuel and expenses (tolls, wash, repairs). Snap the receipt. Fareo splits GST for you.</p></div>'
+    +'<div class="bas-step"><span class="bas-n">3</span><p><b>Open BAS figures.</b> You will see: <b>G1</b> total sales, <b>1A</b> GST you collected (you owe this), <b>1B</b> GST you paid on fuel and costs (you claim this back). The big number is 1A minus 1B — pay it if it is positive, or wait for a refund if it is negative.</p></div>'
+    +'<div class="bas-step"><span class="bas-n">4</span><p><b>Copy into myGov.</b> Log in → BAS / activity statement → type G1, 1A and 1B. 8A is usually the same as 1A. 8B is usually the same as 1B.</p></div>'
+    +'<div class="bas-step"><span class="bas-n">5</span><p><b>Lodge and pay.</b> Due about 28 days after the quarter ends (late Oct, Feb, Apr, Jul). Confirm with your tax agent first — Fareo is a helper, not advice.</p></div>'
+    +'</div>';
+}
+function bindBasGuideActions(root){
+  if(!root)return;
+  var q=root.querySelector('#basUseQtr');
+  if(q)q.onclick=function(){var pair=currentQuarter();repRange.from=iso(pair[0]);repRange.to=iso(pair[1]);repRange.name='Quarter';renderReports();toast('Showing this quarter')};
+  var o=root.querySelector('#basOpenFigs');
+  if(o)o.onclick=function(){openSummary('bas')};
+}
+function fillBasGuide(){
+  var el=$('#basGuide');
+  if(!el||el.dataset.ready)return;
+  el.innerHTML=basHowHTML()
+    +'<button class="btn" id="basOpenFigs" type="button">Open BAS figures</button>'
+    +'<button class="btn neutral" id="basUseQtr" type="button" style="margin-top:8px">Switch report to this quarter</button>';
+  el.dataset.ready='1';
+  bindBasGuideActions(el);
+}
+if($('#basGuideToggle'))$('#basGuideToggle').onclick=function(){
+  var box=$('#basGuide'),on=box&&box.style.display!=='none';
+  this.classList.toggle('open',!on);
+  if(box){if(!on)fillBasGuide();box.style.display=on?'none':'block'}
+};
+if($('#taxGstNet'))$('#taxGstNet').onclick=function(){openSummary('bas')};
+function showTrackedQuarter(){
+  var row=selectedQuarter();
+  repRange.from=iso(row.f);repRange.to=iso(row.t);repRange.name='Quarter';
+  renderReports();
+}
+if($('#pulseHero')){
+  $('#pulseHero').onclick=function(){go('weekly')};
+  $('#pulseHero').onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();go('weekly')}};
+}
+if($('#pulseShifts'))$('#pulseShifts').onclick=function(){go('weekly')};
+if($('#pulseInsight'))$('#pulseInsight').onclick=function(){
+  var card=$('#deadlineCard');
+  if(card)card.scrollIntoView({behavior:'smooth',block:'start'});
+};
+if($('#qGstTile'))$('#qGstTile').onclick=function(){showTrackedQuarter();openSummary('bas')};
+if($('#qLevyTile'))$('#qLevyTile').onclick=function(){
+  showTrackedQuarter();
+  toast('Hail levy is an SRO return — not on the BAS');
+};
+function openSummary(mode){
+  curSummaryMode=mode;
+  $('#summaryBody').innerHTML=(mode==='bas'?basSummaryHTML(false):summaryHTML(false));
+  var how=$('#basHowToggle'),body=$('#basHowBody');
+  if(how){how.style.display=mode==='bas'?'flex':'none';how.classList.remove('open')}
+  if(body){body.style.display='none';if(mode==='bas')body.innerHTML=basHowHTML()}
+  closeModal('sumPick');showModal('summaryModal');
+}
+if($('#basHowToggle'))$('#basHowToggle').onclick=function(){
+  var body=$('#basHowBody'),on=body&&body.style.display!=='none';
+  this.classList.toggle('open',!on);
+  if(body)body.style.display=on?'none':'block';
+};
 $('#summaryBtn').onclick=function(){showModal('sumPick')};
 $('#pickIncome').onclick=function(){openSummary('income')};
 $('#pickBas').onclick=function(){openSummary('bas')};
@@ -1775,8 +2166,8 @@ function renderChangelog(){
 if($('#versionRow'))$('#versionRow').onclick=function(){renderChangelog();showModal('changelogModal')};
 if($('#clClose'))$('#clClose').onclick=function(){closeModal('changelogModal')};
 $('#setTheme').onchange=function(){settings.theme=this.value;persist();applyTheme()};
-$('#setCredit').onchange=function(){settings.creditedDay=parseInt(this.value,10);persist();renderWeekly();toast('Credited on '+DAYS[settings.creditedDay])};
-$('#setWeek').onchange=function(){settings.weekStart=parseInt(this.value,10);persist();wkOffset=0;renderWeekly();toast('Week starts '+DAYS[settings.weekStart])};
+$('#setCredit').onchange=function(){settings.creditedDay=parseInt(this.value,10);persist();renderWeekly();renderReports();toast('Credited on '+DAYS[settings.creditedDay])};
+$('#setWeek').onchange=function(){settings.weekStart=parseInt(this.value,10);persist();wkOffset=0;renderWeekly();renderReports();toast('Week starts '+DAYS[settings.weekStart])};
 $('#setAuto').onclick=function(){settings.autocomplete=!settings.autocomplete;persist();this.classList.toggle('on',settings.autocomplete);rowInputs();toast(settings.autocomplete?'Autocomplete on':'Autocomplete off')};
 $('#addRego').onclick=function(){var v=$('#newRego').value.trim().toUpperCase();if(!v){toast('Enter a rego');return}if(settings.regos.indexOf(v)<0)settings.regos.push(v);$('#newRego').value='';persist();renderSettings();rowInputs();toast('Rego added')};
 $('#newFy').onclick=function(){if(confirm('Clear all shifts, income, deductions and manual fuel for a fresh financial year? Settings and the receipt archive are kept.')){entries=[];deductions=[];recurring=recurring;fuelManual=[];draft=freshDraft(settings.regos[0]||'');persist();toast('New financial year started');rowInputs();render();renderWeekly();renderReports()}};
@@ -1846,7 +2237,8 @@ if($('#syncOut'))$('#syncOut').onclick=syncSignOut;
 function go(tab){$$('.screen').forEach(function(s){s.classList.toggle('on',s.dataset.tab===tab)});
   $$('.nav button').forEach(function(b){if(!b.classList.contains('center'))b.classList.toggle('on',b.dataset.go===tab)});
   if(tab==='weekly')renderWeekly();if(tab==='reports')renderReports();if(tab==='settings')renderSettings();
-  window.scrollTo({top:0});}
+  window.scrollTo({top:0});
+  try{if(location.hash!=='#'+tab)history.replaceState(null,'','#'+tab)}catch(_){}}
 $$('.nav button').forEach(function(b){b.onclick=function(){go(b.dataset.go)}});
 $('#themeBtn').onclick=function(){settings.theme=effectiveDark()?'light':'dark';persist();applyTheme()};
 
@@ -1855,6 +2247,7 @@ $('#today').textContent=new Date().toLocaleDateString('en-AU',{weekday:'long',da
 var _vl=$('#versionLine');if(_vl)_vl.textContent='Fareo '+APP_VERSION+' \u00b7 tap for release notes';
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(){if(settings.theme==='system')applyTheme()});
 applyTheme();renderNames();rowInputs();render();setSub(1);renderDeadlines();
+(function(){var h=(location.hash||'').replace(/^#/,'');if(['shift','weekly','reports','refresh','settings'].indexOf(h)>=0)go(h)})();
 if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})}
 </script>
 </body>
