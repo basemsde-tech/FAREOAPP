@@ -1371,8 +1371,11 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.1';
+var APP_VERSION='8.2';
 var CHANGELOG=[
+  {v:'8.2',date:'August 29, 2026',notes:[
+    ['UI/UX','Concise ETA messages: generated ETA text is now clean and direct: "ETA is <time>".']
+  ]},
   {v:'8.1',date:'August 29, 2026',notes:[
     ['UI/UX','Multi-passenger comma entry: simply type comma-separated names (e.g. John, Jane) in the Passenger Name field to link multiple riders to the same address.'],
     ['Feature','Address search state filter: Victoria (VIC) focused address search and autocomplete predictions by default, with easy state selection in Settings.'],
@@ -3274,8 +3277,7 @@ function updateEtaView(){
 
   /* Format Default Message */
   if(!etaCurrent.customMsg){
-    var namePart = etaCurrent.name ? ('Hi ' + etaCurrent.name + ', ') : 'Hi, ';
-    var msg = namePart + 'your driver is on the way! ETA: ' + timeStr + ' (approx ' + minsStr + ').' + (etaCurrent.address ? (' Destination: ' + etaCurrent.address + '.') : '') + ' See you soon!';
+    var msg = 'ETA is ' + timeStr;
     var tb = $('#etaMsgText');
     if(tb) tb.value = msg;
     var pageTb = $('#etaPageMsgText');
@@ -3475,7 +3477,7 @@ if($('#homeEtaShare')) $('#homeEtaShare').onclick = function(){
   var now = new Date();
   var arr = new Date(now.getTime() + (Number(etaCurrent.mins) || 0) * 60000);
   var timeStr = fmtEtaTime(arr, is24h);
-  var msg = 'Hi, your driver is on the way! ETA: ' + timeStr + ' (approx ' + (etaCurrent.mins || 0) + ' mins). See you soon!';
+  var msg = 'ETA is ' + timeStr;
   sendEtaShareText(msg);
 };
 if($('#homeEtaWa')) $('#homeEtaWa').onclick = function(){
@@ -3483,7 +3485,7 @@ if($('#homeEtaWa')) $('#homeEtaWa').onclick = function(){
   var now = new Date();
   var arr = new Date(now.getTime() + (Number(etaCurrent.mins) || 0) * 60000);
   var timeStr = fmtEtaTime(arr, is24h);
-  var msg = 'Hi, your driver is on the way! ETA: ' + timeStr + ' (approx ' + (etaCurrent.mins || 0) + ' mins). See you soon!';
+  var msg = 'ETA is ' + timeStr;
   sendEtaWaText(msg, etaCurrent.phone);
 };
 if($('#homeEtaCopy')) $('#homeEtaCopy').onclick = function(){
@@ -3491,7 +3493,7 @@ if($('#homeEtaCopy')) $('#homeEtaCopy').onclick = function(){
   var now = new Date();
   var arr = new Date(now.getTime() + (Number(etaCurrent.mins) || 0) * 60000);
   var timeStr = fmtEtaTime(arr, is24h);
-  var msg = 'Hi, your driver is on the way! ETA: ' + timeStr + ' (approx ' + (etaCurrent.mins || 0) + ' mins). See you soon!';
+  var msg = 'ETA is ' + timeStr;
   sendEtaCopyText(msg);
 };
 
