@@ -43,9 +43,9 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--pg:#0E1116;--card:#171D25;--field:#1E2530;--bd:#2A313C;--bd2:#384250;--head:#F2F4F8;--body:#C3C9D4;--mut:#8A93A3;--inc:#34D399;--inc-bg:#1B3D2C;--on-inc:#8EE4B8;--fuel:#F5B36B;--fuel-fill:#E08A3C;--fuel-bg:#3A2814;--on-fuel:#F5C89A;--hail:#93B4F5;--hail-fill:#3B60C4;--hail-bg:#1B3158;--levy:#C4ABF7;--levy-bg:#322456;--on-levy:#CBB4FB;--dgr:#F58A8A;--dgr-bg:#3D1A1A;--on-dgr:#F5B0B0;--fink:#F7B27E;--fink-bg:#3A2414;--on-fink:#F7B27E;--acct:#2DD4BF;--acct-bg:#16443F;--on-acct:#5EEAD4;--qtext:#A9C4FB;--qsub:#8FA8E0;--btn-fill:#10B981;--btn-ink:#052E1B;--disbg:#141922;--disink:#5B6472;--navmut:#8A8A92;--grad-inc:linear-gradient(150deg,#142C1E,#0F2318);--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 26px rgba(0,0,0,.42)}}
 :root[data-theme="dark"]{--pg:#0E1116;--card:#171D25;--field:#1E2530;--bd:#2A313C;--bd2:#384250;--head:#F2F4F8;--body:#C3C9D4;--mut:#8A93A3;--inc:#34D399;--inc-bg:#1B3D2C;--on-inc:#8EE4B8;--fuel:#F5B36B;--fuel-fill:#E08A3C;--fuel-bg:#3A2814;--on-fuel:#F5C89A;--hail:#93B4F5;--hail-fill:#3B60C4;--hail-bg:#1B3158;--levy:#C4ABF7;--levy-bg:#322456;--on-levy:#CBB4FB;--dgr:#F58A8A;--dgr-bg:#3D1A1A;--on-dgr:#F5B0B0;--fink:#F7B27E;--fink-bg:#3A2414;--on-fink:#F7B27E;--acct:#2DD4BF;--acct-bg:#16443F;--on-acct:#5EEAD4;--qtext:#A9C4FB;--qsub:#8FA8E0;--btn-fill:#10B981;--btn-ink:#052E1B;--disbg:#141922;--disink:#5B6472;--navmut:#8A8A92;--grad-inc:linear-gradient(150deg,#142C1E,#0F2318);--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 26px rgba(0,0,0,.42)}
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--pg)}
+html,body{margin:0;background:var(--pg);overflow-x:hidden}
 body{font-family:Outfit,system-ui,sans-serif;color:var(--body);color-scheme:light dark;padding-bottom:calc(72px + env(safe-area-inset-bottom))}
-.app{width:min(100%,440px);margin:0 auto;min-height:100vh;background:var(--pg)}
+.app{width:100%;max-width:440px;margin:0 auto;min-height:100vh;background:var(--pg);position:relative;overflow-x:hidden}
 input,select,textarea,button{font:inherit}
 .body-p{padding:2px 13px 8px}
 .top{display:flex;align-items:center;justify-content:space-between;padding:calc(10px + env(safe-area-inset-top)) 14px 8px;gap:8px}
@@ -565,6 +565,13 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
 .home-eta-chips{flex:1;min-width:0;display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
 .home-eta-chips button{border:1px solid var(--bd2);background:var(--field);color:var(--head);border-radius:8px;padding:7px 2px;font-size:11px;font-weight:800;cursor:pointer;text-align:center}
 .home-eta-chips button.on{background:var(--acct-bg);color:var(--on-acct);border-color:var(--acct)}
+.home-eta-acts{display:flex;align-items:stretch;gap:6px;margin-top:8px}
+.home-eta-acts button{border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;padding:8px 6px;text-align:center;border:1px solid transparent;transition:opacity .15s;-webkit-tap-highlight-color:transparent}
+.home-eta-acts button:active{opacity:.8}
+.btn-eta-main{flex:1.2;background:var(--btn-fill);color:var(--btn-ink);border:none}
+.btn-eta-wa{flex:1.2;background:var(--inc-bg);color:var(--on-inc);border:1px solid var(--inc)}
+.btn-eta-copy{flex:1;background:var(--field);color:var(--head);border:1px solid var(--bd2)}
+.btn-eta-go{width:36px;flex:0 0 36px;background:var(--field);color:var(--head);border:1px solid var(--bd2);font-size:18px;line-height:1;display:grid;place-items:center;padding:0}
 .run-plan-container{display:flex;flex-direction:column;gap:8px;margin-top:8px}
 .run-box{background:var(--card);border:1.5px solid var(--bd2);border-radius:13px;padding:10px 11px;transition:transform .12s,box-shadow .12s,border-color .12s;position:relative;touch-action:pan-y}
 .run-box.dragging{opacity:.4;border-style:dashed;border-color:var(--inc);transform:scale(.98)}
