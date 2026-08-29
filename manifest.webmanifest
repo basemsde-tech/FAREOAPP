@@ -1,12 +1,17 @@
 {
+  "id": "/?source=pwa",
   "name": "Fareo",
   "short_name": "Fareo",
-  "description": "Taxi driver shift calculator, weekly tracker & tax reports",
+  "description": "Taxi driver shift calculator, weekly tracker, runs & tax reports",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
   "background_color": "#0E1116",
   "theme_color": "#0E1116",
   "orientation": "portrait",
+  "lang": "en-AU",
+  "categories": ["finance", "utilities", "productivity"],
   "icons": [
     { "src": "icon-192-v52.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "icon-512-v52.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },

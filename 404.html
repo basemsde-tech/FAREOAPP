@@ -526,9 +526,40 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
 .hub-wheel .hub-core{position:absolute;left:50%;top:50%;width:112px;height:112px;margin:-56px 0 0 -56px;border-radius:50%;border:0;background:var(--btn-fill);color:var(--btn-ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 8px 24px rgba(4,120,87,.35);z-index:2;-webkit-tap-highlight-color:transparent}
 .hub-wheel .hub-core svg{width:32px;height:32px}
 .hub-wheel .hub-core:active{transform:scale(.96)}
-.hub-wheel .hub-sat{position:absolute;left:50%;top:50%;width:72px;height:72px;margin:-36px 0 0 -36px;border-radius:50%;border:1.5px solid var(--bd2);background:var(--card);color:var(--head);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;font-weight:800;cursor:pointer;box-shadow:var(--shadow);transform:rotate(var(--a)) translateY(-114px) rotate(calc(var(--a) * -1));-webkit-tap-highlight-color:transparent}
-.hub-wheel .hub-sat svg{width:20px;height:20px;color:var(--inc)}
-.hub-wheel .hub-sat:nth-child(1){--a:-80deg}.hub-wheel .hub-sat:nth-child(2){--a:-40deg}.hub-wheel .hub-sat:nth-child(3){--a:0deg}.hub-wheel .hub-sat:nth-child(4){--a:40deg}.hub-wheel .hub-sat:nth-child(5){--a:80deg}
+.hub-wheel .hub-sat{position:absolute;left:50%;top:50%;width:66px;height:66px;margin:-33px 0 0 -33px;border-radius:50%;border:1.5px solid var(--bd2);background:var(--card);color:var(--head);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:9.5px;font-weight:800;cursor:pointer;box-shadow:var(--shadow);transform:rotate(var(--a)) translateY(-118px) rotate(calc(var(--a) * -1));-webkit-tap-highlight-color:transparent}
+.hub-wheel .hub-sat svg{width:18px;height:18px;color:var(--inc)}
+.hub-wheel .hub-sat:nth-child(1){--a:-85deg}.hub-wheel .hub-sat:nth-child(2){--a:-51deg}.hub-wheel .hub-sat:nth-child(3){--a:-17deg}.hub-wheel .hub-sat:nth-child(4){--a:17deg}.hub-wheel .hub-sat:nth-child(5){--a:51deg}.hub-wheel .hub-sat:nth-child(6){--a:85deg}
+.run-plan-container{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.run-box{background:var(--card);border:1.5px solid var(--bd2);border-radius:13px;padding:10px 11px;transition:transform .12s,box-shadow .12s,border-color .12s;position:relative;touch-action:pan-y}
+.run-box.dragging{opacity:.4;border-style:dashed;border-color:var(--inc);transform:scale(.98)}
+.run-box.drag-over{border-color:var(--inc);box-shadow:0 0 0 2px var(--inc)}
+.run-box-head{display:flex;align-items:center;gap:7px}
+.run-grip{width:28px;height:28px;border-radius:7px;background:var(--field);color:var(--mut);display:grid;place-items:center;cursor:grab;touch-action:none;flex:0 0 auto;-webkit-user-select:none;user-select:none}
+.run-grip:active{cursor:grabbing;background:var(--inc-bg);color:var(--inc)}
+.run-grip svg{width:15px;height:15px}
+.run-badge{background:var(--btn-fill);color:var(--btn-ink);font-size:10px;font-weight:800;padding:3px 7px;border-radius:6px;letter-spacing:.3px;text-transform:uppercase;flex:0 0 auto}
+.run-names{flex:1;min-width:0;font-size:13.5px;color:var(--head);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.run-names small{color:var(--mut);font-weight:500;margin-left:4px}
+.run-arrows{display:flex;align-items:center;gap:3px;flex:0 0 auto}
+.run-arr,.run-del{width:26px;height:26px;border-radius:6px;border:1px solid var(--bd2);background:var(--field);color:var(--mut);font-size:10px;font-weight:800;display:grid;place-items:center;cursor:pointer;padding:0}
+.run-del{color:var(--dgr);font-size:14px}
+.run-box-body{margin-top:6px;padding-left:35px}
+.run-addr-line{font-size:12px;color:var(--body);margin-bottom:4px;word-break:break-word}
+.run-tag{display:inline-block;font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:4px;background:var(--field);color:var(--mut);margin-right:5px}
+.run-box-acts{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;padding-left:35px}
+.run-box-acts button{flex:1;min-width:65px;border:1px solid var(--bd2);background:var(--field);color:var(--head);border-radius:8px;padding:7px 5px;font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:4px}
+.run-box-acts button.btn-r-nav{background:var(--inc-bg);color:var(--on-inc);border-color:var(--inc)}
+.run-box-acts button.btn-r-eta{background:var(--acct-bg);color:var(--on-acct);border-color:var(--acct)}
+.eta-presets{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0}
+.eta-presets button{border:1px solid var(--bd2);background:var(--field);color:var(--head);border-radius:9px;padding:9px 2px;font-size:12px;font-weight:800;cursor:pointer;text-align:center}
+.eta-presets button.on{background:var(--acct-bg);color:var(--on-acct);border-color:var(--acct)}
+.eta-box{background:var(--grad-inc);border:1.5px solid var(--inc-bg);border-radius:12px;padding:12px;margin:10px 0;text-align:center}
+.eta-box .eta-time{font-size:32px;font-weight:800;color:var(--inc);font-variant-numeric:tabular-nums;line-height:1.1}
+.eta-box .eta-sub{font-size:12px;color:var(--mut);font-weight:600;margin-top:2px}
+.eta-tgl-row{display:flex;align-items:center;justify-content:space-between;background:var(--field);border-radius:10px;padding:8px 12px;margin-bottom:10px}
+.eta-tgl-row b{font-size:12.5px;color:var(--head)}
+.eta-fmt-btn{border:1px solid var(--bd2);background:var(--card);color:var(--head);border-radius:7px;padding:5px 10px;font-size:11px;font-weight:800;cursor:pointer}
+.eta-msg-box{width:100%;border-radius:9px;padding:10px;font-size:13px;background:var(--field);border:1.5px solid var(--bd2);color:var(--fink);-webkit-text-fill-color:var(--fink);font-weight:600;resize:vertical;min-height:74px}
 .pie-wrap{display:flex;align-items:center;gap:14px}
 .pie-wrap svg{flex:0 0 auto}
 .pie-leg{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
@@ -608,6 +639,7 @@ a.addr-link{display:inline;font-size:12.5px}
       <div class="hub-wheel">
         <button type="button" class="hub-sat" data-hub="weekly"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-8M22 19V3"/></svg>Weekly</button>
         <button type="button" class="hub-sat" data-hub="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-7"/></svg>Reports</button>
+        <button type="button" class="hub-sat" data-hub="runs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Runs</button>
         <button type="button" class="hub-sat" data-hub="book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M8 7h8M8 11h6"/></svg>Book</button>
         <button type="button" class="hub-sat" data-hub="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1-2 3.4-.2-.1a1.7 1.7 0 0 0-1.9-.1 1.7 1.7 0 0 0-.9 1.5V22H9.2v-.3a1.7 1.7 0 0 0-.9-1.5 1.7 1.7 0 0 0-1.9.1l-.2.1-2-3.4.1-.1A1.7 1.7 0 0 0 4.6 15 1.7 1.7 0 0 0 3 14H2v-4h1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1 2-3.4.2.1a1.7 1.7 0 0 0 1.9.1A1.7 1.7 0 0 0 9.2 2V2h5.6v.3a1.7 1.7 0 0 0 .9 1.5 1.7 1.7 0 0 0 1.9-.1l.2-.1 2 3.4-.1.1A1.7 1.7 0 0 0 19.4 9 1.7 1.7 0 0 0 21 10h1v4h-1a1.7 1.7 0 0 0-1.6 1Z"/></svg>Settings</button>
         <button type="button" class="hub-sat" data-hub="refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/></svg>Refresh</button>
@@ -688,19 +720,58 @@ a.addr-link{display:inline;font-size:12.5px}
     <button class="btn neutral" id="wkAdd" style="margin-top:9px">+ Add / override entry</button>
   </section>
 
-  <section class="screen" data-tab="book">
-    <div class="sub">Address Book <small>Clients · school runs · one-tap nav</small></div>
-    <input class="cl-search" id="bookSearch" placeholder="Search name or nickname" autocomplete="off">
+  <section class="screen" data-tab="runs">
+    <div class="sub">Runs <small>Ordered run plan &middot; drag to reorder &middot; 1-tap Nav &amp; ETA</small></div>
+
     <div class="card">
-      <h5><span class="dot" style="background:var(--hail)"></span>School run</h5>
-      <div class="book-day" id="bookDays"></div>
-      <div class="run-seg">
-        <button type="button" class="on" id="runAm">Morning</button>
-        <button type="button" id="runPm">Afternoon</button>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px">
+        <h5><span class="dot" style="background:var(--hail)"></span>Weekday Presets</h5>
+        <span id="runStopsCount" style="font-size:11px;font-weight:700;color:var(--mut)">0 stops</span>
       </div>
-      <div id="runList"></div>
-      <button class="btn neutral" id="shareRun" style="margin-top:8px">Share this run</button>
+      <div class="book-day" id="runPlanDays"></div>
+      <div class="run-seg">
+        <button type="button" class="on" id="runPlanAm">Morning AM</button>
+        <button type="button" id="runPlanPm">Afternoon PM</button>
+      </div>
+      <div class="two" style="gap:7px;margin-top:6px">
+        <button type="button" class="btn neutral" id="loadDayRun" style="font-size:12px;padding:9px 6px">Load Day Preset</button>
+        <button type="button" class="btn" id="addRunStopBtn" style="font-size:12px;padding:9px 6px">+ Add Stop</button>
+      </div>
     </div>
+
+    <div class="card" style="padding:12px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <span class="lbl" style="font-size:11px">Active Driving Sequence</span>
+        <div style="display:flex;gap:6px">
+          <button type="button" class="btn neutral" id="shareFullRun" style="padding:5px 9px;font-size:11px;margin:0">Share Run</button>
+          <button type="button" class="btn neutral" id="clearRunPlan" style="padding:5px 9px;font-size:11px;margin:0;border-color:var(--dgr);color:var(--dgr)">Clear</button>
+        </div>
+      </div>
+      <p style="font-size:11px;color:var(--mut);margin:0 0 10px">Drag grip <b style="letter-spacing:1px">:::</b> or tap ▲/▼ to arrange stops in driving order.</p>
+      <div id="runPlanList" class="run-plan-container"></div>
+      <div class="ded-empty" id="runPlanEmpty" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <b>No stops in run plan</b>
+        <span>Tap <b>Load Day Preset</b> or <b>+ Add Stop</b> to build your sequence.</span>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:0">
+      <h5><span class="dot" style="background:var(--acct)"></span>Quick ETA Share</h5>
+      <p style="font-size:11.5px;color:var(--mut);margin:0 0 10px">Send a quick arrival estimate message via WhatsApp, SMS, or copy in 1 tap.</p>
+      <button type="button" class="btn neutral" id="openQuickEtaBtn" style="width:100%">Open ETA Calculator</button>
+    </div>
+  </section>
+
+  <section class="screen" data-tab="book">
+    <div class="sub">Address Book <small>Client directory &middot; addresses &middot; rider notes</small></div>
+    <div class="card" style="background:var(--inc-bg);border:1.5px solid var(--inc);padding:11px;margin-bottom:12px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <div><b style="font-size:13px;color:var(--on-inc);display:block">Active Run Planner</b><span style="font-size:11px;color:var(--mut)">Sequence stops, drag to sort, Nav &amp; ETA</span></div>
+        <button type="button" class="btn" onclick="go('runs')" style="width:auto;padding:8px 14px;font-size:12px;margin:0">Go to Runs &rsaquo;</button>
+      </div>
+    </div>
+    <input class="cl-search" id="bookSearch" placeholder="Search name or nickname" autocomplete="off">
     <div class="card" style="margin-bottom:0">
       <h5><span class="dot" style="background:var(--inc)"></span>Clients<span style="margin-left:auto;font-size:11px;color:var(--mut);font-weight:600" id="cliCount">0</span></h5>
       <div id="cliList"></div>
@@ -855,9 +926,10 @@ a.addr-link{display:inline;font-size:12.5px}
         <button class="btn neutral" id="addPayType">+ Add payment type</button>
       </div>
 
-      <p class="grp">Appearance</p>
+      <p class="grp">Appearance &amp; Time</p>
       <div class="card" style="padding:0">
         <div class="set"><div class="sl"><b>Theme</b><p>Match phone, or force</p></div><select id="setTheme" style="width:120px"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></div>
+        <div class="set"><div class="sl"><b>24-Hour Time Format</b><p>ETA messages: 14:30 vs 2:30 PM</p></div><button class="tgl" id="setTime24h" aria-label="Toggle 24-hour time"></button></div>
       </div>
 
       <p class="grp">Backup</p>
@@ -1046,6 +1118,81 @@ a.addr-link{display:inline;font-size:12.5px}
   <button class="btn" id="clSave" style="margin-top:14px">Save client</button>
   <div class="two" style="margin-top:9px"><button class="btn neutral" id="clCancel">Cancel</button><button class="btn neutral" id="clDelete" style="border-color:var(--dgr);color:var(--dgr);display:none">Delete</button></div>
 </div></div>
+<div class="modal" id="etaModal"><div class="sheet" style="max-height:92vh;overflow:auto">
+  <div class="grip"></div>
+  <h3 id="etaTitle">Share ETA</h3>
+  <p class="csub" id="etaSub">Calculate arrival time and send to passenger or carer</p>
+  
+  <div class="eta-tgl-row">
+    <b>Time Format</b>
+    <button type="button" class="eta-fmt-btn" id="etaFmtToggle">12-Hour (AM/PM)</button>
+  </div>
+
+  <div class="eta-box">
+    <div class="lbl" style="font-size:11px">Estimated Arrival</div>
+    <div class="eta-time" id="etaTimeDisplay">--:--</div>
+    <div class="eta-sub" id="etaMinsDisplay">in 15 mins</div>
+  </div>
+
+  <label class="fl">Quick minutes</label>
+  <div class="eta-presets" id="etaPresets">
+    <button type="button" data-m="5">+5m</button>
+    <button type="button" data-m="10">+10m</button>
+    <button type="button" class="on" data-m="15">+15m</button>
+    <button type="button" data-m="20">+20m</button>
+    <button type="button" data-m="25">+25m</button>
+    <button type="button" data-m="30">+30m</button>
+    <button type="button" data-m="40">+40m</button>
+    <button type="button" data-m="50">+50m</button>
+  </div>
+
+  <div class="two" style="align-items:center;margin-top:8px">
+    <div>
+      <label class="fl">Minutes away</label>
+      <input type="number" id="etaMinsInput" min="1" max="300" value="15" inputmode="numeric">
+    </div>
+    <div>
+      <label class="fl">Target arrival</label>
+      <input type="time" id="etaTargetInput">
+    </div>
+  </div>
+
+  <label class="fl" style="margin-top:10px">Message text (editable)</label>
+  <textarea class="eta-msg-box" id="etaMsgText" rows="3"></textarea>
+
+  <button class="btn" id="etaShareBtn" style="margin-top:12px;background:var(--acct);color:var(--btn-ink)">Share ETA</button>
+  <div class="two" style="gap:7px;margin-top:8px">
+    <button class="btn neutral" id="etaCopyBtn">Copy Message</button>
+    <button class="btn neutral" id="etaWaBtn" style="color:var(--inc);border-color:var(--inc)">WhatsApp</button>
+  </div>
+  <button class="btn neutral" id="etaCloseBtn" style="margin-top:8px">Close</button>
+</div></div>
+
+<div class="modal" id="addStopModal"><div class="sheet" style="max-height:92vh;overflow:auto">
+  <div class="grip"></div>
+  <h3>Add Stop to Run Plan</h3>
+  <p class="csub">Pick from your client list or enter a custom stop</p>
+
+  <label class="fl">Select Client</label>
+  <select id="addStopClientSelect"></select>
+
+  <div id="addStopAddrWrap" style="margin-top:8px">
+    <label class="fl">Select Address</label>
+    <select id="addStopAddrSelect"></select>
+  </div>
+
+  <div style="text-align:center;margin:12px 0 8px;font-size:11px;color:var(--mut);font-weight:700">── OR CUSTOM STOP ──</div>
+
+  <label class="fl">Stop / Place Name</label>
+  <input id="addStopCustomName" placeholder="e.g. Airport, Care Centre, Station">
+  <label class="fl">Address line</label>
+  <input id="addStopCustomLine" placeholder="Address or paste Google Maps link">
+  <div class="sugg" id="addStopSugg" style="display:none"></div>
+
+  <button class="btn" id="addStopConfirmBtn" style="margin-top:14px">Add to Run Plan</button>
+  <button class="btn neutral" id="addStopCancelBtn" style="margin-top:8px">Cancel</button>
+</div></div>
+
 <div class="modal" id="updModal"><div class="sheet">
   <div class="grip"></div>
   <h3>Update ready</h3>
@@ -1082,8 +1229,13 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='7.1';
+var APP_VERSION='7.2';
 var CHANGELOG=[
+  {v:'7.2',date:'August 29, 2026',notes:[
+    ['Feature','Dedicated Runs page with drag-and-drop stop reordering for route planning from your clients database.'],
+    ['Feature','Instant ETA timer and message generator with 12-hour or 24-hour format, quick minute presets, WhatsApp, SMS, and copying.'],
+    ['UI/UX','Enhanced Android PWA support with edge-to-edge layout, responsive touch-drag gestures, and overscroll containment.']
+  ]},
   {v:'7.1',date:'August 29, 2026',notes:[
     ['UI/UX','Bottom bar is a Home button that opens the page wheel. Back and forward in the header follow the pages you opened; the phone back button closes a sheet first, then goes back.'],
     ['Feature','One address can list extra riders (other clients or a typed name). Copy and share include a Google Maps link you can tap to navigate.']
@@ -1211,6 +1363,8 @@ var fuelManual=load('fareo_fuelManual',[]);   /* manual fuel expenses added in R
 var receipts=load('fareo_receipts',[])||[];        /* receipt archive: {id,dataUrl,name,kind,...} */
 var clients=load('fareo_clients',[])||[];
 if(!Array.isArray(clients))clients=[];
+var runPlan=load('fareo_run_plan',[])||[];
+if(!Array.isArray(runPlan))runPlan=[];
 var draft=load('fareo_draft',null)||{date:todayStr(),eos:[0],cash:[{name:'',amount:0}],square:[{name:'',amount:0}],runs:0,accounts:[],fuel:[{amount:0,type:settings.fuel,opPaid:false}],hail:'',rego:'',receipt:false,receiptName:'',custom:{}};
 /* Backfill new draft shapes so older drafts don't crash */
 if(!draft.fuel)draft.fuel=[{amount:0,type:settings.fuel,opPaid:false}];
@@ -1259,7 +1413,7 @@ function hideHelp(){if(helpPop){helpPop.classList.remove('show')}helpFor=null}
 })();
 /* Build a help marker span. Content is escaped-safe. */
 function help(txt){return '<span class="help" data-help="'+esc(txt)+'" aria-label="Help">?</span>'}
-function persist(){save('fareo_settings',settings);save('fareo_entries',entries);save('fareo_deductions',deductions);save('fareo_recurring',recurring);save('fareo_fuelManual',fuelManual);save('fareo_draft',draft);save('fareo_clients',clients)}
+function persist(){save('fareo_settings',settings);save('fareo_entries',entries);save('fareo_deductions',deductions);save('fareo_recurring',recurring);save('fareo_fuelManual',fuelManual);save('fareo_draft',draft);save('fareo_clients',clients);save('fareo_run_plan',runPlan)}
 function saveReceipts(){save('fareo_receipts',receipts)}
 var names=load('fareo_names',[]);
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
@@ -2508,6 +2662,7 @@ function renderSettings(){
   $('#setPct').value=settings.pct;$('#setLevy').value=settings.levy;$('#setFuel').value=settings.fuel;$('#setTheme').value=settings.theme;
   $('#setGstBase').value=settings.gstBase;
   $('#setCashGst').classList.toggle('on',!!settings.cashGstFree);
+  var st24=$('#setTime24h');if(st24)st24.classList.toggle('on',!!settings.time24h);
   var ac=$('#archiveCount');if(ac)ac.textContent=receipts.length;
   var sc=$('#setCredit');sc.innerHTML=DAYS.map(function(d,i){return '<option value="'+i+'">'+d+'</option>'}).join('');sc.value=String(settings.creditedDay);
   var sw=$('#setWeek');sw.innerHTML=DAYS.map(function(d,i){return '<option value="'+i+'">'+d+'</option>'}).join('');sw.value=String(settings.weekStart);
@@ -2550,6 +2705,7 @@ $('#setFuel').onchange=function(){settings.fuel=this.value;persist()};
 /* Fuel mode removed — always reimbursed */
 $('#setGstBase').onchange=function(){settings.gstBase=this.value;persist();toast(this.value==='share'?'GST set aside on driver share':'GST set aside on full gross')};
 $('#setCashGst').onclick=function(){settings.cashGstFree=!settings.cashGstFree;persist();this.classList.toggle('on',settings.cashGstFree);renderReports();toast(settings.cashGstFree?'Cash & Square: GST-free':'Cash & Square: GST-inclusive')};
+if($('#setTime24h'))$('#setTime24h').onclick=function(){settings.time24h=!settings.time24h;persist();this.classList.toggle('on',!!settings.time24h);toast(settings.time24h?'24-Hour time format':'12-Hour time format')};
 if($('#advToggle'))$('#advToggle').onclick=function(){var w=$('#advWrap');var open=w.style.display==='none';w.style.display=open?'block':'none';this.classList.toggle('open',open)};
 if($('#archiveLink'))$('#archiveLink').onclick=openArchive;
 if($('#jarOpen'))$('#jarOpen').onclick=openArchive;
@@ -2597,7 +2753,7 @@ $('#clearCache').onclick=fullRefresh;
 $('#refreshBtn').onclick=fullRefresh;
 
 /* ---------- backup + cloud sync ---------- */
-var SYNC_KEYS=['fareo_settings','fareo_entries','fareo_deductions','fareo_recurring','fareo_fuelManual','fareo_draft','fareo_names','fareo_clients'];
+var SYNC_KEYS=['fareo_settings','fareo_entries','fareo_deductions','fareo_recurring','fareo_fuelManual','fareo_draft','fareo_names','fareo_clients','fareo_run_plan'];
 function allData(){var o={};SYNC_KEYS.forEach(function(k){var v=localStorage.getItem(k);if(v!=null)o[k]=v});return o}
 /* Backup includes receipts (for a full audit-safe export); cloud sync does not. */
 function allDataFull(){var o=allData();var r=localStorage.getItem('fareo_receipts');if(r!=null)o['fareo_receipts']=r;return o}
@@ -2632,7 +2788,7 @@ async function afterAuth(user){
 function pushNow(){if(!syncOn||!fb.uid||!fb.fsM)return;var ts=Date.now();localStorage.setItem('fareo_updatedAt',String(ts));fb.fsM.setDoc(docRef(),{data:allData(),updatedAt:ts,_device:deviceId()}).then(function(){setSyncState('On - saved')}).catch(function(){setSyncState('Offline - will retry')})}
 function scheduleSync(){if(!syncOn||applyingRemote)return;clearTimeout(syncTimer);syncTimer=setTimeout(pushNow,900)}
 async function syncSignOut(){try{if(fb.auth)await fb.authM.signOut(fb.auth)}catch(_){}syncOn=false;localStorage.removeItem('fareo_sync_on');setSyncState('Off - local only');toast('Signed out (data kept on device)')}
-function reloadAll(){settings=load('fareo_settings',settings)||settings;migrateSettings();entries=load('fareo_entries',[])||[];deductions=load('fareo_deductions',[])||[];recurring=load('fareo_recurring',[])||[];fuelManual=load('fareo_fuelManual',[])||[];receipts=load('fareo_receipts',[])||[];names=load('fareo_names',[])||[];clients=load('fareo_clients',[])||[];if(!Array.isArray(clients))clients=[];try{renderNames();rowInputs();render();var a=document.querySelector('.screen.on');if(a){var t=a.dataset.tab;if(t==='weekly')renderWeekly();if(t==='reports')renderReports();if(t==='settings')renderSettings();if(t==='book')renderBook()}}catch(_){}}
+function reloadAll(){settings=load('fareo_settings',settings)||settings;migrateSettings();entries=load('fareo_entries',[])||[];deductions=load('fareo_deductions',[])||[];recurring=load('fareo_recurring',[])||[];fuelManual=load('fareo_fuelManual',[])||[];receipts=load('fareo_receipts',[])||[];names=load('fareo_names',[])||[];clients=load('fareo_clients',[])||[];if(!Array.isArray(clients))clients=[];runPlan=load('fareo_run_plan',[])||[];if(!Array.isArray(runPlan))runPlan=[];try{renderNames();rowInputs();render();var a=document.querySelector('.screen.on');if(a){var t=a.dataset.tab;if(t==='weekly')renderWeekly();if(t==='reports')renderReports();if(t==='settings')renderSettings();if(t==='runs')renderRuns();if(t==='book')renderBook()}}catch(_){}}
 if($('#syncSignin'))$('#syncSignin').onclick=function(){syncConnect(false)};
 if($('#syncCreate'))$('#syncCreate').onclick=function(){syncConnect(true)};
 if($('#syncOut'))$('#syncOut').onclick=syncSignOut;
@@ -2781,56 +2937,606 @@ function schoolOnDay(c,day){
   var days=s.days||[];
   return days.indexOf(day)>=0;
 }
-function runClients(){
-  var am=bookAmpm==='am';
+function runClients(day, ampm){
+  day = (day != null ? day : runPlanDay);
+  ampm = (ampm != null ? ampm : runPlanAmpm);
+  var isAm = ampm === 'am';
   return clients.filter(function(c){
-    if(!schoolOnDay(c,bookDay))return false;
-    var s=c.school||{};
-    return am?(s.am!==false):(s.pm!==false);
+    if(!schoolOnDay(c, day)) return false;
+    var s = c.school || {};
+    return isAm ? (s.am !== false) : (s.pm !== false);
   }).sort(function(a,b){return clientLabel(a).localeCompare(clientLabel(b))});
 }
-function runStops(){
-  var run=runClients(),groups=[],map={};
+
+function runStops(day, ampm){
+  day = (day != null ? day : runPlanDay);
+  ampm = (ampm != null ? ampm : runPlanAmpm);
+  var run = runClients(day, ampm), groups = [], map = {};
   run.forEach(function(c){
-    var addr=bookAmpm==='am'?pickupAddr(c):dropAddr(c);
-    var key=addrKey(addr)||('c:'+c.id);
-    if(!map[key]){map[key]={addr:addr,clients:[]};groups.push(map[key])}
+    var addr = ampm === 'am' ? pickupAddr(c) : dropAddr(c);
+    var key = addrKey(addr) || ('c:' + c.id);
+    if(!map[key]){ map[key] = { addr: addr, clients: [] }; groups.push(map[key]); }
     map[key].clients.push(c);
   });
   return groups;
 }
+
 function riderNames(addr,clientsAt){
   var seen={},out=[];
   function add(s){s=(s||'').trim();if(!s)return;var k=s.toLowerCase();if(seen[k])return;seen[k]=1;out.push(s)}
   (clientsAt||[]).forEach(function(c){add(clientLabel(c));peopleOf(addr,c).forEach(function(p){add(p.label)})});
   return out;
 }
-function renderBook(){
-  var days=$('#bookDays');
+
+/* ---------- ETA Calculator & Sharer ---------- */
+function fmtEtaTime(dateObj, is24h){
+  if(!dateObj || isNaN(dateObj.getTime())) return '';
+  var h = dateObj.getHours();
+  var m = dateObj.getMinutes();
+  if(is24h){
+    return pad2(h) + ':' + pad2(m);
+  }
+  var ampm = h >= 12 ? 'PM' : 'AM';
+  var h12 = h % 12; if(h12 === 0) h12 = 12;
+  return h12 + ':' + pad2(m) + ' ' + ampm;
+}
+
+var etaCurrent = { name: '', phone: '', address: '', mins: 15, customMsg: false };
+
+function updateEtaView(){
+  var is24h = !!settings.time24h;
+  var btn = $('#etaFmtToggle');
+  if(btn) btn.textContent = is24h ? '24-Hour (' + fmtEtaTime(new Date(), true) + ')' : '12-Hour (' + fmtEtaTime(new Date(), false) + ')';
+
+  var now = new Date();
+  var arr = new Date(now.getTime() + (Number(etaCurrent.mins) || 0) * 60000);
+  var timeStr = fmtEtaTime(arr, is24h);
+
+  var timeDisplay = $('#etaTimeDisplay');
+  if(timeDisplay) timeDisplay.textContent = timeStr || '--:--';
+
+  var minsDisplay = $('#etaMinsDisplay');
+  if(minsDisplay) minsDisplay.textContent = 'in ' + (etaCurrent.mins || 0) + ' mins';
+
+  var minsInput = $('#etaMinsInput');
+  if(minsInput && document.activeElement !== minsInput) minsInput.value = String(etaCurrent.mins || 15);
+
+  var targetInput = $('#etaTargetInput');
+  if(targetInput && document.activeElement !== targetInput && !isNaN(arr.getTime())) {
+    targetInput.value = pad2(arr.getHours()) + ':' + pad2(arr.getMinutes());
+  }
+
+  $$('#etaPresets button').forEach(function(b){
+    b.classList.toggle('on', Number(b.dataset.m) === Number(etaCurrent.mins));
+  });
+
+  if(!etaCurrent.customMsg){
+    var namePart = etaCurrent.name ? ('Hi ' + etaCurrent.name + ', ') : 'Hi, ';
+    var msg = namePart + 'your driver is on the way! ETA: ' + timeStr + ' (approx ' + (etaCurrent.mins || 0) + ' mins).' + (etaCurrent.address ? (' Destination: ' + etaCurrent.address + '.') : '') + ' See you soon!';
+    var tb = $('#etaMsgText');
+    if(tb) tb.value = msg;
+  }
+}
+
+function openEta(stopOrClient, initialMins){
+  var name = '', phone = '', address = '';
+  if(stopOrClient){
+    name = stopOrClient.name || clientLabel(stopOrClient) || '';
+    phone = stopOrClient.phone || '';
+    address = stopOrClient.line || (stopOrClient.addresses && stopOrClient.addresses[0] ? stopOrClient.addresses[0].line : '') || '';
+  }
+  etaCurrent = {
+    name: name,
+    phone: phone,
+    address: address,
+    mins: initialMins || 15,
+    customMsg: false
+  };
+  var title = $('#etaTitle');
+  if(title) title.textContent = name ? ('ETA · ' + name) : 'Share ETA';
+  var sub = $('#etaSub');
+  if(sub) sub.textContent = address ? ('Destination: ' + address) : 'Calculate arrival time & share';
+
+  updateEtaView();
+  showModal('etaModal');
+}
+
+$$('#etaPresets button').forEach(function(b){
+  b.onclick = function(){
+    etaCurrent.mins = Number(b.dataset.m);
+    etaCurrent.customMsg = false;
+    updateEtaView();
+  };
+});
+
+if($('#etaMinsInput')) $('#etaMinsInput').oninput = function(){
+  var v = parseInt(this.value, 10);
+  if(v > 0){
+    etaCurrent.mins = v;
+    etaCurrent.customMsg = false;
+    updateEtaView();
+  }
+};
+
+if($('#etaTargetInput')) $('#etaTargetInput').onchange = function(){
+  var val = this.value;
+  if(val){
+    var parts = val.split(':').map(Number);
+    var now = new Date();
+    var target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parts[0], parts[1], 0);
+    var diffMs = target.getTime() - now.getTime();
+    if(diffMs < 0) diffMs += 24 * 60 * 60000;
+    var mins = Math.max(1, Math.round(diffMs / 60000));
+    etaCurrent.mins = mins;
+    etaCurrent.customMsg = false;
+    updateEtaView();
+  }
+};
+
+if($('#etaMsgText')) $('#etaMsgText').oninput = function(){
+  etaCurrent.customMsg = true;
+};
+
+if($('#etaFmtToggle')) $('#etaFmtToggle').onclick = function(){
+  settings.time24h = !settings.time24h;
+  persist();
+  etaCurrent.customMsg = false;
+  updateEtaView();
+  toast(settings.time24h ? '24-Hour format active' : '12-Hour format active');
+};
+
+if($('#etaShareBtn')) $('#etaShareBtn').onclick = function(){
+  var msg = ($('#etaMsgText') ? $('#etaMsgText').value : '') || 'Driver ETA';
+  if(navigator.share){
+    navigator.share({title: 'Driver ETA', text: msg}).catch(function(){});
+  } else {
+    copyTxt(msg);
+    toast('ETA message copied');
+  }
+};
+
+if($('#etaCopyBtn')) $('#etaCopyBtn').onclick = function(){
+  var msg = ($('#etaMsgText') ? $('#etaMsgText').value : '') || '';
+  copyTxt(msg);
+  toast('ETA message copied');
+};
+
+if($('#etaWaBtn')) $('#etaWaBtn').onclick = function(){
+  var msg = ($('#etaMsgText') ? $('#etaMsgText').value : '') || '';
+  var rawPhone = (etaCurrent.phone || '').replace(/[^0-9]/g, '');
+  if(rawPhone.indexOf('04') === 0) rawPhone = '61' + rawPhone.slice(1);
+  if(rawPhone){
+    window.open('https://wa.me/' + rawPhone + '?text=' + encodeURIComponent(msg), '_blank');
+  } else {
+    window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(msg), '_blank');
+  }
+};
+
+if($('#etaCloseBtn')) $('#etaCloseBtn').onclick = function(){
+  closeModal('etaModal');
+};
+
+/* ---------- Dedicated Runs & Drag-drop plan ---------- */
+var runPlanDay = (new Date()).getDay();
+var runPlanAmpm = (new Date()).getHours() < 12 ? 'am' : 'pm';
+
+function renderRuns(){
+  var days = $('#runPlanDays');
   if(days){
-    var letters=['S','M','T','W','T','F','S'];
-    days.innerHTML=letters.map(function(l,i){return '<button type="button" data-d="'+i+'" class="'+(bookDay===i?'on':'')+'">'+l+'</button>'}).join('');
-    $$('#bookDays button').forEach(function(b){b.onclick=function(){bookDay=Number(b.dataset.d);renderBook()}});
-  }
-  var amBtn=$('#runAm'),pmBtn=$('#runPm');
-  if(amBtn)amBtn.classList.toggle('on',bookAmpm==='am');
-  if(pmBtn)pmBtn.classList.toggle('on',bookAmpm==='pm');
-  var stops=runStops();
-  var rl=$('#runList');
-  if(rl){
-    if(!stops.length)rl.innerHTML='<p style="font-size:12.5px;color:var(--mut);margin:4px 0 0">Nobody on this run.</p>';
-    else rl.innerHTML=stops.map(function(g){
-      var names=riderNames(g.addr,g.clients);
-      var fl=[];g.clients.forEach(function(c){flagLabels(c).forEach(function(x){if(fl.indexOf(x)<0)fl.push(x)})});
-      var line=(g.addr&&g.addr.line)||'No address';
-      var navId=g.clients[0]&&g.clients[0].id;
-      var link=g.addr?mapsAnchor(g.addr,line):esc(line);
-      return '<div class="cli" data-cid="'+esc(navId)+'"><div class="cli-av">'+esc((names[0]||'?').slice(0,2).toUpperCase())+'</div><div style="flex:1;min-width:0"><b>'+esc(names.join(' · '))+'</b><span>'+link+(fl.length?' · '+esc(fl.join(' · ')): '')+'</span></div><button type="button" class="cli-go" data-nav="'+esc(navId)+'">Nav</button></div>';
+    var letters = ['S','M','T','W','T','F','S'];
+    days.innerHTML = letters.map(function(l, i){
+      return '<button type="button" data-d="'+i+'" class="'+(runPlanDay === i ? 'on' : '')+'">'+l+'</button>';
     }).join('');
-    $$('#runList .cli').forEach(function(row){row.onclick=function(){openClient(row.dataset.cid)}});
-    $$('#runList [data-nav]').forEach(function(b){b.onclick=function(e){e.stopPropagation();var c=findClient(b.dataset.nav);openMaps(bookAmpm==='am'?pickupAddr(c):dropAddr(c))}});
-    $$('#runList [data-ext]').forEach(function(a){a.onclick=function(e){e.stopPropagation()}});
+    $$('#runPlanDays button').forEach(function(b){
+      b.onclick = function(){
+        runPlanDay = Number(b.dataset.d);
+        renderRuns();
+      };
+    });
   }
+
+  var amBtn = $('#runPlanAm'), pmBtn = $('#runPlanPm');
+  if(amBtn) amBtn.classList.toggle('on', runPlanAmpm === 'am');
+  if(pmBtn) pmBtn.classList.toggle('on', runPlanAmpm === 'pm');
+
+  var stopsCount = $('#runStopsCount');
+  if(stopsCount) stopsCount.textContent = runPlan.length + (runPlan.length === 1 ? ' stop' : ' stops');
+
+  var empty = $('#runPlanEmpty');
+  if(empty) empty.style.display = runPlan.length ? 'none' : 'block';
+
+  var box = $('#runPlanList');
+  if(box){
+    if(!runPlan.length){
+      box.innerHTML = '';
+    } else {
+      box.innerHTML = runPlan.map(function(s, idx){
+        var badge = 'Stop ' + (idx + 1);
+        var line = s.line || 'No address specified';
+        var link = s.line ? ('<a class="addr-link" href="' + esc(mapsUrl(s)) + '" target="_blank" rel="noopener">' + esc(line) + '</a>') : esc(line);
+        var tag = s.title ? ('<span class="run-tag">' + esc(s.title) + '</span>') : '';
+        var needsHtml = (s.needs && s.needs.length) ? ('<div class="cli-need" style="margin-top:3px">' + s.needs.map(function(n){ return '<i>' + esc(n) + '</i>'; }).join('') + '</div>') : '';
+        var callBtn = s.phone ? ('<button type="button" class="btn-r-call" data-rcall="' + idx + '"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Call</button>') : '';
+
+        return '<div class="run-box" data-ridx="' + idx + '" draggable="true">' +
+          '<div class="run-box-head">' +
+            '<div class="run-grip" data-grip="' + idx + '" title="Drag to reorder" aria-label="Drag handle">' +
+              '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg>' +
+            '</div>' +
+            '<span class="run-badge">' + badge + '</span>' +
+            '<div class="run-names">' + esc(s.name || 'Stop') + '</div>' +
+            '<div class="run-arrows">' +
+              '<button type="button" class="run-arr" data-rup="' + idx + '" title="Move Up" aria-label="Move up"' + (idx === 0 ? ' disabled style="opacity:.3"' : '') + '>▲</button>' +
+              '<button type="button" class="run-arr" data-rdn="' + idx + '" title="Move Down" aria-label="Move down"' + (idx === runPlan.length - 1 ? ' disabled style="opacity:.3"' : '') + '>▼</button>' +
+              '<button type="button" class="run-del" data-rdel="' + idx + '" title="Remove stop" aria-label="Remove stop">&times;</button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="run-box-body">' +
+            '<div class="run-addr-line">' + tag + link + '</div>' +
+            needsHtml +
+          '</div>' +
+          '<div class="run-box-acts">' +
+            '<button type="button" class="btn-r-nav" data-rnav="' + idx + '"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>Nav</button>' +
+            '<button type="button" class="btn-r-eta" data-reta="' + idx + '"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>ETA</button>' +
+            callBtn +
+            '<button type="button" data-rshare="' + idx + '">Share</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+
+      $$('#runPlanList [data-rup]').forEach(function(b){
+        b.onclick = function(){
+          var i = Number(b.dataset.rup);
+          if(i > 0){
+            var item = runPlan.splice(i, 1)[0];
+            runPlan.splice(i - 1, 0, item);
+            persist();
+            renderRuns();
+          }
+        };
+      });
+
+      $$('#runPlanList [data-rdn]').forEach(function(b){
+        b.onclick = function(){
+          var i = Number(b.dataset.rdn);
+          if(i < runPlan.length - 1){
+            var item = runPlan.splice(i, 1)[0];
+            runPlan.splice(i + 1, 0, item);
+            persist();
+            renderRuns();
+          }
+        };
+      });
+
+      $$('#runPlanList [data-rdel]').forEach(function(b){
+        b.onclick = function(){
+          var i = Number(b.dataset.rdel);
+          runPlan.splice(i, 1);
+          persist();
+          renderRuns();
+          toast('Stop removed');
+        };
+      });
+
+      $$('#runPlanList [data-rnav]').forEach(function(b){
+        b.onclick = function(e){
+          e.stopPropagation();
+          var i = Number(b.dataset.rnav);
+          var s = runPlan[i];
+          if(s) openMaps({ line: s.line, lat: s.lat, lng: s.lng });
+        };
+      });
+
+      $$('#runPlanList [data-reta]').forEach(function(b){
+        b.onclick = function(e){
+          e.stopPropagation();
+          var i = Number(b.dataset.reta);
+          var s = runPlan[i];
+          if(s) openEta(s, 15);
+        };
+      });
+
+      $$('#runPlanList [data-rcall]').forEach(function(b){
+        b.onclick = function(e){
+          e.stopPropagation();
+          var i = Number(b.dataset.rcall);
+          var s = runPlan[i];
+          if(s && s.phone){
+            window.location.href = 'tel:' + s.phone.replace(/[^0-9+]/g, '');
+          }
+        };
+      });
+
+      $$('#runPlanList [data-rshare]').forEach(function(b){
+        b.onclick = function(e){
+          e.stopPropagation();
+          var i = Number(b.dataset.rshare);
+          var s = runPlan[i];
+          if(s){
+            var u = mapsUrl(s);
+            var txt = 'Stop #' + (i + 1) + ': ' + (s.name || '') + '\n' + (s.title ? s.title + ' — ' : '') + (s.line || '') + (u ? '\n' + u : '');
+            sharePlain(txt, s.name || 'Stop');
+          }
+        };
+      });
+
+      var dragSrcIdx = null;
+      $$('#runPlanList .run-box').forEach(function(row){
+        row.addEventListener('dragstart', function(e){
+          dragSrcIdx = Number(row.dataset.ridx);
+          row.classList.add('dragging');
+          e.dataTransfer.effectAllowed = 'move';
+          try { e.dataTransfer.setData('text/plain', String(dragSrcIdx)); } catch(_){}
+        });
+
+        row.addEventListener('dragover', function(e){
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+          row.classList.add('drag-over');
+        });
+
+        row.addEventListener('dragleave', function(){
+          row.classList.remove('drag-over');
+        });
+
+        row.addEventListener('drop', function(e){
+          e.preventDefault();
+          row.classList.remove('drag-over');
+          var targetIdx = Number(row.dataset.ridx);
+          if(dragSrcIdx != null && dragSrcIdx !== targetIdx && targetIdx >= 0 && targetIdx < runPlan.length){
+            var item = runPlan.splice(dragSrcIdx, 1)[0];
+            runPlan.splice(targetIdx, 0, item);
+            persist();
+            renderRuns();
+          }
+        });
+
+        row.addEventListener('dragend', function(){
+          row.classList.remove('dragging');
+          $$('#runPlanList .run-box').forEach(function(r){ r.classList.remove('drag-over'); });
+        });
+      });
+
+      var touchSrcIdx = null, touchActiveBox = null;
+      $$('#runPlanList .run-grip').forEach(function(grip){
+        grip.addEventListener('touchstart', function(e){
+          var box = grip.closest('.run-box');
+          if(!box) return;
+          touchActiveBox = box;
+          touchSrcIdx = Number(box.dataset.ridx);
+          box.classList.add('dragging');
+        }, { passive: true });
+
+        grip.addEventListener('touchmove', function(e){
+          if(touchSrcIdx == null || !touchActiveBox) return;
+          var touch = e.touches[0];
+          var elem = document.elementFromPoint(touch.clientX, touch.clientY);
+          if(elem){
+            var targetBox = elem.closest('.run-box');
+            $$('#runPlanList .run-box').forEach(function(b){ b.classList.remove('drag-over'); });
+            if(targetBox && targetBox !== touchActiveBox){
+              targetBox.classList.add('drag-over');
+            }
+          }
+        }, { passive: true });
+
+        grip.addEventListener('touchend', function(e){
+          if(touchSrcIdx == null) return;
+          var touch = e.changedTouches[0];
+          var elem = document.elementFromPoint(touch.clientX, touch.clientY);
+          var targetBox = elem ? elem.closest('.run-box') : null;
+          var targetIdx = targetBox ? Number(targetBox.dataset.ridx) : null;
+
+          if(touchActiveBox) touchActiveBox.classList.remove('dragging');
+          $$('#runPlanList .run-box').forEach(function(b){ b.classList.remove('drag-over'); });
+
+          if(targetIdx != null && targetIdx !== touchSrcIdx && targetIdx >= 0 && targetIdx < runPlan.length){
+            var item = runPlan.splice(touchSrcIdx, 1)[0];
+            runPlan.splice(targetIdx, 0, item);
+            persist();
+            renderRuns();
+            if(navigator.vibrate) try{ navigator.vibrate(20); }catch(_){}
+          }
+          touchSrcIdx = null;
+          touchActiveBox = null;
+        });
+      });
+    }
+  }
+}
+
+function openAddStopModal(){
+  var cSel = $('#addStopClientSelect');
+  if(cSel){
+    cSel.innerHTML = '<option value="">-- Choose client --</option>' + clients.map(function(c){
+      return '<option value="' + esc(c.id) + '">' + esc(clientLabel(c)) + '</option>';
+    }).join('');
+    cSel.value = '';
+  }
+  updateAddStopAddrOptions();
+  if($('#addStopCustomName')) $('#addStopCustomName').value = '';
+  if($('#addStopCustomLine')) $('#addStopCustomLine').value = '';
+  var sug = $('#addStopSugg');
+  if(sug){ sug.style.display = 'none'; sug.innerHTML = ''; }
+  showModal('addStopModal');
+}
+
+function updateAddStopAddrOptions(){
+  var cSel = $('#addStopClientSelect');
+  var cid = cSel ? cSel.value : '';
+  var aWrap = $('#addStopAddrWrap');
+  var aSel = $('#addStopAddrSelect');
+  if(!cid){
+    if(aWrap) aWrap.style.display = 'none';
+    return;
+  }
+  var c = findClient(cid);
+  if(!c || !c.addresses || !c.addresses.length){
+    if(aWrap) aWrap.style.display = 'none';
+    return;
+  }
+  if(aWrap) aWrap.style.display = 'block';
+  if(aSel){
+    aSel.innerHTML = c.addresses.map(function(a){
+      return '<option value="' + esc(a.id) + '">' + esc(a.title || 'Address') + (a.line ? ' — ' + esc(a.line) : '') + '</option>';
+    }).join('');
+  }
+}
+
+if($('#addStopClientSelect')) $('#addStopClientSelect').onchange = updateAddStopAddrOptions;
+
+if($('#addStopCustomLine')) {
+  $('#addStopCustomLine').oninput = function(){
+    var val = this.value;
+    var pasted = parseMapsPaste(val);
+    if(pasted){
+      this.value = pasted.line;
+      this._lat = pasted.lat;
+      this._lng = pasted.lng;
+      return;
+    }
+    this._lat = null; this._lng = null;
+    var sug = $('#addStopSugg');
+    auSuggest(val, function(rows){
+      if(!sug) return;
+      if(!rows.length){ sug.style.display = 'none'; sug.innerHTML = ''; return; }
+      sug.style.display = 'block';
+      sug.innerHTML = rows.map(function(r, n){ return '<button type="button" data-asi="' + n + '">' + esc(r.line) + '</button>'; }).join('');
+      sug._rows = rows;
+      $$('button', sug).forEach(function(b){
+        b.onclick = function(){
+          var pick = sug._rows[Number(b.dataset.asi)];
+          if(!pick) return;
+          $('#addStopCustomLine').value = pick.line;
+          $('#addStopCustomLine')._lat = pick.lat;
+          $('#addStopCustomLine')._lng = pick.lng;
+          sug.style.display = 'none';
+        };
+      });
+    });
+  };
+}
+
+if($('#addStopConfirmBtn')) $('#addStopConfirmBtn').onclick = function(){
+  var cSel = $('#addStopClientSelect');
+  var cid = cSel ? cSel.value : '';
+  if(cid){
+    var c = findClient(cid);
+    if(c){
+      var aSel = $('#addStopAddrSelect');
+      var aid = aSel ? aSel.value : '';
+      var addr = (c.addresses || []).filter(function(a){ return a.id === aid; })[0] || (c.addresses || [])[0];
+      var fl = flagLabels(c);
+      runPlan.push({
+        id: uid('s'),
+        clientId: c.id,
+        name: clientLabel(c),
+        phone: c.phone || '',
+        title: addr && addr.title ? addr.title : 'Stop',
+        line: addr ? addr.line : '',
+        lat: addr ? addr.lat : null,
+        lng: addr ? addr.lng : null,
+        needs: fl,
+        notes: c.notes || ''
+      });
+      persist();
+      renderRuns();
+      closeModal('addStopModal');
+      toast('Stop added to run plan');
+      return;
+    }
+  }
+
+  var custName = ($('#addStopCustomName') ? $('#addStopCustomName').value : '').trim();
+  var custLine = ($('#addStopCustomLine') ? $('#addStopCustomLine').value : '').trim();
+  if(!custName && !custLine){
+    toast('Select a client or enter a custom stop');
+    return;
+  }
+  var inp = $('#addStopCustomLine');
+  runPlan.push({
+    id: uid('s'),
+    clientId: '',
+    name: custName || custLine,
+    phone: '',
+    title: custName ? 'Custom Stop' : '',
+    line: custLine,
+    lat: inp ? inp._lat : null,
+    lng: inp ? inp._lng : null,
+    needs: [],
+    notes: ''
+  });
+  persist();
+  renderRuns();
+  closeModal('addStopModal');
+  toast('Stop added to run plan');
+};
+
+if($('#addStopCancelBtn')) $('#addStopCancelBtn').onclick = function(){
+  closeModal('addStopModal');
+};
+
+if($('#runPlanAm')) $('#runPlanAm').onclick = function(){ runPlanAmpm = 'am'; renderRuns(); };
+if($('#runPlanPm')) $('#runPlanPm').onclick = function(){ runPlanAmpm = 'pm'; renderRuns(); };
+if($('#loadDayRun')) $('#loadDayRun').onclick = function(){
+  var stops = runStops(runPlanDay, runPlanAmpm);
+  if(!stops.length){
+    toast('No clients scheduled for ' + (DAYS[runPlanDay]||'') + ' ' + (runPlanAmpm === 'am' ? 'Morning' : 'Afternoon'));
+    return;
+  }
+  runPlan = stops.map(function(g){
+    var c0 = g.clients[0];
+    var addr = g.addr || (c0 ? (runPlanAmpm === 'am' ? pickupAddr(c0) : dropAddr(c0)) : null);
+    var names = riderNames(addr, g.clients);
+    var fl = [];
+    g.clients.forEach(function(c){ flagLabels(c).forEach(function(x){ if(fl.indexOf(x) < 0) fl.push(x); }); });
+    return {
+      id: uid('s'),
+      clientId: c0 ? c0.id : '',
+      name: names.join(' · '),
+      phone: c0 ? c0.phone : '',
+      title: addr && addr.title ? addr.title : (runPlanAmpm === 'am' ? 'Morning Pickup' : 'Afternoon Drop'),
+      line: addr ? addr.line : '',
+      lat: addr ? addr.lat : null,
+      lng: addr ? addr.lng : null,
+      needs: fl,
+      notes: c0 ? c0.notes : ''
+    };
+  });
+  persist();
+  renderRuns();
+  toast('Loaded ' + runPlan.length + ' stops from ' + (DAYS[runPlanDay]||'') + ' ' + (runPlanAmpm === 'am' ? 'AM' : 'PM'));
+};
+
+if($('#addRunStopBtn')) $('#addRunStopBtn').onclick = openAddStopModal;
+if($('#openQuickEtaBtn')) $('#openQuickEtaBtn').onclick = function(){ openEta(null, 15); };
+
+if($('#clearRunPlan')) $('#clearRunPlan').onclick = function(){
+  if(!runPlan.length){ toast('Run plan is already empty'); return; }
+  ask('Clear current run plan?', 'Removes all ' + runPlan.length + ' stops from the active sequence. Your client database is not changed.', 'Clear Plan', function(){
+    runPlan = [];
+    persist();
+    renderRuns();
+    toast('Run plan cleared');
+  });
+};
+
+if($('#shareFullRun')) $('#shareFullRun').onclick = function(){
+  if(!runPlan.length){ toast('No stops to share'); return; }
+  var dayName = DAYS[runPlanDay] || 'Today';
+  var when = runPlanAmpm === 'am' ? 'Morning AM' : 'Afternoon PM';
+  var lines = ['Run Plan · ' + dayName + ' ' + when + ' (' + fmtDayDMY(new Date()) + ')', 'Total stops: ' + runPlan.length, ''];
+  runPlan.forEach(function(s, idx){
+    var flStr = (s.needs && s.needs.length) ? (' [' + s.needs.join(', ') + ']') : '';
+    lines.push((idx + 1) + '. ' + (s.name || 'Stop') + flStr);
+    if(s.title || s.line) lines.push('   ' + (s.title ? s.title + ': ' : '') + (s.line || 'No address'));
+    var u = mapsUrl(s);
+    if(u) lines.push('   Maps: ' + u);
+  });
+  sharePlain(lines.join('\n'), 'Run Plan');
+};
+
+function renderBook(){
   var q=bookQ.toLowerCase();
   var list=clients.filter(function(c){
     if(!q)return true;
@@ -2854,25 +3560,8 @@ function renderBook(){
     $$('#cliList [data-ext]').forEach(function(a){a.onclick=function(e){e.stopPropagation()}});
   }
 }
-if($('#runAm'))$('#runAm').onclick=function(){bookAmpm='am';renderBook()};
-if($('#runPm'))$('#runPm').onclick=function(){bookAmpm='pm';renderBook()};
 if($('#bookSearch'))$('#bookSearch').oninput=function(){bookQ=this.value||'';renderBook()};
 if($('#addClient'))$('#addClient').onclick=function(){openClient(null)};
-if($('#shareRun'))$('#shareRun').onclick=function(){
-  var stops=runStops();
-  var day=DAYS[bookDay]||'';
-  var when=bookAmpm==='am'?'Morning':'Afternoon';
-  var lines=['School run · '+day+' · '+when,fmtDayLong(new Date())];
-  if(!stops.length)lines.push('Nobody on this run.');
-  stops.forEach(function(g){
-    var names=riderNames(g.addr,g.clients);
-    var fl=[];g.clients.forEach(function(c){flagLabels(c).forEach(function(x){if(fl.indexOf(x)<0)fl.push(x)})});
-    lines.push('• '+names.join(', ')+(fl.length?' ('+fl.join(', ')+')':''));
-    if(g.addr&&g.addr.line)lines.push('  '+g.addr.line);
-    var u=mapsUrl(g.addr);if(u)lines.push('  '+u);
-  });
-  sharePlain(lines.join('\n'),'School run');
-};
 function fillAddrSelects(){
   var opts='<option value="">First matching address</option>'+(clDraft.addresses||[]).map(function(a){return '<option value="'+esc(a.id)+'">'+esc(a.title||'Address')+(a.line?' — '+a.line:'')+'</option>'}).join('');
   var p=$('#clPickup'),d=$('#clDrop');
@@ -3141,7 +3830,7 @@ function watchForUpdates(){
 }
 
 /* ---------- nav ---------- */
-var TABS=['hub','shift','weekly','reports','book','refresh','settings'];
+var TABS=['hub','shift','weekly','reports','runs','book','refresh','settings'];
 var curTab='shift';
 var histI=0,histLen=0;
 function anyModal(){return $$('.modal.show')[0]||null}
@@ -3156,7 +3845,7 @@ function applyTab(tab){
   curTab=tab;
   $$('.screen').forEach(function(s){s.classList.toggle('on',s.dataset.tab===tab)});
   var home=$('#homeBtn');if(home)home.classList.toggle('on',tab==='hub');
-  if(tab==='weekly')renderWeekly();if(tab==='reports')renderReports();if(tab==='settings')renderSettings();if(tab==='book')renderBook();
+  if(tab==='weekly')renderWeekly();if(tab==='reports')renderReports();if(tab==='settings')renderSettings();if(tab==='runs')renderRuns();if(tab==='book')renderBook();
   window.scrollTo({top:0});
   syncTrailBtns();
 }
