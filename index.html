@@ -26,7 +26,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0E1116">
+<meta name="theme-color" content="#F7F8FA">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Fareo">
@@ -39,7 +39,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--pg:#F4F5F7;--card:#FFFFFF;--field:#EEF0F4;--bd:#E2E5EA;--bd2:#CDD2DB;--head:#14171F;--body:#3A3F4B;--mut:#5B6270;--inc:#047857;--inc-bg:#E7F6EE;--on-inc:#0F6E30;--fuel:#B45309;--fuel-fill:#C2670F;--fuel-bg:#FBEEE6;--on-fuel:#8A4E07;--hail:#1E3A8A;--hail-fill:#2447A6;--hail-bg:#E9EEFB;--levy:#6D28D9;--levy-bg:#F0EAFB;--on-levy:#5B21B6;--dgr:#C0392B;--dgr-bg:#FCEBEA;--on-dgr:#8E2A20;--fink:#C2410C;--fink-bg:#FDEEE6;--on-fink:#9A3412;--acct:#0F766E;--acct-bg:#E6F6F4;--on-acct:#0F5E58;--qtext:#1E3A8A;--qsub:#41579C;--btn-fill:#047857;--btn-ink:#FFFFFF;--disbg:#E4E6EA;--disink:#8A9099;--navmut:#6B6B70;--grad-inc:linear-gradient(150deg,#F1FBF6,#E2F4EC);--shadow:0 1px 2px rgba(20,23,31,.05),0 8px 22px rgba(20,23,31,.07)}
+:root{--pg:#F7F8FA;--card:#FFFFFF;--field:#F0F2F6;--bd:#E3E7EE;--bd2:#CFD5DF;--head:#0D121B;--body:#2C3340;--mut:#545F71;--inc:#047857;--inc-bg:#E6F6ED;--on-inc:#065F46;--fuel:#B45309;--fuel-fill:#C2670F;--fuel-bg:#FEF3C7;--on-fuel:#92400E;--hail:#1D4ED8;--hail-fill:#2563EB;--hail-bg:#EFF6FF;--levy:#6D28D9;--levy-bg:#F5F3FF;--on-levy:#5B21B6;--dgr:#C0392B;--dgr-bg:#FCEBEA;--on-dgr:#8E2A20;--fink:#C2410C;--fink-bg:#FFF7ED;--on-fink:#9A3412;--acct:#0F766E;--acct-bg:#F0FDFA;--on-acct:#115E59;--qtext:#1E3A8A;--qsub:#41579C;--btn-fill:#047857;--btn-ink:#FFFFFF;--disbg:#E4E6EA;--disink:#6B7280;--navmut:#545F71;--grad-inc:linear-gradient(150deg,#F0FAF4,#E3F6EC);--shadow:0 1px 3px rgba(13,18,27,.05),0 8px 24px rgba(13,18,27,.06)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--pg:#0E1116;--card:#171D25;--field:#1E2530;--bd:#2A313C;--bd2:#384250;--head:#F2F4F8;--body:#C3C9D4;--mut:#8A93A3;--inc:#34D399;--inc-bg:#1B3D2C;--on-inc:#8EE4B8;--fuel:#F5B36B;--fuel-fill:#E08A3C;--fuel-bg:#3A2814;--on-fuel:#F5C89A;--hail:#93B4F5;--hail-fill:#3B60C4;--hail-bg:#1B3158;--levy:#C4ABF7;--levy-bg:#322456;--on-levy:#CBB4FB;--dgr:#F58A8A;--dgr-bg:#3D1A1A;--on-dgr:#F5B0B0;--fink:#F7B27E;--fink-bg:#3A2414;--on-fink:#F7B27E;--acct:#2DD4BF;--acct-bg:#16443F;--on-acct:#5EEAD4;--qtext:#A9C4FB;--qsub:#8FA8E0;--btn-fill:#10B981;--btn-ink:#052E1B;--disbg:#141922;--disink:#5B6472;--navmut:#8A8A92;--grad-inc:linear-gradient(150deg,#142C1E,#0F2318);--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 26px rgba(0,0,0,.42)}}
 :root[data-theme="dark"]{--pg:#0E1116;--card:#171D25;--field:#1E2530;--bd:#2A313C;--bd2:#384250;--head:#F2F4F8;--body:#C3C9D4;--mut:#8A93A3;--inc:#34D399;--inc-bg:#1B3D2C;--on-inc:#8EE4B8;--fuel:#F5B36B;--fuel-fill:#E08A3C;--fuel-bg:#3A2814;--on-fuel:#F5C89A;--hail:#93B4F5;--hail-fill:#3B60C4;--hail-bg:#1B3158;--levy:#C4ABF7;--levy-bg:#322456;--on-levy:#CBB4FB;--dgr:#F58A8A;--dgr-bg:#3D1A1A;--on-dgr:#F5B0B0;--fink:#F7B27E;--fink-bg:#3A2414;--on-fink:#F7B27E;--acct:#2DD4BF;--acct-bg:#16443F;--on-acct:#5EEAD4;--qtext:#A9C4FB;--qsub:#8FA8E0;--btn-fill:#10B981;--btn-ink:#052E1B;--disbg:#141922;--disink:#5B6472;--navmut:#8A8A92;--grad-inc:linear-gradient(150deg,#142C1E,#0F2318);--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 26px rgba(0,0,0,.42)}
 *{box-sizing:border-box}
@@ -185,6 +185,8 @@ input:disabled,select:disabled{background:var(--disbg);color:var(--disink);-webk
 .modal{position:fixed;inset:0;background:rgba(8,10,14,.62);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:flex-end;justify-content:center;z-index:60}
 .modal.show{display:flex}
 .modal.show .sheet{animation:sheetSlideUp .24s cubic-bezier(.16,1,.3,1) both}
+#askModal{z-index:100}
+#updModal{z-index:95}
 @keyframes sheetSlideUp{0%{transform:translateY(100%)}100%{transform:translateY(0)}}
 .sheet{width:100%;max-width:440px;background:var(--card);border-radius:24px 24px 0 0;padding:12px 16px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -12px 48px rgba(0,0,0,.38);max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .grip{width:38px;height:4.5px;border-radius:99px;background:var(--bd2);margin:4px auto 14px;opacity:.8}
@@ -524,7 +526,7 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
 .home-btn svg{width:24px;height:24px}
 .home-btn.on{box-shadow:0 0 0 3px var(--pg),0 0 0 6px var(--inc),0 6px 20px rgba(4,120,87,.38)}
 .home-btn:active{transform:translateX(-50%) scale(.94)}
-.toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%) translateY(16px);background:var(--head);color:var(--pg);border-radius:999px;padding:10px 15px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:.2s;z-index:50}
+.toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%) translateY(16px);background:var(--head);color:var(--pg);border-radius:999px;padding:10px 15px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:.2s;z-index:999}
 .advtoggle{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px 15px;margin-bottom:10px;cursor:pointer;box-shadow:var(--shadow);text-align:left}
 .advtoggle b{display:block;font-size:13.5px;font-weight:700;color:var(--head)}
 .advtoggle small{display:block;font-size:10.5px;color:var(--mut);margin-top:1px}
@@ -592,7 +594,28 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
 .btn-eta-wa{flex:1.2;background:var(--inc-bg);color:var(--on-inc);border:1px solid var(--inc)}
 .btn-eta-copy{flex:1;background:var(--field);color:var(--head);border:1px solid var(--bd2)}
 .btn-eta-go{width:36px;flex:0 0 36px;background:var(--field);color:var(--head);border:1px solid var(--bd2);font-size:18px;line-height:1;display:grid;place-items:center;padding:0}
-.run-plan-container{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.run-deck-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+.run-deck-search{width:100%;border-radius:10px;padding:8px 12px;font-size:12px;background:var(--field);border:1.5px solid var(--bd2);color:var(--head);margin-bottom:8px;outline:none;transition:border-color .15s}
+.run-deck-search:focus{border-color:var(--fuel)}
+.run-deck-filter{display:flex;gap:5px;margin-bottom:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+.run-deck-filter button{border:1px solid var(--bd2);background:var(--field);color:var(--head);border-radius:8px;padding:4px 9px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;flex:0 0 auto;transition:all .12s}
+.run-deck-filter button.on{background:var(--fuel-bg);color:var(--on-fuel);border-color:var(--fuel)}
+.run-client-grid{display:grid;grid-template-columns:repeat(2, 1fr);gap:7px;max-height:220px;overflow-y:auto;padding:2px;-webkit-overflow-scrolling:touch}
+.run-client-chip{background:var(--card);border:1.5px solid var(--bd2);border-radius:12px;padding:8px 9px;display:flex;flex-direction:column;gap:3px;cursor:pointer;position:relative;transition:transform .12s,box-shadow .12s,border-color .12s,background .12s;-webkit-tap-highlight-color:transparent;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.run-client-chip:active{transform:scale(.96)}
+.run-client-chip.in-plan{background:var(--inc-bg);border-color:var(--inc);box-shadow:0 2px 10px rgba(4,120,87,.15)}
+.run-client-chip .chip-top{display:flex;align-items:center;justify-content:space-between;gap:4px}
+.run-client-chip .chip-av{width:22px;height:22px;border-radius:6px;background:var(--fuel-fill);color:var(--btn-ink);font-size:9.5px;font-weight:800;display:grid;place-items:center;flex:0 0 auto}
+.run-client-chip.in-plan .chip-av{background:var(--inc);color:var(--btn-ink)}
+.run-client-chip .chip-badge{font-size:9px;font-weight:800;padding:1px 5px;border-radius:5px;background:var(--field);color:var(--mut);letter-spacing:.2px}
+.run-client-chip.in-plan .chip-badge{background:var(--inc);color:var(--btn-ink)}
+.run-client-chip .chip-name{font-size:12px;font-weight:700;color:var(--head);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2}
+.run-client-chip.in-plan .chip-name{color:var(--on-inc)}
+.run-client-chip .chip-addr{font-size:10px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.run-client-chip.in-plan .chip-addr{color:var(--on-inc);opacity:.85}
+.run-client-chip.dragging{opacity:.4;border-style:dashed;border-color:var(--fuel);transform:scale(.95)}
+.run-plan-container{display:flex;flex-direction:column;gap:8px;margin-top:8px;min-height:30px;transition:background .15s}
+.run-plan-container.drag-target{background:var(--inc-bg);border-radius:12px;padding:4px;outline:2px dashed var(--inc)}
 .run-box{background:var(--card);border:1.5px solid var(--bd2);border-radius:13px;padding:10px 11px;transition:transform .12s,box-shadow .12s,border-color .12s;position:relative;touch-action:pan-y}
 .run-box.dragging{opacity:.4;border-style:dashed;border-color:var(--inc);transform:scale(.98)}
 .run-box.drag-over{border-color:var(--inc);box-shadow:0 0 0 2px var(--inc)}
@@ -820,38 +843,72 @@ a.addr-link{display:inline;font-size:12.5px}
   </section>
 
   <section class="screen" data-tab="runs">
-    <div class="sub">Runs <small>Ordered run plan &middot; drag to reorder &middot; 1-tap Nav &amp; ETA</small></div>
+    <div class="sub">Runs <small>Ordered run plan &middot; tap or drag clients into sequence &middot; 1-tap Nav</small></div>
 
-    <div class="card">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px">
-        <h5><span class="dot" style="background:var(--hail)"></span>Weekday Presets</h5>
-        <span id="runStopsCount" style="font-size:11px;font-weight:700;color:var(--mut)">0 stops</span>
+    <!-- Client Quick-Pick Floating Boxes Deck -->
+    <div class="card" style="padding:12px;margin-bottom:10px">
+      <div class="run-deck-head">
+        <div style="display:flex;align-items:center;gap:6px">
+          <span class="dot" style="background:var(--fuel)"></span>
+          <b style="font-size:13px;color:var(--head)">Select Clients for Run</b>
+        </div>
+        <span id="runDeckCount" style="font-size:11px;font-weight:700;color:var(--mut)">0 clients</span>
       </div>
-      <div class="book-day" id="runPlanDays"></div>
-      <div class="run-seg">
-        <button type="button" class="on" id="runPlanAm">Morning AM</button>
-        <button type="button" id="runPlanPm">Afternoon PM</button>
+      <p style="font-size:11px;color:var(--mut);margin:0 0 8px">Tap any client box to add/toggle into sequence, or drag directly into your driving order.</p>
+      
+      <input type="search" id="runDeckSearch" class="run-deck-search" placeholder="Search client name or address..." autocomplete="off">
+      <div class="run-deck-filter" id="runDeckFilter">
+        <button type="button" class="on" data-filt="all">All</button>
+        <button type="button" data-filt="am">AM School</button>
+        <button type="button" data-filt="pm">PM School</button>
+        <button type="button" data-filt="inplan">In Sequence</button>
       </div>
-      <div class="two" style="gap:7px;margin-top:6px">
-        <button type="button" class="btn neutral" id="loadDayRun" style="font-size:12px;padding:9px 6px">Load Day Preset</button>
-        <button type="button" class="btn" id="addRunStopBtn" style="font-size:12px;padding:9px 6px">+ Add Stop</button>
+
+      <div id="runClientGrid" class="run-client-grid"></div>
+      <div id="runClientEmpty" class="ded-empty" style="display:none;padding:12px 0">
+        <b>No clients found</b>
+        <span>Add clients in the Address Book first.</span>
       </div>
     </div>
 
+    <!-- Active Driving Sequence -->
     <div class="card" style="padding:12px">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-        <span class="lbl" style="font-size:11px">Active Driving Sequence</span>
-        <div style="display:flex;gap:6px">
-          <button type="button" class="btn neutral" id="shareFullRun" style="padding:5px 9px;font-size:11px;margin:0">Share Run</button>
-          <button type="button" class="btn neutral" id="clearRunPlan" style="padding:5px 9px;font-size:11px;margin:0;border-color:var(--dgr);color:var(--dgr)">Clear</button>
+        <div style="display:flex;align-items:center;gap:6px">
+          <span class="dot" style="background:var(--inc)"></span>
+          <b style="font-size:13px;color:var(--head)">Active Driving Sequence</b>
+          <span id="runStopsCount" style="font-size:11px;font-weight:800;color:var(--inc);background:var(--inc-bg);padding:2px 7px;border-radius:6px">0 stops</span>
+        </div>
+        <div style="display:flex;gap:5px">
+          <button type="button" class="btn neutral" id="shareFullRun" style="padding:5px 8px;font-size:11px;margin:0">Share</button>
+          <button type="button" class="btn neutral" id="clearRunPlan" style="padding:5px 8px;font-size:11px;margin:0;border-color:var(--dgr);color:var(--dgr)">Clear</button>
         </div>
       </div>
       <p style="font-size:11px;color:var(--mut);margin:0 0 10px">Drag grip <b style="letter-spacing:1px">:::</b> or tap ▲/▼ to arrange stops in driving order.</p>
       <div id="runPlanList" class="run-plan-container"></div>
       <div class="ded-empty" id="runPlanEmpty" style="display:none">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        <b>No stops in run plan</b>
-        <span>Tap <b>Load Day Preset</b> or <b>+ Add Stop</b> to build your sequence.</span>
+        <b>No stops in sequence yet</b>
+        <span>Tap client boxes above to build your custom sequence in order.</span>
+      </div>
+    </div>
+
+    <!-- Weekday Presets & Custom Stops -->
+    <div class="card" style="margin-bottom:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px">
+        <div style="display:flex;align-items:center;gap:6px">
+          <span class="dot" style="background:var(--hail)"></span>
+          <b style="font-size:13px;color:var(--head)">Weekday Presets &amp; Custom Stops</b>
+        </div>
+      </div>
+      <div class="book-day" id="runPlanDays"></div>
+      <div class="run-seg" style="margin:8px 0">
+        <button type="button" class="on" id="runPlanAm">Morning AM</button>
+        <button type="button" id="runPlanPm">Afternoon PM</button>
+      </div>
+      <div class="two" style="gap:7px;margin-top:6px">
+        <button type="button" class="btn neutral" id="loadDayRun" style="font-size:12px;padding:9px 6px">Load Day Preset</button>
+        <button type="button" class="btn neutral" id="addRunStopBtn" style="font-size:12px;padding:9px 6px">+ Custom Stop</button>
       </div>
     </div>
 
@@ -1395,8 +1452,13 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.4';
+var APP_VERSION='8.5';
 var CHANGELOG=[
+  {v:'8.5',date:'August 29, 2026',notes:[
+    ['Feature','Runs Client Deck: quick-pick floating client cards for 1-tap addition or direct drag-and-drop into custom driving sequence.'],
+    ['Bug Fix','Fixed client deletion modal stacking and response.'],
+    ['UI/UX','Crisp, high-contrast light background palette with optimal readability across all screens.']
+  ]},
   {v:'8.4',date:'August 29, 2026',notes:[
     ['UI/UX','Vibrant orbital navigation wheel: distinct high-contrast color badges and matching glow effects for every page circle (ETA, Runs, Book, Weekly, Reports, Settings, Refresh, and Log Shift).']
   ]},
@@ -1656,7 +1718,7 @@ function backSolveGross(take,cash,fuelIPaid){var p=settings.pct/100;var g=p>0?((
 var sunSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6 19 19M19 5l-1.4 1.4M6.4 17.6 5 19"/></svg>';
 var moonSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>';
 function effectiveDark(){if(settings.theme==='dark')return true;if(settings.theme==='light')return false;return matchMedia('(prefers-color-scheme: dark)').matches}
-function applyTheme(){var r=document.documentElement;if(settings.theme==='system')r.removeAttribute('data-theme');else r.setAttribute('data-theme',settings.theme);$('#themeBtn').innerHTML=effectiveDark()?sunSvg:moonSvg;var m=$('meta[name=theme-color]');if(m)m.content=effectiveDark()?'#0E1116':'#F4F5F7'}
+function applyTheme(){var r=document.documentElement;if(settings.theme==='system')r.removeAttribute('data-theme');else r.setAttribute('data-theme',settings.theme);$('#themeBtn').innerHTML=effectiveDark()?sunSvg:moonSvg;var m=$('meta[name=theme-color]');if(m)m.content=effectiveDark()?'#0E1116':'#F7F8FA'}
 
 /* ---------- safe formula evaluator ----------
    Tokenized shunting-yard. Only accepts numbers, the whitelisted variable names
@@ -3540,8 +3602,73 @@ if($('#homeEtaCopy')) $('#homeEtaCopy').onclick = function(){
 /* ---------- Dedicated Runs & Drag-drop plan ---------- */
 var runPlanDay = (new Date()).getDay();
 var runPlanAmpm = (new Date()).getHours() < 12 ? 'am' : 'pm';
+var runDeckQ = '';
+var runDeckFilt = 'all';
+
+function clientPickupAddr(c){
+  if(!c) return null;
+  if(c.school && c.school.pickup){
+    var a = findAddr(c, c.school.pickup);
+    if(a) return a;
+  }
+  return (c.addresses && c.addresses.length) ? c.addresses[0] : null;
+}
+
+function clientDropAddr(c){
+  if(!c) return null;
+  if(c.school && c.school.drop){
+    var a = findAddr(c, c.school.drop);
+    if(a) return a;
+  }
+  return (c.addresses && c.addresses.length) ? c.addresses[0] : null;
+}
+
+function addClientToRunPlan(cid, optIndex){
+  var c = findClient(cid);
+  if(!c){ toast('Client not found'); return; }
+  var addr = runPlanAmpm === 'am' ? clientPickupAddr(c) : clientDropAddr(c);
+  if(!addr && c.addresses && c.addresses.length) addr = c.addresses[0];
+  var fl = flagLabels(c);
+  var stop = {
+    id: uid('s'),
+    clientId: c.id,
+    name: clientLabel(c),
+    phone: c.phone || '',
+    title: addr && addr.title ? addr.title : (runPlanAmpm === 'am' ? 'Morning Pickup' : 'Afternoon Drop'),
+    line: addr ? addr.line : '',
+    lat: addr ? addr.lat : null,
+    lng: addr ? addr.lng : null,
+    needs: fl,
+    notes: c.notes || ''
+  };
+  if(optIndex != null && optIndex >= 0 && optIndex <= runPlan.length){
+    runPlan.splice(optIndex, 0, stop);
+  } else {
+    runPlan.push(stop);
+  }
+  persist();
+  renderRuns();
+  if(navigator.vibrate) try{ navigator.vibrate(15); }catch(_){}
+  var pos = (optIndex != null && optIndex >= 0) ? (optIndex + 1) : runPlan.length;
+  toast('Added ' + clientLabel(c) + ' (Stop ' + pos + ')');
+}
+
+function removeClientFromRunPlan(cid){
+  var c = findClient(cid);
+  var prevLen = runPlan.length;
+  runPlan = runPlan.filter(function(s){ return s.clientId !== cid; });
+  if(runPlan.length !== prevLen){
+    persist();
+    renderRuns();
+    if(navigator.vibrate) try{ navigator.vibrate(15); }catch(_){}
+    toast('Removed ' + (c ? clientLabel(c) : 'stop') + ' from sequence');
+  }
+}
 
 function renderRuns(){
+  cleanOrphanClients();
+
+  /* 1. Weekday selector */
   var days = $('#runPlanDays');
   if(days){
     var letters = ['S','M','T','W','T','F','S'];
@@ -3560,6 +3687,79 @@ function renderRuns(){
   if(amBtn) amBtn.classList.toggle('on', runPlanAmpm === 'am');
   if(pmBtn) pmBtn.classList.toggle('on', runPlanAmpm === 'pm');
 
+  /* 2. Floating Client Deck */
+  var deckCount = $('#runDeckCount');
+  var deckEmpty = $('#runClientEmpty');
+  var grid = $('#runClientGrid');
+
+  var q = (runDeckQ || '').toLowerCase().trim();
+  var filteredClients = clients.filter(function(c){
+    if(!c) return false;
+    var name = clientLabel(c).toLowerCase();
+    var addrLine = ((c.addresses && c.addresses[0] && c.addresses[0].line) || '').toLowerCase();
+    if(q && name.indexOf(q) < 0 && addrLine.indexOf(q) < 0) return false;
+
+    if(runDeckFilt === 'am'){
+      return !!(c.school && c.school.on && c.school.am !== false);
+    }
+    if(runDeckFilt === 'pm'){
+      return !!(c.school && c.school.on && c.school.pm !== false);
+    }
+    if(runDeckFilt === 'inplan'){
+      return runPlan.some(function(s){ return s.clientId === c.id; });
+    }
+    return true;
+  }).sort(function(a, b){ return clientLabel(a).localeCompare(clientLabel(b)); });
+
+  if(deckCount) deckCount.textContent = filteredClients.length + (filteredClients.length === 1 ? ' client' : ' clients');
+  if(deckEmpty) deckEmpty.style.display = filteredClients.length ? 'none' : 'block';
+
+  if(grid){
+    grid.innerHTML = filteredClients.map(function(c){
+      var planIndices = [];
+      runPlan.forEach(function(s, idx){ if(s.clientId === c.id) planIndices.push(idx + 1); });
+      var inPlan = planIndices.length > 0;
+      var a0 = (c.addresses && c.addresses.length) ? c.addresses[0] : null;
+      var addrTxt = (a0 && a0.line) ? a0.line : 'No address';
+      var badgeText = inPlan ? ('Stop ' + planIndices.join(',')) : '+ Add';
+
+      return '<div class="run-client-chip' + (inPlan ? ' in-plan' : '') + '" data-cid="' + esc(c.id) + '" draggable="true" title="' + (inPlan ? 'Tap to remove or drag to position' : 'Tap or drag into sequence') + '">' +
+        '<div class="chip-top">' +
+          '<div class="chip-av">' + esc(clientInitials(c)) + '</div>' +
+          '<span class="chip-badge">' + esc(badgeText) + '</span>' +
+        '</div>' +
+        '<div class="chip-name">' + esc(clientLabel(c)) + '</div>' +
+        '<div class="chip-addr">' + esc(addrTxt) + '</div>' +
+      '</div>';
+    }).join('');
+
+    $$('#runClientGrid .run-client-chip').forEach(function(chip){
+      var cid = chip.dataset.cid;
+      chip.onclick = function(e){
+        var inPlan = chip.classList.contains('in-plan');
+        if(inPlan){
+          removeClientFromRunPlan(cid);
+        } else {
+          addClientToRunPlan(cid);
+        }
+      };
+
+      chip.addEventListener('dragstart', function(e){
+        chip.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'copyMove';
+        try{ e.dataTransfer.setData('text/plain', 'client:' + cid); }catch(_){}
+      });
+
+      chip.addEventListener('dragend', function(){
+        chip.classList.remove('dragging');
+        var container = $('#runPlanList');
+        if(container) container.classList.remove('drag-target');
+        $$('#runPlanList .run-box').forEach(function(b){ b.classList.remove('drag-over'); });
+      });
+    });
+  }
+
+  /* 3. Active Driving Sequence */
   var stopsCount = $('#runStopsCount');
   if(stopsCount) stopsCount.textContent = runPlan.length + (runPlan.length === 1 ? ' stop' : ' stops');
 
@@ -3568,6 +3768,24 @@ function renderRuns(){
 
   var box = $('#runPlanList');
   if(box){
+    box.ondragover = function(e){
+      e.preventDefault();
+      box.classList.add('drag-target');
+    };
+    box.ondragleave = function(e){
+      if(e.target === box) box.classList.remove('drag-target');
+    };
+    box.ondrop = function(e){
+      e.preventDefault();
+      box.classList.remove('drag-target');
+      var data = '';
+      try{ data = e.dataTransfer.getData('text/plain'); }catch(_){}
+      if(data && data.indexOf('client:') === 0){
+        var cid = data.replace('client:', '');
+        addClientToRunPlan(cid);
+      }
+    };
+
     if(!runPlan.length){
       box.innerHTML = '';
     } else {
@@ -3687,7 +3905,7 @@ function renderRuns(){
           dragSrcIdx = Number(row.dataset.ridx);
           row.classList.add('dragging');
           e.dataTransfer.effectAllowed = 'move';
-          try { e.dataTransfer.setData('text/plain', String(dragSrcIdx)); } catch(_){}
+          try { e.dataTransfer.setData('text/plain', 'stop:' + dragSrcIdx); } catch(_){}
         });
 
         row.addEventListener('dragover', function(e){
@@ -3702,13 +3920,26 @@ function renderRuns(){
 
         row.addEventListener('drop', function(e){
           e.preventDefault();
+          e.stopPropagation();
           row.classList.remove('drag-over');
           var targetIdx = Number(row.dataset.ridx);
-          if(dragSrcIdx != null && dragSrcIdx !== targetIdx && targetIdx >= 0 && targetIdx < runPlan.length){
-            var item = runPlan.splice(dragSrcIdx, 1)[0];
-            runPlan.splice(targetIdx, 0, item);
-            persist();
-            renderRuns();
+          var data = '';
+          try{ data = e.dataTransfer.getData('text/plain'); }catch(_){}
+
+          if(data && data.indexOf('client:') === 0){
+            var cid = data.replace('client:', '');
+            addClientToRunPlan(cid, targetIdx);
+            return;
+          }
+
+          if(data && data.indexOf('stop:') === 0){
+            var fromIdx = Number(data.replace('stop:', ''));
+            if(fromIdx >= 0 && fromIdx < runPlan.length && fromIdx !== targetIdx){
+              var item = runPlan.splice(fromIdx, 1)[0];
+              runPlan.splice(targetIdx, 0, item);
+              persist();
+              renderRuns();
+            }
           }
         });
 
@@ -3764,6 +3995,22 @@ function renderRuns(){
       });
     }
   }
+}
+
+if($('#runDeckSearch')){
+  $('#runDeckSearch').oninput = function(){
+    runDeckQ = this.value || '';
+    renderRuns();
+  };
+}
+if($('#runDeckFilter')){
+  $$('#runDeckFilter button').forEach(function(b){
+    b.onclick = function(){
+      runDeckFilt = b.dataset.filt;
+      $$('#runDeckFilter button').forEach(function(x){ x.classList.toggle('on', x === b); });
+      renderRuns();
+    };
+  });
 }
 
 function openAddStopModal(){
@@ -4201,7 +4448,14 @@ if($('#clDelete'))$('#clDelete').onclick=function(){
   if(!clDraft)return;
   var id=clDraft.id,lab=clientLabel(clDraft);
   ask('Delete this client?','Removes '+lab+' and their addresses from this phone.','Delete',function(){
-    clients=clients.filter(function(c){return c.id!==id});persist();closeModal('clientModal');clDraft=null;renderBook();toast('Client removed');
+    clients=clients.filter(function(c){return c.id!==id});
+    runPlan=runPlan.filter(function(s){return s.clientId!==id});
+    persist();
+    closeModal('clientModal');
+    clDraft=null;
+    renderBook();
+    renderRuns();
+    toast('Client removed');
   });
 };
 
@@ -4270,7 +4524,12 @@ function watchForUpdates(){
 var TABS=['hub','shift','weekly','reports','runs','eta','book','refresh','settings'];
 var curTab='shift';
 var histI=0,histLen=0;
-function anyModal(){return $$('.modal.show')[0]||null}
+function anyModal(){
+  var askM=$('#askModal');
+  if(askM&&askM.classList.contains('show'))return askM;
+  var list=$$('.modal.show');
+  return list[list.length-1]||null;
+}
 function closeTopModal(){var m=anyModal();if(!m)return false;closeModal(m.id);return true}
 function syncTrailBtns(){
   var b=$('#navBack'),f=$('#navFwd');
