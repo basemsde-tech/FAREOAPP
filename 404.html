@@ -543,8 +543,8 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
 .hub-wheel .hub-core svg{width:30px;height:30px}
 .hub-wheel .hub-core:active{transform:scale(.94);box-shadow:0 4px 14px rgba(4,120,87,.3)}
 @keyframes corePulse{0%,100%{box-shadow:0 8px 24px rgba(4,120,87,.35)}50%{box-shadow:0 10px 32px rgba(4,120,87,.52),0 0 0 4px rgba(4,120,87,.15)}}
-.hub-wheel .hub-sat{position:absolute;left:50%;top:50%;width:60px;height:60px;margin:-30px 0 0 -30px;border-radius:50%;border:1.5px solid var(--bd2);background:var(--card);color:var(--head);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:9px;font-weight:800;cursor:pointer;box-shadow:var(--shadow);transform:rotate(var(--a)) translateY(-116px) rotate(calc(var(--a) * -1));-webkit-tap-highlight-color:transparent;transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .15s,border-color .15s;z-index:2;animation:orbitPop .45s cubic-bezier(.34,1.56,.64,1) both;animation-delay:calc(var(--i, 0) * .04s)}
-.hub-wheel .hub-sat svg{width:17px;height:17px;color:var(--inc)}
+.hub-wheel .hub-sat{position:absolute;left:50%;top:50%;width:62px;height:62px;margin:-31px 0 0 -31px;border-radius:50%;border:1.5px solid var(--bd2);background:var(--card);color:var(--head);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:9px;font-weight:800;cursor:pointer;box-shadow:var(--shadow);transform:rotate(var(--a)) translateY(-116px) rotate(calc(var(--a) * -1));-webkit-tap-highlight-color:transparent;transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .15s,border-color .15s,background .15s;z-index:2;animation:orbitPop .45s cubic-bezier(.34,1.56,.64,1) both;animation-delay:calc(var(--i, 0) * .04s)}
+.hub-wheel .hub-sat svg{width:18px;height:18px;pointer-events:none}
 .hub-wheel .hub-sat:active{transform:rotate(var(--a)) translateY(-116px) rotate(calc(var(--a) * -1)) scale(.91)}
 @keyframes orbitPop{0%{opacity:0;transform:rotate(var(--a)) translateY(0) rotate(calc(var(--a)*-1)) scale(.2)}100%{opacity:1;transform:rotate(var(--a)) translateY(-116px) rotate(calc(var(--a)*-1)) scale(1)}}
 .hub-wheel .hub-sat:nth-child(1){--a:0deg;--i:1}
@@ -554,9 +554,29 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
 .hub-wheel .hub-sat:nth-child(5){--a:205.7deg;--i:5}
 .hub-wheel .hub-sat:nth-child(6){--a:257.1deg;--i:6}
 .hub-wheel .hub-sat:nth-child(7){--a:308.6deg;--i:7}
+
+/* Individual Color Themes for Every Orbit Node */
 .hub-wheel .hub-sat.hub-sat-eta{width:68px;height:68px;margin:-34px 0 0 -34px;border:2px solid var(--acct);background:var(--acct-bg);color:var(--on-acct);font-size:9.5px;z-index:3;box-shadow:0 6px 20px rgba(15,118,110,.28)}
 .hub-wheel .hub-sat.hub-sat-eta svg{width:21px;height:21px;color:var(--acct)}
 .hub-wheel .hub-sat.hub-sat-eta .sat-badge{font-size:7px;font-weight:800;color:var(--on-acct);background:rgba(15,118,110,.18);padding:1px 4px;border-radius:4px;margin-top:1px;letter-spacing:.3px;text-transform:uppercase}
+
+.hub-wheel .hub-sat.sat-runs{border-color:var(--fuel);background:var(--fuel-bg);color:var(--on-fuel);box-shadow:0 4px 16px rgba(180,83,9,.22)}
+.hub-wheel .hub-sat.sat-runs svg{color:var(--fuel)}
+
+.hub-wheel .hub-sat.sat-book{border-color:var(--hail);background:var(--hail-bg);color:var(--hail);box-shadow:0 4px 16px rgba(30,58,138,.22)}
+.hub-wheel .hub-sat.sat-book svg{color:var(--hail-fill)}
+
+.hub-wheel .hub-sat.sat-weekly{border-color:var(--inc);background:var(--inc-bg);color:var(--on-inc);box-shadow:0 4px 16px rgba(4,120,87,.22)}
+.hub-wheel .hub-sat.sat-weekly svg{color:var(--inc)}
+
+.hub-wheel .hub-sat.sat-reports{border-color:var(--levy);background:var(--levy-bg);color:var(--on-levy);box-shadow:0 4px 16px rgba(109,40,217,.22)}
+.hub-wheel .hub-sat.sat-reports svg{color:var(--levy)}
+
+.hub-wheel .hub-sat.sat-settings{border-color:var(--fink);background:var(--fink-bg);color:var(--on-fink);box-shadow:0 4px 16px rgba(194,65,12,.22)}
+.hub-wheel .hub-sat.sat-settings svg{color:var(--fink)}
+
+.hub-wheel .hub-sat.sat-refresh{border-color:var(--acct);background:var(--acct-bg);color:var(--on-acct);box-shadow:0 4px 16px rgba(15,118,110,.22)}
+.hub-wheel .hub-sat.sat-refresh svg{color:var(--acct)}
 .home-eta-card{background:var(--card);border:1.5px solid var(--bd);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow);margin-top:8px}
 .home-eta-grid{display:flex;align-items:center;gap:12px;margin:8px 0 10px}
 .home-eta-main{flex:0 0 auto;text-align:center;padding:8px 12px;background:var(--grad-inc);border-radius:12px;border:1px solid var(--inc-bg);min-width:110px}
@@ -685,12 +705,12 @@ a.addr-link{display:inline;font-size:12.5px}
     <div class="hub">
       <div class="hub-wheel">
         <button type="button" class="hub-sat hub-sat-eta" data-hub="eta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>ETA<span class="sat-badge">Quick</span></button>
-        <button type="button" class="hub-sat" data-hub="runs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Runs</button>
-        <button type="button" class="hub-sat" data-hub="book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M8 7h8M8 11h6"/></svg>Book</button>
-        <button type="button" class="hub-sat" data-hub="weekly"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-8M22 19V3"/></svg>Weekly</button>
-        <button type="button" class="hub-sat" data-hub="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-7"/></svg>Reports</button>
-        <button type="button" class="hub-sat" data-hub="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1-2 3.4-.2-.1a1.7 1.7 0 0 0-1.9-.1 1.7 1.7 0 0 0-.9 1.5V22H9.2v-.3a1.7 1.7 0 0 0-.9-1.5 1.7 1.7 0 0 0-1.9.1l-.2.1-2-3.4.1-.1A1.7 1.7 0 0 0 4.6 15 1.7 1.7 0 0 0 3 14H2v-4h1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1 2-3.4.2.1a1.7 1.7 0 0 0 1.9.1A1.7 1.7 0 0 0 9.2 2V2h5.6v.3a1.7 1.7 0 0 0 .9 1.5 1.7 1.7 0 0 0 1.9-.1l.2-.1 2 3.4-.1.1A1.7 1.7 0 0 0 19.4 9 1.7 1.7 0 0 0 21 10h1v4h-1a1.7 1.7 0 0 0-1.6 1Z"/></svg>Settings</button>
-        <button type="button" class="hub-sat" data-hub="refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/></svg>Refresh</button>
+        <button type="button" class="hub-sat sat-runs" data-hub="runs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Runs</button>
+        <button type="button" class="hub-sat sat-book" data-hub="book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M8 7h8M8 11h6"/></svg>Book</button>
+        <button type="button" class="hub-sat sat-weekly" data-hub="weekly"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-8M22 19V3"/></svg>Weekly</button>
+        <button type="button" class="hub-sat sat-reports" data-hub="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-7"/></svg>Reports</button>
+        <button type="button" class="hub-sat sat-settings" data-hub="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1-2 3.4-.2-.1a1.7 1.7 0 0 0-1.9-.1 1.7 1.7 0 0 0-.9 1.5V22H9.2v-.3a1.7 1.7 0 0 0-.9-1.5 1.7 1.7 0 0 0-1.9.1l-.2.1-2-3.4.1-.1A1.7 1.7 0 0 0 4.6 15 1.7 1.7 0 0 0 3 14H2v-4h1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1 2-3.4.2.1a1.7 1.7 0 0 0 1.9.1A1.7 1.7 0 0 0 9.2 2V2h5.6v.3a1.7 1.7 0 0 0 .9 1.5 1.7 1.7 0 0 0 1.9-.1l.2-.1 2 3.4-.1.1A1.7 1.7 0 0 0 19.4 9 1.7 1.7 0 0 0 21 10h1v4h-1a1.7 1.7 0 0 0-1.6 1Z"/></svg>Settings</button>
+        <button type="button" class="hub-sat sat-refresh" data-hub="refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/></svg>Refresh</button>
         <button type="button" class="hub-core" data-hub="shift"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/><path d="M12 3.5v6M4.2 16.5l5.2-3M19.8 16.5l-5.2-3"/></svg>Log Shift</button>
       </div>
     </div>
@@ -1375,8 +1395,11 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.3';
+var APP_VERSION='8.4';
 var CHANGELOG=[
+  {v:'8.4',date:'August 29, 2026',notes:[
+    ['UI/UX','Vibrant orbital navigation wheel: distinct high-contrast color badges and matching glow effects for every page circle (ETA, Runs, Book, Weekly, Reports, Settings, Refresh, and Log Shift).']
+  ]},
   {v:'8.3',date:'August 29, 2026',notes:[
     ['UI/UX','Multi-passenger cards: saving multiple names (e.g. Shane, Gavin) now saves cleanly as one unified profile card with their address, Nav, and Share.'],
     ['Bug Fix','Deduplicated address autocomplete predictions to eliminate repeated suggestion spam.'],
