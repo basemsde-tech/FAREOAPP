@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fareo-v6.2';
+const CACHE_NAME = 'fareo-v7.0';
 
 /* Local, same-origin assets only. cache.addAll() is atomic — if any entry fails
    the whole install fails, so cross-origin URLs (e.g. Google Fonts) are NOT listed
@@ -19,8 +19,18 @@ self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => cache.addAll(ASSETS))
-      .then(() => self.skipWaiting())
+      .then(() => {
+        /* First install: take over. Later updates wait for the Update now button. */
+        if (!self.registration.active) return self.skipWaiting();
+      })
   );
+});
+
+self.addEventListener('message', e => {
+  const data = e.data;
+  if (data === 'SKIP_WAITING' || (data && data.type === 'SKIP_WAITING')) {
+    self.skipWaiting();
+  }
 });
 
 self.addEventListener('activate', e => {

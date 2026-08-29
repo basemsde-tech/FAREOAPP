@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Fareo v6.2 | Soft-Geometric rebuild | single-file PWA
+<!-- Fareo v7.0 | Soft-Geometric rebuild | single-file PWA
      Changelog v4.3 -> v4.4 (code review fixes):
      [F1]  Levy rate of $0 no longer silently reverts to $1.20 (levyRate() helper).
      [F2]  currentQuarter() fixed: last day of Q2/Q3/Q4 no longer reports Q1 (ISO string compare).
@@ -453,8 +453,8 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .wk-share:active{opacity:1;background:var(--inc-bg)}
 input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text-fill-color:var(--mut)!important;opacity:.4}
 .screen{display:none}.screen.on{display:block}
-.nav{position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(414px,calc(100% - 20px));display:grid;grid-template-columns:repeat(5,1fr);gap:3px;background:var(--card);border:1px solid var(--bd);border-radius:999px;padding:7px 6px;box-shadow:var(--shadow);z-index:20}
-.nav button{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9px;color:var(--navmut);background:transparent;border:0;padding:4px 0;cursor:pointer}
+.nav{position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(414px,calc(100% - 20px));display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:3px;background:var(--card);border:1px solid var(--bd);border-radius:999px;padding:7px 6px;box-shadow:var(--shadow);z-index:20}
+.nav button{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;color:var(--navmut);background:transparent;border:0;padding:4px 0;cursor:pointer}
 .nav button svg{width:19px;height:19px}
 .nav button.on{color:var(--inc)}
 .nav button.center{color:var(--btn-ink);background:var(--btn-fill);border-radius:16px;font-weight:800;padding:7px 0}
@@ -470,6 +470,65 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
 .help-pop.show{opacity:1;transform:translateY(0)}
 .help-pop b{color:#fff}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.nav{grid-template-columns:1fr 1.25fr 1fr}
+.hub{padding:6px 2px 18px}
+.hub-feat{display:flex;flex-direction:column;align-items:center;margin:4px 0 20px}
+.hub-orb{width:128px;height:128px;border-radius:50%;border:0;background:var(--btn-fill);color:var(--btn-ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;box-shadow:var(--shadow);cursor:pointer}
+.hub-orb svg{width:34px;height:34px}
+.hub-orb b{font-size:13.5px;font-weight:800}
+.hub-orb small{font-size:10px;opacity:.85;font-weight:600}
+.hub-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px 6px;text-align:center}
+.hub-dot{width:76px;height:76px;border-radius:50%;border:1.5px solid var(--bd2);background:var(--card);color:var(--head);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;margin:0 auto;cursor:pointer;box-shadow:var(--shadow)}
+.hub-dot svg{width:22px;height:22px;color:var(--inc)}
+.hub-dot b{font-size:10.5px;font-weight:800}
+.hub-cap{display:block;margin-top:7px;font-size:11px;font-weight:700;color:var(--mut)}
+.pie-wrap{display:flex;align-items:center;gap:14px}
+.pie-wrap svg{flex:0 0 auto}
+.pie-leg{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+.pie-leg div{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12.5px;font-weight:600;color:var(--mut)}
+.pie-leg b{color:var(--head);font-variant-numeric:tabular-nums}
+.pie-sw{width:10px;height:10px;border-radius:50%;flex:0 0 auto}
+.book-day{display:flex;gap:5px;margin:0 0 10px;overflow-x:auto}
+.book-day button{flex:1;min-width:40px;border:1px solid var(--bd2);background:var(--card);color:var(--mut);border-radius:10px;padding:8px 4px;font-size:11px;font-weight:800;cursor:pointer}
+.book-day button.on{background:var(--inc);color:var(--btn-ink);border-color:transparent;-webkit-text-fill-color:var(--btn-ink)}
+.run-seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.run-seg button{border:1px solid var(--bd2);background:var(--card);color:var(--mut);border-radius:10px;padding:9px;font-size:12.5px;font-weight:800;cursor:pointer}
+.run-seg button.on{background:var(--inc-bg);color:var(--on-inc);border-color:var(--inc)}
+.cli{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--bd);cursor:pointer}
+.cli:last-child{border-bottom:0}
+.cli-av{width:40px;height:40px;border-radius:50%;background:var(--inc-bg);color:var(--on-inc);display:grid;place-items:center;font-weight:800;font-size:13px;flex:0 0 auto}
+.cli b{display:block;font-size:14.5px;color:var(--head)}
+.cli span{display:block;font-size:11.5px;color:var(--mut);margin-top:1px}
+.cli-go{border:1px solid var(--inc);background:transparent;color:var(--inc);border-radius:9px;padding:7px 9px;font-size:11px;font-weight:800;cursor:pointer;flex:0 0 auto}
+.addr-card{background:var(--field);border:1px solid var(--bd);border-radius:12px;padding:11px;margin-top:8px}
+.addr-card .ttl{width:100%;border:0;background:transparent;padding:0;font-size:13px;font-weight:800;color:var(--head);-webkit-text-fill-color:var(--head);text-align:left;margin-bottom:4px}
+.addr-acts{display:flex;gap:6px;margin-top:8px}
+.addr-acts button{flex:1;border:1px solid var(--bd2);background:var(--card);color:var(--head);border-radius:9px;padding:8px 6px;font-size:11px;font-weight:800;cursor:pointer}
+.sugg{border:1px solid var(--bd2);border-radius:10px;background:var(--card);margin-top:4px;overflow:hidden}
+.sugg button{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--bd);background:transparent;color:var(--body);padding:10px 11px;font-size:12.5px;font-weight:600;cursor:pointer}
+.sugg button:last-child{border-bottom:0}
+.need{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.need button{border:1px solid var(--bd2);background:var(--card);color:var(--mut);border-radius:999px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer}
+.need button.on{background:var(--hail-bg);color:var(--hail);border-color:var(--hail)}
+.sch-days{display:flex;gap:5px}
+.sch-days button{flex:1;border:1px solid var(--bd2);background:var(--card);color:var(--mut);border-radius:8px;padding:8px 0;font-size:11px;font-weight:800;cursor:pointer}
+.sch-days button.on{background:var(--inc);color:var(--btn-ink);border-color:transparent;-webkit-text-fill-color:var(--btn-ink)}
+.cl-search{margin-bottom:10px}
+.cli-need{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.cli-need i{font-style:normal;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;background:var(--hail-bg);color:var(--hail)}
+.upd-banner{position:fixed;left:50%;top:calc(8px + env(safe-area-inset-top));transform:translateX(-50%);width:min(414px,calc(100% - 20px));z-index:45;background:var(--inc);color:var(--btn-ink);border-radius:14px;padding:11px 12px;display:none;align-items:center;gap:10px;box-shadow:var(--shadow)}
+.upd-banner.show{display:flex}
+.upd-banner div{flex:1;min-width:0}
+.upd-banner b{display:block;font-size:13px;font-weight:800}
+.upd-banner span{display:block;font-size:11px;opacity:.9;font-weight:600;margin-top:1px}
+.upd-banner button{flex:0 0 auto;border:0;border-radius:9px;padding:8px 12px;font-weight:800;font-size:12px;background:var(--btn-ink);color:var(--inc);-webkit-text-fill-color:var(--inc);cursor:pointer}
+.upd-notes{margin:10px 0 14px;font-size:12.5px;color:var(--body);line-height:1.45}
+.upd-notes p{margin:0 0 6px}
+.chart.pie{height:auto;overflow:visible;display:block}
+.addr-presets{display:flex;flex-wrap:wrap;gap:5px;margin:4px 0 8px}
+.addr-presets button{border:1px solid var(--bd2);background:var(--card);color:var(--mut);border-radius:999px;padding:5px 9px;font-size:10.5px;font-weight:700;cursor:pointer}
+.addr-presets button.on{background:var(--inc-bg);color:var(--on-inc);border-color:var(--inc)}
+.sch-box{border:1px solid var(--bd);border-radius:12px;padding:10px;margin-top:8px;background:var(--field)}
 </style>
 </head>
 <body>
@@ -483,6 +542,22 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
       <button class="theme" id="themeBtn" aria-label="Theme"></button></div>
   </div>
   <div class="body-p">
+
+  <section class="screen" data-tab="hub">
+    <div class="sub">Pages <small>Pick where to go</small></div>
+    <div class="hub">
+      <div class="hub-feat">
+        <button type="button" class="hub-orb" data-hub="shift"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/><path d="M12 3.5v6M4.2 16.5l5.2-3M19.8 16.5l-5.2-3"/></svg><b>Log Shift</b><small>Primary</small></button>
+      </div>
+      <div class="hub-grid">
+        <div><button type="button" class="hub-dot" data-hub="weekly"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-8M22 19V3"/></svg></button><span class="hub-cap">Weekly</span></div>
+        <div><button type="button" class="hub-dot" data-hub="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-7"/></svg></button><span class="hub-cap">Reports</span></div>
+        <div><button type="button" class="hub-dot" data-hub="book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M8 7h8M8 11h6"/></svg></button><span class="hub-cap">Address Book</span></div>
+        <div><button type="button" class="hub-dot" data-hub="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1-2 3.4-.2-.1a1.7 1.7 0 0 0-1.9-.1 1.7 1.7 0 0 0-.9 1.5V22H9.2v-.3a1.7 1.7 0 0 0-.9-1.5 1.7 1.7 0 0 0-1.9.1l-.2.1-2-3.4.1-.1A1.7 1.7 0 0 0 4.6 15 1.7 1.7 0 0 0 3 14H2v-4h1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1 2-3.4.2.1a1.7 1.7 0 0 0 1.9.1A1.7 1.7 0 0 0 9.2 2V2h5.6v.3a1.7 1.7 0 0 0 .9 1.5 1.7 1.7 0 0 0 1.9-.1l.2-.1 2 3.4-.1.1A1.7 1.7 0 0 0 19.4 9 1.7 1.7 0 0 0 21 10h1v4h-1a1.7 1.7 0 0 0-1.6 1Z"/></svg></button><span class="hub-cap">Settings</span></div>
+        <div><button type="button" class="hub-dot" data-hub="refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/></svg></button><span class="hub-cap">Refresh</span></div>
+      </div>
+    </div>
+  </section>
 
   <section class="screen on" data-tab="shift">
     <div class="steps" id="steps">
@@ -556,6 +631,27 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
     <button class="btn neutral" id="wkAdd" style="margin-top:9px">+ Add / override entry</button>
   </section>
 
+  <section class="screen" data-tab="book">
+    <div class="sub">Address Book <small>Clients · school runs · one-tap nav</small></div>
+    <input class="cl-search" id="bookSearch" placeholder="Search name or nickname" autocomplete="off">
+    <div class="card">
+      <h5><span class="dot" style="background:var(--hail)"></span>School run</h5>
+      <div class="book-day" id="bookDays"></div>
+      <div class="run-seg">
+        <button type="button" class="on" id="runAm">Morning</button>
+        <button type="button" id="runPm">Afternoon</button>
+      </div>
+      <div id="runList"></div>
+      <button class="btn neutral" id="shareRun" style="margin-top:8px">Share this run</button>
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <h5><span class="dot" style="background:var(--inc)"></span>Clients<span style="margin-left:auto;font-size:11px;color:var(--mut);font-weight:600" id="cliCount">0</span></h5>
+      <div id="cliList"></div>
+      <div class="ded-empty" id="cliEmpty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><b>No clients yet</b><span>Add a name, nickname, and the addresses you actually drive to.</span></div>
+      <button class="btn" id="addClient" style="margin-top:10px">+ Add client</button>
+    </div>
+  </section>
+
   <section class="screen" data-tab="reports">
     <div class="sub">Reports <small>Cycle · GST · costs</small></div>
 
@@ -573,17 +669,19 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
     <div class="card" id="pulseCard">
       <div class="ph-head">
         <span class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg></span>
-        <div class="ph-t"><b>This cycle</b><p id="pulseSub">Pay week</p></div>
+        <div class="ph-t"><b id="pulseTitle">This range</b><p id="pulseSub">Pay week</p></div>
         <span class="ph-pill tap" id="pulseShifts">0 shifts</span>
       </div>
       <div class="ph-hero tap" id="pulseHero" role="button" tabindex="0">
-        <div class="ph-lbl" id="pulseHeroLbl">This cycle take-home</div>
+        <div class="ph-lbl" id="pulseHeroLbl">Take-home</div>
         <div class="ph-net" id="repTake">$0.00</div>
         <div class="pulse-delta" id="pulseDelta"></div>
       </div>
-      <div id="cycBadgeWrap" style="text-align:center;margin:-4px 0 12px"></div>
-      <div class="cyc-strip" id="cycStrip"></div>
-      <div class="cyc-pay" id="cycPay"><span>Payday</span><b id="cycPayLbl">—</b></div>
+      <div id="pulseWeekBits">
+        <div id="cycBadgeWrap" style="text-align:center;margin:-4px 0 12px"></div>
+        <div class="cyc-strip" id="cycStrip"></div>
+        <div class="cyc-pay" id="cycPay"><span>Payday</span><b id="cycPayLbl">—</b></div>
+      </div>
       <div class="pulse-keep" id="pulseKeep">
         <div class="pulse-keep-track"><i id="pulseKeepFill"></i></div>
         <div class="pulse-keep-lbl"><span><b id="pulseKeepPct">0%</b> yours this cycle</span><span id="pulseOpLbl">operator 0%</span></div>
@@ -596,9 +694,9 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
     </div>
 
     <div class="card chart-card" id="insightCard">
-      <div class="chart-head"><b>Income vs costs</b><span id="chartGrainLbl">By month</span></div>
+      <div class="chart-head"><b>Income vs costs</b><span id="chartGrainLbl">This range</span></div>
       <div class="chart-sum"><span class="ci">Take-home <b id="chartInc">$0.00</b></span><span class="ce">Costs <b id="chartExp">$0.00</b></span></div>
-      <div class="chart" id="chartBars"></div>
+      <div class="chart pie" id="chartBars"></div>
     </div>
 
     <div class="card" id="deadlineCard" style="padding:13px">
@@ -624,10 +722,6 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
       </div>
     </div>
 
-    <div class="card mix-slim" id="mixCard">
-      <div id="mixRows"></div>
-    </div>
-
     <div class="card" id="taxCard">
       <div class="ph-head">
         <span class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.2L14 21l-2-1.2L10 21l-2-1.2L6 21z"/><path d="M9 8h6M9 12h6"/></svg></span>
@@ -638,20 +732,9 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
         <div class="tri-p accent-inc"><small>GST you can claim · 1B</small><b id="repGstCred" style="color:var(--inc)">$0.00</b></div>
         <div class="tri-p"><small>Costs you can deduct</small><b id="repDeduct">$0.00</b></div>
       </div>
-      <div class="tax-gstbar" id="taxGstBar">
-        <span>GST on fares (1A) <b id="tax1A">$0.00</b></span>
-        <span>&minus;</span>
-        <span>claim (1B) <b id="tax1Bmini">$0.00</b></span>
-        <span style="margin-left:auto"><span id="taxNetLabel" class="pay">Pay ATO</span> <b id="taxNetAmt">$0.00</b></span>
-      </div>
       <div class="tax-actions">
         <button class="tax-add fuel" id="addFuelExp" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg>+ Fuel</button>
         <button class="tax-add" id="addExp" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>+ Expense</button>
-      </div>
-      <div class="fuel-stat-row" id="fuelStatRow">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="color:var(--fuel);flex:0 0 auto"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg>
-        <span><b id="fTotal" style="color:var(--fuel)">$0.00</b> fuel · <span id="fuelEntries" style="color:var(--mut)">0 entries</span></span>
-        <span id="fuelFoot" class="rg" style="margin-left:auto;text-align:right"></span>
       </div>
       <div id="recurSection" style="display:none;margin-top:10px">
         <div class="explabel">Repeats every period</div>
@@ -739,7 +822,7 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
       <div class="card" style="padding:0">
         <div class="set" id="archiveLink"><div class="sl"><b>Receipt jar</b><p>Snaps by category for tax audit &middot; <span id="archiveCount">0</span> saved</p></div><span class="chev">&rsaquo;</span></div>
         <div class="set" id="clearCache"><div class="sl"><b>Clear Cache &amp; Refresh</b><p>Checks for updates</p></div><span class="chev">&rsaquo;</span></div>
-        <div class="set" id="newFy"><div class="sl"><b class="danger">Start New Financial Year</b><p>Clear shifts &amp; income &middot; keep settings</p></div><span class="chev danger">&rsaquo;</span></div>
+        <div class="set" id="newFy"><div class="sl"><b class="danger">Start New Financial Year</b><p>Clear shifts &amp; income &middot; keep settings &amp; address book</p></div><span class="chev danger">&rsaquo;</span></div>
       </div>
     </div>
 
@@ -870,13 +953,59 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
   <p class="csub" id="askBody"></p>
   <div class="two" style="margin-top:14px"><button class="btn neutral" id="askNo">Keep</button><button class="btn" id="askYes" style="background:var(--dgr)">Delete</button></div>
 </div></div>
+<div class="modal" id="clientModal"><div class="sheet" style="max-height:92vh;overflow:auto">
+  <div class="grip"></div>
+  <h3 id="clTitle">Client</h3>
+  <p class="csub">Name plus a nickname the kids actually use. Address titles are yours to change.</p>
+  <label class="fl">Name</label><input id="clName" placeholder="e.g. Holly Nguyen" autocomplete="name">
+  <label class="fl">Nickname</label><input id="clNick" placeholder="e.g. Hol" autocomplete="off">
+  <div class="two">
+    <div><label class="fl">Phone</label><input id="clPhone" type="tel" placeholder="Optional"></div>
+    <div><label class="fl">Carer / contact</label><input id="clCarer" placeholder="Optional"></div>
+  </div>
+  <label class="fl">Needs</label>
+  <div class="need" id="clNeeds">
+    <button type="button" data-flag="wheelchair">Wheelchair</button>
+    <button type="button" data-flag="nonverbal">Non-verbal</button>
+    <button type="button" data-flag="extra">Extra seat</button>
+    <button type="button" data-flag="assist">Assistance</button>
+  </div>
+  <label class="fl">Notes</label><textarea id="clNotes" rows="2" placeholder="Anything the driver should know" style="width:100%;border-radius:9px;padding:10px;font-size:14px;background:var(--field);border:1.5px solid var(--bd2);color:var(--fink);-webkit-text-fill-color:var(--fink);font-weight:600;resize:vertical"></textarea>
+  <div class="sch-box">
+    <div class="set" style="padding:0;border:0;box-shadow:none"><div class="sl"><b>School run</b><p>Preset weekdays for the AM / PM list</p></div><button class="tgl" id="clSchOn" aria-label="Toggle school run"></button></div>
+    <div id="clSchWrap" style="display:none;margin-top:8px">
+      <div class="sch-days" id="clSchDays"></div>
+      <div class="run-seg" style="margin-top:8px">
+        <button type="button" class="on" id="clSchAm">Morning list</button>
+        <button type="button" class="on" id="clSchPm">Afternoon list</button>
+      </div>
+      <label class="fl">Morning pickup</label><select id="clPickup"></select>
+      <label class="fl">Afternoon drop</label><select id="clDrop"></select>
+    </div>
+  </div>
+  <label class="fl" style="margin-top:12px">Addresses</label>
+  <div id="clAddrs"></div>
+  <button class="add" id="clAddAddr" type="button">+ Add address</button>
+  <button class="btn" id="clSave" style="margin-top:14px">Save client</button>
+  <div class="two" style="margin-top:9px"><button class="btn neutral" id="clCancel">Cancel</button><button class="btn neutral" id="clDelete" style="border-color:var(--dgr);color:var(--dgr);display:none">Delete</button></div>
+</div></div>
+<div class="modal" id="updModal"><div class="sheet">
+  <div class="grip"></div>
+  <h3>Update ready</h3>
+  <p class="csub" id="updBody">A new Fareo version is on this phone. Your shifts and address book stay. Tap Update now to load it.</p>
+  <div class="upd-notes" id="updNotes"></div>
+  <button class="btn" id="updNow">Update now</button>
+  <button class="btn neutral" id="updLater" style="margin-top:9px">Later</button>
+</div></div>
 <nav class="nav">
-  <button data-go="weekly"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-8M22 19V3"/></svg>Weekly</button>
-  <button data-go="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-7"/></svg>Reports</button>
+  <button data-go="hub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>Pages</button>
   <button class="center" data-go="shift"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/><path d="M12 3.5v6M4.2 16.5l5.2-3M19.8 16.5l-5.2-3"/></svg>Shift</button>
-  <button data-go="refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/></svg>Refresh</button>
-  <button data-go="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1-2 3.4-.2-.1a1.7 1.7 0 0 0-1.9-.1 1.7 1.7 0 0 0-.9 1.5V22H9.2v-.3a1.7 1.7 0 0 0-.9-1.5 1.7 1.7 0 0 0-1.9.1l-.2.1-2-3.4.1-.1A1.7 1.7 0 0 0 4.6 15 1.7 1.7 0 0 0 3 14H2v-4h1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1 2-3.4.2.1a1.7 1.7 0 0 0 1.9.1A1.7 1.7 0 0 0 9.2 2V2h5.6v.3a1.7 1.7 0 0 0 .9 1.5 1.7 1.7 0 0 0 1.9-.1l.2-.1 2 3.4-.1.1A1.7 1.7 0 0 0 19.4 9 1.7 1.7 0 0 0 21 10h1v4h-1a1.7 1.7 0 0 0-1.6 1Z"/></svg>Settings</button>
+  <button data-go="book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M8 7h8M8 11h6"/></svg>Book</button>
 </nav>
+<div class="upd-banner" id="updBanner">
+  <div><b>Update ready</b><span>New Fareo version — your data stays</span></div>
+  <button type="button" id="updBannerNow">Update now</button>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -898,8 +1027,15 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='6.2';
+var APP_VERSION='7.0';
 var CHANGELOG=[
+  {v:'7.0',date:'August 29, 2026',notes:[
+    ['Feature','Address Book for taxi clients: name and nickname, custom address titles, Australian address search, one-tap Google Maps, copy and share.'],
+    ['Feature','School-run list by weekday morning or afternoon, with pickup and drop addresses for navigation.'],
+    ['UI/UX','Pages hub with circular cards. Bottom nav is Pages, Shift, and Book.'],
+    ['UI/UX','Reports Pulse follows the selected filter. Insights is a pie of take-home vs costs.'],
+    ['Feature','When a new version is waiting, Fareo shows an update popup and a banner with Update now.']
+  ]},
   {v:'6.2',date:'August 28, 2026',notes:[
     ['UI/UX','Share Week sends a plain date-range + total message. The table image is day, date, rego, and amount only.']
   ]},
@@ -1013,7 +1149,9 @@ var entries=load('fareo_entries',[]);
 var deductions=load('fareo_deductions',[]);
 var recurring=load('fareo_recurring',[]);
 var fuelManual=load('fareo_fuelManual',[]);   /* manual fuel expenses added in Reports */
-var receipts=load('fareo_receipts',[]);        /* receipt archive: {id,dataUrl,name,kind,...} */
+var receipts=load('fareo_receipts',[])||[];        /* receipt archive: {id,dataUrl,name,kind,...} */
+var clients=load('fareo_clients',[])||[];
+if(!Array.isArray(clients))clients=[];
 var draft=load('fareo_draft',null)||{date:todayStr(),eos:[0],cash:[{name:'',amount:0}],square:[{name:'',amount:0}],runs:0,accounts:[],fuel:[{amount:0,type:settings.fuel,opPaid:false}],hail:'',rego:'',receipt:false,receiptName:'',custom:{}};
 /* Backfill new draft shapes so older drafts don't crash */
 if(!draft.fuel)draft.fuel=[{amount:0,type:settings.fuel,opPaid:false}];
@@ -1062,7 +1200,7 @@ function hideHelp(){if(helpPop){helpPop.classList.remove('show')}helpFor=null}
 })();
 /* Build a help marker span. Content is escaped-safe. */
 function help(txt){return '<span class="help" data-help="'+esc(txt)+'" aria-label="Help">?</span>'}
-function persist(){save('fareo_settings',settings);save('fareo_entries',entries);save('fareo_deductions',deductions);save('fareo_recurring',recurring);save('fareo_fuelManual',fuelManual);save('fareo_draft',draft)}
+function persist(){save('fareo_settings',settings);save('fareo_entries',entries);save('fareo_deductions',deductions);save('fareo_recurring',recurring);save('fareo_fuelManual',fuelManual);save('fareo_draft',draft);save('fareo_clients',clients)}
 function saveReceipts(){save('fareo_receipts',receipts)}
 var names=load('fareo_names',[]);
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
@@ -1779,7 +1917,7 @@ function previousPeriod(from,to,name){
   if(days<1)return null;
   var nt=new Date(f);nt.setDate(nt.getDate()-1);
   var nf=new Date(nt);nf.setDate(nt.getDate()-days+1);
-  var label={Today:'yesterday','This Week':'last week','7 Days':'previous 7 days',Quarter:'last quarter','Fin Year':'last financial year',Custom:'the previous stretch'}[name]||'last period';
+  var label={Today:'yesterday','This Week':'last week','7 Days':'previous 7 days',Quarter:'last quarter','Fin Year':'last financial year','All Time':'the previous stretch',Custom:'the previous stretch'}[name]||'last period';
   return{from:iso(nf),to:iso(nt),label:label};
 }
 /* single source of truth for all report figures */
@@ -1874,32 +2012,38 @@ function chartBuckets(){
 }
 function renderChart(a){
   var box=$('#chartBars'),lab=$('#chartGrainLbl'),incEl=$('#chartInc'),expEl=$('#chartExp');
-  var spent=spentOf(a);
-  if(incEl)incEl.textContent=money(a.inc);
+  var spent=spentOf(a),inc=a.inc||0;
+  if(incEl)incEl.textContent=money(inc);
   if(expEl)expEl.textContent=money(spent);
+  if(lab)lab.textContent=repRange.name||'This range';
   if(!box)return;
-  var pack=chartBuckets();
-  var grainLbl={day:'By day',month:'By month',quarter:'By quarter'}[pack.grain]||'By period';
-  if(lab)lab.textContent=grainLbl;
-  if(!pack.rows.length){box.innerHTML='<div class="chart-empty">Nothing in this range yet.</div>';return}
-  var rows=pack.rows.map(function(b){var x=aggBetween(b.from,b.to);return{label:b.label,inc:x.inc,exp:spentOf(x)}});
-  var max=0;rows.forEach(function(r){if(r.inc>max)max=r.inc;if(r.exp>max)max=r.exp});
-  if(max<=0)max=1;
-  box.innerHTML=rows.map(function(r){
-    var ih=Math.max(2,Math.round(r.inc/max*100)),eh=Math.max(2,Math.round(r.exp/max*100));
-    if(!r.inc)ih=0;if(!r.exp)eh=0;
-    return '<div class="chart-col"><div class="chart-pair">'
-      +'<div class="chart-stack"><span class="chart-val ci">'+money(r.inc)+'</span><div class="chart-track">'+(r.inc?'<i class="chart-bar ci" style="height:'+ih+'%"></i>':'<i class="chart-bar ci" style="height:2px;opacity:.25"></i>')+'</div></div>'
-      +'<div class="chart-stack"><span class="chart-val ce">'+money(r.exp)+'</span><div class="chart-track">'+(r.exp?'<i class="chart-bar ce" style="height:'+eh+'%"></i>':'<i class="chart-bar ce" style="height:2px;opacity:.25"></i>')+'</div></div>'
-      +'</div><small>'+esc(r.label)+'</small></div>';
-  }).join('');
+  var tot=inc+spent;
+  if(tot<=0){box.innerHTML='<div class="chart-empty">Nothing in this range yet.</div>';return}
+  var r=38,c=50,circ=2*Math.PI*r;
+  var dashInc=Math.max(0,(inc/tot)*circ);
+  var keep=inc/tot*100;
+  box.innerHTML='<div class="pie-wrap"><svg width="108" height="108" viewBox="0 0 100 100" aria-hidden="true">'
+    +'<circle cx="'+c+'" cy="'+c+'" r="'+r+'" fill="none" stroke="var(--fuel)" stroke-width="18"></circle>'
+    +'<circle cx="'+c+'" cy="'+c+'" r="'+r+'" fill="none" stroke="var(--inc)" stroke-width="18" stroke-linecap="butt" stroke-dasharray="'+dashInc.toFixed(2)+' '+circ.toFixed(2)+'" transform="rotate(-90 '+c+' '+c+')"></circle>'
+    +'</svg><div class="pie-leg">'
+    +'<div><span style="display:flex;align-items:center;gap:7px"><i class="pie-sw" style="background:var(--inc)"></i>Take-home</span><b>'+money(inc)+'</b></div>'
+    +'<div><span style="display:flex;align-items:center;gap:7px"><i class="pie-sw" style="background:var(--fuel)"></i>Costs</span><b>'+money(spent)+'</b></div>'
+    +'<div><span style="color:var(--mut)">Yours of the mix</span><b>'+Math.round(keep)+'%</b></div>'
+    +'</div></div>';
 }
-function renderCyclePulse(){
-  var cyc=cycleOf(0),last=cycleOf(-1);
-  var a=aggBetween(cyc.from,cyc.to);
-  var lastA=aggBetween(last.from,last.to);
-  var name=cycleName();
-  var sub=$('#pulseSub');if(sub)sub.textContent=name+' · '+fmtDMY(cyc.base)+' \u2013 '+fmtDMY(cyc.end);
+function renderCyclePulse(a){
+  a=a||rangeAgg();
+  var isWeek=repRange.name==='This Week';
+  var prev=previousPeriod(repRange.from,repRange.to,repRange.name);
+  var lastA=prev?aggBetween(prev.from,prev.to):{inc:0,shifts:0};
+  var cyc=cycleOf(0);
+  var title=$('#pulseTitle');if(title)title.textContent=isWeek?'This cycle':(repRange.name||'This range');
+  var sub=$('#pulseSub');
+  if(sub){
+    if(isWeek)sub.textContent=cycleName()+' · '+fmtDMY(cyc.base)+' \u2013 '+fmtDMY(cyc.end);
+    else if(repRange.from&&repRange.to)sub.textContent=fmtDMY(repRange.from)+' \u2013 '+fmtDMY(repRange.to);
+    else sub.textContent=repRange.name||'Selected range';
+  }
   $('#pulseShifts').textContent=a.shifts+' shift'+(a.shifts===1?'':'s');
   $('#repTake').textContent=money(a.inc);
   $('#repGross').textContent=money(a.gross);
@@ -1908,8 +2052,9 @@ function renderCyclePulse(){
   var daysWorked={};
   a.es.forEach(function(e){daysWorked[e.date]=1});
   var nDays=Object.keys(daysWorked).length;
-  var pd=$('#pulseDays');if(pd)pd.textContent=nDays+'/7';
-  var heroLbl=$('#pulseHeroLbl');if(heroLbl)heroLbl.textContent='This cycle take-home';
+  var spanDays=daysInRange(repRange.from,repRange.to)||nDays;
+  var pd=$('#pulseDays');if(pd)pd.textContent=isWeek?(nDays+'/7'):(nDays+'/'+spanDays);
+  var heroLbl=$('#pulseHeroLbl');if(heroLbl)heroLbl.textContent=(isWeek?'This cycle':(repRange.name||'Range'))+' take-home';
   var keepPct=a.gross>0?Math.round((a.share||0)/a.gross*100):(Number(settings.pct)||0);
   if(keepPct<0)keepPct=0;if(keepPct>100)keepPct=100;
   var fill=$('#pulseKeepFill'),kp=$('#pulseKeepPct'),op=$('#pulseOpLbl'),keepBox=$('#pulseKeep');
@@ -1917,20 +2062,24 @@ function renderCyclePulse(){
   if(kp)kp.textContent=keepPct+'%';
   if(op)op.textContent='operator '+(100-keepPct)+'%';
   if(keepBox)keepBox.style.display=a.gross>0?'block':'none';
+  var weekBits=$('#pulseWeekBits');if(weekBits)weekBits.style.display=isWeek?'block':'none';
   var delta=$('#pulseDelta');
+  var vs=prev?prev.label:'last period';
   if(delta){
-    if(a.shifts||lastA.shifts){
-      var cls='flat',txt='Even vs last cycle';
-      if(lastA.inc<=0&&a.inc>0){cls='up';txt='New vs last cycle'}
+    if(repRange.name==='All Time'){delta.className='pulse-delta';delta.textContent=''}
+    else if(a.shifts||lastA.shifts){
+      var cls='flat',txt='Even vs '+vs;
+      if(lastA.inc<=0&&a.inc>0){cls='up';txt='New vs '+vs}
       else if(lastA.inc>0){
         var pct=Math.round((a.inc-lastA.inc)/lastA.inc*100);
-        if(pct>=3){cls='up';txt='Up '+pct+'% vs last cycle'}
-        else if(pct<=-3){cls='down';txt='Down '+Math.abs(pct)+'% vs last cycle'}
-        else txt='About even vs last cycle';
+        if(pct>=3){cls='up';txt='Up '+pct+'% vs '+vs}
+        else if(pct<=-3){cls='down';txt='Down '+Math.abs(pct)+'% vs '+vs}
+        else txt='About even vs '+vs;
       }
       delta.className='pulse-delta on '+cls;delta.textContent=txt;
     }else{delta.className='pulse-delta';delta.textContent=''}
   }
+  if(!isWeek)return;
   var strip=$('#cycStrip');
   if(strip){
     var today=iso(new Date());
@@ -1995,23 +2144,9 @@ function renderReports(){
     else fr.textContent=fmtDMY(repRange.from)+' \u2013 '+fmtDMY(repRange.to);
   }
   renderAlerts(a);
-  renderCyclePulse();
+  renderCyclePulse(a);
   renderChart(a);
   renderJarMeta();
-  /* Fuel stat row in Tax & Deductions */
-  $('#fTotal').textContent=money(a.fuel);
-  $('#fuelEntries').textContent=a.fc+' entr'+(a.fc===1?'y':'ies');
-  var fsr=$('#fuelStatRow');if(fsr)fsr.style.display=a.fuel>0?'flex':'none';
-  $('#fuelFoot').textContent=(a.fuelManual>0)
-    ? ('Shift '+money(a.fuelShift)+' + manual '+money(a.fuelManual))
-    : (a.fuelOpPaid>0
-      ? ('I paid '+money(a.fuelIPaid)+' \u00b7 op paid '+money(a.fuelOpPaid))
-      : '');
-  /* Payment mix */
-  var mix=[['EFTPOS (EOS)',a.mixEftpos,'var(--inc)'],['Cash',a.mixCash,'var(--levy)'],['Square',a.mixSquare,'var(--acct)'],['Runs',a.mixRuns,'var(--hail)'],['Custom types',a.mixCustom,'var(--fink)']].filter(function(m){return m[1]>0});
-  var mixTot=mix.reduce(function(s,m){return s+m[1]},0)||1;
-  $('#mixCard').style.display=mix.length?'block':'none';
-  $('#mixRows').innerHTML=mix.map(function(m){var pct=(m[1]/mixTot*100).toFixed(0);return '<div class="tr" style="grid-template-columns:1fr auto auto"><span><span class="dot" style="display:inline-block;background:'+m[0+2]+';margin-right:6px"></span>'+esc(m[0])+'</span><span class="rg">'+pct+'%</span><span class="am" style="color:'+m[2]+'">'+money(m[1])+'</span></div>'}).join('');
   $('#repGstCred').textContent=money(a.oneB);$('#repDeduct').textContent=money(a.dedTotal);
   var trl=$('#taxRangeLbl');if(trl)trl.textContent=(a.dn+a.fc)+' item'+(a.dn+a.fc===1?'':'s');
   var netGst=a.gst-a.oneB;
@@ -2244,10 +2379,10 @@ function showTrackedQuarter(){
   renderReports();
 }
 if($('#pulseHero')){
-  $('#pulseHero').onclick=function(){go('weekly')};
-  $('#pulseHero').onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();go('weekly')}};
+  $('#pulseHero').onclick=function(){if(repRange.name==='This Week')go('weekly')};
+  $('#pulseHero').onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();if(repRange.name==='This Week')go('weekly')}};
 }
-if($('#pulseShifts'))$('#pulseShifts').onclick=function(){go('weekly')};
+if($('#pulseShifts'))$('#pulseShifts').onclick=function(){if(repRange.name==='This Week')go('weekly')};
 if($('#qGstTile'))$('#qGstTile').onclick=function(){showTrackedQuarter();openSummary('bas')};
 if($('#qLevyTile'))$('#qLevyTile').onclick=function(){
   showTrackedQuarter();
@@ -2380,7 +2515,7 @@ $('#setCredit').onchange=function(){settings.creditedDay=parseInt(this.value,10)
 $('#setWeek').onchange=function(){settings.weekStart=parseInt(this.value,10);persist();wkOffset=0;renderWeekly();renderReports();toast('Week starts '+DAYS[settings.weekStart])};
 $('#setAuto').onclick=function(){settings.autocomplete=!settings.autocomplete;persist();this.classList.toggle('on',settings.autocomplete);rowInputs();toast(settings.autocomplete?'Autocomplete on':'Autocomplete off')};
 $('#addRego').onclick=function(){var v=$('#newRego').value.trim().toUpperCase();if(!v){toast('Enter a rego');return}if(settings.regos.indexOf(v)<0)settings.regos.push(v);$('#newRego').value='';persist();renderSettings();rowInputs();toast('Rego added')};
-$('#newFy').onclick=function(){ask('Start a new financial year?','Clears shifts, income, deductions and manual fuel. Settings and the receipt jar stay.','Clear year',function(){entries=[];deductions=[];fuelManual=[];draft=freshDraft(settings.regos[0]||'');persist();toast('New financial year started');rowInputs();render();renderWeekly();renderReports()})};
+$('#newFy').onclick=function(){ask('Start a new financial year?','Clears shifts, income, deductions and manual fuel. Settings, receipt jar and address book stay.','Clear year',function(){entries=[];deductions=[];fuelManual=[];draft=freshDraft(settings.regos[0]||'');persist();toast('New financial year started');rowInputs();render();renderWeekly();renderReports()})};
 async function fullRefresh(){
   toast('Clearing caches…');
   try{
@@ -2403,7 +2538,7 @@ $('#clearCache').onclick=fullRefresh;
 $('#refreshBtn').onclick=fullRefresh;
 
 /* ---------- backup + cloud sync ---------- */
-var SYNC_KEYS=['fareo_settings','fareo_entries','fareo_deductions','fareo_recurring','fareo_fuelManual','fareo_draft','fareo_names'];
+var SYNC_KEYS=['fareo_settings','fareo_entries','fareo_deductions','fareo_recurring','fareo_fuelManual','fareo_draft','fareo_names','fareo_clients'];
 function allData(){var o={};SYNC_KEYS.forEach(function(k){var v=localStorage.getItem(k);if(v!=null)o[k]=v});return o}
 /* Backup includes receipts (for a full audit-safe export); cloud sync does not. */
 function allDataFull(){var o=allData();var r=localStorage.getItem('fareo_receipts');if(r!=null)o['fareo_receipts']=r;return o}
@@ -2438,18 +2573,360 @@ async function afterAuth(user){
 function pushNow(){if(!syncOn||!fb.uid||!fb.fsM)return;var ts=Date.now();localStorage.setItem('fareo_updatedAt',String(ts));fb.fsM.setDoc(docRef(),{data:allData(),updatedAt:ts,_device:deviceId()}).then(function(){setSyncState('On - saved')}).catch(function(){setSyncState('Offline - will retry')})}
 function scheduleSync(){if(!syncOn||applyingRemote)return;clearTimeout(syncTimer);syncTimer=setTimeout(pushNow,900)}
 async function syncSignOut(){try{if(fb.auth)await fb.authM.signOut(fb.auth)}catch(_){}syncOn=false;localStorage.removeItem('fareo_sync_on');setSyncState('Off - local only');toast('Signed out (data kept on device)')}
-function reloadAll(){settings=load('fareo_settings',settings)||settings;migrateSettings();entries=load('fareo_entries',[])||[];deductions=load('fareo_deductions',[])||[];recurring=load('fareo_recurring',[])||[];fuelManual=load('fareo_fuelManual',[])||[];receipts=load('fareo_receipts',[])||[];names=load('fareo_names',[])||[];try{renderNames();rowInputs();render();var a=document.querySelector('.screen.on');if(a){var t=a.dataset.tab;if(t==='weekly')renderWeekly();if(t==='reports')renderReports();if(t==='settings')renderSettings()}}catch(_){}}
+function reloadAll(){settings=load('fareo_settings',settings)||settings;migrateSettings();entries=load('fareo_entries',[])||[];deductions=load('fareo_deductions',[])||[];recurring=load('fareo_recurring',[])||[];fuelManual=load('fareo_fuelManual',[])||[];receipts=load('fareo_receipts',[])||[];names=load('fareo_names',[])||[];clients=load('fareo_clients',[])||[];if(!Array.isArray(clients))clients=[];try{renderNames();rowInputs();render();var a=document.querySelector('.screen.on');if(a){var t=a.dataset.tab;if(t==='weekly')renderWeekly();if(t==='reports')renderReports();if(t==='settings')renderSettings();if(t==='book')renderBook()}}catch(_){}}
 if($('#syncSignin'))$('#syncSignin').onclick=function(){syncConnect(false)};
 if($('#syncCreate'))$('#syncCreate').onclick=function(){syncConnect(true)};
 if($('#syncOut'))$('#syncOut').onclick=syncSignOut;
 (function autoConnect(){try{var cfg=localStorage.getItem('fareo_fbcfg');if(cfg&&localStorage.getItem('fareo_sync_on')){var pre=$('#fbConfig');if(pre)pre.value=cfg;fbInit(JSON.parse(cfg)).then(function(){fb.authM.onAuthStateChanged(fb.auth,function(u){afterAuth(u)})}).catch(function(){setSyncState('Off - local only')})}}catch(_){}})();
+
+/* ---------- address book ---------- */
+function uid(p){return (p||'id')+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function clientLabel(c){return ((c.nick||'').trim()||(c.name||'').trim()||'Client')}
+function clientSub(c){var n=(c.name||'').trim(),k=(c.nick||'').trim();return (k&&n&&k!==n)?n:''}
+function clientInitials(c){var s=clientLabel(c);var p=s.split(/\s+/).filter(Boolean);return ((p[0]||'?')[0]+(p[1]?p[1][0]:'')).toUpperCase()}
+function blankAddr(){return {id:uid('a'),title:'Home',kind:'home',line:'',lat:null,lng:null}}
+function blankClient(){return {id:uid('c'),name:'',nick:'',phone:'',carer:'',notes:'',flags:{wheelchair:false,nonverbal:false,extra:false,assist:false},school:{on:false,days:[],am:true,pm:true,pickup:'',drop:''},addresses:[blankAddr()]}}
+function findClient(id){for(var i=0;i<clients.length;i++)if(clients[i].id===id)return clients[i];return null}
+function findAddr(c,id){var list=(c&&c.addresses)||[];for(var i=0;i<list.length;i++)if(list[i].id===id)return list[i];return null}
+function addrByTitle(c,re){var list=(c&&c.addresses)||[];for(var i=0;i<list.length;i++){if(re.test(list[i].title||''))return list[i]}return null}
+function pickupAddr(c){if(!c)return null;var s=c.school||{};return findAddr(c,s.pickup)||addrByTitle(c,/home|house|pickup/i)||(c.addresses||[])[0]||null}
+function dropAddr(c){if(!c)return null;var s=c.school||{};return findAddr(c,s.drop)||addrByTitle(c,/school|program|work|drop/i)||(c.addresses||[])[1]||(c.addresses||[])[0]||null}
+function mapsUrl(addr){
+  if(!addr)return '';
+  if(addr.lat!=null&&addr.lng!=null&&isFinite(addr.lat)&&isFinite(addr.lng))return 'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(addr.lat+','+addr.lng);
+  return addr.line?'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(addr.line):'';
+}
+function openMaps(addr){var u=mapsUrl(addr);if(!u){toast('No address yet');return}window.open(u,'_blank')}
+function copyTxt(t){
+  t=String(t||'');if(!t){toast('Nothing to copy');return}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){toast('Copied')}).catch(function(){toast('Copy failed')});return}
+  toast('Copy not available')}
+function sharePlain(t,title){
+  t=String(t||'');if(!t){toast('Nothing to share');return}
+  if(navigator.share){navigator.share({text:t,title:title||'Fareo'}).catch(function(){copyTxt(t)});return}
+  copyTxt(t)}
+function flagLabels(c){
+  var f=c.flags||{},out=[];
+  if(f.wheelchair)out.push('Wheelchair');
+  if(f.nonverbal)out.push('Non-verbal');
+  if(f.extra)out.push('Extra seat');
+  if(f.assist)out.push('Assistance');
+  return out;
+}
+function clientCardText(c){
+  var lines=[clientLabel(c)];
+  var sub=clientSub(c);if(sub)lines.push(sub);
+  var fl=flagLabels(c);if(fl.length)lines.push(fl.join(' · '));
+  if(c.phone)lines.push('Phone '+c.phone);
+  if(c.carer)lines.push('Carer '+c.carer);
+  (c.addresses||[]).forEach(function(a){if(a.line)lines.push((a.title||'Address')+': '+a.line)});
+  if(c.notes)lines.push(c.notes);
+  return lines.join('\n');
+}
+function auSuggest(q,cb){
+  q=(q||'').trim();
+  if(q.length<3){cb([]);return}
+  if(auSuggest._t)clearTimeout(auSuggest._t);
+  auSuggest._t=setTimeout(function(){
+    if(auSuggest._ab)auSuggest._ab.abort();
+    auSuggest._ab=new AbortController();
+    var url='https://photon.komoot.io/api/?q='+encodeURIComponent(q)+'&limit=6&lang=en&bbox=112.9,-43.75,153.64,-10.06';
+    fetch(url,{signal:auSuggest._ab.signal}).then(function(r){return r.json()}).then(function(j){
+      var out=(j.features||[]).map(function(f){
+        var p=f.properties||{},c=f.geometry&&f.geometry.coordinates;
+        var country=String(p.country||p.countrycode||'').toLowerCase();
+        if(country&&country.indexOf('au')<0&&country.indexOf('australia')<0)return null;
+        var line=[p.housenumber,p.street||p.name,p.district,p.city||p.locality,p.state,p.postcode].filter(Boolean).join(', ');
+        return {line:line||p.name||'',lat:c?c[1]:null,lng:c?c[0]:null};
+      }).filter(function(x){return x&&x.line});
+      cb(out);
+    }).catch(function(){cb([])});
+  },280);
+}
+var bookDay=(new Date()).getDay();
+var bookAmpm='am';
+var bookQ='';
+var ADDR_PRESETS=['Home','Work','School','Day program','Other'];
+var NEED_FLAGS=[['wheelchair','Wheelchair'],['nonverbal','Non-verbal'],['extra','Extra seat'],['assist','Assistance']];
+var clDraft=null;
+function schoolOnDay(c,day){
+  var s=c.school||{};
+  if(!s.on)return false;
+  var days=s.days||[];
+  return days.indexOf(day)>=0;
+}
+function runClients(){
+  var am=bookAmpm==='am';
+  return clients.filter(function(c){
+    if(!schoolOnDay(c,bookDay))return false;
+    var s=c.school||{};
+    return am?(s.am!==false):(s.pm!==false);
+  }).sort(function(a,b){return clientLabel(a).localeCompare(clientLabel(b))});
+}
+function renderBook(){
+  var days=$('#bookDays');
+  if(days){
+    var letters=['S','M','T','W','T','F','S'];
+    days.innerHTML=letters.map(function(l,i){return '<button type="button" data-d="'+i+'" class="'+(bookDay===i?'on':'')+'">'+l+'</button>'}).join('');
+    $$('#bookDays button').forEach(function(b){b.onclick=function(){bookDay=Number(b.dataset.d);renderBook()}});
+  }
+  var amBtn=$('#runAm'),pmBtn=$('#runPm');
+  if(amBtn)amBtn.classList.toggle('on',bookAmpm==='am');
+  if(pmBtn)pmBtn.classList.toggle('on',bookAmpm==='pm');
+  var run=runClients();
+  var rl=$('#runList');
+  if(rl){
+    if(!run.length)rl.innerHTML='<p style="font-size:12.5px;color:var(--mut);margin:4px 0 0">Nobody on this run.</p>';
+    else rl.innerHTML=run.map(function(c){
+      var addr=bookAmpm==='am'?pickupAddr(c):dropAddr(c);
+      var fl=flagLabels(c);
+      return '<div class="cli" data-cid="'+esc(c.id)+'"><div class="cli-av">'+esc(clientInitials(c))+'</div><div style="flex:1;min-width:0"><b>'+esc(clientLabel(c))+'</b><span>'+esc((addr&&addr.line)||'No address')+(fl.length?' · '+esc(fl.join(' · ')): '')+'</span></div><button type="button" class="cli-go" data-nav="'+esc(c.id)+'">Nav</button></div>';
+    }).join('');
+    $$('#runList .cli').forEach(function(row){row.onclick=function(){openClient(row.dataset.cid)}});
+    $$('#runList [data-nav]').forEach(function(b){b.onclick=function(e){e.stopPropagation();var c=findClient(b.dataset.nav);openMaps(bookAmpm==='am'?pickupAddr(c):dropAddr(c))}});
+  }
+  var q=bookQ.toLowerCase();
+  var list=clients.filter(function(c){
+    if(!q)return true;
+    return (c.name||'').toLowerCase().indexOf(q)>=0||(c.nick||'').toLowerCase().indexOf(q)>=0||(c.notes||'').toLowerCase().indexOf(q)>=0||(c.addresses||[]).some(function(a){return ((a.title||'')+' '+(a.line||'')).toLowerCase().indexOf(q)>=0});
+  }).sort(function(a,b){return clientLabel(a).localeCompare(clientLabel(b))});
+  var cc=$('#cliCount');if(cc)cc.textContent=String(list.length);
+  var empty=$('#cliEmpty');if(empty)empty.style.display=list.length?'none':'block';
+  var box=$('#cliList');
+  if(box){
+    box.innerHTML=list.map(function(c){
+      var fl=flagLabels(c);
+      var sub=clientSub(c)||((c.addresses||[])[0]&&(c.addresses[0].line))||'No address yet';
+      return '<div class="cli" data-cid="'+esc(c.id)+'"><div class="cli-av">'+esc(clientInitials(c))+'</div><div style="flex:1;min-width:0"><b>'+esc(clientLabel(c))+'</b><span>'+esc(sub)+'</span>'+(fl.length?'<div class="cli-need">'+fl.map(function(x){return '<i>'+esc(x)+'</i>'}).join('')+'</div>':'')+'</div><button type="button" class="cli-go" data-nav="'+esc(c.id)+'">Nav</button></div>';
+    }).join('');
+    $$('#cliList .cli').forEach(function(row){row.onclick=function(){openClient(row.dataset.cid)}});
+    $$('#cliList [data-nav]').forEach(function(b){b.onclick=function(e){e.stopPropagation();var c=findClient(b.dataset.nav);openMaps((c.addresses||[])[0])}});
+  }
+}
+if($('#runAm'))$('#runAm').onclick=function(){bookAmpm='am';renderBook()};
+if($('#runPm'))$('#runPm').onclick=function(){bookAmpm='pm';renderBook()};
+if($('#bookSearch'))$('#bookSearch').oninput=function(){bookQ=this.value||'';renderBook()};
+if($('#addClient'))$('#addClient').onclick=function(){openClient(null)};
+if($('#shareRun'))$('#shareRun').onclick=function(){
+  var run=runClients();
+  var day=DAYS[bookDay]||'';
+  var when=bookAmpm==='am'?'Morning':'Afternoon';
+  var lines=['School run · '+day+' · '+when,fmtDayLong(new Date())];
+  if(!run.length)lines.push('Nobody on this run.');
+  run.forEach(function(c){
+    var addr=bookAmpm==='am'?pickupAddr(c):dropAddr(c);
+    var fl=flagLabels(c);
+    lines.push('• '+clientLabel(c)+(fl.length?' ('+fl.join(', ')+')':'')+(addr&&addr.line?' — '+addr.line:''));
+  });
+  sharePlain(lines.join('\n'),'School run');
+};
+function fillAddrSelects(){
+  var opts='<option value="">First matching address</option>'+(clDraft.addresses||[]).map(function(a){return '<option value="'+esc(a.id)+'">'+esc(a.title||'Address')+(a.line?' — '+a.line:'')+'</option>'}).join('');
+  var p=$('#clPickup'),d=$('#clDrop');
+  if(p){p.innerHTML=opts;p.value=clDraft.school.pickup||''}
+  if(d){d.innerHTML=opts;d.value=clDraft.school.drop||''}
+}
+function renderClNeeds(){
+  $$('#clNeeds [data-flag]').forEach(function(b){b.classList.toggle('on',!!(clDraft.flags&&clDraft.flags[b.dataset.flag]))});
+}
+function renderClSchool(){
+  var on=!!(clDraft.school&&clDraft.school.on);
+  var tg=$('#clSchOn');if(tg)tg.classList.toggle('on',on);
+  var wrap=$('#clSchWrap');if(wrap)wrap.style.display=on?'block':'none';
+  var days=$('#clSchDays');
+  if(days){
+    var letters=['M','T','W','T','F'];
+    var idxs=[1,2,3,4,5];
+    days.innerHTML=idxs.map(function(i,n){return '<button type="button" data-d="'+i+'" class="'+((clDraft.school.days||[]).indexOf(i)>=0?'on':'')+'">'+letters[n]+'</button>'}).join('');
+    $$('#clSchDays button').forEach(function(b){b.onclick=function(){
+      var d=Number(b.dataset.d),arr=clDraft.school.days||[];
+      var i=arr.indexOf(d);if(i>=0)arr.splice(i,1);else arr.push(d);
+      clDraft.school.days=arr.sort(function(x,y){return x-y});
+      renderClSchool();
+    }});
+  }
+  var am=$('#clSchAm'),pm=$('#clSchPm');
+  if(am)am.classList.toggle('on',clDraft.school.am!==false);
+  if(pm)pm.classList.toggle('on',clDraft.school.pm!==false);
+  fillAddrSelects();
+}
+function renderClAddrs(){
+  var box=$('#clAddrs');if(!box||!clDraft)return;
+  box.innerHTML=(clDraft.addresses||[]).map(function(a,i){
+    return '<div class="addr-card" data-aid="'+esc(a.id)+'">'
+      +'<input class="ttl" data-k="title" value="'+esc(a.title||'')+'" placeholder="Address title">'
+      +'<div class="addr-presets">'+ADDR_PRESETS.map(function(p){return '<button type="button" data-pre="'+esc(p)+'" class="'+(a.title===p?'on':'')+'">'+esc(p)+'</button>'}).join('')+'</div>'
+      +'<input data-k="line" value="'+esc(a.line||'')+'" placeholder="Start typing an Australian address">'
+      +'<div class="sugg" data-sugg style="display:none"></div>'
+      +'<div class="addr-acts"><button type="button" data-act="nav">Maps</button><button type="button" data-act="copy">Copy</button><button type="button" data-act="share">Share</button>'+(clDraft.addresses.length>1?'<button type="button" data-act="del">Remove</button>':'')+'</div>'
+      +'</div>';
+  }).join('');
+  $$('#clAddrs .addr-card').forEach(function(card){
+    var id=card.dataset.aid;
+    var addr=findAddr(clDraft,id);
+    $$('[data-k]',card).forEach(function(inp){
+      inp.oninput=function(){
+        if(!addr)return;
+        addr[inp.dataset.k]=inp.value;
+        if(inp.dataset.k==='line'){
+          addr.lat=null;addr.lng=null;
+          var sug=$('[data-sugg]',card);
+          auSuggest(inp.value,function(rows){
+            if(!sug)return;
+            if(!rows.length){sug.style.display='none';sug.innerHTML='';return}
+            sug.style.display='block';
+            sug.innerHTML=rows.map(function(r,n){return '<button type="button" data-si="'+n+'">'+esc(r.line)+'</button>'}).join('');
+            sug._rows=rows;
+            $$('button',sug).forEach(function(b){b.onclick=function(){
+              var pick=sug._rows[Number(b.dataset.si)];
+              if(!pick||!addr)return;
+              addr.line=pick.line;addr.lat=pick.lat;addr.lng=pick.lng;
+              inp.value=pick.line;sug.style.display='none';
+              fillAddrSelects();
+            }});
+          });
+        }
+        if(inp.dataset.k==='title')$$('[data-pre]',card).forEach(function(p){p.classList.toggle('on',p.dataset.pre===inp.value)});
+        if(inp.dataset.k==='title')fillAddrSelects();
+      };
+    });
+    $$('[data-pre]',card).forEach(function(p){p.onclick=function(){if(!addr)return;addr.title=p.dataset.pre;addr.kind=String(p.dataset.pre).toLowerCase();renderClAddrs()}});
+    $$('[data-act]',card).forEach(function(b){
+      b.onclick=function(){
+        if(!addr)return;
+        var act=b.dataset.act;
+        if(act==='nav')openMaps(addr);
+        else if(act==='copy')copyTxt((addr.title?addr.title+'\n':'')+(addr.line||''));
+        else if(act==='share')sharePlain(clientLabel(clDraft)+'\n'+(addr.title||'Address')+'\n'+(addr.line||''),'Address');
+        else if(act==='del'){clDraft.addresses=clDraft.addresses.filter(function(x){return x.id!==id});if(!clDraft.addresses.length)clDraft.addresses=[blankAddr()];renderClAddrs();renderClSchool()}
+      };
+    });
+  });
+  fillAddrSelects();
+}
+function openClient(id){
+  var c=id?findClient(id):null;
+  clDraft=c?JSON.parse(JSON.stringify(c)):blankClient();
+  if(!clDraft.flags)clDraft.flags={wheelchair:false,nonverbal:false,extra:false,assist:false};
+  if(!clDraft.school)clDraft.school={on:false,days:[],am:true,pm:true,pickup:'',drop:''};
+  if(!Array.isArray(clDraft.addresses)||!clDraft.addresses.length)clDraft.addresses=[blankAddr()];
+  $('#clTitle').textContent=c?'Edit client':'New client';
+  $('#clName').value=clDraft.name||'';
+  $('#clNick').value=clDraft.nick||'';
+  $('#clPhone').value=clDraft.phone||'';
+  $('#clCarer').value=clDraft.carer||'';
+  $('#clNotes').value=clDraft.notes||'';
+  var del=$('#clDelete');if(del)del.style.display=c?'block':'none';
+  renderClNeeds();renderClSchool();renderClAddrs();
+  showModal('clientModal');
+}
+if($('#clNeeds'))$$('#clNeeds [data-flag]').forEach(function(b){b.onclick=function(){if(!clDraft.flags)clDraft.flags={};clDraft.flags[b.dataset.flag]=!clDraft.flags[b.dataset.flag];renderClNeeds()}});
+if($('#clSchOn'))$('#clSchOn').onclick=function(){if(!clDraft.school)clDraft.school={on:false,days:[],am:true,pm:true,pickup:'',drop:''};clDraft.school.on=!clDraft.school.on;renderClSchool()};
+if($('#clSchAm'))$('#clSchAm').onclick=function(){clDraft.school.am=clDraft.school.am===false;renderClSchool()};
+if($('#clSchPm'))$('#clSchPm').onclick=function(){clDraft.school.pm=clDraft.school.pm===false;renderClSchool()};
+if($('#clPickup'))$('#clPickup').onchange=function(){clDraft.school.pickup=this.value};
+if($('#clDrop'))$('#clDrop').onchange=function(){clDraft.school.drop=this.value};
+if($('#clAddAddr'))$('#clAddAddr').onclick=function(){clDraft.addresses.push({id:uid('a'),title:'Address',kind:'other',line:'',lat:null,lng:null});renderClAddrs();renderClSchool()};
+if($('#clCancel'))$('#clCancel').onclick=function(){closeModal('clientModal');clDraft=null};
+if($('#clSave'))$('#clSave').onclick=function(){
+  if(!clDraft)return;
+  clDraft.name=($('#clName').value||'').trim();
+  clDraft.nick=($('#clNick').value||'').trim();
+  clDraft.phone=($('#clPhone').value||'').trim();
+  clDraft.carer=($('#clCarer').value||'').trim();
+  clDraft.notes=($('#clNotes').value||'').trim();
+  $$('#clAddrs .addr-card').forEach(function(card){
+    var a=findAddr(clDraft,card.dataset.aid);if(!a)return;
+    var t=$('[data-k="title"]',card);if(t)a.title=t.value;
+    var l=$('[data-k="line"]',card);if(l)a.line=l.value;
+  });
+  if(!clDraft.name&&!clDraft.nick){toast('Add a name or nickname');return}
+  var i=-1;clients.forEach(function(c,n){if(c.id===clDraft.id)i=n});
+  if(i>=0)clients[i]=clDraft;else clients.push(clDraft);
+  persist();clDraft=null;closeModal('clientModal');renderBook();toast('Client saved');
+};
+if($('#clDelete'))$('#clDelete').onclick=function(){
+  if(!clDraft)return;
+  var id=clDraft.id,lab=clientLabel(clDraft);
+  ask('Delete this client?','Removes '+lab+' and their addresses from this phone.','Delete',function(){
+    clients=clients.filter(function(c){return c.id!==id});persist();closeModal('clientModal');clDraft=null;renderBook();toast('Client removed');
+  });
+};
+
+/* ---------- update popup ---------- */
+var updReg=null,updShown=false;
+function applyWaitingUpdate(){
+  if(applyWaitingUpdate._go)return;
+  toast('Updating…');
+  function go(){if(applyWaitingUpdate._go)return;applyWaitingUpdate._go=true;location.reload()}
+  try{if(navigator.serviceWorker)navigator.serviceWorker.addEventListener('controllerchange',go)}catch(_){}
+  try{if(updReg&&updReg.waiting)updReg.waiting.postMessage({type:'SKIP_WAITING'})}catch(_){}
+  setTimeout(go,900);
+}
+function showUpdatePrompt(later){
+  var notes=$('#updNotes');
+  if(notes){
+    var rel=CHANGELOG[0];
+    notes.innerHTML=rel&&rel.notes?rel.notes.slice(0,3).map(function(n){return '<p>'+esc(n[1])+'</p>'}).join(''):'';
+  }
+  var body=$('#updBody');
+  if(body)body.textContent='You are on Fareo '+APP_VERSION+'. A newer build is ready. Shifts and the address book stay on this phone.';
+  if(later){
+    var ban=$('#updBanner');if(ban)ban.classList.add('show');
+    closeModal('updModal');
+  }else{
+    var ban2=$('#updBanner');if(ban2)ban2.classList.remove('show');
+    showModal('updModal');
+  }
+  if(!later&&typeof Notification!=='undefined'&&Notification.permission==='granted'&&!updShown){
+    try{new Notification('Fareo update ready',{body:'Tap Update now in the app to load it. Your data stays.',tag:'fareo-update',icon:'icon-192-v52.png'})}catch(_){}
+  }
+  updShown=true;
+}
+function onUpdateReady(){
+  if(sessionStorage.getItem('fareo_upd_later')==='1')showUpdatePrompt(true);
+  else showUpdatePrompt(false);
+}
+function bindUpdateReg(reg){
+  if(!reg)return;
+  updReg=reg;
+  if(bindUpdateReg._on){
+    if(reg.waiting&&navigator.serviceWorker.controller)onUpdateReady();
+    return;
+  }
+  bindUpdateReg._on=true;
+  if(reg.waiting&&navigator.serviceWorker.controller)onUpdateReady();
+  reg.addEventListener('updatefound',function(){
+    var inst=reg.installing;if(!inst)return;
+    inst.addEventListener('statechange',function(){
+      if(inst.state==='installed'&&navigator.serviceWorker.controller)onUpdateReady();
+    });
+  });
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)reg.update().catch(function(){})});
+  setInterval(function(){reg.update().catch(function(){})},30*60*1000);
+}
+function watchForUpdates(){
+  if($('#updNow'))$('#updNow').onclick=applyWaitingUpdate;
+  if($('#updBannerNow'))$('#updBannerNow').onclick=applyWaitingUpdate;
+  if($('#updLater'))$('#updLater').onclick=function(){try{sessionStorage.setItem('fareo_upd_later','1')}catch(_){}showUpdatePrompt(true)};
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.getRegistration().then(function(reg){if(reg)bindUpdateReg(reg)}).catch(function(){});
+  }
+}
+
 /* ---------- nav ---------- */
+var PAGE_TABS=['hub','weekly','reports','refresh','settings'];
 function go(tab){$$('.screen').forEach(function(s){s.classList.toggle('on',s.dataset.tab===tab)});
-  $$('.nav button').forEach(function(b){if(!b.classList.contains('center'))b.classList.toggle('on',b.dataset.go===tab)});
-  if(tab==='weekly')renderWeekly();if(tab==='reports')renderReports();if(tab==='settings')renderSettings();
+  $$('.nav button').forEach(function(b){
+    if(b.classList.contains('center'))return;
+    if(b.dataset.go==='hub')b.classList.toggle('on',PAGE_TABS.indexOf(tab)>=0);
+    else b.classList.toggle('on',b.dataset.go===tab);
+  });
+  if(tab==='weekly')renderWeekly();if(tab==='reports')renderReports();if(tab==='settings')renderSettings();if(tab==='book')renderBook();
   window.scrollTo({top:0});
   try{if(location.hash!=='#'+tab)history.replaceState(null,'','#'+tab)}catch(_){}}
 $$('.nav button').forEach(function(b){b.onclick=function(){go(b.dataset.go)}});
+$$('[data-hub]').forEach(function(b){b.onclick=function(){go(b.dataset.hub)}});
 $('#themeBtn').onclick=function(){settings.theme=effectiveDark()?'light':'dark';persist();applyTheme()};
 
 /* ---------- init ---------- */
@@ -2457,8 +2934,9 @@ $('#today').textContent=fmtDayLong(new Date());
 var _vl=$('#versionLine');if(_vl)_vl.textContent='Fareo '+APP_VERSION+' \u00b7 tap for release notes';
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(){if(settings.theme==='system')applyTheme()});
 applyTheme();renderNames();rowInputs();render();setSub(1);renderDeadlines();
-(function(){var h=(location.hash||'').replace(/^#/,'');if(['shift','weekly','reports','refresh','settings'].indexOf(h)>=0)go(h)})();
-if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})}
+(function(){var h=(location.hash||'').replace(/^#/,'');if(['shift','weekly','reports','refresh','settings','hub','book'].indexOf(h)>=0)go(h)})();
+watchForUpdates();
+if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').then(function(reg){bindUpdateReg(reg)}).catch(function(){})})}
 </script>
 </body>
 </html>
