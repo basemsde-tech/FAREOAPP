@@ -17,5 +17,28 @@
     { "src": "icon-512-v52.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
     { "src": "icon-maskable-192-v52.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
     { "src": "icon-maskable-512-v52.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "ETA Calculator",
+      "short_name": "ETA",
+      "description": "Calculate and share arrival ETA timer",
+      "url": "./#eta",
+      "icons": [{ "src": "icon-192-v52.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Log Shift",
+      "short_name": "Shift",
+      "description": "Log your shift takings, fuel, and hail trips",
+      "url": "./#shift",
+      "icons": [{ "src": "icon-192-v52.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Run Plan",
+      "short_name": "Runs",
+      "description": "Driving sequence and stop navigation",
+      "url": "./#runs",
+      "icons": [{ "src": "icon-192-v52.png", "sizes": "192x192" }]
+    }
   ]
 }

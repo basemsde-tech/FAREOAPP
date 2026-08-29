@@ -306,6 +306,19 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .jar-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding:12px 13px;border:1.5px solid var(--bd2);border-radius:12px;background:var(--field);cursor:pointer;text-align:left}
 .jar-btn b{display:block;font-size:13.5px;color:var(--head)}
 .jar-btn span{font-size:11.5px;color:var(--mut);font-weight:600}
+.ded-ctrl-bar{display:flex;align-items:center;justify-content:space-between;margin:12px 0 8px;padding:2px 0}
+.ded-ctrl-btn{border:1px solid var(--bd2);background:var(--field);color:var(--mut);border-radius:8px;padding:4px 9px;font-size:11px;font-weight:700;cursor:pointer}
+.cat-group{background:var(--field);border:1px solid var(--bd);border-radius:12px;margin-bottom:8px;overflow:hidden;transition:border-color .15s}
+.cat-group.open{border-color:var(--bd2)}
+.cat-head{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+.cat-head:active{background:var(--bd)}
+.cat-title{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:var(--head)}
+.cat-count{font-size:10.5px;font-weight:600;color:var(--mut);background:var(--card);border:1px solid var(--bd2);padding:2px 6px;border-radius:999px}
+.cat-sum{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800;color:var(--inc);font-variant-numeric:tabular-nums}
+.cat-sum .cat-chev{font-size:16px;color:var(--mut);transition:transform .18s;line-height:1}
+.cat-group.open .cat-chev{transform:rotate(90deg)}
+.cat-body{padding:0 12px 4px;border-top:1px solid var(--bd);background:var(--card)}
+.cat-group:not(.open) .cat-body{display:none}
 .cat-h{display:flex;justify-content:space-between;align-items:baseline;margin:14px 0 4px;font-size:10.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--mut)}
 .cat-h:first-child{margin-top:8px}
 .cat-h b{color:var(--head);font-size:12.5px;text-transform:none;letter-spacing:0;font-variant-numeric:tabular-nums}
@@ -521,14 +534,35 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
 .help-pop.show{opacity:1;transform:translateY(0)}
 .help-pop b{color:#fff}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.hub{padding:8px 2px 16px;min-height:340px;display:flex;align-items:center;justify-content:center}
-.hub-wheel{position:relative;width:300px;height:300px}
-.hub-wheel .hub-core{position:absolute;left:50%;top:50%;width:112px;height:112px;margin:-56px 0 0 -56px;border-radius:50%;border:0;background:var(--btn-fill);color:var(--btn-ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 8px 24px rgba(4,120,87,.35);z-index:2;-webkit-tap-highlight-color:transparent}
-.hub-wheel .hub-core svg{width:32px;height:32px}
-.hub-wheel .hub-core:active{transform:scale(.96)}
-.hub-wheel .hub-sat{position:absolute;left:50%;top:50%;width:66px;height:66px;margin:-33px 0 0 -33px;border-radius:50%;border:1.5px solid var(--bd2);background:var(--card);color:var(--head);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:9.5px;font-weight:800;cursor:pointer;box-shadow:var(--shadow);transform:rotate(var(--a)) translateY(-118px) rotate(calc(var(--a) * -1));-webkit-tap-highlight-color:transparent}
-.hub-wheel .hub-sat svg{width:18px;height:18px;color:var(--inc)}
-.hub-wheel .hub-sat:nth-child(1){--a:-85deg}.hub-wheel .hub-sat:nth-child(2){--a:-51deg}.hub-wheel .hub-sat:nth-child(3){--a:-17deg}.hub-wheel .hub-sat:nth-child(4){--a:17deg}.hub-wheel .hub-sat:nth-child(5){--a:51deg}.hub-wheel .hub-sat:nth-child(6){--a:85deg}
+.hub{padding:12px 2px 20px;min-height:360px;display:flex;align-items:center;justify-content:center;position:relative}
+.hub-wheel{position:relative;width:min(320px, 92vw);height:min(320px, 92vw);display:flex;align-items:center;justify-content:center}
+.hub-wheel::before{content:"";position:absolute;left:50%;top:50%;width:232px;height:232px;margin:-116px 0 0 -116px;border-radius:50%;border:1.5px dashed var(--bd2);opacity:.65;pointer-events:none}
+.hub-wheel .hub-core{position:absolute;left:50%;top:50%;width:108px;height:108px;margin:-54px 0 0 -54px;border-radius:50%;border:0;background:var(--btn-fill);color:var(--btn-ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 8px 26px rgba(4,120,87,.38);z-index:4;-webkit-tap-highlight-color:transparent;animation:corePulse 3s ease-in-out infinite;transition:transform .15s cubic-bezier(.34,1.56,.64,1),box-shadow .15s}
+.hub-wheel .hub-core svg{width:30px;height:30px}
+.hub-wheel .hub-core:active{transform:scale(.94);box-shadow:0 4px 14px rgba(4,120,87,.3)}
+@keyframes corePulse{0%,100%{box-shadow:0 8px 24px rgba(4,120,87,.35)}50%{box-shadow:0 10px 32px rgba(4,120,87,.52),0 0 0 4px rgba(4,120,87,.15)}}
+.hub-wheel .hub-sat{position:absolute;left:50%;top:50%;width:60px;height:60px;margin:-30px 0 0 -30px;border-radius:50%;border:1.5px solid var(--bd2);background:var(--card);color:var(--head);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:9px;font-weight:800;cursor:pointer;box-shadow:var(--shadow);transform:rotate(var(--a)) translateY(-116px) rotate(calc(var(--a) * -1));-webkit-tap-highlight-color:transparent;transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .15s,border-color .15s;z-index:2;animation:orbitPop .45s cubic-bezier(.34,1.56,.64,1) both;animation-delay:calc(var(--i, 0) * .04s)}
+.hub-wheel .hub-sat svg{width:17px;height:17px;color:var(--inc)}
+.hub-wheel .hub-sat:active{transform:rotate(var(--a)) translateY(-116px) rotate(calc(var(--a) * -1)) scale(.91)}
+@keyframes orbitPop{0%{opacity:0;transform:rotate(var(--a)) translateY(0) rotate(calc(var(--a)*-1)) scale(.2)}100%{opacity:1;transform:rotate(var(--a)) translateY(-116px) rotate(calc(var(--a)*-1)) scale(1)}}
+.hub-wheel .hub-sat:nth-child(1){--a:0deg;--i:1}
+.hub-wheel .hub-sat:nth-child(2){--a:51.4deg;--i:2}
+.hub-wheel .hub-sat:nth-child(3){--a:102.9deg;--i:3}
+.hub-wheel .hub-sat:nth-child(4){--a:154.3deg;--i:4}
+.hub-wheel .hub-sat:nth-child(5){--a:205.7deg;--i:5}
+.hub-wheel .hub-sat:nth-child(6){--a:257.1deg;--i:6}
+.hub-wheel .hub-sat:nth-child(7){--a:308.6deg;--i:7}
+.hub-wheel .hub-sat.hub-sat-eta{width:68px;height:68px;margin:-34px 0 0 -34px;border:2px solid var(--acct);background:var(--acct-bg);color:var(--on-acct);font-size:9.5px;z-index:3;box-shadow:0 6px 20px rgba(15,118,110,.28)}
+.hub-wheel .hub-sat.hub-sat-eta svg{width:21px;height:21px;color:var(--acct)}
+.hub-wheel .hub-sat.hub-sat-eta .sat-badge{font-size:7px;font-weight:800;color:var(--on-acct);background:rgba(15,118,110,.18);padding:1px 4px;border-radius:4px;margin-top:1px;letter-spacing:.3px;text-transform:uppercase}
+.home-eta-card{background:var(--card);border:1.5px solid var(--bd);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow);margin-top:8px}
+.home-eta-grid{display:flex;align-items:center;gap:12px;margin:8px 0 10px}
+.home-eta-main{flex:0 0 auto;text-align:center;padding:8px 12px;background:var(--grad-inc);border-radius:12px;border:1px solid var(--inc-bg);min-width:110px}
+.home-eta-time{font-size:26px;font-weight:800;color:var(--inc);line-height:1.1;font-variant-numeric:tabular-nums}
+.home-eta-sub{font-size:11px;font-weight:600;color:var(--mut);margin-top:2px}
+.home-eta-chips{flex:1;min-width:0;display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.home-eta-chips button{border:1px solid var(--bd2);background:var(--field);color:var(--head);border-radius:8px;padding:7px 2px;font-size:11px;font-weight:800;cursor:pointer;text-align:center}
+.home-eta-chips button.on{background:var(--acct-bg);color:var(--on-acct);border-color:var(--acct)}
 .run-plan-container{display:flex;flex-direction:column;gap:8px;margin-top:8px}
 .run-box{background:var(--card);border:1.5px solid var(--bd2);border-radius:13px;padding:10px 11px;transition:transform .12s,box-shadow .12s,border-color .12s;position:relative;touch-action:pan-y}
 .run-box.dragging{opacity:.4;border-style:dashed;border-color:var(--inc);transform:scale(.98)}
@@ -637,13 +671,45 @@ a.addr-link{display:inline;font-size:12.5px}
     <div class="sub">Home <small>Tap a circle to open that page</small></div>
     <div class="hub">
       <div class="hub-wheel">
-        <button type="button" class="hub-sat" data-hub="weekly"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-8M22 19V3"/></svg>Weekly</button>
-        <button type="button" class="hub-sat" data-hub="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-7"/></svg>Reports</button>
+        <button type="button" class="hub-sat hub-sat-eta" data-hub="eta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>ETA<span class="sat-badge">Quick</span></button>
         <button type="button" class="hub-sat" data-hub="runs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Runs</button>
         <button type="button" class="hub-sat" data-hub="book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M8 7h8M8 11h6"/></svg>Book</button>
+        <button type="button" class="hub-sat" data-hub="weekly"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-8M22 19V3"/></svg>Weekly</button>
+        <button type="button" class="hub-sat" data-hub="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-7"/></svg>Reports</button>
         <button type="button" class="hub-sat" data-hub="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1-2 3.4-.2-.1a1.7 1.7 0 0 0-1.9-.1 1.7 1.7 0 0 0-.9 1.5V22H9.2v-.3a1.7 1.7 0 0 0-.9-1.5 1.7 1.7 0 0 0-1.9.1l-.2.1-2-3.4.1-.1A1.7 1.7 0 0 0 4.6 15 1.7 1.7 0 0 0 3 14H2v-4h1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1 2-3.4.2.1a1.7 1.7 0 0 0 1.9.1A1.7 1.7 0 0 0 9.2 2V2h5.6v.3a1.7 1.7 0 0 0 .9 1.5 1.7 1.7 0 0 0 1.9-.1l.2-.1 2 3.4-.1.1A1.7 1.7 0 0 0 19.4 9 1.7 1.7 0 0 0 21 10h1v4h-1a1.7 1.7 0 0 0-1.6 1Z"/></svg>Settings</button>
         <button type="button" class="hub-sat" data-hub="refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/></svg>Refresh</button>
         <button type="button" class="hub-core" data-hub="shift"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/><path d="M12 3.5v6M4.2 16.5l5.2-3M19.8 16.5l-5.2-3"/></svg>Log Shift</button>
+      </div>
+    </div>
+
+    <!-- Home Screen Live ETA Widget -->
+    <div class="card home-eta-card" id="homeEtaCard">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+        <div style="display:flex;align-items:center;gap:6px">
+          <span class="dot" style="background:var(--acct)"></span>
+          <b style="font-size:13px;color:var(--head)">Quick ETA Widget</b>
+        </div>
+        <button type="button" class="eta-fmt-btn" id="homeEtaFmtBtn" style="font-size:10.5px;padding:3px 7px">12-Hour</button>
+      </div>
+      <div class="home-eta-grid">
+        <div class="home-eta-main">
+          <div class="home-eta-time" id="homeEtaTime">--:--</div>
+          <div class="home-eta-sub" id="homeEtaSub">in 15 mins</div>
+        </div>
+        <div class="home-eta-chips" id="homeEtaPresets">
+          <button type="button" data-m="5">+5m</button>
+          <button type="button" data-m="10">+10m</button>
+          <button type="button" class="on" data-m="15">+15m</button>
+          <button type="button" data-m="20">+20m</button>
+          <button type="button" data-m="30">+30m</button>
+          <button type="button" data-m="45">+45m</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;margin-top:8px">
+        <button type="button" class="btn" id="homeEtaShare" style="flex:1.2;background:var(--acct);color:var(--btn-ink);padding:8px 5px;font-size:11.5px;margin:0">Share ETA</button>
+        <button type="button" class="btn neutral" id="homeEtaWa" style="flex:1;color:var(--inc);border-color:var(--inc);padding:8px 5px;font-size:11.5px;margin:0">WhatsApp</button>
+        <button type="button" class="btn neutral" id="homeEtaCopy" style="flex:1;padding:8px 5px;font-size:11.5px;margin:0">Copy</button>
+        <button type="button" class="btn neutral" onclick="go('eta')" style="flex:0 0 auto;padding:8px 10px;font-size:12px;margin:0" title="Full ETA Page">&rsaquo;</button>
       </div>
     </div>
   </section>
@@ -760,6 +826,63 @@ a.addr-link{display:inline;font-size:12.5px}
       <h5><span class="dot" style="background:var(--acct)"></span>Quick ETA Share</h5>
       <p style="font-size:11.5px;color:var(--mut);margin:0 0 10px">Send a quick arrival estimate message via WhatsApp, SMS, or copy in 1 tap.</p>
       <button type="button" class="btn neutral" id="openQuickEtaBtn" style="width:100%">Open ETA Calculator</button>
+    </div>
+  </section>
+
+  <section class="screen" data-tab="eta">
+    <div class="sub">ETA Calculator <small>Live arrival timer &middot; SMS, WhatsApp, 1-tap copy</small></div>
+
+    <div class="card" style="text-align:center;padding:16px 12px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <span class="lbl" style="font-size:11px">Arrival Estimate</span>
+        <button type="button" class="eta-fmt-btn" id="etaPageFmtBtn">12-Hour (AM/PM)</button>
+      </div>
+      <div class="eta-box" style="margin:0 0 12px">
+        <div class="eta-time" id="etaPageTimeDisplay" style="font-size:38px">--:--</div>
+        <div class="eta-sub" id="etaPageMinsDisplay">in 15 mins</div>
+      </div>
+      <div class="eta-presets" id="etaPagePresets">
+        <button type="button" data-m="5">+5m</button>
+        <button type="button" data-m="10">+10m</button>
+        <button type="button" class="on" data-m="15">+15m</button>
+        <button type="button" data-m="20">+20m</button>
+        <button type="button" data-m="25">+25m</button>
+        <button type="button" data-m="30">+30m</button>
+        <button type="button" data-m="40">+40m</button>
+        <button type="button" data-m="50">+50m</button>
+      </div>
+      <div class="two" style="align-items:center;margin-top:10px">
+        <div>
+          <label class="fl">Minutes away</label>
+          <input type="number" id="etaPageMinsInput" min="1" max="300" value="15" inputmode="numeric">
+        </div>
+        <div>
+          <label class="fl">Target arrival</label>
+          <input type="time" id="etaPageTargetInput">
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h5><span class="dot" style="background:var(--inc)"></span>Passenger Details (Optional)</h5>
+      <label class="fl">Select Client</label>
+      <select id="etaPageClientSelect"></select>
+      <div class="two" style="margin-top:8px">
+        <div><label class="fl">Name</label><input id="etaPageName" placeholder="Passenger name"></div>
+        <div><label class="fl">Phone</label><input id="etaPagePhone" type="tel" placeholder="Mobile / WhatsApp"></div>
+      </div>
+      <label class="fl">Destination</label>
+      <input id="etaPageDest" placeholder="e.g. Airport, Care Centre, Home">
+    </div>
+
+    <div class="card" style="margin-bottom:0">
+      <h5><span class="dot" style="background:var(--acct)"></span>Message &amp; Share</h5>
+      <textarea class="eta-msg-box" id="etaPageMsgText" rows="3"></textarea>
+      <button class="btn" id="etaPageShareBtn" style="margin-top:12px;background:var(--acct);color:var(--btn-ink)">Share ETA</button>
+      <div class="two" style="gap:7px;margin-top:8px">
+        <button class="btn neutral" id="etaPageWaBtn" style="color:var(--inc);border-color:var(--inc)">WhatsApp</button>
+        <button class="btn neutral" id="etaPageCopyBtn">Copy Message</button>
+      </div>
     </div>
   </section>
 
@@ -1084,37 +1207,49 @@ a.addr-link{display:inline;font-size:12.5px}
 </div></div>
 <div class="modal" id="clientModal"><div class="sheet" style="max-height:92vh;overflow:auto">
   <div class="grip"></div>
-  <h3 id="clTitle">Client</h3>
-  <p class="csub">Name plus a nickname the kids actually use. Address titles are yours to change.</p>
-  <label class="fl">Name</label><input id="clName" placeholder="e.g. Holly Nguyen" autocomplete="name">
-  <label class="fl">Nickname</label><input id="clNick" placeholder="e.g. Hol" autocomplete="off">
-  <div class="two">
-    <div><label class="fl">Phone</label><input id="clPhone" type="tel" placeholder="Optional"></div>
-    <div><label class="fl">Carer / contact</label><input id="clCarer" placeholder="Optional"></div>
-  </div>
-  <label class="fl">Needs</label>
-  <div class="need" id="clNeeds">
-    <button type="button" data-flag="wheelchair">Wheelchair</button>
-    <button type="button" data-flag="nonverbal">Non-verbal</button>
-    <button type="button" data-flag="extra">Extra seat</button>
-    <button type="button" data-flag="assist">Assistance</button>
-  </div>
-  <label class="fl">Notes</label><textarea id="clNotes" rows="2" placeholder="Anything the driver should know" style="width:100%;border-radius:9px;padding:10px;font-size:14px;background:var(--field);border:1.5px solid var(--bd2);color:var(--fink);-webkit-text-fill-color:var(--fink);font-weight:600;resize:vertical"></textarea>
-  <div class="sch-box">
-    <div class="set" style="padding:0;border:0;box-shadow:none"><div class="sl"><b>School run</b><p>Preset weekdays for the AM / PM list</p></div><button class="tgl" id="clSchOn" aria-label="Toggle school run"></button></div>
-    <div id="clSchWrap" style="display:none;margin-top:8px">
-      <div class="sch-days" id="clSchDays"></div>
-      <div class="run-seg" style="margin-top:8px">
-        <button type="button" class="on" id="clSchAm">Morning list</button>
-        <button type="button" class="on" id="clSchPm">Afternoon list</button>
+  <h3 id="clTitle">Client &amp; Address</h3>
+  <p class="csub">Add passenger name and address. Add multiple people sharing this stop with +.</p>
+  
+  <label class="fl">Passenger Name</label>
+  <input id="clName" placeholder="e.g. Holly Nguyen" autocomplete="name">
+  
+  <div id="clExtraNamesList" style="display:flex;flex-direction:column;gap:6px;margin-top:6px"></div>
+  <button type="button" class="btn neutral" id="clAddRiderBtn" style="margin:6px 0 10px;padding:8px 10px;font-size:12px;border-style:dashed;color:var(--inc);border-color:var(--inc)">+ Add another client at this address</button>
+
+  <label class="fl" style="margin-top:4px">Address</label>
+  <div id="clAddrs"></div>
+  <button class="add" id="clAddAddr" type="button" style="margin-top:4px">+ Add another address</button>
+
+  <button class="advtoggle" id="clMoreToggle" type="button" style="margin-top:10px"><span><b>More details (optional)</b><small>Nickname, phone, carer, needs &amp; school schedule</small></span><span class="chev" id="clMoreChev">&rsaquo;</span></button>
+
+  <div id="clMoreWrap" style="display:none;margin-top:8px">
+    <label class="fl">Nickname</label><input id="clNick" placeholder="e.g. Hol" autocomplete="off">
+    <div class="two">
+      <div><label class="fl">Phone</label><input id="clPhone" type="tel" placeholder="Optional"></div>
+      <div><label class="fl">Carer / contact</label><input id="clCarer" placeholder="Optional"></div>
+    </div>
+    <label class="fl">Needs</label>
+    <div class="need" id="clNeeds">
+      <button type="button" data-flag="wheelchair">Wheelchair</button>
+      <button type="button" data-flag="nonverbal">Non-verbal</button>
+      <button type="button" data-flag="extra">Extra seat</button>
+      <button type="button" data-flag="assist">Assistance</button>
+    </div>
+    <label class="fl">Notes</label><textarea id="clNotes" rows="2" placeholder="Anything the driver should know" style="width:100%;border-radius:9px;padding:10px;font-size:14px;background:var(--field);border:1.5px solid var(--bd2);color:var(--fink);-webkit-text-fill-color:var(--fink);font-weight:600;resize:vertical"></textarea>
+    <div class="sch-box">
+      <div class="set" style="padding:0;border:0;box-shadow:none"><div class="sl"><b>School run</b><p>Preset weekdays for the AM / PM list</p></div><button class="tgl" id="clSchOn" aria-label="Toggle school run"></button></div>
+      <div id="clSchWrap" style="display:none;margin-top:8px">
+        <div class="sch-days" id="clSchDays"></div>
+        <div class="run-seg" style="margin-top:8px">
+          <button type="button" class="on" id="clSchAm">Morning list</button>
+          <button type="button" class="on" id="clSchPm">Afternoon list</button>
+        </div>
+        <label class="fl">Morning pickup</label><select id="clPickup"></select>
+        <label class="fl">Afternoon drop</label><select id="clDrop"></select>
       </div>
-      <label class="fl">Morning pickup</label><select id="clPickup"></select>
-      <label class="fl">Afternoon drop</label><select id="clDrop"></select>
     </div>
   </div>
-  <label class="fl" style="margin-top:12px">Addresses</label>
-  <div id="clAddrs"></div>
-  <button class="add" id="clAddAddr" type="button">+ Add address</button>
+
   <button class="btn" id="clSave" style="margin-top:14px">Save client</button>
   <div class="two" style="margin-top:9px"><button class="btn neutral" id="clCancel">Cancel</button><button class="btn neutral" id="clDelete" style="border-color:var(--dgr);color:var(--dgr);display:none">Delete</button></div>
 </div></div>
@@ -1229,8 +1364,14 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='7.2';
+var APP_VERSION='8.0';
 var CHANGELOG=[
+  {v:'8.0',date:'August 29, 2026',notes:[
+    ['UI/UX','Complete minimalist redesign with smooth 360° orbital Home navigation, animated satellite fan-out, and live Home ETA Widget.'],
+    ['Feature','Dedicated ETA Calculator tab with 12h/24h toggle, minute chips, passenger destination presets, and 1-tap WhatsApp/SMS/Copy sharing.'],
+    ['Feature','Intelligent hideable & categorized deductions in Reports with item counts, subtotals, and one-tap collapse/expand.'],
+    ['Feature','Streamlined Add Client dialog with clean primary name entry and simple + button to add multiple clients sharing the same address.']
+  ]},
   {v:'7.2',date:'August 29, 2026',notes:[
     ['Feature','Dedicated Runs page with drag-and-drop stop reordering for route planning from your clients database.'],
     ['Feature','Instant ETA timer and message generator with 12-hour or 24-hour format, quick minute presets, WhatsApp, SMS, and copying.'],
@@ -2318,7 +2459,18 @@ function renderCyclePulse(a){
     else payEl.textContent=payStr;
   }
 }
-function catLabel(c){return {Tolls:'Tolls',Cleaning:'Cleaning',Maintenance:'Repairs',Insurance:'Insurance',Fuel:'Fuel',Other:'Other'}[c]||c||'Other'}
+function catLabel(c){
+  var map = {
+    Fuel: 'Fuel & Oil',
+    Tolls: 'Tolls & Parking',
+    Maintenance: 'Repairs & Maintenance',
+    Cleaning: 'Wash & Detailing',
+    Insurance: 'Insurance & Rego',
+    Phone: 'Phone & Tech',
+    Other: 'Other Business Costs'
+  };
+  return map[c] || c || 'Other Business Costs';
+}
 function jarCatOf(r){return r.category||(r.kind==='fuel'?'Fuel':'Other')}
 function renderJarMeta(){
   var n=receipts.length;
@@ -2374,26 +2526,75 @@ function renderReports(){
     var kill=opts.delAttr?'<button class="ded-x kill" '+opts.delAttr+' aria-label="Remove">&times;</button>':'<span></span>';
     return '<div class="ded-row'+(opts.fuel?' fuel':'')+'"'+(opts.rid?' data-rid="'+esc(opts.rid)+'" style="cursor:pointer"':'')+'><div><span class="nm">'+opts.name+'</span><span class="meta">'+opts.meta+'</span></div><div class="am"><b>'+money(opts.amt)+'</b><small>'+opts.sub+'</small></div>'+kill+'</div>';
   }
-  var grouped={},order=['Fuel','Tolls','Cleaning','Maintenance','Insurance','Other'];
-  function pushG(key,html,amt){if(!grouped[key])grouped[key]={html:'',amt:0};grouped[key].html+=html;grouped[key].amt+=nn(amt)}
-  if(a.fuelShift>0)pushG('Fuel',dedRow({fuel:true,name:'Fuel from shifts',meta:'Auto from tracker \u00b7 '+a.fcShift+' fill'+(a.fcShift===1?'':'s'),amt:a.fuelShift,sub:gstBit(a.fuelShift,true)}),a.fuelShift);
+  var grouped={},order=['Fuel','Tolls','Maintenance','Cleaning','Insurance','Phone','Other'];
+  function pushG(key,html,amt,cnt){
+    if(!grouped[key])grouped[key]={html:'',amt:0,count:0};
+    grouped[key].html+=html;
+    grouped[key].amt+=nn(amt);
+    grouped[key].count+=(cnt||1);
+  }
+  if(a.fuelShift>0)pushG('Fuel',dedRow({fuel:true,name:'Fuel from shifts',meta:'Auto from tracker \u00b7 '+a.fcShift+' fill'+(a.fcShift===1?'':'s'),amt:a.fuelShift,sub:gstBit(a.fuelShift,true)}),a.fuelShift,a.fcShift);
   a.fmList.slice().sort(function(x,y){return x.date<y.date?1:-1}).forEach(function(m){
-    pushG('Fuel',dedRow({fuel:true,name:'Fuel ('+esc(m.type)+')',meta:fmtDayDMY(m.date)+(m.receiptId?' \u00b7 receipt':' \u00b7 no receipt'),amt:m.amount,sub:gstBit(m.amount,true),delAttr:'data-delfm="'+esc(m.id)+'"',rid:m.receiptId||''}),m.amount);
+    pushG('Fuel',dedRow({fuel:true,name:'Fuel ('+esc(m.type)+')',meta:fmtDayDMY(m.date)+(m.receiptId?' \u00b7 receipt':' \u00b7 no receipt'),amt:m.amount,sub:gstBit(m.amount,true),delAttr:'data-delfm="'+esc(m.id)+'"',rid:m.receiptId||''}),m.amount,1);
   });
   var ds=a.allDed.sort(function(x,y){return x.date<y.date?1:-1});
   ds.forEach(function(d){
     var key=d.category||'Other';
     if(order.indexOf(key)<0&&!grouped[key])order.push(key);
     var del=d._recurring?'':(d.id!=null?'data-deld="'+esc(d.id)+'"':'');
-    pushG(key,dedRow({name:esc(d.name),meta:fmtDayDMY(d.date)+(d._recurring?' \u00b7 repeats':'')+(d.receiptId?' \u00b7 receipt':''),amt:d.amount,sub:gstBit(d.amount,d.gst!==false),delAttr:del,rid:d.receiptId||'',fuel:false}),d.amount);
+    pushG(key,dedRow({name:esc(d.name),meta:fmtDayDMY(d.date)+(d._recurring?' \u00b7 repeats':'')+(d.receiptId?' \u00b7 receipt':''),amt:d.amount,sub:gstBit(d.amount,d.gst!==false),delAttr:del,rid:d.receiptId||'',fuel:false}),d.amount,1);
   });
-  var keys=order.filter(function(k){return grouped[k]});
-  Object.keys(grouped).forEach(function(k){if(keys.indexOf(k)<0)keys.push(k)});
-  $('#dedRows').innerHTML=keys.map(function(k){return '<div class="cat-h">'+esc(catLabel(k))+'<b>'+money(grouped[k].amt)+'</b></div>'+grouped[k].html}).join('');
+  var keys=order.filter(function(k){return grouped[k]&&grouped[k].count>0});
+  Object.keys(grouped).forEach(function(k){if(keys.indexOf(k)<0&&grouped[k]&&grouped[k].count>0)keys.push(k)});
+  var totalDedCount=keys.reduce(function(s,k){return s+(grouped[k]?grouped[k].count:0)},0);
+
+  if(!window.dedCollapsedState) window.dedCollapsedState={};
+  var allClosed=keys.length>0&&keys.every(function(k){return window.dedCollapsedState[k]===true});
+
+  var outHtml='';
+  if(keys.length>0){
+    outHtml+='<div class="ded-ctrl-bar"><span style="font-size:11.5px;font-weight:700;color:var(--head)">Categorised Expenses ('+totalDedCount+' item'+(totalDedCount===1?'':'s')+' \u00b7 '+money(a.dedTotal)+')</span><button type="button" class="ded-ctrl-btn" id="dedToggleAll">'+(allClosed?'Show all':'Hide all')+'</button></div>';
+    outHtml+=keys.map(function(k){
+      var isOpen=window.dedCollapsedState[k]!==true;
+      return '<div class="cat-group '+(isOpen?'open':'')+'" data-cat="'+esc(k)+'">'
+        +'<div class="cat-head" data-cat-toggle="'+esc(k)+'">'
+          +'<div class="cat-title"><span>'+esc(catLabel(k))+'</span><span class="cat-count">'+grouped[k].count+'</span></div>'
+          +'<div class="cat-sum"><b>'+money(grouped[k].amt)+'</b><span class="cat-chev">&rsaquo;</span></div>'
+        +'</div>'
+        +'<div class="cat-body">'+grouped[k].html+'</div>'
+      +'</div>';
+    }).join('');
+  }
+  $('#dedRows').innerHTML=outHtml;
+
+  var tglAllBtn=$('#dedToggleAll');
+  if(tglAllBtn){
+    tglAllBtn.onclick=function(){
+      var willOpen=allClosed;
+      keys.forEach(function(k){window.dedCollapsedState[k]=!willOpen});
+      renderReports();
+    };
+  }
+  $$('#dedRows [data-cat-toggle]').forEach(function(h){
+    h.onclick=function(){
+      var catKey=h.dataset.catToggle;
+      var grp=h.closest('.cat-group');
+      if(grp){
+        var nowOpen=!grp.classList.contains('open');
+        grp.classList.toggle('open',nowOpen);
+        window.dedCollapsedState[catKey]=!nowOpen;
+        var btn=$('#dedToggleAll');
+        if(btn){
+          var isAllClosed=keys.every(function(k){return window.dedCollapsedState[k]===true});
+          btn.textContent=isAllClosed?'Show all':'Hide all';
+        }
+      }
+    };
+  });
   $$('#dedRows [data-delfm]').forEach(function(b){b.onclick=function(e){e.stopPropagation();var id=Number(b.dataset.delfm);var m=fuelManual.filter(function(x){return x.id===id})[0];ask('Remove this fuel?',(m?fmtDayDMY(m.date)+' \u00b7 '+money(m.amount)+'. ':'')+'The receipt snap stays in the jar unless you delete it there.','Remove',function(){fuelManual=fuelManual.filter(function(x){return x.id!==id});save('fareo_fuelManual',fuelManual);renderReports();toast('Fuel expense removed')})}});
   $$('#dedRows [data-deld]').forEach(function(b){b.onclick=function(e){e.stopPropagation();var id=Number(b.dataset.deld);var d=deductions.filter(function(x){return x.id===id})[0];ask('Remove this expense?',(d?(d.name||'')+' \u00b7 '+fmtDayDMY(d.date)+' \u00b7 '+money(d.amount)+'. ':'')+'The receipt snap stays in the jar unless you delete it there.','Remove',function(){deductions=deductions.filter(function(x){return x.id!==id});save('fareo_deductions',deductions);renderReports();toast('Expense removed')})}});
   $$('#dedRows [data-rid]').forEach(function(row){row.onclick=function(){if(row.dataset.rid)viewReceipt(row.dataset.rid)}});
-  $('#dedEmpty').style.display=(ds.length||a.fuel>0)?'none':'block';
+  $('#dedEmpty').style.display=(totalDedCount>0)?'none':'block';
   /* Recurring templates list with delete */
   var hasRecur=recurring.length>0;
   $('#recurSection').style.display=hasRecur?'block':'none';
@@ -2985,36 +3186,64 @@ var etaCurrent = { name: '', phone: '', address: '', mins: 15, customMsg: false 
 
 function updateEtaView(){
   var is24h = !!settings.time24h;
-  var btn = $('#etaFmtToggle');
-  if(btn) btn.textContent = is24h ? '24-Hour (' + fmtEtaTime(new Date(), true) + ')' : '12-Hour (' + fmtEtaTime(new Date(), false) + ')';
-
   var now = new Date();
   var arr = new Date(now.getTime() + (Number(etaCurrent.mins) || 0) * 60000);
   var timeStr = fmtEtaTime(arr, is24h);
+  var minsStr = (etaCurrent.mins || 0) + ' mins';
 
+  /* Update Modal Elements */
+  var btn = $('#etaFmtToggle');
+  if(btn) btn.textContent = is24h ? '24-Hour (' + fmtEtaTime(now, true) + ')' : '12-Hour (' + fmtEtaTime(now, false) + ')';
   var timeDisplay = $('#etaTimeDisplay');
   if(timeDisplay) timeDisplay.textContent = timeStr || '--:--';
-
   var minsDisplay = $('#etaMinsDisplay');
-  if(minsDisplay) minsDisplay.textContent = 'in ' + (etaCurrent.mins || 0) + ' mins';
-
+  if(minsDisplay) minsDisplay.textContent = 'in ' + minsStr;
   var minsInput = $('#etaMinsInput');
   if(minsInput && document.activeElement !== minsInput) minsInput.value = String(etaCurrent.mins || 15);
-
   var targetInput = $('#etaTargetInput');
   if(targetInput && document.activeElement !== targetInput && !isNaN(arr.getTime())) {
     targetInput.value = pad2(arr.getHours()) + ':' + pad2(arr.getMinutes());
   }
-
   $$('#etaPresets button').forEach(function(b){
     b.classList.toggle('on', Number(b.dataset.m) === Number(etaCurrent.mins));
   });
 
+  /* Update Full Page Elements */
+  var pageFmtBtn = $('#etaPageFmtBtn');
+  if(pageFmtBtn) pageFmtBtn.textContent = is24h ? '24-Hour (' + fmtEtaTime(now, true) + ')' : '12-Hour (' + fmtEtaTime(now, false) + ')';
+  var pageTimeDisplay = $('#etaPageTimeDisplay');
+  if(pageTimeDisplay) pageTimeDisplay.textContent = timeStr || '--:--';
+  var pageMinsDisplay = $('#etaPageMinsDisplay');
+  if(pageMinsDisplay) pageMinsDisplay.textContent = 'in ' + minsStr;
+  var pageMinsInput = $('#etaPageMinsInput');
+  if(pageMinsInput && document.activeElement !== pageMinsInput) pageMinsInput.value = String(etaCurrent.mins || 15);
+  var pageTargetInput = $('#etaPageTargetInput');
+  if(pageTargetInput && document.activeElement !== pageTargetInput && !isNaN(arr.getTime())) {
+    pageTargetInput.value = pad2(arr.getHours()) + ':' + pad2(arr.getMinutes());
+  }
+  $$('#etaPagePresets button').forEach(function(b){
+    b.classList.toggle('on', Number(b.dataset.m) === Number(etaCurrent.mins));
+  });
+
+  /* Update Home Screen Live Widget Elements */
+  var homeFmtBtn = $('#homeEtaFmtBtn');
+  if(homeFmtBtn) homeFmtBtn.textContent = is24h ? '24-Hour' : '12-Hour';
+  var homeTime = $('#homeEtaTime');
+  if(homeTime) homeTime.textContent = timeStr || '--:--';
+  var homeSub = $('#homeEtaSub');
+  if(homeSub) homeSub.textContent = 'in ' + minsStr;
+  $$('#homeEtaPresets button').forEach(function(b){
+    b.classList.toggle('on', Number(b.dataset.m) === Number(etaCurrent.mins));
+  });
+
+  /* Format Default Message */
   if(!etaCurrent.customMsg){
     var namePart = etaCurrent.name ? ('Hi ' + etaCurrent.name + ', ') : 'Hi, ';
-    var msg = namePart + 'your driver is on the way! ETA: ' + timeStr + ' (approx ' + (etaCurrent.mins || 0) + ' mins).' + (etaCurrent.address ? (' Destination: ' + etaCurrent.address + '.') : '') + ' See you soon!';
+    var msg = namePart + 'your driver is on the way! ETA: ' + timeStr + ' (approx ' + minsStr + ').' + (etaCurrent.address ? (' Destination: ' + etaCurrent.address + '.') : '') + ' See you soon!';
     var tb = $('#etaMsgText');
     if(tb) tb.value = msg;
+    var pageTb = $('#etaPageMsgText');
+    if(pageTb) pageTb.value = msg;
   }
 }
 
@@ -3029,7 +3258,7 @@ function openEta(stopOrClient, initialMins){
     name: name,
     phone: phone,
     address: address,
-    mins: initialMins || 15,
+    mins: initialMins || etaCurrent.mins || 15,
     customMsg: false
   };
   var title = $('#etaTitle');
@@ -3041,6 +3270,54 @@ function openEta(stopOrClient, initialMins){
   showModal('etaModal');
 }
 
+function renderEtaPage(){
+  var cSel = $('#etaPageClientSelect');
+  if(cSel){
+    var curr = cSel.value;
+    cSel.innerHTML = '<option value="">-- Choose client (or type below) --</option>' + clients.map(function(c){
+      return '<option value="' + esc(c.id) + '">' + esc(clientLabel(c)) + '</option>';
+    }).join('');
+    if(curr) cSel.value = curr;
+  }
+  var nInp = $('#etaPageName'); if(nInp && !nInp.value) nInp.value = etaCurrent.name || '';
+  var pInp = $('#etaPagePhone'); if(pInp && !pInp.value) pInp.value = etaCurrent.phone || '';
+  var dInp = $('#etaPageDest'); if(dInp && !dInp.value) dInp.value = etaCurrent.address || '';
+  updateEtaView();
+}
+
+function renderHomeEtaWidget(){
+  updateEtaView();
+}
+
+function sendEtaShareText(msgText){
+  var msg = msgText || ($('#etaPageMsgText') ? $('#etaPageMsgText').value : '') || ($('#etaMsgText') ? $('#etaMsgText').value : '') || 'Driver ETA';
+  if(navigator.share){
+    navigator.share({title: 'Driver ETA', text: msg}).catch(function(){});
+  } else {
+    copyTxt(msg);
+    toast('ETA message copied');
+  }
+}
+
+function sendEtaWaText(msgText, phoneVal){
+  var msg = msgText || ($('#etaPageMsgText') ? $('#etaPageMsgText').value : '') || ($('#etaMsgText') ? $('#etaMsgText').value : '') || '';
+  var phone = phoneVal || etaCurrent.phone || '';
+  var rawPhone = (phone || '').replace(/[^0-9]/g, '');
+  if(rawPhone.indexOf('04') === 0) rawPhone = '61' + rawPhone.slice(1);
+  if(rawPhone){
+    window.open('https://wa.me/' + rawPhone + '?text=' + encodeURIComponent(msg), '_blank');
+  } else {
+    window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(msg), '_blank');
+  }
+}
+
+function sendEtaCopyText(msgText){
+  var msg = msgText || ($('#etaPageMsgText') ? $('#etaPageMsgText').value : '') || ($('#etaMsgText') ? $('#etaMsgText').value : '') || '';
+  copyTxt(msg);
+  toast('ETA message copied');
+}
+
+/* Modal ETA Bindings */
 $$('#etaPresets button').forEach(function(b){
   b.onclick = function(){
     etaCurrent.mins = Number(b.dataset.m);
@@ -3048,16 +3325,10 @@ $$('#etaPresets button').forEach(function(b){
     updateEtaView();
   };
 });
-
 if($('#etaMinsInput')) $('#etaMinsInput').oninput = function(){
   var v = parseInt(this.value, 10);
-  if(v > 0){
-    etaCurrent.mins = v;
-    etaCurrent.customMsg = false;
-    updateEtaView();
-  }
+  if(v > 0){ etaCurrent.mins = v; etaCurrent.customMsg = false; updateEtaView(); }
 };
-
 if($('#etaTargetInput')) $('#etaTargetInput').onchange = function(){
   var val = this.value;
   if(val){
@@ -3066,17 +3337,12 @@ if($('#etaTargetInput')) $('#etaTargetInput').onchange = function(){
     var target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parts[0], parts[1], 0);
     var diffMs = target.getTime() - now.getTime();
     if(diffMs < 0) diffMs += 24 * 60 * 60000;
-    var mins = Math.max(1, Math.round(diffMs / 60000));
-    etaCurrent.mins = mins;
+    etaCurrent.mins = Math.max(1, Math.round(diffMs / 60000));
     etaCurrent.customMsg = false;
     updateEtaView();
   }
 };
-
-if($('#etaMsgText')) $('#etaMsgText').oninput = function(){
-  etaCurrent.customMsg = true;
-};
-
+if($('#etaMsgText')) $('#etaMsgText').oninput = function(){ etaCurrent.customMsg = true; };
 if($('#etaFmtToggle')) $('#etaFmtToggle').onclick = function(){
   settings.time24h = !settings.time24h;
   persist();
@@ -3084,36 +3350,113 @@ if($('#etaFmtToggle')) $('#etaFmtToggle').onclick = function(){
   updateEtaView();
   toast(settings.time24h ? '24-Hour format active' : '12-Hour format active');
 };
+if($('#etaShareBtn')) $('#etaShareBtn').onclick = function(){ sendEtaShareText($('#etaMsgText') ? $('#etaMsgText').value : ''); };
+if($('#etaCopyBtn')) $('#etaCopyBtn').onclick = function(){ sendEtaCopyText($('#etaMsgText') ? $('#etaMsgText').value : ''); };
+if($('#etaWaBtn')) $('#etaWaBtn').onclick = function(){ sendEtaWaText($('#etaMsgText') ? $('#etaMsgText').value : '', etaCurrent.phone); };
+if($('#etaCloseBtn')) $('#etaCloseBtn').onclick = function(){ closeModal('etaModal'); };
 
-if($('#etaShareBtn')) $('#etaShareBtn').onclick = function(){
-  var msg = ($('#etaMsgText') ? $('#etaMsgText').value : '') || 'Driver ETA';
-  if(navigator.share){
-    navigator.share({title: 'Driver ETA', text: msg}).catch(function(){});
-  } else {
-    copyTxt(msg);
-    toast('ETA message copied');
+/* Full ETA Page Bindings */
+$$('#etaPagePresets button').forEach(function(b){
+  b.onclick = function(){
+    etaCurrent.mins = Number(b.dataset.m);
+    etaCurrent.customMsg = false;
+    updateEtaView();
+  };
+});
+if($('#etaPageMinsInput')) $('#etaPageMinsInput').oninput = function(){
+  var v = parseInt(this.value, 10);
+  if(v > 0){ etaCurrent.mins = v; etaCurrent.customMsg = false; updateEtaView(); }
+};
+if($('#etaPageTargetInput')) $('#etaPageTargetInput').onchange = function(){
+  var val = this.value;
+  if(val){
+    var parts = val.split(':').map(Number);
+    var now = new Date();
+    var target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parts[0], parts[1], 0);
+    var diffMs = target.getTime() - now.getTime();
+    if(diffMs < 0) diffMs += 24 * 60 * 60000;
+    etaCurrent.mins = Math.max(1, Math.round(diffMs / 60000));
+    etaCurrent.customMsg = false;
+    updateEtaView();
   }
 };
-
-if($('#etaCopyBtn')) $('#etaCopyBtn').onclick = function(){
-  var msg = ($('#etaMsgText') ? $('#etaMsgText').value : '') || '';
-  copyTxt(msg);
-  toast('ETA message copied');
+if($('#etaPageMsgText')) $('#etaPageMsgText').oninput = function(){ etaCurrent.customMsg = true; };
+if($('#etaPageFmtBtn')) $('#etaPageFmtBtn').onclick = function(){
+  settings.time24h = !settings.time24h;
+  persist();
+  etaCurrent.customMsg = false;
+  updateEtaView();
+  toast(settings.time24h ? '24-Hour format active' : '12-Hour format active');
 };
-
-if($('#etaWaBtn')) $('#etaWaBtn').onclick = function(){
-  var msg = ($('#etaMsgText') ? $('#etaMsgText').value : '') || '';
-  var rawPhone = (etaCurrent.phone || '').replace(/[^0-9]/g, '');
-  if(rawPhone.indexOf('04') === 0) rawPhone = '61' + rawPhone.slice(1);
-  if(rawPhone){
-    window.open('https://wa.me/' + rawPhone + '?text=' + encodeURIComponent(msg), '_blank');
-  } else {
-    window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(msg), '_blank');
+if($('#etaPageClientSelect')) $('#etaPageClientSelect').onchange = function(){
+  var cid = this.value;
+  var c = clients.filter(function(x){ return x.id === cid; })[0];
+  if(c){
+    etaCurrent.name = clientLabel(c);
+    etaCurrent.phone = c.phone || '';
+    etaCurrent.address = (c.addresses && c.addresses[0] ? c.addresses[0].line : '') || '';
+    if($('#etaPageName')) $('#etaPageName').value = etaCurrent.name;
+    if($('#etaPagePhone')) $('#etaPagePhone').value = etaCurrent.phone;
+    if($('#etaPageDest')) $('#etaPageDest').value = etaCurrent.address;
+    etaCurrent.customMsg = false;
+    updateEtaView();
   }
 };
+if($('#etaPageName')) $('#etaPageName').oninput = function(){
+  etaCurrent.name = (this.value || '').trim();
+  etaCurrent.customMsg = false;
+  updateEtaView();
+};
+if($('#etaPagePhone')) $('#etaPagePhone').oninput = function(){
+  etaCurrent.phone = (this.value || '').trim();
+};
+if($('#etaPageDest')) $('#etaPageDest').oninput = function(){
+  etaCurrent.address = (this.value || '').trim();
+  etaCurrent.customMsg = false;
+  updateEtaView();
+};
+if($('#etaPageShareBtn')) $('#etaPageShareBtn').onclick = function(){ sendEtaShareText($('#etaPageMsgText') ? $('#etaPageMsgText').value : ''); };
+if($('#etaPageCopyBtn')) $('#etaPageCopyBtn').onclick = function(){ sendEtaCopyText($('#etaPageMsgText') ? $('#etaPageMsgText').value : ''); };
+if($('#etaPageWaBtn')) $('#etaPageWaBtn').onclick = function(){ sendEtaWaText($('#etaPageMsgText') ? $('#etaPageMsgText').value : '', etaCurrent.phone); };
 
-if($('#etaCloseBtn')) $('#etaCloseBtn').onclick = function(){
-  closeModal('etaModal');
+/* Home Screen Quick ETA Widget Bindings */
+$$('#homeEtaPresets button').forEach(function(b){
+  b.onclick = function(){
+    etaCurrent.mins = Number(b.dataset.m);
+    etaCurrent.customMsg = false;
+    updateEtaView();
+  };
+});
+if($('#homeEtaFmtBtn')) $('#homeEtaFmtBtn').onclick = function(){
+  settings.time24h = !settings.time24h;
+  persist();
+  etaCurrent.customMsg = false;
+  updateEtaView();
+  toast(settings.time24h ? '24-Hour format active' : '12-Hour format active');
+};
+if($('#homeEtaShare')) $('#homeEtaShare').onclick = function(){
+  var is24h = !!settings.time24h;
+  var now = new Date();
+  var arr = new Date(now.getTime() + (Number(etaCurrent.mins) || 0) * 60000);
+  var timeStr = fmtEtaTime(arr, is24h);
+  var msg = 'Hi, your driver is on the way! ETA: ' + timeStr + ' (approx ' + (etaCurrent.mins || 0) + ' mins). See you soon!';
+  sendEtaShareText(msg);
+};
+if($('#homeEtaWa')) $('#homeEtaWa').onclick = function(){
+  var is24h = !!settings.time24h;
+  var now = new Date();
+  var arr = new Date(now.getTime() + (Number(etaCurrent.mins) || 0) * 60000);
+  var timeStr = fmtEtaTime(arr, is24h);
+  var msg = 'Hi, your driver is on the way! ETA: ' + timeStr + ' (approx ' + (etaCurrent.mins || 0) + ' mins). See you soon!';
+  sendEtaWaText(msg, etaCurrent.phone);
+};
+if($('#homeEtaCopy')) $('#homeEtaCopy').onclick = function(){
+  var is24h = !!settings.time24h;
+  var now = new Date();
+  var arr = new Date(now.getTime() + (Number(etaCurrent.mins) || 0) * 60000);
+  var timeStr = fmtEtaTime(arr, is24h);
+  var msg = 'Hi, your driver is on the way! ETA: ' + timeStr + ' (approx ' + (etaCurrent.mins || 0) + ' mins). See you soon!';
+  sendEtaCopyText(msg);
 };
 
 /* ---------- Dedicated Runs & Drag-drop plan ---------- */
@@ -3700,23 +4043,95 @@ function renderClAddrs(){
 }
 function syncShared(owner){
   (owner.addresses||[]).forEach(function(a){
-    var ppl=(a.people||[]).filter(function(p){return p&&p.id&&p.id!==owner.id});
-    if(!ppl.length)return;
+    if(!Array.isArray(a.people)) a.people = [];
     ensureShare(a);
-    ppl.forEach(function(p){
-      var oc=findClient(p.id);if(!oc)return;
-      if(!oc.addresses)oc.addresses=[];
-      var match=null;
-      oc.addresses.forEach(function(x){if(x.shareId===a.shareId)match=x});
-      var others=[{id:owner.id,name:clientLabel(owner)}].concat(a.people||[]).filter(function(x){return x&&x.id!==oc.id});
-      if(match){
-        match.line=a.line;match.lat=a.lat;match.lng=a.lng;match.title=a.title;match.kind=a.kind;match.people=others;match.shareId=a.shareId;
-      }else{
-        oc.addresses.push({id:uid('a'),shareId:a.shareId,title:a.title,kind:a.kind||'other',line:a.line,lat:a.lat,lng:a.lng,people:others});
+    a.people.forEach(function(p){
+      if(!p) return;
+      var oc = p.id ? findClient(p.id) : null;
+      if(!oc && p.name){
+        var nTrim = p.name.trim();
+        oc = clients.filter(function(x){ return clientLabel(x).toLowerCase() === nTrim.toLowerCase(); })[0];
+        if(!oc){
+          oc = blankClient();
+          oc.name = nTrim;
+          clients.push(oc);
+        }
+        p.id = oc.id;
+        p.name = clientLabel(oc);
+      }
+      if(oc && oc.id !== owner.id){
+        if(!oc.addresses) oc.addresses = [];
+        var match = null;
+        oc.addresses.forEach(function(x){ if(x.shareId === a.shareId) match = x; });
+        var others = [{id:owner.id, name:clientLabel(owner)}].concat(a.people||[]).filter(function(x){ return x && x.id !== oc.id; });
+        if(match){
+          match.line = a.line; match.lat = a.lat; match.lng = a.lng; match.title = a.title; match.kind = a.kind; match.people = others; match.shareId = a.shareId;
+        }else{
+          oc.addresses.push({id:uid('a'), shareId:a.shareId, title:a.title, kind:a.kind||'other', line:a.line, lat:a.lat, lng:a.lng, people:others});
+        }
       }
     });
   });
 }
+
+var clExtraRiders = [];
+
+function renderClExtraNames(){
+  var box = $('#clExtraNamesList');
+  if(!box) return;
+  if(!clExtraRiders.length){
+    box.innerHTML = '';
+    return;
+  }
+  box.innerHTML = clExtraRiders.map(function(r, idx){
+    return '<div class="cl-extra-row" data-eidx="' + idx + '" style="display:flex;align-items:center;gap:6px">'
+      + '<input class="cl-extra-inp" placeholder="Additional passenger name" value="' + esc(r.name || '') + '" style="flex:1">'
+      + '<button type="button" class="x" data-e-del="' + idx + '" style="width:36px;height:36px;border-radius:8px;border:1px solid var(--bd2);background:var(--field);color:var(--dgr);cursor:pointer;font-size:18px;line-height:1;display:grid;place-items:center" aria-label="Remove passenger">&times;</button>'
+      + '</div>';
+  }).join('');
+
+  $$('#clExtraNamesList .cl-extra-inp').forEach(function(inp){
+    inp.oninput = function(){
+      var row = inp.closest('.cl-extra-row');
+      var idx = row ? Number(row.dataset.eidx) : -1;
+      if(idx >= 0 && clExtraRiders[idx]){
+        clExtraRiders[idx].name = inp.value;
+      }
+    };
+  });
+
+  $$('#clExtraNamesList [data-e-del]').forEach(function(btn){
+    btn.onclick = function(){
+      var idx = Number(btn.dataset.eDel);
+      if(idx >= 0){
+        clExtraRiders.splice(idx, 1);
+        renderClExtraNames();
+      }
+    };
+  });
+}
+
+if($('#clAddRiderBtn')){
+  $('#clAddRiderBtn').onclick = function(){
+    clExtraRiders.push({ name: '' });
+    renderClExtraNames();
+    var inps = $$('#clExtraNamesList .cl-extra-inp');
+    var last = inps[inps.length - 1];
+    if(last) last.focus();
+  };
+}
+
+if($('#clMoreToggle')){
+  $('#clMoreToggle').onclick = function(){
+    var wrap = $('#clMoreWrap');
+    var chev = $('#clMoreChev');
+    if(!wrap) return;
+    var open = wrap.style.display !== 'none';
+    wrap.style.display = open ? 'none' : 'block';
+    if(chev) chev.style.transform = open ? 'rotate(0deg)' : 'rotate(90deg)';
+  };
+}
+
 function openClient(id){
   var c=id?findClient(id):null;
   clDraft=c?JSON.parse(JSON.stringify(c)):blankClient();
@@ -3724,13 +4139,31 @@ function openClient(id){
   if(!clDraft.school)clDraft.school={on:false,days:[],am:true,pm:true,pickup:'',drop:''};
   if(!Array.isArray(clDraft.addresses)||!clDraft.addresses.length)clDraft.addresses=[blankAddr()];
   (clDraft.addresses||[]).forEach(function(a){if(!Array.isArray(a.people))a.people=[]});
+
+  clExtraRiders = [];
+  (clDraft.addresses||[]).forEach(function(a){
+    (a.people||[]).forEach(function(p){
+      var n = p.name || (p.id ? clientLabel(findClient(p.id)) : '');
+      if(n && !clExtraRiders.some(function(x){ return (x.name||'').toLowerCase() === n.toLowerCase(); })){
+        clExtraRiders.push({ id: p.id || '', name: n });
+      }
+    });
+  });
+
   $('#clTitle').textContent=c?'Edit client':'New client';
   $('#clName').value=clDraft.name||'';
   $('#clNick').value=clDraft.nick||'';
   $('#clPhone').value=clDraft.phone||'';
   $('#clCarer').value=clDraft.carer||'';
   $('#clNotes').value=clDraft.notes||'';
+
+  var moreWrap = $('#clMoreWrap');
+  var moreChev = $('#clMoreChev');
+  if(moreWrap) moreWrap.style.display = 'none';
+  if(moreChev) moreChev.style.transform = 'rotate(0deg)';
+
   var del=$('#clDelete');if(del)del.style.display=c?'block':'none';
+  renderClExtraNames();
   renderClNeeds();renderClSchool();renderClAddrs();
   showModal('clientModal');
 }
@@ -3754,7 +4187,23 @@ if($('#clSave'))$('#clSave').onclick=function(){
     var t=$('[data-k="title"]',card);if(t)a.title=t.value;
     var l=$('[data-k="line"]',card);if(l)a.line=l.value;
   });
-  if(!clDraft.name&&!clDraft.nick){toast('Add a name or nickname');return}
+  if(!clDraft.name&&!clDraft.nick){toast('Add a passenger name');return}
+
+  /* Collect extra rider names */
+  var extraNames = [];
+  $$('#clExtraNamesList .cl-extra-inp').forEach(function(inp){
+    var val = (inp.value||'').trim();
+    if(val && extraNames.indexOf(val)<0) extraNames.push(val);
+  });
+  var peopleList = extraNames.map(function(n){
+    var match = clExtraRiders.filter(function(r){ return (r.name||'').toLowerCase() === n.toLowerCase(); })[0];
+    return { id: match ? match.id : '', name: n };
+  });
+
+  (clDraft.addresses||[]).forEach(function(a){
+    a.people = peopleList.slice();
+  });
+
   var i=-1;clients.forEach(function(c,n){if(c.id===clDraft.id)i=n});
   if(i>=0)clients[i]=clDraft;else clients.push(clDraft);
   syncShared(clDraft);
