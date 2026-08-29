@@ -620,7 +620,11 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
 .cli-av{width:40px;height:40px;border-radius:50%;background:var(--inc-bg);color:var(--on-inc);display:grid;place-items:center;font-weight:800;font-size:13px;flex:0 0 auto}
 .cli b{display:block;font-size:14.5px;color:var(--head)}
 .cli span{display:block;font-size:11.5px;color:var(--mut);margin-top:1px}
-.cli-go{border:1px solid var(--inc);background:transparent;color:var(--inc);border-radius:9px;padding:7px 9px;font-size:11px;font-weight:800;cursor:pointer;flex:0 0 auto}
+.cli-go{width:34px;height:34px;border:1px solid var(--bd2);background:var(--field);color:var(--head);border-radius:10px;display:grid;place-items:center;cursor:pointer;flex:0 0 auto;padding:0;transition:transform .12s,background .12s,color .12s;-webkit-tap-highlight-color:transparent}
+.cli-go:active{transform:scale(.92)}
+.cli-go svg{width:16px;height:16px;pointer-events:none}
+.cli-go.cli-share{color:var(--acct);border-color:var(--acct);background:var(--acct-bg)}
+.cli-go.cli-nav{color:var(--inc);border-color:var(--inc);background:var(--inc-bg)}
 .addr-card{background:var(--field);border:1px solid var(--bd);border-radius:12px;padding:11px;margin-top:8px}
 .addr-card .ttl{width:100%;border:0;background:transparent;padding:0;font-size:13px;font-weight:800;color:var(--head);-webkit-text-fill-color:var(--head);text-align:left;margin-bottom:4px}
 .addr-link{color:var(--inc);font-weight:700;text-decoration:underline;text-underline-offset:2px;word-break:break-word}
@@ -1371,8 +1375,13 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.2';
+var APP_VERSION='8.3';
 var CHANGELOG=[
+  {v:'8.3',date:'August 29, 2026',notes:[
+    ['UI/UX','Multi-passenger cards: saving multiple names (e.g. Shane, Gavin) now saves cleanly as one unified profile card with their address, Nav, and Share.'],
+    ['Bug Fix','Deduplicated address autocomplete predictions to eliminate repeated suggestion spam.'],
+    ['UI/UX','Replaced Share and Nav text buttons with minimalist symbol icons.']
+  ]},
   {v:'8.2',date:'August 29, 2026',notes:[
     ['UI/UX','Concise ETA messages: generated ETA text is now clean and direct: "ETA is <time>".']
   ]},
@@ -3017,8 +3026,8 @@ if($('#syncOut'))$('#syncOut').onclick=syncSignOut;
 function uid(p){return (p||'id')+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
 function clientLabel(c){return ((c.nick||'').trim()||(c.name||'').trim()||'Client')}
 function clientSub(c){var n=(c.name||'').trim(),k=(c.nick||'').trim();return (k&&n&&k!==n)?n:''}
-function clientInitials(c){var s=clientLabel(c);var p=s.split(/\s+/).filter(Boolean);return ((p[0]||'?')[0]+(p[1]?p[1][0]:'')).toUpperCase()}
-function blankAddr(){return {id:uid('a'),title:'Home',kind:'home',line:'',lat:null,lng:null,people:[],shareId:''}}
+function clientInitials(c){var s=clientLabel(c);var p=s.split(/[\s,]+/).filter(Boolean);return ((p[0]||'?')[0]+(p[1]?p[1][0]:'')).toUpperCase()}
+function blankAddr(){return {id:uid('a'),title:'Home',kind:'home',line:'',lat:null,lng:null}}
 function blankClient(){return {id:uid('c'),name:'',nick:'',phone:'',carer:'',notes:'',flags:{wheelchair:false,nonverbal:false,extra:false,assist:false},school:{on:false,days:[],am:true,pm:true,pickup:'',drop:''},addresses:[blankAddr()]}}
 function findClient(id){for(var i=0;i<clients.length;i++)if(clients[i].id===id)return clients[i];return null}
 function findAddr(c,id){var list=(c&&c.addresses)||[];for(var i=0;i<list.length;i++)if(list[i].id===id)return list[i];return null}
@@ -3147,21 +3156,29 @@ function auSuggest(q,cb){
     var stInfo=AU_STATES[curState]||AU_STATES.VIC;
     var bboxPart=stInfo.bbox?('&bbox='+stInfo.bbox):'';
     var biasPart=(stInfo.lat!=null&&stInfo.lon!=null)?('&lat='+stInfo.lat+'&lon='+stInfo.lon):'';
-    var url='https://photon.komoot.io/api/?q='+encodeURIComponent(q)+'&limit=8&lang=en'+bboxPart+biasPart;
+    var url='https://photon.komoot.io/api/?q='+encodeURIComponent(q)+'&limit=15&lang=en'+bboxPart+biasPart;
     fetch(url,{signal:auSuggest._ab.signal}).then(function(r){return r.json()}).then(function(j){
-      var out=(j.features||[]).map(function(f){
+      var seen={};
+      var out=[];
+      (j.features||[]).forEach(function(f){
         var p=f.properties||{},c=f.geometry&&f.geometry.coordinates;
         var country=String(p.country||p.countrycode||'').toLowerCase();
-        if(country&&country.indexOf('au')<0&&country.indexOf('australia')<0)return null;
+        if(country&&country.indexOf('au')<0&&country.indexOf('australia')<0)return;
         var stateStr=String(p.state||'').trim();
         if(curState!=='ALL'&&stateStr){
           var matches=(stateStr.toLowerCase()===stInfo.name.toLowerCase()||stateStr.toUpperCase()===stInfo.code);
-          if(!matches&&!p.postcode)return null;
+          if(!matches&&!p.postcode)return;
         }
-        var line=[p.housenumber,p.street||p.name,p.district,p.city||p.locality,p.state,p.postcode].filter(Boolean).join(', ');
-        return {line:line||p.name||'',lat:c?c[1]:null,lng:c?c[0]:null,state:p.state};
-      }).filter(function(x){return x&&x.line});
-      cb(out);
+        var parts=[p.housenumber,p.street||p.name,p.district,p.city||p.locality,p.state,p.postcode].filter(Boolean);
+        var line=parts.join(', ');
+        if(!line) line=p.name||'';
+        if(!line) return;
+        var norm=line.toLowerCase().replace(/[^a-z0-9]/g,'');
+        if(seen[norm]) return;
+        seen[norm]=true;
+        out.push({line:line,lat:c?c[1]:null,lng:c?c[0]:null,state:p.state});
+      });
+      cb(out.slice(0,6));
     }).catch(function(){cb([])});
   },250);
 }
@@ -3917,7 +3934,27 @@ if($('#shareFullRun')) $('#shareFullRun').onclick = function(){
   sharePlain(lines.join('\n'), 'Run Plan');
 };
 
+function cleanOrphanClients(){
+  if(!Array.isArray(clients)) return;
+  clients = clients.filter(function(c){
+    if(!c) return false;
+    var hasAddr = Array.isArray(c.addresses) && c.addresses.some(function(a){ return a && (a.line || '').trim(); });
+    var hasExtra = (c.phone||'').trim() || (c.carer||'').trim() || (c.notes||'').trim() || (c.school && c.school.on);
+    if(hasAddr || hasExtra) return true;
+    var name = (c.name || '').trim().toLowerCase();
+    if(!name) return false;
+    var existsInAnother = clients.some(function(other){
+      if(!other || other.id === c.id) return false;
+      var oName = (other.name || '').toLowerCase();
+      var parts = oName.split(',').map(function(s){ return s.trim(); });
+      return parts.indexOf(name) >= 0;
+    });
+    return !existsInAnother;
+  });
+}
+
 function renderBook(){
+  cleanOrphanClients();
   var q=bookQ.toLowerCase();
   var list=clients.filter(function(c){
     if(!q)return true;
@@ -3930,16 +3967,14 @@ function renderBook(){
     box.innerHTML=list.map(function(c){
       var fl=flagLabels(c);
       var a0=(c.addresses||[])[0];
-      var withWho=a0?peopleOf(a0,c).filter(function(p){return p.id!==c.id}).map(function(p){return p.label}):[];
       var sub=clientSub(c)||(a0&&a0.line)||'No address yet';
-      if(withWho.length)sub=(a0&&a0.line?a0.line+' · ':'')+'with '+withWho.join(', ');
       var link=a0&&a0.line?mapsAnchor(a0,sub):esc(sub);
       return '<div class="cli" data-cid="'+esc(c.id)+'">'
         +'<div class="cli-av">'+esc(clientInitials(c))+'</div>'
         +'<div style="flex:1;min-width:0"><b>'+esc(clientLabel(c))+'</b><span>'+link+'</span>'+(fl.length?'<div class="cli-need">'+fl.map(function(x){return '<i>'+esc(x)+'</i>'}).join('')+'</div>':'')+'</div>'
-        +'<div style="display:flex;gap:5px;flex:0 0 auto">'
-          +'<button type="button" class="cli-go" data-share="'+esc(c.id)+'" title="Share address with Maps link" style="border-color:var(--acct);color:var(--acct)">Share</button>'
-          +'<button type="button" class="cli-go" data-nav="'+esc(c.id)+'" title="Open in Maps">Nav</button>'
+        +'<div style="display:flex;gap:6px;flex:0 0 auto">'
+          +'<button type="button" class="cli-go cli-share" data-share="'+esc(c.id)+'" title="Share address with Maps link" aria-label="Share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>'
+          +'<button type="button" class="cli-go cli-nav" data-nav="'+esc(c.id)+'" title="Open in Maps" aria-label="Navigate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg></button>'
         +'</div>'
       +'</div>';
     }).join('');
@@ -4095,19 +4130,9 @@ function openClient(id){
   if(!clDraft.flags)clDraft.flags={wheelchair:false,nonverbal:false,extra:false,assist:false};
   if(!clDraft.school)clDraft.school={on:false,days:[],am:true,pm:true,pickup:'',drop:''};
   if(!Array.isArray(clDraft.addresses)||!clDraft.addresses.length)clDraft.addresses=[blankAddr()];
-  (clDraft.addresses||[]).forEach(function(a){if(!Array.isArray(a.people))a.people=[]});
-
-  var allNames = [];
-  if(clDraft.name) allNames.push(clDraft.name);
-  (clDraft.addresses||[]).forEach(function(a){
-    (a.people||[]).forEach(function(p){
-      var n = (p.name || (p.id ? clientLabel(findClient(p.id)) : '')).trim();
-      if(n && allNames.indexOf(n) < 0) allNames.push(n);
-    });
-  });
 
   $('#clTitle').textContent=c?'Edit client':'New client';
-  $('#clName').value=allNames.join(', ');
+  $('#clName').value=clDraft.name||'';
   $('#clNick').value=clDraft.nick||'';
   $('#clPhone').value=clDraft.phone||'';
   $('#clCarer').value=clDraft.carer||'';
@@ -4132,32 +4157,21 @@ if($('#clAddAddr'))$('#clAddAddr').onclick=function(){clDraft.addresses.push(bla
 if($('#clCancel'))$('#clCancel').onclick=function(){closeModal('clientModal');clDraft=null};
 if($('#clSave'))$('#clSave').onclick=function(){
   if(!clDraft)return;
-  var rawNames = ($('#clName').value || '').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
-  clDraft.name = rawNames[0] || '';
-  clDraft.nick = ($('#clNick').value || '').trim();
-  clDraft.phone = ($('#clPhone').value || '').trim();
-  clDraft.carer = ($('#clCarer').value || '').trim();
-  clDraft.notes = ($('#clNotes').value || '').trim();
+  clDraft.name=($('#clName').value||'').trim();
+  clDraft.nick=($('#clNick').value||'').trim();
+  clDraft.phone=($('#clPhone').value||'').trim();
+  clDraft.carer=($('#clCarer').value||'').trim();
+  clDraft.notes=($('#clNotes').value||'').trim();
   $$('#clAddrs .addr-card').forEach(function(card){
     var a=findAddr(clDraft,card.dataset.aid);if(!a)return;
     var t=$('[data-k="title"]',card);if(t)a.title=t.value;
     var l=$('[data-k="line"]',card);if(l)a.line=l.value;
   });
-  if(!clDraft.name && !clDraft.nick){toast('Add a passenger name');return}
-
-  var extraNames = rawNames.slice(1);
-  var peopleList = extraNames.map(function(n){
-    var existing = clients.filter(function(x){ return clientLabel(x).toLowerCase() === n.toLowerCase(); })[0];
-    return { id: existing ? existing.id : '', name: n };
-  });
-
-  (clDraft.addresses||[]).forEach(function(a){
-    a.people = peopleList.slice();
-  });
+  if(!clDraft.name&&!clDraft.nick){toast('Add a passenger name');return}
 
   var i=-1;clients.forEach(function(c,n){if(c.id===clDraft.id)i=n});
   if(i>=0)clients[i]=clDraft;else clients.push(clDraft);
-  syncShared(clDraft);
+  cleanOrphanClients();
   persist();clDraft=null;closeModal('clientModal');renderBook();toast('Client saved');
 };
 if($('#clDelete'))$('#clDelete').onclick=function(){
