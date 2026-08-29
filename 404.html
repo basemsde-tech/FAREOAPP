@@ -680,7 +680,7 @@ a.addr-link{display:inline;font-size:12.5px}
   </div>
   <div class="body-p">
 
-  <section class="screen" data-tab="hub">
+  <section class="screen on" data-tab="hub">
     <div class="sub">Home <small>Tap a circle to open that page</small></div>
     <div class="hub">
       <div class="hub-wheel">
@@ -727,7 +727,7 @@ a.addr-link{display:inline;font-size:12.5px}
     </div>
   </section>
 
-  <section class="screen on" data-tab="shift">
+  <section class="screen" data-tab="shift">
     <div class="steps" id="steps">
       <button class="stp lit on" data-sub="1"><i></i><span>Log Shift</span></button>
       <button class="stp" data-sub="2"><i></i><span>Attach</span></button>
@@ -4325,7 +4325,7 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(){
 applyTheme();renderNames();rowInputs();render();setSub(1);renderDeadlines();updateEtaView();
 (function(){
   var h=(location.hash||'').replace(/^#/,'');
-  if(TABS.indexOf(h)<0)h='shift';
+  if(TABS.indexOf(h)<0)h='hub';
   applyTab(h);
   try{history.replaceState({tab:h,i:0},'','#'+h)}catch(_){}
 })();
