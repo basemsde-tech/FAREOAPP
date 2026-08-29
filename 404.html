@@ -182,10 +182,12 @@ input:disabled,select:disabled{background:var(--disbg);color:var(--disink);-webk
 .summ{display:inline-flex;align-items:center;justify-content:center;gap:7px}
 .summ svg{width:16px;height:16px}
 .rep-csv{border-width:2.5px;border-style:solid;border-color:var(--inc);color:var(--inc)}
-.modal{position:fixed;inset:0;background:rgba(8,10,14,.55);display:none;align-items:flex-end;justify-content:center;z-index:60}
+.modal{position:fixed;inset:0;background:rgba(8,10,14,.62);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:flex-end;justify-content:center;z-index:60}
 .modal.show{display:flex}
-.sheet{width:100%;max-width:440px;background:var(--card);border-radius:22px 22px 0 0;padding:14px 16px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -12px 44px rgba(0,0,0,.34);max-height:90vh;overflow:auto}
-.grip{width:42px;height:5px;border-radius:99px;background:var(--bd2);margin:2px auto 12px}
+.modal.show .sheet{animation:sheetSlideUp .24s cubic-bezier(.16,1,.3,1) both}
+@keyframes sheetSlideUp{0%{transform:translateY(100%)}100%{transform:translateY(0)}}
+.sheet{width:100%;max-width:440px;background:var(--card);border-radius:24px 24px 0 0;padding:12px 16px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -12px 48px rgba(0,0,0,.38);max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.grip{width:38px;height:4.5px;border-radius:99px;background:var(--bd2);margin:4px auto 14px;opacity:.8}
 .sheet h3{margin:0 0 2px;font-size:19px;color:var(--head)}
 .sheet .csub{font-size:12px;color:var(--mut);margin:0 0 14px}
 .presets{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -705,11 +707,11 @@ a.addr-link{display:inline;font-size:12.5px}
           <button type="button" data-m="45">+45m</button>
         </div>
       </div>
-      <div style="display:flex;gap:6px;margin-top:8px">
-        <button type="button" class="btn" id="homeEtaShare" style="flex:1.2;background:var(--acct);color:var(--btn-ink);padding:8px 5px;font-size:11.5px;margin:0">Share ETA</button>
-        <button type="button" class="btn neutral" id="homeEtaWa" style="flex:1;color:var(--inc);border-color:var(--inc);padding:8px 5px;font-size:11.5px;margin:0">WhatsApp</button>
-        <button type="button" class="btn neutral" id="homeEtaCopy" style="flex:1;padding:8px 5px;font-size:11.5px;margin:0">Copy</button>
-        <button type="button" class="btn neutral" onclick="go('eta')" style="flex:0 0 auto;padding:8px 10px;font-size:12px;margin:0" title="Full ETA Page">&rsaquo;</button>
+      <div class="home-eta-acts">
+        <button type="button" class="btn-eta-main" id="homeEtaShare">Share ETA</button>
+        <button type="button" class="btn-eta-wa" id="homeEtaWa">WhatsApp</button>
+        <button type="button" class="btn-eta-copy" id="homeEtaCopy">Copy</button>
+        <button type="button" class="btn-eta-go" onclick="go('eta')" title="Full ETA Page">&rsaquo;</button>
       </div>
     </div>
   </section>
@@ -1020,6 +1022,7 @@ a.addr-link{display:inline;font-size:12.5px}
     <div class="card" style="padding:0">
       <div class="set hot"><div class="sl"><b>Driver Percentage Share</b><p>Global &middot; flows to every calc</p></div><input id="setPct" type="number" min="0" max="100" inputmode="decimal"></div>
       <div class="set"><div class="sl"><b>Hail Trip Levy</b><p>Per trip ($) &middot; 0 allowed if BSP pays</p></div><input id="setLevy" type="number" min="0" inputmode="decimal"></div>
+      <div class="set"><div class="sl"><b>State Address Focus <span class="help" data-help="Prioritises and predicts addresses in your Australian state (Victoria by default)." aria-label="Help">?</span></b><p>Address search predictions</p></div><select id="setState" style="width:125px"><option value="VIC">VIC (Victoria)</option><option value="NSW">NSW</option><option value="QLD">QLD</option><option value="SA">SA</option><option value="WA">WA</option><option value="TAS">TAS</option><option value="ACT">ACT</option><option value="NT">NT</option><option value="ALL">All Australia</option></select></div>
       <div class="set"><div class="sl"><b>Cash &amp; Square GST-free <span class="help" data-help="When on, cash and Square fares are excluded from your GST-on-sales calculation (treated as GST-free income). EFTPOS, accounts and runs stay GST-inclusive." aria-label="Help">?</span></b><p>Exclude cash-type fares from GST</p></div><button class="tgl" id="setCashGst" aria-label="Toggle cash GST-free"></button></div>
       <div class="set"><div class="sl"><b>Week Cycle</b><p>Which day your week starts</p></div><select id="setWeek"></select></div>
       <div class="set" style="display:block"><div class="sl"><b>Vehicle Regos</b></div>
@@ -1208,15 +1211,12 @@ a.addr-link{display:inline;font-size:12.5px}
 <div class="modal" id="clientModal"><div class="sheet" style="max-height:92vh;overflow:auto">
   <div class="grip"></div>
   <h3 id="clTitle">Client &amp; Address</h3>
-  <p class="csub">Add passenger name and address. Add multiple people sharing this stop with +.</p>
+  <p class="csub">Add passenger name and address. Use commas (,) to add multiple passengers at this address.</p>
   
-  <label class="fl">Passenger Name</label>
-  <input id="clName" placeholder="e.g. Holly Nguyen" autocomplete="name">
-  
-  <div id="clExtraNamesList" style="display:flex;flex-direction:column;gap:6px;margin-top:6px"></div>
-  <button type="button" class="btn neutral" id="clAddRiderBtn" style="margin:6px 0 10px;padding:8px 10px;font-size:12px;border-style:dashed;color:var(--inc);border-color:var(--inc)">+ Add another client at this address</button>
+  <label class="fl">Passenger Name(s)</label>
+  <input id="clName" placeholder="e.g. Holly Nguyen, David Nguyen" autocomplete="name">
 
-  <label class="fl" style="margin-top:4px">Address</label>
+  <label class="fl" style="margin-top:8px">Address</label>
   <div id="clAddrs"></div>
   <button class="add" id="clAddAddr" type="button" style="margin-top:4px">+ Add another address</button>
 
@@ -1364,13 +1364,17 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.0';
+var APP_VERSION='8.1';
 var CHANGELOG=[
+  {v:'8.1',date:'August 29, 2026',notes:[
+    ['UI/UX','Multi-passenger comma entry: simply type comma-separated names (e.g. John, Jane) in the Passenger Name field to link multiple riders to the same address.'],
+    ['Feature','Address search state filter: Victoria (VIC) focused address search and autocomplete predictions by default, with easy state selection in Settings.'],
+    ['Feature','Direct 1-tap Share button next to Nav in the Address Book client list for fast address & Maps link messaging.']
+  ]},
   {v:'8.0',date:'August 29, 2026',notes:[
     ['UI/UX','Complete minimalist redesign with smooth 360° orbital Home navigation, animated satellite fan-out, and live Home ETA Widget.'],
     ['Feature','Dedicated ETA Calculator tab with 12h/24h toggle, minute chips, passenger destination presets, and 1-tap WhatsApp/SMS/Copy sharing.'],
-    ['Feature','Intelligent hideable & categorized deductions in Reports with item counts, subtotals, and one-tap collapse/expand.'],
-    ['Feature','Streamlined Add Client dialog with clean primary name entry and simple + button to add multiple clients sharing the same address.']
+    ['Feature','Intelligent hideable & categorized deductions in Reports with item counts, subtotals, and one-tap collapse/expand.']
   ]},
   {v:'7.2',date:'August 29, 2026',notes:[
     ['Feature','Dedicated Runs page with drag-and-drop stop reordering for route planning from your clients database.'],
@@ -1483,7 +1487,7 @@ var CHANGELOG=[
   ]}
 ];
 
-var settings=load('fareo_settings',{pct:55,levy:1.20,fuel:'Diesel',regos:['5088M'],theme:'system',weekStart:4,creditedDay:5,autocomplete:true,fuelMode:'reimbursed',gstBase:'gross'});
+var settings=load('fareo_settings',{pct:55,levy:1.20,fuel:'Diesel',regos:['5088M'],theme:'system',weekStart:4,creditedDay:5,autocomplete:true,fuelMode:'reimbursed',gstBase:'gross',state:'VIC'});
 function migrateSettings(){
   if(!settings.regos||!settings.regos.length)settings.regos=['5088M'];
   if(settings.creditedDay==null)settings.creditedDay=5;
@@ -1492,6 +1496,8 @@ function migrateSettings(){
   if(settings.gstBase!=='share'&&settings.gstBase!=='gross')settings.gstBase='gross';
   /* Cash & Square fares default to GST-free (excluded from GST-on-sales). */
   if(settings.cashGstFree==null)settings.cashGstFree=true;
+  /* State focus for address search (defaults to Victoria) */
+  if(!settings.state)settings.state='VIC';
   /* Custom payment/income types. Built-ins (EOS, Cash, Square, Runs, Accounts) are implicit. */
   if(!Array.isArray(settings.payTypes))settings.payTypes=[];
 }
@@ -2091,7 +2097,7 @@ if($('#enCalc'))$('#enCalc').onclick=function(){var e=entries.filter(function(x)
 /* ---------- reports ---------- */
 function showModal(id){$('#'+id).classList.add('show');if(typeof syncTrailBtns==='function')syncTrailBtns()}
 function closeModal(id){$('#'+id).classList.remove('show');if(id==='askModal')askCb=null;if(typeof syncTrailBtns==='function')syncTrailBtns()}
-$$('.modal').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m){m.classList.remove('show');if(m.id==='askModal')askCb=null}})});
+$$('.modal').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)closeModal(m.id)})});
 var askCb=null;
 function ask(title,body,okLbl,fn){
   $('#askTitle').textContent=title;
@@ -2862,6 +2868,7 @@ $('#csvBtn').onclick=function(){var rows=[['Date','Rego','TakeHome','Gross','Dri
 function renderSettings(){
   $('#setPct').value=settings.pct;$('#setLevy').value=settings.levy;$('#setFuel').value=settings.fuel;$('#setTheme').value=settings.theme;
   $('#setGstBase').value=settings.gstBase;
+  var stState=$('#setState');if(stState)stState.value=settings.state||'VIC';
   $('#setCashGst').classList.toggle('on',!!settings.cashGstFree);
   var st24=$('#setTime24h');if(st24)st24.classList.toggle('on',!!settings.time24h);
   var ac=$('#archiveCount');if(ac)ac.textContent=receipts.length;
@@ -2906,6 +2913,7 @@ $('#setFuel').onchange=function(){settings.fuel=this.value;persist()};
 /* Fuel mode removed — always reimbursed */
 $('#setGstBase').onchange=function(){settings.gstBase=this.value;persist();toast(this.value==='share'?'GST set aside on driver share':'GST set aside on full gross')};
 $('#setCashGst').onclick=function(){settings.cashGstFree=!settings.cashGstFree;persist();this.classList.toggle('on',settings.cashGstFree);renderReports();toast(settings.cashGstFree?'Cash & Square: GST-free':'Cash & Square: GST-inclusive')};
+if($('#setState'))$('#setState').onchange=function(){settings.state=this.value;persist();toast('Address search focused on '+this.value)};
 if($('#setTime24h'))$('#setTime24h').onclick=function(){settings.time24h=!settings.time24h;persist();this.classList.toggle('on',!!settings.time24h);toast(settings.time24h?'24-Hour time format':'12-Hour time format')};
 if($('#advToggle'))$('#advToggle').onclick=function(){var w=$('#advWrap');var open=w.style.display==='none';w.style.display=open?'block':'none';this.classList.toggle('open',open)};
 if($('#archiveLink'))$('#archiveLink').onclick=openArchive;
@@ -2989,7 +2997,7 @@ async function afterAuth(user){
 function pushNow(){if(!syncOn||!fb.uid||!fb.fsM)return;var ts=Date.now();localStorage.setItem('fareo_updatedAt',String(ts));fb.fsM.setDoc(docRef(),{data:allData(),updatedAt:ts,_device:deviceId()}).then(function(){setSyncState('On - saved')}).catch(function(){setSyncState('Offline - will retry')})}
 function scheduleSync(){if(!syncOn||applyingRemote)return;clearTimeout(syncTimer);syncTimer=setTimeout(pushNow,900)}
 async function syncSignOut(){try{if(fb.auth)await fb.authM.signOut(fb.auth)}catch(_){}syncOn=false;localStorage.removeItem('fareo_sync_on');setSyncState('Off - local only');toast('Signed out (data kept on device)')}
-function reloadAll(){settings=load('fareo_settings',settings)||settings;migrateSettings();entries=load('fareo_entries',[])||[];deductions=load('fareo_deductions',[])||[];recurring=load('fareo_recurring',[])||[];fuelManual=load('fareo_fuelManual',[])||[];receipts=load('fareo_receipts',[])||[];names=load('fareo_names',[])||[];clients=load('fareo_clients',[])||[];if(!Array.isArray(clients))clients=[];runPlan=load('fareo_run_plan',[])||[];if(!Array.isArray(runPlan))runPlan=[];try{renderNames();rowInputs();render();var a=document.querySelector('.screen.on');if(a){var t=a.dataset.tab;if(t==='weekly')renderWeekly();if(t==='reports')renderReports();if(t==='settings')renderSettings();if(t==='runs')renderRuns();if(t==='book')renderBook()}}catch(_){}}
+function reloadAll(){settings=load('fareo_settings',settings)||settings;migrateSettings();entries=load('fareo_entries',[])||[];deductions=load('fareo_deductions',[])||[];recurring=load('fareo_recurring',[])||[];fuelManual=load('fareo_fuelManual',[])||[];receipts=load('fareo_receipts',[])||[];names=load('fareo_names',[])||[];clients=load('fareo_clients',[])||[];if(!Array.isArray(clients))clients=[];runPlan=load('fareo_run_plan',[])||[];if(!Array.isArray(runPlan))runPlan=[];try{renderNames();rowInputs();render();var a=document.querySelector('.screen.on');if(a){var t=a.dataset.tab;if(t==='hub')renderHomeEtaWidget();if(t==='weekly')renderWeekly();if(t==='reports')renderReports();if(t==='settings')renderSettings();if(t==='runs')renderRuns();if(t==='eta')renderEtaPage();if(t==='book')renderBook()}}catch(_){}}
 if($('#syncSignin'))$('#syncSignin').onclick=function(){syncConnect(false)};
 if($('#syncCreate'))$('#syncCreate').onclick=function(){syncConnect(true)};
 if($('#syncOut'))$('#syncOut').onclick=syncSignOut;
@@ -3106,6 +3114,18 @@ function clientCardText(c){
   if(c.notes)lines.push(c.notes);
   return lines.join('\n');
 }
+var AU_STATES={
+  VIC:{name:'Victoria',code:'VIC',bbox:'140.96,-39.20,150.05,-33.98',lat:-37.8136,lon:144.9631},
+  NSW:{name:'New South Wales',code:'NSW',bbox:'140.99,-37.51,153.64,-28.15',lat:-33.8688,lon:151.2093},
+  QLD:{name:'Queensland',code:'QLD',bbox:'137.99,-29.18,153.55,-10.05',lat:-27.4698,lon:153.0251},
+  SA: {name:'South Australia',code:'SA',bbox:'129.00,-38.07,141.01,-25.99',lat:-34.9285,lon:138.6007},
+  WA: {name:'Western Australia',code:'WA',bbox:'112.90,-35.19,129.01,-13.68',lat:-31.9505,lon:115.8605},
+  TAS:{name:'Tasmania',code:'TAS',bbox:'143.83,-43.66,148.52,-39.57',lat:-42.8821,lon:147.3272},
+  ACT:{name:'Australian Capital Territory',code:'ACT',bbox:'148.76,-35.92,149.40,-35.12',lat:-35.2809,lon:149.1300},
+  NT: {name:'Northern Territory',code:'NT',bbox:'129.00,-26.00,138.01,-10.85',lat:-12.4634,lon:130.8456},
+  ALL:{name:'Australia',code:'ALL',bbox:'112.90,-43.75,153.64,-10.06',lat:-25.2744,lon:133.7751}
+};
+
 function auSuggest(q,cb){
   q=(q||'').trim();
   if(q.length<3){cb([]);return}
@@ -3113,18 +3133,27 @@ function auSuggest(q,cb){
   auSuggest._t=setTimeout(function(){
     if(auSuggest._ab)auSuggest._ab.abort();
     auSuggest._ab=new AbortController();
-    var url='https://photon.komoot.io/api/?q='+encodeURIComponent(q)+'&limit=6&lang=en&bbox=112.9,-43.75,153.64,-10.06';
+    var curState=settings.state||'VIC';
+    var stInfo=AU_STATES[curState]||AU_STATES.VIC;
+    var bboxPart=stInfo.bbox?('&bbox='+stInfo.bbox):'';
+    var biasPart=(stInfo.lat!=null&&stInfo.lon!=null)?('&lat='+stInfo.lat+'&lon='+stInfo.lon):'';
+    var url='https://photon.komoot.io/api/?q='+encodeURIComponent(q)+'&limit=8&lang=en'+bboxPart+biasPart;
     fetch(url,{signal:auSuggest._ab.signal}).then(function(r){return r.json()}).then(function(j){
       var out=(j.features||[]).map(function(f){
         var p=f.properties||{},c=f.geometry&&f.geometry.coordinates;
         var country=String(p.country||p.countrycode||'').toLowerCase();
         if(country&&country.indexOf('au')<0&&country.indexOf('australia')<0)return null;
+        var stateStr=String(p.state||'').trim();
+        if(curState!=='ALL'&&stateStr){
+          var matches=(stateStr.toLowerCase()===stInfo.name.toLowerCase()||stateStr.toUpperCase()===stInfo.code);
+          if(!matches&&!p.postcode)return null;
+        }
         var line=[p.housenumber,p.street||p.name,p.district,p.city||p.locality,p.state,p.postcode].filter(Boolean).join(', ');
-        return {line:line||p.name||'',lat:c?c[1]:null,lng:c?c[0]:null};
+        return {line:line||p.name||'',lat:c?c[1]:null,lng:c?c[0]:null,state:p.state};
       }).filter(function(x){return x&&x.line});
       cb(out);
     }).catch(function(){cb([])});
-  },280);
+  },250);
 }
 var bookDay=(new Date()).getDay();
 var bookAmpm='am';
@@ -3896,10 +3925,18 @@ function renderBook(){
       var sub=clientSub(c)||(a0&&a0.line)||'No address yet';
       if(withWho.length)sub=(a0&&a0.line?a0.line+' · ':'')+'with '+withWho.join(', ');
       var link=a0&&a0.line?mapsAnchor(a0,sub):esc(sub);
-      return '<div class="cli" data-cid="'+esc(c.id)+'"><div class="cli-av">'+esc(clientInitials(c))+'</div><div style="flex:1;min-width:0"><b>'+esc(clientLabel(c))+'</b><span>'+link+'</span>'+(fl.length?'<div class="cli-need">'+fl.map(function(x){return '<i>'+esc(x)+'</i>'}).join('')+'</div>':'')+'</div><button type="button" class="cli-go" data-nav="'+esc(c.id)+'">Nav</button></div>';
+      return '<div class="cli" data-cid="'+esc(c.id)+'">'
+        +'<div class="cli-av">'+esc(clientInitials(c))+'</div>'
+        +'<div style="flex:1;min-width:0"><b>'+esc(clientLabel(c))+'</b><span>'+link+'</span>'+(fl.length?'<div class="cli-need">'+fl.map(function(x){return '<i>'+esc(x)+'</i>'}).join('')+'</div>':'')+'</div>'
+        +'<div style="display:flex;gap:5px;flex:0 0 auto">'
+          +'<button type="button" class="cli-go" data-share="'+esc(c.id)+'" title="Share address with Maps link" style="border-color:var(--acct);color:var(--acct)">Share</button>'
+          +'<button type="button" class="cli-go" data-nav="'+esc(c.id)+'" title="Open in Maps">Nav</button>'
+        +'</div>'
+      +'</div>';
     }).join('');
     $$('#cliList .cli').forEach(function(row){row.onclick=function(){openClient(row.dataset.cid)}});
     $$('#cliList [data-nav]').forEach(function(b){b.onclick=function(e){e.stopPropagation();var c=findClient(b.dataset.nav);openMaps((c.addresses||[])[0])}});
+    $$('#cliList [data-share]').forEach(function(b){b.onclick=function(e){e.stopPropagation();var c=findClient(b.dataset.share);if(c&&c.addresses&&c.addresses[0]&&c.addresses[0].line){shareAddr(c.addresses[0],c)}else{toast('No address saved for this client')}}});
     $$('#cliList [data-ext]').forEach(function(a){a.onclick=function(e){e.stopPropagation()}});
   }
 }
@@ -3935,16 +3972,6 @@ function renderClSchool(){
   if(pm)pm.classList.toggle('on',clDraft.school.pm!==false);
   fillAddrSelects();
 }
-function riderBar(addr){
-  if(!addr.people)addr.people=[];
-  var extra=peopleOf(addr,clDraft).filter(function(p){return p.id!==clDraft.id});
-  var used={};extra.forEach(function(p){if(p.id)used[p.id]=1});
-  var opts=clients.filter(function(c){return c.id!==clDraft.id&&!used[c.id]}).map(function(c){return '<option value="'+esc(c.id)+'">'+esc(clientLabel(c))+'</option>'}).join('');
-  return '<div class="riders"><b>Also at this stop</b>'
-    +extra.map(function(p){return '<span class="chip-r">'+esc(p.label)+'<button type="button" data-unride="'+esc(p.id||'')+'" data-unname="'+esc(p.label)+'" aria-label="Remove">×</button></span>'}).join('')
-    +(opts?'<select data-ride><option value="">Add a client</option>'+opts+'</select>':'')
-    +'<input class="ride-add" data-ride-name placeholder="Or type a name"></div>';
-}
 function renderClAddrs(){
   var box=$('#clAddrs');if(!box||!clDraft)return;
   box.innerHTML=(clDraft.addresses||[]).map(function(a){
@@ -3955,7 +3982,6 @@ function renderClAddrs(){
       +'<input data-k="line" value="'+esc(a.line||'')+'" placeholder="Type an address or paste a Maps link">'
       +'<div class="sugg" data-sugg style="display:none"></div>'
       +(u?'<a class="addr-nav" href="'+esc(u)+'" target="_blank" rel="noopener">Open in Maps</a>':'')
-      +riderBar(a)
       +'<div class="addr-acts"><button type="button" data-act="nav">Maps</button><button type="button" data-act="copy">Copy</button><button type="button" data-act="share">Share</button>'+(clDraft.addresses.length>1?'<button type="button" data-act="del">Remove</button>':'')+'</div>'
       +'</div>';
   }).join('');
@@ -4007,37 +4033,6 @@ function renderClAddrs(){
         else if(act==='del'){clDraft.addresses=clDraft.addresses.filter(function(x){return x.id!==id});if(!clDraft.addresses.length)clDraft.addresses=[blankAddr()];renderClAddrs();renderClSchool()}
       };
     });
-    var ride=$('[data-ride]',card);
-    if(ride)ride.onchange=function(){
-      if(!addr||!this.value)return;
-      var c=findClient(this.value);if(!c)return;
-      if(!addr.people)addr.people=[];
-      addr.people.push({id:c.id,name:clientLabel(c)});
-      ensureShare(addr);
-      renderClAddrs();
-    };
-    var nameInp=$('[data-ride-name]',card);
-    if(nameInp)nameInp.onkeydown=function(e){
-      if(e.key!=='Enter')return;
-      e.preventDefault();
-      var n=(this.value||'').trim();if(!n||!addr)return;
-      if(!addr.people)addr.people=[];
-      addr.people.push({name:n});
-      this.value='';
-      renderClAddrs();
-    };
-    $$('[data-unride]',card).forEach(function(b){
-      b.onclick=function(){
-        if(!addr||!addr.people)return;
-        var rid=b.dataset.unride,nm=b.dataset.unname;
-        addr.people=addr.people.filter(function(p){
-          if(rid&&p.id===rid)return false;
-          if(!rid&&nm&&(p.name||'')===nm)return false;
-          return true;
-        });
-        renderClAddrs();
-      };
-    });
   });
   fillAddrSelects();
 }
@@ -4074,53 +4069,6 @@ function syncShared(owner){
   });
 }
 
-var clExtraRiders = [];
-
-function renderClExtraNames(){
-  var box = $('#clExtraNamesList');
-  if(!box) return;
-  if(!clExtraRiders.length){
-    box.innerHTML = '';
-    return;
-  }
-  box.innerHTML = clExtraRiders.map(function(r, idx){
-    return '<div class="cl-extra-row" data-eidx="' + idx + '" style="display:flex;align-items:center;gap:6px">'
-      + '<input class="cl-extra-inp" placeholder="Additional passenger name" value="' + esc(r.name || '') + '" style="flex:1">'
-      + '<button type="button" class="x" data-e-del="' + idx + '" style="width:36px;height:36px;border-radius:8px;border:1px solid var(--bd2);background:var(--field);color:var(--dgr);cursor:pointer;font-size:18px;line-height:1;display:grid;place-items:center" aria-label="Remove passenger">&times;</button>'
-      + '</div>';
-  }).join('');
-
-  $$('#clExtraNamesList .cl-extra-inp').forEach(function(inp){
-    inp.oninput = function(){
-      var row = inp.closest('.cl-extra-row');
-      var idx = row ? Number(row.dataset.eidx) : -1;
-      if(idx >= 0 && clExtraRiders[idx]){
-        clExtraRiders[idx].name = inp.value;
-      }
-    };
-  });
-
-  $$('#clExtraNamesList [data-e-del]').forEach(function(btn){
-    btn.onclick = function(){
-      var idx = Number(btn.dataset.eDel);
-      if(idx >= 0){
-        clExtraRiders.splice(idx, 1);
-        renderClExtraNames();
-      }
-    };
-  });
-}
-
-if($('#clAddRiderBtn')){
-  $('#clAddRiderBtn').onclick = function(){
-    clExtraRiders.push({ name: '' });
-    renderClExtraNames();
-    var inps = $$('#clExtraNamesList .cl-extra-inp');
-    var last = inps[inps.length - 1];
-    if(last) last.focus();
-  };
-}
-
 if($('#clMoreToggle')){
   $('#clMoreToggle').onclick = function(){
     var wrap = $('#clMoreWrap');
@@ -4140,18 +4088,17 @@ function openClient(id){
   if(!Array.isArray(clDraft.addresses)||!clDraft.addresses.length)clDraft.addresses=[blankAddr()];
   (clDraft.addresses||[]).forEach(function(a){if(!Array.isArray(a.people))a.people=[]});
 
-  clExtraRiders = [];
+  var allNames = [];
+  if(clDraft.name) allNames.push(clDraft.name);
   (clDraft.addresses||[]).forEach(function(a){
     (a.people||[]).forEach(function(p){
-      var n = p.name || (p.id ? clientLabel(findClient(p.id)) : '');
-      if(n && !clExtraRiders.some(function(x){ return (x.name||'').toLowerCase() === n.toLowerCase(); })){
-        clExtraRiders.push({ id: p.id || '', name: n });
-      }
+      var n = (p.name || (p.id ? clientLabel(findClient(p.id)) : '')).trim();
+      if(n && allNames.indexOf(n) < 0) allNames.push(n);
     });
   });
 
   $('#clTitle').textContent=c?'Edit client':'New client';
-  $('#clName').value=clDraft.name||'';
+  $('#clName').value=allNames.join(', ');
   $('#clNick').value=clDraft.nick||'';
   $('#clPhone').value=clDraft.phone||'';
   $('#clCarer').value=clDraft.carer||'';
@@ -4163,7 +4110,6 @@ function openClient(id){
   if(moreChev) moreChev.style.transform = 'rotate(0deg)';
 
   var del=$('#clDelete');if(del)del.style.display=c?'block':'none';
-  renderClExtraNames();
   renderClNeeds();renderClSchool();renderClAddrs();
   showModal('clientModal');
 }
@@ -4177,27 +4123,23 @@ if($('#clAddAddr'))$('#clAddAddr').onclick=function(){clDraft.addresses.push(bla
 if($('#clCancel'))$('#clCancel').onclick=function(){closeModal('clientModal');clDraft=null};
 if($('#clSave'))$('#clSave').onclick=function(){
   if(!clDraft)return;
-  clDraft.name=($('#clName').value||'').trim();
-  clDraft.nick=($('#clNick').value||'').trim();
-  clDraft.phone=($('#clPhone').value||'').trim();
-  clDraft.carer=($('#clCarer').value||'').trim();
-  clDraft.notes=($('#clNotes').value||'').trim();
+  var rawNames = ($('#clName').value || '').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+  clDraft.name = rawNames[0] || '';
+  clDraft.nick = ($('#clNick').value || '').trim();
+  clDraft.phone = ($('#clPhone').value || '').trim();
+  clDraft.carer = ($('#clCarer').value || '').trim();
+  clDraft.notes = ($('#clNotes').value || '').trim();
   $$('#clAddrs .addr-card').forEach(function(card){
     var a=findAddr(clDraft,card.dataset.aid);if(!a)return;
     var t=$('[data-k="title"]',card);if(t)a.title=t.value;
     var l=$('[data-k="line"]',card);if(l)a.line=l.value;
   });
-  if(!clDraft.name&&!clDraft.nick){toast('Add a passenger name');return}
+  if(!clDraft.name && !clDraft.nick){toast('Add a passenger name');return}
 
-  /* Collect extra rider names */
-  var extraNames = [];
-  $$('#clExtraNamesList .cl-extra-inp').forEach(function(inp){
-    var val = (inp.value||'').trim();
-    if(val && extraNames.indexOf(val)<0) extraNames.push(val);
-  });
+  var extraNames = rawNames.slice(1);
   var peopleList = extraNames.map(function(n){
-    var match = clExtraRiders.filter(function(r){ return (r.name||'').toLowerCase() === n.toLowerCase(); })[0];
-    return { id: match ? match.id : '', name: n };
+    var existing = clients.filter(function(x){ return clientLabel(x).toLowerCase() === n.toLowerCase(); })[0];
+    return { id: existing ? existing.id : '', name: n };
   });
 
   (clDraft.addresses||[]).forEach(function(a){
@@ -4279,7 +4221,7 @@ function watchForUpdates(){
 }
 
 /* ---------- nav ---------- */
-var TABS=['hub','shift','weekly','reports','runs','book','refresh','settings'];
+var TABS=['hub','shift','weekly','reports','runs','eta','book','refresh','settings'];
 var curTab='shift';
 var histI=0,histLen=0;
 function anyModal(){return $$('.modal.show')[0]||null}
@@ -4294,7 +4236,13 @@ function applyTab(tab){
   curTab=tab;
   $$('.screen').forEach(function(s){s.classList.toggle('on',s.dataset.tab===tab)});
   var home=$('#homeBtn');if(home)home.classList.toggle('on',tab==='hub');
-  if(tab==='weekly')renderWeekly();if(tab==='reports')renderReports();if(tab==='settings')renderSettings();if(tab==='runs')renderRuns();if(tab==='book')renderBook();
+  if(tab==='hub')renderHomeEtaWidget();
+  if(tab==='weekly')renderWeekly();
+  if(tab==='reports')renderReports();
+  if(tab==='settings')renderSettings();
+  if(tab==='runs')renderRuns();
+  if(tab==='eta')renderEtaPage();
+  if(tab==='book')renderBook();
   window.scrollTo({top:0});
   syncTrailBtns();
 }
@@ -4351,7 +4299,7 @@ $('#themeBtn').onclick=function(){settings.theme=effectiveDark()?'light':'dark';
 $('#today').textContent=fmtDayLong(new Date());
 var _vl=$('#versionLine');if(_vl)_vl.textContent='Fareo '+APP_VERSION+' \u00b7 tap for release notes';
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(){if(settings.theme==='system')applyTheme()});
-applyTheme();renderNames();rowInputs();render();setSub(1);renderDeadlines();
+applyTheme();renderNames();rowInputs();render();setSub(1);renderDeadlines();updateEtaView();
 (function(){
   var h=(location.hash||'').replace(/^#/,'');
   if(TABS.indexOf(h)<0)h='shift';
