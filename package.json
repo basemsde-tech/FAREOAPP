@@ -1,0 +1,28 @@
+{
+  "name": "fareoapp",
+  "version": "1.0.0",
+  "description": "A single-file Progressive Web App (PWA) for taxi drivers — shift calculator,\r weekly payout tracker, and ATO-ready tax/BAS reports. Works offline, installs\r to your home screen. All data is stored locally in your browser.",
+  "main": "sw.js",
+  "scripts": {
+    "build": "node build-www.js && npx cap sync android",
+    "sync": "node build-www.js && npx cap sync android",
+    "open:android": "npx cap open android"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/basemsde-tech/FAREOAPP.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/basemsde-tech/FAREOAPP/issues"
+  },
+  "homepage": "https://github.com/basemsde-tech/FAREOAPP#readme",
+  "dependencies": {
+    "@capacitor/android": "^8.5.0",
+    "@capacitor/cli": "^8.5.0",
+    "@capacitor/core": "^8.5.0"
+  }
+}

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Fareo</string>
+    <string name="title_activity_main">Fareo</string>
+    <string name="package_name">com.fareo.app</string>
+    <string name="custom_url_scheme">com.fareo.app</string>
+</resources>

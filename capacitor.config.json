@@ -1,0 +1,13 @@
+{
+  "appId": "com.fareo.app",
+  "appName": "Fareo",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": true,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": false
+  }
+}
