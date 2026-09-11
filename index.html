@@ -110,12 +110,17 @@ input:disabled,select:disabled{background:var(--disbg);color:var(--disink);-webk
 .shift-rcpt-frame.inspect.dragging{cursor:grabbing}
 .shift-rcpt-frame .insp-stage{flex:1;min-height:180px;position:relative;overflow:hidden;touch-action:none;width:100%}
 #logEosPreview.inspect .insp-stage{min-height:min(28vh,220px)}
-.log-eos-dictate{margin-top:12px;padding-top:12px;border-top:1px dashed var(--bd2)}
-.log-eos-dictate .add{margin-top:8px}
-.log-hail-dictate{margin-top:12px;padding-top:12px;border-top:1px dashed var(--bd2)}
-.log-hail-dictate .hail-head{display:flex;align-items:center;gap:7px;margin:0 0 8px;font-size:12px;font-weight:700;color:var(--head)}
-.log-hail-dictate .hail-head .sub-amt{margin-left:auto;font-size:11px;font-weight:700;color:var(--dgr);font-variant-numeric:tabular-nums}
-.log-hail-dictate .hailwrap{margin:0}
+.log-dictate-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--bd2);align-items:start}
+.log-dictate-row .log-eos-dictate,.log-dictate-row .log-hail-dictate{margin:0;padding:0;border:0;min-width:0}
+.log-dictate-row .fl,.log-dictate-row .hail-head{display:flex;align-items:center;gap:5px;margin:0 0 6px;font-size:11px;font-weight:700;color:var(--head);line-height:1.2}
+.log-dictate-row .hail-head .sub-amt{margin-left:auto;font-size:10px;font-weight:700;color:var(--dgr);font-variant-numeric:tabular-nums}
+.log-dictate-row .add{margin-top:6px;padding:7px 8px;font-size:11px}
+.log-dictate-row .hailwrap{margin:0;padding:8px 9px;gap:8px;flex-direction:column;align-items:stretch}
+.log-dictate-row .hailamt b{font-size:20px}
+.log-dictate-row .counter{justify-content:center}
+.log-dictate-row .counter input{width:40px;font-size:16px}
+.log-dictate-row .counter button{width:30px;height:30px;font-size:17px}
+@media (max-width:360px){.log-dictate-row{grid-template-columns:1fr}}
 .shift-net{margin-top:4px;margin-bottom:4px;padding:14px 14px 12px}
 .shift-net .total{font-size:34px;margin:4px 0 2px}
 .shift-net .formula{font-size:10.5px;line-height:1.35;word-break:break-word}
@@ -837,7 +842,7 @@ a.addr-link{display:inline;font-size:12.5px}
       </div>
 
       <div class="card" style="margin-bottom:0">
-        <h5><span class="dot" style="background:var(--fuel-fill)"></span>Fuel Receipts <span class="help" data-help="Optional. If you attach a fuel receipt, a fuel amount becomes compulsory on the Log Shift step. Fuel snaps are included in the share collage with EOS." aria-label="Help">?</span></h5>
+        <h5><span class="dot" style="background:var(--fuel-fill)"></span>Fuel Receipts <span class="help" data-help="Optional. If you attach a fuel receipt, a fuel amount becomes compulsory on the Log Shift step. Fuel snaps are stored for the shift but are not added to the share collage (EOS only)." aria-label="Help">?</span></h5>
         <p style="font-size:11.5px;color:var(--mut);margin:0 0 10px;line-height:1.4">Standalone fuel receipt upload. Attaching one makes fuel expense required.</p>
         <button class="att" id="fuelRcpt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg><span id="fuelRcptTxt">Add fuel receipt</span></button>
         <input id="fuelRcptFile" type="file" accept="image/*,application/pdf" multiple style="display:none">
@@ -853,8 +858,8 @@ a.addr-link{display:inline;font-size:12.5px}
     </div>
     <div data-pane="2" style="display:none">
       <div class="card" style="margin-bottom:10px">
-        <h5><span class="dot" style="background:var(--inc)"></span>End of Shift<span class="help" data-help="Inspect the slip, then enter EOS dollars and hail count underneath. Pinch, scroll-wheel, or +/- to zoom; drag to pan." aria-label="Help">?</span><span class="sub-amt" id="eosSub">$0</span></h5>
-        <p style="font-size:11.5px;color:var(--mut);margin:0 0 8px;line-height:1.4">Slip, EOS values, and hail count stay together so you can dictate from the photo.</p>
+        <h5><span class="dot" style="background:var(--inc)"></span>End of Shift<span class="help" data-help="Inspect the slip, then enter EOS dollars and hail count side by side. Use Prev / Next to switch slips. Pinch, scroll-wheel, or +/- to zoom; drag to pan." aria-label="Help">?</span><span class="sub-amt" id="eosSub">$0</span></h5>
+        <p style="font-size:11.5px;color:var(--mut);margin:0 0 8px;line-height:1.4">Dictate EOS + hail from the slip — Prev / Next switches attachments.</p>
         <div class="shift-rcpt-frame" id="logEosPreview" style="min-height:140px;max-height:none">
           <div class="rcpt-empty"><b>No EOS attachment</b>Go back to Attach to add an End of Shift document.</div>
         </div>
@@ -863,29 +868,21 @@ a.addr-link{display:inline;font-size:12.5px}
           <span class="rcpt-count" id="logEosCount">1 / 1</span>
           <button type="button" id="logEosNext" aria-label="Next">Next &rsaquo;</button>
         </div>
-        <div class="shift-rcpt-thumbs" id="logEosThumbs"></div>
-        <div class="log-eos-dictate">
-          <label class="fl" style="margin-bottom:6px">EOS Takings <span class="help" data-help="Enter EOS dollar values from your slip (one field per attachment when you have multiple). Cash is entered separately." aria-label="Help">?</span></label>
-          <div id="eosRows"></div>
-          <button class="add" id="addEos">+ Add EOS value</button>
-        </div>
-        <div class="log-hail-dictate">
-          <div class="hail-head"><span class="dot" style="background:var(--dgr)"></span>Hail Trips <span class="danger" style="font-size:10px">required</span><span class="help" data-help="Rank / street-hail trips for CPV levy. When Hail OCR is on, this can auto-fill from the slip; otherwise enter it yourself." aria-label="Help">?</span><span class="sub-amt" id="levyTag">$0.00 levy</span></div>
-          <div class="hailwrap">
-            <div class="hailamt"><small>Private levy</small><b id="levyAmt">$0.00</b><span id="levyRate">$1.20 / trip</span></div>
-            <div class="counter"><button type="button" id="hailMinus">&minus;</button><input id="hail" type="number" min="0" inputmode="numeric" placeholder="0"><button type="button" id="hailPlus">+</button></div>
+        <div class="log-dictate-row">
+          <div class="log-eos-dictate">
+            <label class="fl">EOS Takings <span class="help" data-help="Enter EOS dollar values from your slip (one field per attachment when you have multiple). Cash is entered separately." aria-label="Help">?</span></label>
+            <div id="eosRows"></div>
+            <button class="add" id="addEos">+ Add EOS</button>
           </div>
-          <p id="hailOcrHint" style="display:none;margin:8px 0 0;font-size:11px;color:var(--on-dgr)"></p>
+          <div class="log-hail-dictate">
+            <div class="hail-head"><span class="dot" style="background:var(--dgr)"></span>Hail <span class="danger" style="font-size:10px">req</span><span class="help" data-help="Rank / street-hail trips for CPV levy. When Hail OCR is on, this can auto-fill from the slip; otherwise enter it yourself." aria-label="Help">?</span><span class="sub-amt" id="levyTag">$0</span></div>
+            <div class="hailwrap">
+              <div class="hailamt"><small>Levy</small><b id="levyAmt">$0.00</b><span id="levyRate">$1.20 / trip</span></div>
+              <div class="counter"><button type="button" id="hailMinus">&minus;</button><input id="hail" type="number" min="0" inputmode="numeric" placeholder="0"><button type="button" id="hailPlus">+</button></div>
+            </div>
+            <p id="hailOcrHint" style="display:none;margin:6px 0 0;font-size:10.5px;color:var(--on-dgr);line-height:1.35"></p>
+          </div>
         </div>
-      </div>
-      <div class="shift-rcpt-sticky" id="rcptSticky">
-        <img id="rcptStickyImg" alt="" style="display:none">
-        <div class="rp-meta"><b id="rcptStickyTitle">Attachments</b><span id="rcptStickyName">—</span></div>
-        <div class="rp-sw">
-          <button type="button" id="rcptStickyPrev" aria-label="Previous">&lsaquo;</button>
-          <button type="button" id="rcptStickyNext" aria-label="Next">&rsaquo;</button>
-        </div>
-        <button type="button" id="rcptStickyChange" style="border:1px solid var(--bd2);background:var(--field);color:var(--head);border-radius:8px;padding:7px 9px;font-size:11px;font-weight:700;cursor:pointer">EOS</button>
       </div>
       <p class="shift-fields-hint">Drag <b style="letter-spacing:1px">:::</b> on a field to reorder — amounts &amp; maths stay the same. EOS &amp; hail stay under the slip.</p>
       <div class="shift-fields" id="shiftFields">
@@ -1478,8 +1475,12 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.18';
+var APP_VERSION='8.20';
 var CHANGELOG=[
+  {v:'8.20',date:'September 11, 2026',notes:[
+    ['UI/UX','Log Shift: EOS + Hail sit side-by-side under the slip; thumb strip and sticky nav removed — Prev / Next only.'],
+    ['UI/UX','Share collage is EOS photos only — no text banner or fuel — slips side-by-side with a clear divider.'],
+  ]},
   {v:'8.18',date:'September 11, 2026',notes:[
     ['UI/UX','Log Shift: Hail Trips sits with EOS values under the slip preview so slip, dollars, and hail stay in one view.'],
   ]},
@@ -2002,7 +2003,6 @@ function updateReceiptUI(){
     var ln=$('#logEosNext');if(ln)ln.disabled=shiftRcptIdx>=n-1;
   }
   renderThumbs($('#rcptThumbs'), eosReceipts, shiftRcptIdx, function(i){shiftRcptIdx=i;updateReceiptUI()}, function(i){removeEosAt(i)});
-  renderThumbs($('#logEosThumbs'), eosReceipts, shiftRcptIdx, function(i){shiftRcptIdx=i;updateReceiptUI()}, null);
   var rem=$('#rcptRemove');if(rem)rem.disabled=!has;
 
   var fn=fuelReceipts.length, fcur=currentFuelReceipt(), fhas=fn>0;
@@ -2013,20 +2013,6 @@ function updateReceiptUI(){
   renderThumbs($('#fuelRcptThumbs'), fuelReceipts, fuelRcptIdx, function(i){fuelRcptIdx=i;updateReceiptUI()}, function(i){removeFuelAt(i)});
   var badge=$('#fuelReqBadge');if(badge)badge.style.display=fhas?'inline':'none';
 
-  var sticky=$('#rcptSticky');
-  if(sticky){
-    sticky.classList.toggle('on',has||fhas);
-    var stImg=$('#rcptStickyImg'), stTitle=$('#rcptStickyTitle'), stName=$('#rcptStickyName');
-    var show=cur&&cur.url?cur:(fcur&&fcur.url?fcur:null);
-    if(stTitle)stTitle.textContent=(n||0)+' EOS · '+(fn||0)+' fuel';
-    if(stName)stName.textContent=show?show.name:'Tap EOS to change attachments';
-    if(stImg){
-      if(show&&show.url&&show.type!=='application/pdf'){stImg.src=show.url;stImg.style.display='block'}
-      else{stImg.removeAttribute('src');stImg.style.display='none'}
-    }
-    var sp=$('#rcptStickyPrev');if(sp)sp.disabled=!has||shiftRcptIdx<=0;
-    var sn=$('#rcptStickyNext');if(sn)sn.disabled=!has||shiftRcptIdx>=n-1;
-  }
   syncAttachOcrHint();
   if(typeof updateFooter==='function')updateFooter();
   if(typeof rowInputs==='function'){/* keep eos rows in sync after attach count change */}
@@ -2273,83 +2259,56 @@ function drawPdfTile(ctx,x,y,w,h,name){
   ctx.fillText(label,x+w/2,y+h/2+22);
   ctx.textAlign='left';
 }
-function wrapCanvasText(ctx, text, maxW){
-  var words=String(text).split(/\s+/), lines=[], line='';
-  words.forEach(function(w){
-    var test=line?line+' '+w:w;
-    if(ctx.measureText(test).width>maxW&&line){lines.push(line);line=w}else line=test;
-  });
-  if(line)lines.push(line);
-  return lines;
-}
-/* Collage embeds the SAME share lines as WhatsApp text so image + caption stay consistent. */
-async function buildReceiptCollageFile(shareLines){
-  var list=allShiftAttach();
-  if(!list.length)return null;
-  var lines=shareLines||buildShareLines();
-  var pad=24,gap=16,maxW=1080,tiles=[];
-  /* measure text block */
-  var tmp=document.createElement('canvas').getContext('2d');
-  tmp.font='600 22px system-ui,sans-serif';
-  var textLines=[];
-  lines.forEach(function(raw){
-    var clean=String(raw).replace(/\*/g,'').replace(/[^\x20-\x7E]/g,' ').replace(/\s+/g,' ').trim();
-    if(!clean)return;
-    wrapCanvasText(tmp, clean, maxW-pad*2).forEach(function(ln){textLines.push(ln)});
-  });
-  var textBlockH=36+textLines.length*28+pad;
+/* EOS-only collage: slips side-by-side (equal height), clear divider lines, no text/fuel. */
+async function buildReceiptCollageFile(){
+  if(!eosReceipts.length)return null;
+  var DIV=6, MAX_H=1200, MAX_TOTAL_W=2400, tiles=[];
   for(var i=0;i<eosReceipts.length;i++){
     var r=eosReceipts[i];
-    if(r.type==='application/pdf'||!r.url)tiles.push({kind:'pdf',name:'EOS · '+r.name,w:maxW-pad*2,h:200,label:'EOS '+(i+1)});
-    else{
-      var img=await loadImgFromUrl(r.url);
-      if(!img){tiles.push({kind:'pdf',name:'EOS · '+r.name,w:maxW-pad*2,h:200,label:'EOS '+(i+1)});continue}
-      var iw=img.naturalWidth||img.width,ih=img.naturalHeight||img.height;
-      var tw=maxW-pad*2,th=Math.round(ih*(tw/iw));
-      if(th>1400){th=1400;tw=Math.round(iw*(th/ih))}
-      tiles.push({kind:'img',img:img,w:tw,h:th,name:r.name,label:'EOS '+(i+1)});
+    if(r.type==='application/pdf'||!r.url){
+      tiles.push({kind:'pdf',name:r.name||('EOS '+(i+1)),nw:480,nh:720});
+      continue;
     }
+    var img=await loadImgFromUrl(r.url);
+    if(!img){tiles.push({kind:'pdf',name:r.name||('EOS '+(i+1)),nw:480,nh:720});continue}
+    tiles.push({kind:'img',img:img,nw:img.naturalWidth||img.width||480,nh:img.naturalHeight||img.height||720});
   }
-  for(var j=0;j<fuelReceipts.length;j++){
-    var fr=fuelReceipts[j];
-    if(fr.type==='application/pdf'||!fr.url)tiles.push({kind:'pdf',name:'Fuel · '+fr.name,w:maxW-pad*2,h:200,label:'Fuel '+(j+1)});
-    else{
-      var fimg=await loadImgFromUrl(fr.url);
-      if(!fimg){tiles.push({kind:'pdf',name:'Fuel · '+fr.name,w:maxW-pad*2,h:200,label:'Fuel '+(j+1)});continue}
-      var fiw=fimg.naturalWidth||fimg.width,fih=fimg.naturalHeight||fimg.height;
-      var ftw=maxW-pad*2,fth=Math.round(fih*(ftw/fiw));
-      if(fth>1400){fth=1400;ftw=Math.round(fiw*(fth/fih))}
-      tiles.push({kind:'img',img:fimg,w:ftw,h:fth,name:fr.name,label:'Fuel '+(j+1)});
-    }
+  if(!tiles.length)return null;
+  var targetH=Math.min(MAX_H, Math.max.apply(null, tiles.map(function(t){return t.nh})));
+  if(!isFinite(targetH)||targetH<240)targetH=900;
+  tiles.forEach(function(t){
+    var scale=targetH/t.nh;
+    t.dw=Math.max(100,Math.round(t.nw*scale));
+    t.dh=targetH;
+  });
+  var contentW=tiles.reduce(function(a,t){return a+t.dw},0);
+  var totalW=contentW+(tiles.length-1)*DIV;
+  if(totalW>MAX_TOTAL_W){
+    var s=(MAX_TOTAL_W-(tiles.length-1)*DIV)/contentW;
+    tiles.forEach(function(t){t.dw=Math.max(80,Math.round(t.dw*s));t.dh=Math.max(160,Math.round(t.dh*s))});
+    totalW=tiles.reduce(function(a,t){return a+t.dw},0)+(tiles.length-1)*DIV;
   }
-  var totalH=textBlockH+pad;
-  tiles.forEach(function(t,idx){totalH+=28+t.h+(idx<tiles.length-1?gap:0)});
-  totalH+=pad;
-  var c=document.createElement('canvas');c.width=maxW;c.height=Math.max(totalH,240);
+  var colH=Math.max.apply(null, tiles.map(function(t){return t.dh}));
+  var c=document.createElement('canvas');c.width=Math.max(totalW,200);c.height=colH;
   var x=c.getContext('2d');
-  x.fillStyle='#0B1220';x.fillRect(0,0,c.width,c.height);
-  x.fillStyle='#ECFDF5';x.fillRect(0,0,c.width,textBlockH);
-  x.fillStyle='#065F46';x.font='800 24px system-ui,sans-serif';
-  x.fillText('Fareo shift · text matches this collage',pad,32);
-  x.fillStyle='#111827';x.font='600 20px system-ui,sans-serif';
-  var ty=58;
-  textLines.forEach(function(ln){x.fillText(ln,pad,ty);ty+=28});
-  var y=textBlockH+8;
+  x.fillStyle='#FFFFFF';x.fillRect(0,0,c.width,c.height);
+  var left=0;
   tiles.forEach(function(t,idx){
-    x.fillStyle='#F4F4F5';x.font='700 18px system-ui,sans-serif';
-    x.fillText(t.label||('File '+(idx+1)),pad,y+18);
-    y+=28;
-    var left=Math.round((maxW-t.w)/2);
-    if(t.kind==='img')x.drawImage(t.img,left,y,t.w,t.h);
-    else drawPdfTile(x,left,y,t.w,t.h,t.name);
-    y+=t.h+(idx<tiles.length-1?gap:0);
+    if(t.kind==='img')x.drawImage(t.img,left,0,t.dw,t.dh);
+    else drawPdfTile(x,left,0,t.dw,t.dh,t.name);
+    left+=t.dw;
+    if(idx<tiles.length-1){
+      x.fillStyle='#F3F4F6';x.fillRect(left,0,DIV,colH);
+      x.fillStyle='#6B7280';x.fillRect(left+2,0,2,colH);
+      left+=DIV;
+    }
   });
   return new Promise(function(res){
     try{
       c.toBlob(function(blob){
         if(!blob){res(null);return}
-        res(new File([blob],'fareo-shift-'+todayStr()+'.jpg',{type:'image/jpeg'}));
-      },'image/jpeg',0.85);
+        res(new File([blob],'fareo-eos-'+todayStr()+'.jpg',{type:'image/jpeg'}));
+      },'image/jpeg',0.9);
     }catch(e){res(null)}
   });
 }
@@ -2395,10 +2354,9 @@ async function buildReceiptCollageFile(shareLines){
   if($('#rzReset'))$('#rzReset').onclick=function(){rz.scale=1;rz.x=0;rz.y=0;rzApply()};
   window.addEventListener('resize',function(){if($('#rcptZoom')&&$('#rcptZoom').classList.contains('show'))rzFitImage()});
 })();
-/* Inline inspect replaces click-to-maximize on preview frames; sticky thumb still opens full view. */
+/* Inline inspect on Log Shift preview; Prev / Next switches EOS slips. */
 if($('#logEosPrev'))$('#logEosPrev').onclick=function(){shiftRcptIdx=Math.max(0,shiftRcptIdx-1);updateReceiptUI()};
 if($('#logEosNext'))$('#logEosNext').onclick=function(){shiftRcptIdx=Math.min(eosReceipts.length-1,shiftRcptIdx+1);updateReceiptUI()};
-if($('#rcptStickyImg'))$('#rcptStickyImg').onclick=function(e){e.stopPropagation();openCurrentReceiptZoom()};
 
 var repRange={from:null,to:null,name:""};
 var trackQ=null;
@@ -2676,11 +2634,8 @@ $('#hailMinus').onclick=function(){draft.hail=Math.max(0,nn(draft.hail)-1);$('#h
 $('#hailPlus').onclick=function(){draft.hail=nn(draft.hail)+1;$('#hail').value=draft.hail;render()};
 $('#rcpt').onclick=function(){$('#rcptFile').click()};
 if($('#rcptAddMore'))$('#rcptAddMore').onclick=function(){$('#rcptFile').click()};
-if($('#rcptStickyChange'))$('#rcptStickyChange').onclick=function(){go('shift');setSub(1)};
 if($('#rcptPrevBtn'))$('#rcptPrevBtn').onclick=function(){shiftRcptIdx=Math.max(0,shiftRcptIdx-1);updateReceiptUI()};
 if($('#rcptNextBtn'))$('#rcptNextBtn').onclick=function(){shiftRcptIdx=Math.min(eosReceipts.length-1,shiftRcptIdx+1);updateReceiptUI()};
-if($('#rcptStickyPrev'))$('#rcptStickyPrev').onclick=function(){shiftRcptIdx=Math.max(0,shiftRcptIdx-1);updateReceiptUI()};
-if($('#rcptStickyNext'))$('#rcptStickyNext').onclick=function(){shiftRcptIdx=Math.min(eosReceipts.length-1,shiftRcptIdx+1);updateReceiptUI()};
 if($('#rcptRemove'))$('#rcptRemove').onclick=function(){
   if(!eosReceipts.length)return;
   removeEosAt(shiftRcptIdx);
@@ -2768,17 +2723,17 @@ function downloadShareFile(file){
     setTimeout(function(){URL.revokeObjectURL(u)},1600);
   }catch(_){}
 }
-/* Same buildShareLines() feeds WhatsApp text AND collage banner — always paired. */
+/* Share: WhatsApp text separate; collage is EOS photos only (side-by-side). */
 async function doShare(){
   var lines=buildShareLines();
   var txt=lines.join('\n');
   var p=$('#prev');if(p)p.textContent=txt;
   var f=null;
-  if(allShiftAttach().length){
-    try{f=await buildReceiptCollageFile(lines)}catch(_){f=null}
+  if(eosReceipts.length){
+    try{f=await buildReceiptCollageFile()}catch(_){f=null}
     if(!f){
       var first=null;
-      allShiftAttach().some(function(r){if(r&&r.file){first=r.file;return true}return false});
+      eosReceipts.some(function(r){if(r&&r.file){first=r.file;return true}return false});
       f=first;
     }
   }
