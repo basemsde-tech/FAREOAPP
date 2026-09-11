@@ -588,18 +588,13 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
 .hub-wheel .hub-sat:active{transform:rotate(var(--a)) translateY(-116px) rotate(calc(var(--a) * -1)) scale(.91)}
 @keyframes orbitPop{0%{opacity:0;transform:rotate(var(--a)) translateY(0) rotate(calc(var(--a)*-1)) scale(.2)}100%{opacity:1;transform:rotate(var(--a)) translateY(-116px) rotate(calc(var(--a)*-1)) scale(1)}}
 .hub-wheel .hub-sat:nth-child(1){--a:0deg;--i:1}
-.hub-wheel .hub-sat:nth-child(2){--a:51.4deg;--i:2}
-.hub-wheel .hub-sat:nth-child(3){--a:102.9deg;--i:3}
-.hub-wheel .hub-sat:nth-child(4){--a:154.3deg;--i:4}
-.hub-wheel .hub-sat:nth-child(5){--a:205.7deg;--i:5}
-.hub-wheel .hub-sat:nth-child(6){--a:257.1deg;--i:6}
-.hub-wheel .hub-sat:nth-child(7){--a:308.6deg;--i:7}
+.hub-wheel .hub-sat:nth-child(2){--a:60deg;--i:2}
+.hub-wheel .hub-sat:nth-child(3){--a:120deg;--i:3}
+.hub-wheel .hub-sat:nth-child(4){--a:180deg;--i:4}
+.hub-wheel .hub-sat:nth-child(5){--a:240deg;--i:5}
+.hub-wheel .hub-sat:nth-child(6){--a:300deg;--i:6}
 
 /* Individual Color Themes for Every Orbit Node */
-.hub-wheel .hub-sat.hub-sat-eta{width:68px;height:68px;margin:-34px 0 0 -34px;border:2px solid var(--acct);background:var(--acct-bg);color:var(--on-acct);font-size:9.5px;z-index:3;box-shadow:0 6px 20px rgba(15,118,110,.28)}
-.hub-wheel .hub-sat.hub-sat-eta svg{width:21px;height:21px;color:var(--acct)}
-.hub-wheel .hub-sat.hub-sat-eta .sat-badge{font-size:7px;font-weight:800;color:var(--on-acct);background:rgba(15,118,110,.18);padding:1px 4px;border-radius:4px;margin-top:1px;letter-spacing:.3px;text-transform:uppercase}
-
 .hub-wheel .hub-sat.sat-runs{border-color:var(--fuel);background:var(--fuel-bg);color:var(--on-fuel);box-shadow:0 4px 16px rgba(180,83,9,.22)}
 .hub-wheel .hub-sat.sat-runs svg{color:var(--fuel)}
 
@@ -634,21 +629,6 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
 .arch-tabs button{border:1.5px solid var(--bd2);background:var(--field);color:var(--mut);border-radius:10px;padding:9px 6px;font-size:12px;font-weight:800;cursor:pointer}
 .arch-tabs button.on{background:var(--inc);color:var(--btn-ink);border-color:transparent;-webkit-text-fill-color:var(--btn-ink)}
 .eos-row:active{opacity:.65}
-.home-eta-card{background:var(--card);border:1.5px solid var(--bd);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow);margin-top:8px}
-.home-eta-grid{display:flex;align-items:center;gap:12px;margin:8px 0 10px}
-.home-eta-main{flex:0 0 auto;text-align:center;padding:8px 12px;background:var(--grad-inc);border-radius:12px;border:1px solid var(--inc-bg);min-width:110px}
-.home-eta-time{font-size:26px;font-weight:800;color:var(--inc);line-height:1.1;font-variant-numeric:tabular-nums}
-.home-eta-sub{font-size:11px;font-weight:600;color:var(--mut);margin-top:2px}
-.home-eta-chips{flex:1;min-width:0;display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
-.home-eta-chips button{border:1px solid var(--bd2);background:var(--field);color:var(--head);border-radius:8px;padding:7px 2px;font-size:11px;font-weight:800;cursor:pointer;text-align:center}
-.home-eta-chips button.on{background:var(--acct-bg);color:var(--on-acct);border-color:var(--acct)}
-.home-eta-acts{display:flex;align-items:stretch;gap:6px;margin-top:8px}
-.home-eta-acts button{border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;padding:8px 6px;text-align:center;border:1px solid transparent;transition:opacity .15s;-webkit-tap-highlight-color:transparent}
-.home-eta-acts button:active{opacity:.8}
-.btn-eta-main{flex:1.2;background:var(--btn-fill);color:var(--btn-ink);border:none}
-.btn-eta-wa{flex:1.2;background:var(--inc-bg);color:var(--on-inc);border:1px solid var(--inc)}
-.btn-eta-copy{flex:1;background:var(--field);color:var(--head);border:1px solid var(--bd2)}
-.btn-eta-go{width:36px;flex:0 0 36px;background:var(--field);color:var(--head);border:1px solid var(--bd2);font-size:18px;line-height:1;display:grid;place-items:center;padding:0}
 .run-deck-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
 .run-deck-search{width:100%;border-radius:10px;padding:8px 12px;font-size:12px;background:var(--field);border:1.5px solid var(--bd2);color:var(--head);margin-bottom:8px;outline:none;transition:border-color .15s}
 .run-deck-search:focus{border-color:var(--fuel)}
@@ -690,17 +670,6 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
 .run-box-acts{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;padding-left:35px}
 .run-box-acts button{flex:1;min-width:65px;border:1px solid var(--bd2);background:var(--field);color:var(--head);border-radius:8px;padding:7px 5px;font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:4px}
 .run-box-acts button.btn-r-nav{background:var(--inc-bg);color:var(--on-inc);border-color:var(--inc)}
-.run-box-acts button.btn-r-eta{background:var(--acct-bg);color:var(--on-acct);border-color:var(--acct)}
-.eta-presets{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0}
-.eta-presets button{border:1px solid var(--bd2);background:var(--field);color:var(--head);border-radius:9px;padding:9px 2px;font-size:12px;font-weight:800;cursor:pointer;text-align:center}
-.eta-presets button.on{background:var(--acct-bg);color:var(--on-acct);border-color:var(--acct)}
-.eta-box{background:var(--grad-inc);border:1.5px solid var(--inc-bg);border-radius:12px;padding:12px;margin:10px 0;text-align:center}
-.eta-box .eta-time{font-size:32px;font-weight:800;color:var(--inc);font-variant-numeric:tabular-nums;line-height:1.1}
-.eta-box .eta-sub{font-size:12px;color:var(--mut);font-weight:600;margin-top:2px}
-.eta-tgl-row{display:flex;align-items:center;justify-content:space-between;background:var(--field);border-radius:10px;padding:8px 12px;margin-bottom:10px}
-.eta-tgl-row b{font-size:12.5px;color:var(--head)}
-.eta-fmt-btn{border:1px solid var(--bd2);background:var(--card);color:var(--head);border-radius:7px;padding:5px 10px;font-size:11px;font-weight:800;cursor:pointer}
-.eta-msg-box{width:100%;border-radius:9px;padding:10px;font-size:13px;background:var(--field);border:1.5px solid var(--bd2);color:var(--fink);-webkit-text-fill-color:var(--fink);font-weight:600;resize:vertical;min-height:74px}
 .pie-wrap{display:flex;align-items:center;gap:14px}
 .pie-wrap svg{flex:0 0 auto}
 .pie-leg{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
@@ -782,7 +751,6 @@ a.addr-link{display:inline;font-size:12.5px}
     <div class="sub">Home <small>Tap a circle to open that page</small></div>
     <div class="hub">
       <div class="hub-wheel">
-        <button type="button" class="hub-sat hub-sat-eta" data-hub="eta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>ETA<span class="sat-badge">Quick</span></button>
         <button type="button" class="hub-sat sat-runs" data-hub="runs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Runs</button>
         <button type="button" class="hub-sat sat-book" data-hub="book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M8 7h8M8 11h6"/></svg>Book</button>
         <button type="button" class="hub-sat sat-weekly" data-hub="weekly"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-8M22 19V3"/></svg>Weekly</button>
@@ -793,36 +761,6 @@ a.addr-link{display:inline;font-size:12.5px}
       </div>
     </div>
 
-    <!-- Home Screen Live ETA Widget -->
-    <div class="card home-eta-card" id="homeEtaCard">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-        <div style="display:flex;align-items:center;gap:6px">
-          <span class="dot" style="background:var(--acct)"></span>
-          <b style="font-size:13px;color:var(--head)">Quick ETA Widget</b>
-        </div>
-        <button type="button" class="eta-fmt-btn" id="homeEtaFmtBtn" style="font-size:10.5px;padding:3px 7px">12-Hour</button>
-      </div>
-      <div class="home-eta-grid">
-        <div class="home-eta-main">
-          <div class="home-eta-time" id="homeEtaTime">--:--</div>
-          <div class="home-eta-sub" id="homeEtaSub">in 15 mins</div>
-        </div>
-        <div class="home-eta-chips" id="homeEtaPresets">
-          <button type="button" data-m="5">+5m</button>
-          <button type="button" data-m="10">+10m</button>
-          <button type="button" class="on" data-m="15">+15m</button>
-          <button type="button" data-m="20">+20m</button>
-          <button type="button" data-m="30">+30m</button>
-          <button type="button" data-m="45">+45m</button>
-        </div>
-      </div>
-      <div class="home-eta-acts">
-        <button type="button" class="btn-eta-main" id="homeEtaShare">Share ETA</button>
-        <button type="button" class="btn-eta-wa" id="homeEtaWa">WhatsApp</button>
-        <button type="button" class="btn-eta-copy" id="homeEtaCopy">Copy</button>
-        <button type="button" class="btn-eta-go" onclick="go('eta')" title="Full ETA Page">&rsaquo;</button>
-      </div>
-    </div>
   </section>
 
   <section class="screen" data-tab="shift">
@@ -1015,75 +953,13 @@ a.addr-link{display:inline;font-size:12.5px}
       </div>
     </div>
 
-    <div class="card" style="margin-bottom:0">
-      <h5><span class="dot" style="background:var(--acct)"></span>Quick ETA Share</h5>
-      <p style="font-size:11.5px;color:var(--mut);margin:0 0 10px">Send a quick arrival estimate message via WhatsApp, SMS, or copy in 1 tap.</p>
-      <button type="button" class="btn neutral" id="openQuickEtaBtn" style="width:100%">Open ETA Calculator</button>
-    </div>
-  </section>
-
-  <section class="screen" data-tab="eta">
-    <div class="sub">ETA Calculator <small>Live arrival timer &middot; SMS, WhatsApp, 1-tap copy</small></div>
-
-    <div class="card" style="text-align:center;padding:16px 12px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-        <span class="lbl" style="font-size:11px">Arrival Estimate</span>
-        <button type="button" class="eta-fmt-btn" id="etaPageFmtBtn">12-Hour (AM/PM)</button>
-      </div>
-      <div class="eta-box" style="margin:0 0 12px">
-        <div class="eta-time" id="etaPageTimeDisplay" style="font-size:38px">--:--</div>
-        <div class="eta-sub" id="etaPageMinsDisplay">in 15 mins</div>
-      </div>
-      <div class="eta-presets" id="etaPagePresets">
-        <button type="button" data-m="5">+5m</button>
-        <button type="button" data-m="10">+10m</button>
-        <button type="button" class="on" data-m="15">+15m</button>
-        <button type="button" data-m="20">+20m</button>
-        <button type="button" data-m="25">+25m</button>
-        <button type="button" data-m="30">+30m</button>
-        <button type="button" data-m="40">+40m</button>
-        <button type="button" data-m="50">+50m</button>
-      </div>
-      <div class="two" style="align-items:center;margin-top:10px">
-        <div>
-          <label class="fl">Minutes away</label>
-          <input type="number" id="etaPageMinsInput" min="1" max="300" value="15" inputmode="numeric">
-        </div>
-        <div>
-          <label class="fl">Target arrival</label>
-          <input type="time" id="etaPageTargetInput">
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h5><span class="dot" style="background:var(--inc)"></span>Passenger Details (Optional)</h5>
-      <label class="fl">Select Client</label>
-      <select id="etaPageClientSelect"></select>
-      <div class="two" style="margin-top:8px">
-        <div><label class="fl">Name</label><input id="etaPageName" placeholder="Passenger name"></div>
-        <div><label class="fl">Phone</label><input id="etaPagePhone" type="tel" placeholder="Mobile / WhatsApp"></div>
-      </div>
-      <label class="fl">Destination</label>
-      <input id="etaPageDest" placeholder="e.g. Airport, Care Centre, Home">
-    </div>
-
-    <div class="card" style="margin-bottom:0">
-      <h5><span class="dot" style="background:var(--acct)"></span>Message &amp; Share</h5>
-      <textarea class="eta-msg-box" id="etaPageMsgText" rows="3"></textarea>
-      <button class="btn" id="etaPageShareBtn" style="margin-top:12px;background:var(--acct);color:var(--btn-ink)">Share ETA</button>
-      <div class="two" style="gap:7px;margin-top:8px">
-        <button class="btn neutral" id="etaPageWaBtn" style="color:var(--inc);border-color:var(--inc)">WhatsApp</button>
-        <button class="btn neutral" id="etaPageCopyBtn">Copy Message</button>
-      </div>
-    </div>
   </section>
 
   <section class="screen" data-tab="book">
     <div class="sub">Address Book <small>Client directory &middot; addresses &middot; rider notes</small></div>
     <div class="card" style="background:var(--inc-bg);border:1.5px solid var(--inc);padding:11px;margin-bottom:12px">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-        <div><b style="font-size:13px;color:var(--on-inc);display:block">Active Run Planner</b><span style="font-size:11px;color:var(--mut)">Sequence stops, drag to sort, Nav &amp; ETA</span></div>
+        <div><b style="font-size:13px;color:var(--on-inc);display:block">Active Run Planner</b><span style="font-size:11px;color:var(--mut)">Sequence stops, drag to sort, Nav &amp; Share</span></div>
         <button type="button" class="btn" onclick="go('runs')" style="width:auto;padding:8px 14px;font-size:12px;margin:0">Go to Runs &rsaquo;</button>
       </div>
     </div>
@@ -1249,10 +1125,9 @@ a.addr-link{display:inline;font-size:12.5px}
         <button class="btn neutral" id="addPayType">+ Add payment type</button>
       </div>
 
-      <p class="grp">Appearance &amp; Time</p>
+      <p class="grp">Appearance</p>
       <div class="card" style="padding:0">
         <div class="set"><div class="sl"><b>Theme</b><p>Match phone, or force</p></div><select id="setTheme" style="width:120px"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></div>
-        <div class="set"><div class="sl"><b>24-Hour Time Format</b><p>ETA messages: 14:30 vs 2:30 PM</p></div><button class="tgl" id="setTime24h" aria-label="Toggle 24-hour time"></button></div>
       </div>
 
       <p class="grp">Backup</p>
@@ -1486,56 +1361,6 @@ a.addr-link{display:inline;font-size:12.5px}
   <button class="btn" id="clSave" style="margin-top:14px">Save client</button>
   <div class="two" style="margin-top:9px"><button class="btn neutral" id="clCancel">Cancel</button><button class="btn neutral" id="clDelete" style="border-color:var(--dgr);color:var(--dgr);display:none">Delete</button></div>
 </div></div>
-<div class="modal" id="etaModal"><div class="sheet" style="max-height:92vh;overflow:auto">
-  <div class="grip"></div>
-  <h3 id="etaTitle">Share ETA</h3>
-  <p class="csub" id="etaSub">Calculate arrival time and send to passenger or carer</p>
-  
-  <div class="eta-tgl-row">
-    <b>Time Format</b>
-    <button type="button" class="eta-fmt-btn" id="etaFmtToggle">12-Hour (AM/PM)</button>
-  </div>
-
-  <div class="eta-box">
-    <div class="lbl" style="font-size:11px">Estimated Arrival</div>
-    <div class="eta-time" id="etaTimeDisplay">--:--</div>
-    <div class="eta-sub" id="etaMinsDisplay">in 15 mins</div>
-  </div>
-
-  <label class="fl">Quick minutes</label>
-  <div class="eta-presets" id="etaPresets">
-    <button type="button" data-m="5">+5m</button>
-    <button type="button" data-m="10">+10m</button>
-    <button type="button" class="on" data-m="15">+15m</button>
-    <button type="button" data-m="20">+20m</button>
-    <button type="button" data-m="25">+25m</button>
-    <button type="button" data-m="30">+30m</button>
-    <button type="button" data-m="40">+40m</button>
-    <button type="button" data-m="50">+50m</button>
-  </div>
-
-  <div class="two" style="align-items:center;margin-top:8px">
-    <div>
-      <label class="fl">Minutes away</label>
-      <input type="number" id="etaMinsInput" min="1" max="300" value="15" inputmode="numeric">
-    </div>
-    <div>
-      <label class="fl">Target arrival</label>
-      <input type="time" id="etaTargetInput">
-    </div>
-  </div>
-
-  <label class="fl" style="margin-top:10px">Message text (editable)</label>
-  <textarea class="eta-msg-box" id="etaMsgText" rows="3"></textarea>
-
-  <button class="btn" id="etaShareBtn" style="margin-top:12px;background:var(--acct);color:var(--btn-ink)">Share ETA</button>
-  <div class="two" style="gap:7px;margin-top:8px">
-    <button class="btn neutral" id="etaCopyBtn">Copy Message</button>
-    <button class="btn neutral" id="etaWaBtn" style="color:var(--inc);border-color:var(--inc)">WhatsApp</button>
-  </div>
-  <button class="btn neutral" id="etaCloseBtn" style="margin-top:8px">Close</button>
-</div></div>
-
 <div class="modal" id="addStopModal"><div class="sheet" style="max-height:92vh;overflow:auto">
   <div class="grip"></div>
   <h3>Add Stop to Run Plan</h3>
@@ -1597,8 +1422,11 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.9';
+var APP_VERSION='8.10';
 var CHANGELOG=[
+  {v:'8.10',date:'September 11, 2026',notes:[
+    ['UI/UX','Removed ETA Calculator, home ETA widget, hub ETA shortcut, and run-stop ETA actions — feature unused.'],
+  ]},
   {v:'8.9',date:'September 11, 2026',notes:[
     ['Feature','Log Shift Attach step: Date + End of Shift attachments first, with a dedicated Fuel Receipts field. Fuel receipt makes fuel amount compulsory.'],
     ['Feature','EOS OCR: reads TXN TOTALS into EOS values and Rank/Hail into hail count; multi-slip EOS creates matching value fields; manual prompt if OCR misses.'],
@@ -3656,7 +3484,6 @@ function renderSettings(){
   $('#setGstBase').value=settings.gstBase;
   var stState=$('#setState');if(stState)stState.value=settings.state||'VIC';
   $('#setCashGst').classList.toggle('on',!!settings.cashGstFree);
-  var st24=$('#setTime24h');if(st24)st24.classList.toggle('on',!!settings.time24h);
   var ac=$('#archiveCount');if(ac)ac.textContent=receipts.length;
   var sc=$('#setCredit');sc.innerHTML=DAYS.map(function(d,i){return '<option value="'+i+'">'+d+'</option>'}).join('');sc.value=String(settings.creditedDay);
   var sw=$('#setWeek');sw.innerHTML=DAYS.map(function(d,i){return '<option value="'+i+'">'+d+'</option>'}).join('');sw.value=String(settings.weekStart);
@@ -3700,7 +3527,6 @@ $('#setFuel').onchange=function(){settings.fuel=this.value;persist()};
 $('#setGstBase').onchange=function(){settings.gstBase=this.value;persist();toast(this.value==='share'?'GST set aside on driver share':'GST set aside on full gross')};
 $('#setCashGst').onclick=function(){settings.cashGstFree=!settings.cashGstFree;persist();this.classList.toggle('on',settings.cashGstFree);renderReports();toast(settings.cashGstFree?'Cash & Square: GST-free':'Cash & Square: GST-inclusive')};
 if($('#setState'))$('#setState').onchange=function(){settings.state=this.value;persist();toast('Address search focused on '+this.value)};
-if($('#setTime24h'))$('#setTime24h').onclick=function(){settings.time24h=!settings.time24h;persist();this.classList.toggle('on',!!settings.time24h);toast(settings.time24h?'24-Hour time format':'12-Hour time format')};
 if($('#advToggle'))$('#advToggle').onclick=function(){var w=$('#advWrap');var open=w.style.display==='none';w.style.display=open?'block':'none';this.classList.toggle('open',open)};
 if($('#archiveLink'))$('#archiveLink').onclick=openArchive;
 if($('#jarOpen'))$('#jarOpen').onclick=openArchive;
@@ -3783,7 +3609,7 @@ async function afterAuth(user){
 function pushNow(){if(!syncOn||!fb.uid||!fb.fsM)return;var ts=Date.now();localStorage.setItem('fareo_updatedAt',String(ts));fb.fsM.setDoc(docRef(),{data:allData(),updatedAt:ts,_device:deviceId()}).then(function(){setSyncState('On - saved')}).catch(function(){setSyncState('Offline - will retry')})}
 function scheduleSync(){if(!syncOn||applyingRemote)return;clearTimeout(syncTimer);syncTimer=setTimeout(pushNow,900)}
 async function syncSignOut(){try{if(fb.auth)await fb.authM.signOut(fb.auth)}catch(_){}syncOn=false;localStorage.removeItem('fareo_sync_on');setSyncState('Off - local only');toast('Signed out (data kept on device)')}
-function reloadAll(){settings=load('fareo_settings',settings)||settings;migrateSettings();entries=load('fareo_entries',[])||[];deductions=load('fareo_deductions',[])||[];recurring=load('fareo_recurring',[])||[];fuelManual=load('fareo_fuelManual',[])||[];receipts=load('fareo_receipts',[])||[];names=load('fareo_names',[])||[];clients=load('fareo_clients',[])||[];if(!Array.isArray(clients))clients=[];runPlan=load('fareo_run_plan',[])||[];if(!Array.isArray(runPlan))runPlan=[];try{renderNames();rowInputs();render();var a=document.querySelector('.screen.on');if(a){var t=a.dataset.tab;if(t==='hub')renderHomeEtaWidget();if(t==='weekly')renderWeekly();if(t==='reports')renderReports();if(t==='settings')renderSettings();if(t==='runs')renderRuns();if(t==='eta')renderEtaPage();if(t==='book')renderBook()}}catch(_){}}
+function reloadAll(){settings=load('fareo_settings',settings)||settings;migrateSettings();entries=load('fareo_entries',[])||[];deductions=load('fareo_deductions',[])||[];recurring=load('fareo_recurring',[])||[];fuelManual=load('fareo_fuelManual',[])||[];receipts=load('fareo_receipts',[])||[];names=load('fareo_names',[])||[];clients=load('fareo_clients',[])||[];if(!Array.isArray(clients))clients=[];runPlan=load('fareo_run_plan',[])||[];if(!Array.isArray(runPlan))runPlan=[];try{renderNames();rowInputs();render();var a=document.querySelector('.screen.on');if(a){var t=a.dataset.tab;if(t==='weekly')renderWeekly();if(t==='reports')renderReports();if(t==='settings')renderSettings();if(t==='runs')renderRuns();if(t==='book')renderBook()}}catch(_){}}
 if($('#syncSignin'))$('#syncSignin').onclick=function(){syncConnect(false)};
 if($('#syncCreate'))$('#syncCreate').onclick=function(){syncConnect(true)};
 if($('#syncOut'))$('#syncOut').onclick=syncSignOut;
@@ -3991,295 +3817,6 @@ function riderNames(addr,clientsAt){
   (clientsAt||[]).forEach(function(c){add(clientLabel(c));peopleOf(addr,c).forEach(function(p){add(p.label)})});
   return out;
 }
-
-/* ---------- ETA Calculator & Sharer ---------- */
-function fmtEtaTime(dateObj, is24h){
-  if(!dateObj || isNaN(dateObj.getTime())) return '';
-  var h = dateObj.getHours();
-  var m = dateObj.getMinutes();
-  if(is24h){
-    return pad2(h) + ':' + pad2(m);
-  }
-  var ampm = h >= 12 ? 'PM' : 'AM';
-  var h12 = h % 12; if(h12 === 0) h12 = 12;
-  return h12 + ':' + pad2(m) + ' ' + ampm;
-}
-
-var etaCurrent = { name: '', phone: '', address: '', mins: 15, customMsg: false };
-
-function updateEtaView(){
-  var is24h = !!settings.time24h;
-  var now = new Date();
-  var arr = new Date(now.getTime() + (Number(etaCurrent.mins) || 0) * 60000);
-  var timeStr = fmtEtaTime(arr, is24h);
-  var minsStr = (etaCurrent.mins || 0) + ' mins';
-
-  /* Update Modal Elements */
-  var btn = $('#etaFmtToggle');
-  if(btn) btn.textContent = is24h ? '24-Hour (' + fmtEtaTime(now, true) + ')' : '12-Hour (' + fmtEtaTime(now, false) + ')';
-  var timeDisplay = $('#etaTimeDisplay');
-  if(timeDisplay) timeDisplay.textContent = timeStr || '--:--';
-  var minsDisplay = $('#etaMinsDisplay');
-  if(minsDisplay) minsDisplay.textContent = 'in ' + minsStr;
-  var minsInput = $('#etaMinsInput');
-  if(minsInput && document.activeElement !== minsInput) minsInput.value = String(etaCurrent.mins || 15);
-  var targetInput = $('#etaTargetInput');
-  if(targetInput && document.activeElement !== targetInput && !isNaN(arr.getTime())) {
-    targetInput.value = pad2(arr.getHours()) + ':' + pad2(arr.getMinutes());
-  }
-  $$('#etaPresets button').forEach(function(b){
-    b.classList.toggle('on', Number(b.dataset.m) === Number(etaCurrent.mins));
-  });
-
-  /* Update Full Page Elements */
-  var pageFmtBtn = $('#etaPageFmtBtn');
-  if(pageFmtBtn) pageFmtBtn.textContent = is24h ? '24-Hour (' + fmtEtaTime(now, true) + ')' : '12-Hour (' + fmtEtaTime(now, false) + ')';
-  var pageTimeDisplay = $('#etaPageTimeDisplay');
-  if(pageTimeDisplay) pageTimeDisplay.textContent = timeStr || '--:--';
-  var pageMinsDisplay = $('#etaPageMinsDisplay');
-  if(pageMinsDisplay) pageMinsDisplay.textContent = 'in ' + minsStr;
-  var pageMinsInput = $('#etaPageMinsInput');
-  if(pageMinsInput && document.activeElement !== pageMinsInput) pageMinsInput.value = String(etaCurrent.mins || 15);
-  var pageTargetInput = $('#etaPageTargetInput');
-  if(pageTargetInput && document.activeElement !== pageTargetInput && !isNaN(arr.getTime())) {
-    pageTargetInput.value = pad2(arr.getHours()) + ':' + pad2(arr.getMinutes());
-  }
-  $$('#etaPagePresets button').forEach(function(b){
-    b.classList.toggle('on', Number(b.dataset.m) === Number(etaCurrent.mins));
-  });
-
-  /* Update Home Screen Live Widget Elements */
-  var homeFmtBtn = $('#homeEtaFmtBtn');
-  if(homeFmtBtn) homeFmtBtn.textContent = is24h ? '24-Hour' : '12-Hour';
-  var homeTime = $('#homeEtaTime');
-  if(homeTime) homeTime.textContent = timeStr || '--:--';
-  var homeSub = $('#homeEtaSub');
-  if(homeSub) homeSub.textContent = 'in ' + minsStr;
-  $$('#homeEtaPresets button').forEach(function(b){
-    b.classList.toggle('on', Number(b.dataset.m) === Number(etaCurrent.mins));
-  });
-
-  /* Format Default Message */
-  if(!etaCurrent.customMsg){
-    var msg = 'ETA is ' + timeStr;
-    var tb = $('#etaMsgText');
-    if(tb) tb.value = msg;
-    var pageTb = $('#etaPageMsgText');
-    if(pageTb) pageTb.value = msg;
-  }
-}
-
-function openEta(stopOrClient, initialMins){
-  var name = '', phone = '', address = '';
-  if(stopOrClient){
-    name = stopOrClient.name || clientLabel(stopOrClient) || '';
-    phone = stopOrClient.phone || '';
-    address = stopOrClient.line || (stopOrClient.addresses && stopOrClient.addresses[0] ? stopOrClient.addresses[0].line : '') || '';
-  }
-  etaCurrent = {
-    name: name,
-    phone: phone,
-    address: address,
-    mins: initialMins || etaCurrent.mins || 15,
-    customMsg: false
-  };
-  var title = $('#etaTitle');
-  if(title) title.textContent = name ? ('ETA · ' + name) : 'Share ETA';
-  var sub = $('#etaSub');
-  if(sub) sub.textContent = address ? ('Destination: ' + address) : 'Calculate arrival time & share';
-
-  updateEtaView();
-  showModal('etaModal');
-}
-
-function renderEtaPage(){
-  var cSel = $('#etaPageClientSelect');
-  if(cSel){
-    var curr = cSel.value;
-    cSel.innerHTML = '<option value="">-- Choose client (or type below) --</option>' + clients.map(function(c){
-      return '<option value="' + esc(c.id) + '">' + esc(clientLabel(c)) + '</option>';
-    }).join('');
-    if(curr) cSel.value = curr;
-  }
-  var nInp = $('#etaPageName'); if(nInp && !nInp.value) nInp.value = etaCurrent.name || '';
-  var pInp = $('#etaPagePhone'); if(pInp && !pInp.value) pInp.value = etaCurrent.phone || '';
-  var dInp = $('#etaPageDest'); if(dInp && !dInp.value) dInp.value = etaCurrent.address || '';
-  updateEtaView();
-}
-
-function renderHomeEtaWidget(){
-  updateEtaView();
-}
-
-function sendEtaShareText(msgText){
-  var msg = msgText || ($('#etaPageMsgText') ? $('#etaPageMsgText').value : '') || ($('#etaMsgText') ? $('#etaMsgText').value : '') || 'Driver ETA';
-  if(navigator.share){
-    navigator.share({title: 'Driver ETA', text: msg}).catch(function(){});
-  } else {
-    copyTxt(msg);
-    toast('ETA message copied');
-  }
-}
-
-function sendEtaWaText(msgText, phoneVal){
-  var msg = msgText || ($('#etaPageMsgText') ? $('#etaPageMsgText').value : '') || ($('#etaMsgText') ? $('#etaMsgText').value : '') || '';
-  var phone = phoneVal || etaCurrent.phone || '';
-  var rawPhone = (phone || '').replace(/[^0-9]/g, '');
-  if(rawPhone.indexOf('04') === 0) rawPhone = '61' + rawPhone.slice(1);
-  if(rawPhone){
-    window.open('https://wa.me/' + rawPhone + '?text=' + encodeURIComponent(msg), '_blank');
-  } else {
-    window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(msg), '_blank');
-  }
-}
-
-function sendEtaCopyText(msgText){
-  var msg = msgText || ($('#etaPageMsgText') ? $('#etaPageMsgText').value : '') || ($('#etaMsgText') ? $('#etaMsgText').value : '') || '';
-  copyTxt(msg);
-  toast('ETA message copied');
-}
-
-/* Modal ETA Bindings */
-$$('#etaPresets button').forEach(function(b){
-  b.onclick = function(){
-    etaCurrent.mins = Number(b.dataset.m);
-    etaCurrent.customMsg = false;
-    updateEtaView();
-  };
-});
-if($('#etaMinsInput')) $('#etaMinsInput').oninput = function(){
-  var v = parseInt(this.value, 10);
-  if(v > 0){ etaCurrent.mins = v; etaCurrent.customMsg = false; updateEtaView(); }
-};
-if($('#etaTargetInput')) $('#etaTargetInput').onchange = function(){
-  var val = this.value;
-  if(val){
-    var parts = val.split(':').map(Number);
-    var now = new Date();
-    var target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parts[0], parts[1], 0);
-    var diffMs = target.getTime() - now.getTime();
-    if(diffMs < 0) diffMs += 24 * 60 * 60000;
-    etaCurrent.mins = Math.max(1, Math.round(diffMs / 60000));
-    etaCurrent.customMsg = false;
-    updateEtaView();
-  }
-};
-if($('#etaMsgText')) $('#etaMsgText').oninput = function(){ etaCurrent.customMsg = true; };
-if($('#etaFmtToggle')) $('#etaFmtToggle').onclick = function(){
-  settings.time24h = !settings.time24h;
-  persist();
-  etaCurrent.customMsg = false;
-  updateEtaView();
-  toast(settings.time24h ? '24-Hour format active' : '12-Hour format active');
-};
-if($('#etaShareBtn')) $('#etaShareBtn').onclick = function(){ sendEtaShareText($('#etaMsgText') ? $('#etaMsgText').value : ''); };
-if($('#etaCopyBtn')) $('#etaCopyBtn').onclick = function(){ sendEtaCopyText($('#etaMsgText') ? $('#etaMsgText').value : ''); };
-if($('#etaWaBtn')) $('#etaWaBtn').onclick = function(){ sendEtaWaText($('#etaMsgText') ? $('#etaMsgText').value : '', etaCurrent.phone); };
-if($('#etaCloseBtn')) $('#etaCloseBtn').onclick = function(){ closeModal('etaModal'); };
-
-/* Full ETA Page Bindings */
-$$('#etaPagePresets button').forEach(function(b){
-  b.onclick = function(){
-    etaCurrent.mins = Number(b.dataset.m);
-    etaCurrent.customMsg = false;
-    updateEtaView();
-  };
-});
-if($('#etaPageMinsInput')) $('#etaPageMinsInput').oninput = function(){
-  var v = parseInt(this.value, 10);
-  if(v > 0){ etaCurrent.mins = v; etaCurrent.customMsg = false; updateEtaView(); }
-};
-if($('#etaPageTargetInput')) $('#etaPageTargetInput').onchange = function(){
-  var val = this.value;
-  if(val){
-    var parts = val.split(':').map(Number);
-    var now = new Date();
-    var target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parts[0], parts[1], 0);
-    var diffMs = target.getTime() - now.getTime();
-    if(diffMs < 0) diffMs += 24 * 60 * 60000;
-    etaCurrent.mins = Math.max(1, Math.round(diffMs / 60000));
-    etaCurrent.customMsg = false;
-    updateEtaView();
-  }
-};
-if($('#etaPageMsgText')) $('#etaPageMsgText').oninput = function(){ etaCurrent.customMsg = true; };
-if($('#etaPageFmtBtn')) $('#etaPageFmtBtn').onclick = function(){
-  settings.time24h = !settings.time24h;
-  persist();
-  etaCurrent.customMsg = false;
-  updateEtaView();
-  toast(settings.time24h ? '24-Hour format active' : '12-Hour format active');
-};
-if($('#etaPageClientSelect')) $('#etaPageClientSelect').onchange = function(){
-  var cid = this.value;
-  var c = clients.filter(function(x){ return x.id === cid; })[0];
-  if(c){
-    etaCurrent.name = clientLabel(c);
-    etaCurrent.phone = c.phone || '';
-    etaCurrent.address = (c.addresses && c.addresses[0] ? c.addresses[0].line : '') || '';
-    if($('#etaPageName')) $('#etaPageName').value = etaCurrent.name;
-    if($('#etaPagePhone')) $('#etaPagePhone').value = etaCurrent.phone;
-    if($('#etaPageDest')) $('#etaPageDest').value = etaCurrent.address;
-    etaCurrent.customMsg = false;
-    updateEtaView();
-  }
-};
-if($('#etaPageName')) $('#etaPageName').oninput = function(){
-  etaCurrent.name = (this.value || '').trim();
-  etaCurrent.customMsg = false;
-  updateEtaView();
-};
-if($('#etaPagePhone')) $('#etaPagePhone').oninput = function(){
-  etaCurrent.phone = (this.value || '').trim();
-};
-if($('#etaPageDest')) $('#etaPageDest').oninput = function(){
-  etaCurrent.address = (this.value || '').trim();
-  etaCurrent.customMsg = false;
-  updateEtaView();
-};
-if($('#etaPageShareBtn')) $('#etaPageShareBtn').onclick = function(){ sendEtaShareText($('#etaPageMsgText') ? $('#etaPageMsgText').value : ''); };
-if($('#etaPageCopyBtn')) $('#etaPageCopyBtn').onclick = function(){ sendEtaCopyText($('#etaPageMsgText') ? $('#etaPageMsgText').value : ''); };
-if($('#etaPageWaBtn')) $('#etaPageWaBtn').onclick = function(){ sendEtaWaText($('#etaPageMsgText') ? $('#etaPageMsgText').value : '', etaCurrent.phone); };
-
-/* Home Screen Quick ETA Widget Bindings */
-$$('#homeEtaPresets button').forEach(function(b){
-  b.onclick = function(){
-    etaCurrent.mins = Number(b.dataset.m);
-    etaCurrent.customMsg = false;
-    updateEtaView();
-  };
-});
-if($('#homeEtaFmtBtn')) $('#homeEtaFmtBtn').onclick = function(){
-  settings.time24h = !settings.time24h;
-  persist();
-  etaCurrent.customMsg = false;
-  updateEtaView();
-  toast(settings.time24h ? '24-Hour format active' : '12-Hour format active');
-};
-if($('#homeEtaShare')) $('#homeEtaShare').onclick = function(){
-  var is24h = !!settings.time24h;
-  var now = new Date();
-  var arr = new Date(now.getTime() + (Number(etaCurrent.mins) || 0) * 60000);
-  var timeStr = fmtEtaTime(arr, is24h);
-  var msg = 'ETA is ' + timeStr;
-  sendEtaShareText(msg);
-};
-if($('#homeEtaWa')) $('#homeEtaWa').onclick = function(){
-  var is24h = !!settings.time24h;
-  var now = new Date();
-  var arr = new Date(now.getTime() + (Number(etaCurrent.mins) || 0) * 60000);
-  var timeStr = fmtEtaTime(arr, is24h);
-  var msg = 'ETA is ' + timeStr;
-  sendEtaWaText(msg, etaCurrent.phone);
-};
-if($('#homeEtaCopy')) $('#homeEtaCopy').onclick = function(){
-  var is24h = !!settings.time24h;
-  var now = new Date();
-  var arr = new Date(now.getTime() + (Number(etaCurrent.mins) || 0) * 60000);
-  var timeStr = fmtEtaTime(arr, is24h);
-  var msg = 'ETA is ' + timeStr;
-  sendEtaCopyText(msg);
-};
 
 /* ---------- Dedicated Runs & Drag-drop plan ---------- */
 var runPlanDay = (new Date()).getDay();
@@ -4498,7 +4035,6 @@ function renderRuns(){
           '</div>' +
           '<div class="run-box-acts">' +
             '<button type="button" class="btn-r-nav" data-rnav="' + idx + '"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>Nav</button>' +
-            '<button type="button" class="btn-r-eta" data-reta="' + idx + '"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>ETA</button>' +
             callBtn +
             '<button type="button" data-rshare="' + idx + '">Share</button>' +
           '</div>' +
@@ -4548,14 +4084,6 @@ function renderRuns(){
         };
       });
 
-      $$('#runPlanList [data-reta]').forEach(function(b){
-        b.onclick = function(e){
-          e.stopPropagation();
-          var i = Number(b.dataset.reta);
-          var s = runPlan[i];
-          if(s) openEta(s, 15);
-        };
-      });
 
       $$('#runPlanList [data-rcall]').forEach(function(b){
         b.onclick = function(e){
@@ -4859,7 +4387,6 @@ if($('#loadDayRun')) $('#loadDayRun').onclick = function(){
 };
 
 if($('#addRunStopBtn')) $('#addRunStopBtn').onclick = openAddStopModal;
-if($('#openQuickEtaBtn')) $('#openQuickEtaBtn').onclick = function(){ openEta(null, 15); };
 
 if($('#clearRunPlan')) $('#clearRunPlan').onclick = function(){
   if(!runPlan.length){ toast('Run plan is already empty'); return; }
@@ -5229,7 +4756,7 @@ function watchForUpdates(){
 }
 
 /* ---------- nav ---------- */
-var TABS=['hub','shift','weekly','reports','runs','eta','book','refresh','settings'];
+var TABS=['hub','shift','weekly','reports','runs','book','refresh','settings'];
 var curTab='shift';
 var histI=0,histLen=0;
 function anyModal(){
@@ -5255,12 +4782,10 @@ function applyTab(tab){
   curTab=tab;
   $$('.screen').forEach(function(s){s.classList.toggle('on',s.dataset.tab===tab)});
   var home=$('#homeBtn');if(home)home.classList.toggle('on',tab==='hub');
-  if(tab==='hub')renderHomeEtaWidget();
   if(tab==='weekly')renderWeekly();
   if(tab==='reports')renderReports();
   if(tab==='settings')renderSettings();
   if(tab==='runs')renderRuns();
-  if(tab==='eta')renderEtaPage();
   if(tab==='book')renderBook();
   window.scrollTo({top:0});
   syncTrailBtns();
