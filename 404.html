@@ -821,11 +821,23 @@ a.addr-link{display:inline;font-size:12.5px}
       </div>
     </div>
     <div data-pane="2" style="display:none">
+      <div class="card" style="margin-bottom:10px">
+        <h5><span class="dot" style="background:var(--inc)"></span>End of Shift attachment<span class="help" data-help="Preview your EOS slip(s) while logging. Tap to zoom and pan so you can read figures and enter them below." aria-label="Help">?</span></h5>
+        <p style="font-size:11.5px;color:var(--mut);margin:0 0 8px;line-height:1.4">Tap image to zoom &amp; pan — copy values into the fields below.</p>
+        <div class="shift-rcpt-frame" id="logEosPreview" style="min-height:200px;max-height:none">
+          <div class="rcpt-empty"><b>No EOS attachment</b>Go back to Attach to add an End of Shift document.</div>
+        </div>
+        <div class="shift-rcpt-nav" id="logEosNav" style="display:none">
+          <button type="button" id="logEosPrev" aria-label="Previous">&lsaquo; Prev</button>
+          <span class="rcpt-count" id="logEosCount">1 / 1</span>
+          <button type="button" id="logEosNext" aria-label="Next">Next &rsaquo;</button>
+        </div>
+        <div class="shift-rcpt-thumbs" id="logEosThumbs"></div>
+      </div>
       <div class="card hero" style="margin-bottom:10px">
-        <div class="lbl">Shift preview · net take-home</div>
+        <div class="lbl">Net take-home</div>
         <div class="total" id="total">$0.00</div>
         <div class="formula" id="formula">(0 x 0.55) - 0</div>
-        <div class="prev" id="shiftLivePrev" style="margin-top:10px;max-height:120px;overflow:auto;background:var(--card);border-radius:10px;padding:8px 10px;border:1px solid var(--inc-bg)"></div>
         <button class="btn neutral" id="clearShift" style="margin-top:12px;padding:10px;font-size:12px;border-color:var(--dgr);color:var(--dgr)">Clear all fields</button>
       </div>
       <div class="shift-rcpt-sticky" id="rcptSticky">
@@ -1422,8 +1434,12 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.10';
+var APP_VERSION='8.11';
 var CHANGELOG=[
+  {v:'8.11',date:'September 11, 2026',notes:[
+    ['UI/UX','Log Shift step shows End of Shift attachment preview (zoom/pan) for reading slips while entering values — WhatsApp text preview stays on Review only.'],
+    ['Bug Fix','Share / WhatsApp text restored to the previous script (no extra hail or attachments lines).'],
+  ]},
   {v:'8.10',date:'September 11, 2026',notes:[
     ['UI/UX','Removed ETA Calculator, home ETA widget, hub ETA shortcut, and run-stop ETA actions — feature unused.'],
   ]},
@@ -1705,6 +1721,7 @@ function updateReceiptUI(){
   var rc=$('#rcpt');if(rc)rc.classList.toggle('done',has);
   var txt=$('#rcptTxt');if(txt)txt.textContent=has?('Add more EOS ('+n+')'):'Add EOS photo / PDF';
   renderAttachFrame($('#rcptPreview'), cur, 'No EOS attachment yet', 'At least one End of Shift document is required.');
+  renderAttachFrame($('#logEosPreview'), cur, 'No EOS attachment', 'Go back to Attach to add an End of Shift document.');
   var nav=$('#rcptNav');
   if(nav){
     nav.style.display=has?'flex':'none';
@@ -1712,7 +1729,15 @@ function updateReceiptUI(){
     var prev=$('#rcptPrevBtn');if(prev)prev.disabled=shiftRcptIdx<=0;
     var next=$('#rcptNextBtn');if(next)next.disabled=shiftRcptIdx>=n-1;
   }
+  var lnav=$('#logEosNav');
+  if(lnav){
+    lnav.style.display=has?'flex':'none';
+    var lcnt=$('#logEosCount');if(lcnt)lcnt.textContent=(shiftRcptIdx+1)+' / '+n;
+    var lp=$('#logEosPrev');if(lp)lp.disabled=shiftRcptIdx<=0;
+    var ln=$('#logEosNext');if(ln)ln.disabled=shiftRcptIdx>=n-1;
+  }
   renderThumbs($('#rcptThumbs'), eosReceipts, shiftRcptIdx, function(i){shiftRcptIdx=i;updateReceiptUI()}, function(i){removeEosAt(i)});
+  renderThumbs($('#logEosThumbs'), eosReceipts, shiftRcptIdx, function(i){shiftRcptIdx=i;updateReceiptUI()}, function(i){removeEosAt(i)});
   var rem=$('#rcptRemove');if(rem)rem.disabled=!has;
 
   var fn=fuelReceipts.length, fcur=currentFuelReceipt(), fhas=fn>0;
@@ -1899,26 +1924,18 @@ function openCurrentReceiptZoom(){
   openReceiptZoom(cur.url,cur.name||('EOS '+(shiftRcptIdx+1)));
 }
 
-/* Build share text lines (single source for preview + collage banner + WhatsApp). */
+/* Build share text lines — same script as before (preview / WhatsApp / collage banner). */
 function buildShareLines(){
   var L=[];
   L.push('*Shift Report \u2014 '+fmtDayLong(draft.date)+'*');
   L.push('\ud83d\ude90 *Rego:* '+(draft.rego||'Not set'));
-  if(eosT()>0){
-    if(draft.eos.filter(function(v){return nn(v)>0}).length>1){
-      draft.eos.forEach(function(v,i){if(nn(v)>0)L.push('\ud83d\udcb3 *EOS '+(i+1)+':* '+money(nn(v)))});
-      L.push('\ud83d\udcb3 *EOS total:* '+money(eosT()));
-    }else L.push('\ud83d\udcb3 *EOS:* '+money(eosT()));
-  }
+  if(eosT()>0)L.push('\ud83d\udcb3 *EOS:* '+money(eosT()));
   if(cashT()>0){var cb=draft.cash.filter(function(c){return nn(c.amount)>0}).map(function(c){return (c.name||'Cash')+' '+money(nn(c.amount))}).join(', ');L.push('\ud83d\udcb5 *Cash:* '+money(cashT())+(cb?' ('+cb+')':''));}
   if(squareT()>0){var sb=draft.square.filter(function(c){return nn(c.amount)>0}).map(function(c){return (c.name||'Square')+' '+money(nn(c.amount))}).join(', ');L.push('\ud83d\udcf1 *Square:* '+money(squareT())+(sb?' ('+sb+')':''));}
   if(nn(draft.runs)>0)L.push('\ud83d\ude95 *Run ('+nn(draft.runs)+'):* '+money(nn(draft.runs)*RUN));
   if(acctT()>0){var ab=draft.accounts.filter(function(a){return nn(a.amount)>0}).map(function(a){return (a.name||'Account')+' '+money(nn(a.amount))}).join(', ');L.push('\ud83e\uddfe *Accounts:* '+money(acctT())+(ab?' ('+ab+')':''));}
   settings.payTypes.forEach(function(pt){var amt=customAmt(pt);if(amt>0)L.push('\u2795 *'+pt.name+':* '+money(amt));});
   if(fuelIPaidT()>0)L.push('\u26fd *Fuel:* '+money(fuelIPaidT()));
-  if(String(draft.hail).trim()!=='')L.push('\ud83d\ude97 *Hail trips:* '+nn(draft.hail)+' ('+money(levyT())+' levy)');
-  var attN=eosReceipts.length, fuelN=fuelReceipts.length;
-  if(attN||fuelN)L.push('\ud83d\uddbc️ *Attachments:* '+attN+' EOS'+(fuelN?' + '+fuelN+' fuel':'')+' (collage)');
   L.push('');
   L.push('\ud83d\udcb0 *TOTAL EARNINGS: '+money(takeT())+'*');
   return L;
@@ -2060,6 +2077,12 @@ if($('#rcptPreview'))$('#rcptPreview').onclick=function(e){
   if(e.target&&(e.target.classList.contains('rcpt-empty')||e.target.classList.contains('rcpt-pdf')||(e.target.closest&&e.target.closest('.rcpt-empty,.rcpt-pdf'))))return;
   openCurrentReceiptZoom();
 };
+if($('#logEosPreview'))$('#logEosPreview').onclick=function(e){
+  if(e.target&&(e.target.classList.contains('rcpt-empty')||e.target.classList.contains('rcpt-pdf')||(e.target.closest&&e.target.closest('.rcpt-empty,.rcpt-pdf'))))return;
+  openCurrentReceiptZoom();
+};
+if($('#logEosPrev'))$('#logEosPrev').onclick=function(){shiftRcptIdx=Math.max(0,shiftRcptIdx-1);updateReceiptUI()};
+if($('#logEosNext'))$('#logEosNext').onclick=function(){shiftRcptIdx=Math.min(eosReceipts.length-1,shiftRcptIdx+1);updateReceiptUI()};
 if($('#fuelRcptPreview'))$('#fuelRcptPreview').onclick=function(e){
   if(e.target&&(e.target.classList.contains('rcpt-empty')||e.target.classList.contains('rcpt-pdf')||(e.target.closest&&e.target.closest('.rcpt-empty,.rcpt-pdf'))))return;
   var f=currentFuelReceipt();if(f&&f.url&&f.type!=='application/pdf')openReceiptZoom(f.url,f.name);
@@ -2272,7 +2295,6 @@ function docsOk(){return eosReceipts.length>0 && String(draft.hail).trim()!=='' 
 function buildPreview(){
   var txt=buildShareLines().join('\n');
   var p=$('#prev');if(p)p.textContent=txt;
-  var live=$('#shiftLivePrev');if(live)live.textContent=txt;
 }
 
 /* ---------- shift interactions ---------- */
@@ -2433,7 +2455,6 @@ async function doShare(){
   var lines=buildShareLines();
   var txt=lines.join('\n');
   var p=$('#prev');if(p)p.textContent=txt;
-  var live=$('#shiftLivePrev');if(live)live.textContent=txt;
   var f=null;
   if(allShiftAttach().length){
     try{f=await buildReceiptCollageFile(lines)}catch(_){f=null}
