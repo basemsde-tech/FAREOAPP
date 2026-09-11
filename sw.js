@@ -1,4 +1,6 @@
-const CACHE_NAME = 'fareo-v8.8';
+const CACHE_NAME = 'fareo-v8.9';
+const ROLLBACK_CACHE = 'fareo-rollback';
+const META_CACHE = 'fareo-meta';
 
 /* Local, same-origin assets only. cache.addAll() is atomic — if any entry fails
    the whole install fails, so cross-origin URLs (e.g. Google Fonts) are NOT listed
@@ -15,66 +17,157 @@ const ASSETS = [
   './apple-touch-icon-v52.png'
 ];
 
-self.addEventListener('install', e => {
+async function copyCache(fromName, toName) {
+  const src = await caches.open(fromName);
+  await caches.delete(toName);
+  const dest = await caches.open(toName);
+  const reqs = await src.keys();
+  await Promise.all(reqs.map(async (req) => {
+    const res = await src.match(req);
+    if (res) await dest.put(req, res.clone());
+  }));
+}
+
+async function snapshotPreviousForRollback() {
+  const keys = await caches.keys();
+  const prev = keys
+    .filter((k) => k.startsWith('fareo-v') && k !== CACHE_NAME)
+    .sort()
+    .pop();
+  if (prev) {
+    await copyCache(prev, ROLLBACK_CACHE);
+  }
+}
+
+async function isRollbackMode() {
+  try {
+    const c = await caches.open(META_CACHE);
+    const r = await c.match('use-rollback');
+    return !!(r && (await r.text()) === '1');
+  } catch (_) {
+    return false;
+  }
+}
+
+async function setRollbackMode(on) {
+  const c = await caches.open(META_CACHE);
+  if (on) await c.put('use-rollback', new Response('1'));
+  else await c.delete('use-rollback');
+}
+
+async function matchFrom(cacheName, req) {
+  const c = await caches.open(cacheName);
+  return (
+    (await c.match(req)) ||
+    (await c.match('./index.html')) ||
+    (await c.match('./')) ||
+    (await c.match('/index.html'))
+  );
+}
+
+self.addEventListener('install', (e) => {
   e.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(ASSETS))
-      .then(() => {
-        /* First install: take over. Later updates wait for the Update now button. */
-        if (!self.registration.active) return self.skipWaiting();
-      })
+    (async () => {
+      await snapshotPreviousForRollback();
+      const cache = await caches.open(CACHE_NAME);
+      await cache.addAll(ASSETS);
+      /* First install: take over. Later updates wait for the Update now button. */
+      if (!self.registration.active) return self.skipWaiting();
+    })()
   );
 });
 
-self.addEventListener('message', e => {
+self.addEventListener('message', (e) => {
   const data = e.data;
   if (data === 'SKIP_WAITING' || (data && data.type === 'SKIP_WAITING')) {
-    self.skipWaiting();
+    setRollbackMode(false).then(() => self.skipWaiting());
+    return;
+  }
+  if (data && data.type === 'ROLLBACK') {
+    e.waitUntil(
+      (async () => {
+        const has = await caches.has(ROLLBACK_CACHE);
+        const rb = has ? await caches.open(ROLLBACK_CACHE) : null;
+        const keys = rb ? await rb.keys() : [];
+        if (!keys.length) {
+          if (e.ports && e.ports[0]) e.ports[0].postMessage({ ok: false, reason: 'empty' });
+          return;
+        }
+        await setRollbackMode(true);
+        const clients = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+        clients.forEach((c) => {
+          try { c.navigate(c.url); } catch (_) {}
+        });
+        if (e.ports && e.ports[0]) e.ports[0].postMessage({ ok: true });
+      })()
+    );
+  }
+  if (data && data.type === 'CLEAR_ROLLBACK') {
+    e.waitUntil(setRollbackMode(false));
   }
 });
 
-self.addEventListener('activate', e => {
+self.addEventListener('activate', (e) => {
   e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+    caches.keys().then((keys) =>
+      Promise.all(
+        keys
+          .filter((k) => k !== CACHE_NAME && k !== ROLLBACK_CACHE && k !== META_CACHE)
+          .map((k) => caches.delete(k))
+      )
     ).then(() => self.clients.claim())
   );
 });
 
-self.addEventListener('fetch', e => {
+self.addEventListener('fetch', (e) => {
   const req = e.request;
 
-  // Only handle GET; let the browser deal with everything else.
   if (req.method !== 'GET') return;
 
-  // Navigation requests: network-first so a new deploy is picked up, with an
-  // offline fallback to the cached shell.
   if (req.mode === 'navigate') {
     e.respondWith(
-      fetch(req)
-        .then(res => {
+      (async () => {
+        if (await isRollbackMode()) {
+          const rb = await matchFrom(ROLLBACK_CACHE, req);
+          if (rb) return rb;
+        }
+        try {
+          const res = await fetch(req);
           const clone = res.clone();
-          caches.open(CACHE_NAME).then(c => c.put('./index.html', clone));
+          caches.open(CACHE_NAME).then((c) => c.put('./index.html', clone));
           return res;
-        })
-        .catch(() => caches.match('./index.html').then(r => r || caches.match('./')))
+        } catch (_) {
+          return (
+            (await matchFrom(CACHE_NAME, req)) ||
+            (await matchFrom(ROLLBACK_CACHE, req)) ||
+            Response.error()
+          );
+        }
+      })()
     );
     return;
   }
 
-  // Everything else: cache-first, then network. Runtime-cache successful GETs
-  // (including cross-origin fonts) best-effort; never let a caching error break
-  // the response.
   e.respondWith(
-    caches.match(req).then(cached => {
+    (async () => {
+      if (await isRollbackMode()) {
+        const rb = await caches.open(ROLLBACK_CACHE);
+        const rbHit = await rb.match(req);
+        if (rbHit) return rbHit;
+      }
+      const live = await caches.open(CACHE_NAME);
+      const cached = await live.match(req);
       if (cached) return cached;
-      return fetch(req).then(res => {
+      try {
+        const res = await fetch(req);
         if (res && (res.ok || res.type === 'opaque')) {
           const clone = res.clone();
-          caches.open(CACHE_NAME).then(c => c.put(req, clone)).catch(() => {});
+          live.put(req, clone).catch(() => {});
         }
         return res;
-      }).catch(() => cached);
-    })
+      } catch (_) {
+        return cached;
+      }
+    })()
   );
 });

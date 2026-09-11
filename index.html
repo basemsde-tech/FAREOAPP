@@ -105,11 +105,24 @@ input:disabled,select:disabled{background:var(--disbg);color:var(--disink);-webk
 .sback{flex:0 0 104px}
 .snext{flex:1}
 .snext.faded{opacity:.45}
-.shift-rcpt-frame{margin-top:10px;border:1.5px solid var(--bd2);border-radius:12px;background:var(--field);overflow:hidden;min-height:180px;display:flex;align-items:center;justify-content:center;position:relative}
-.shift-rcpt-frame img{display:block;width:100%;max-height:280px;object-fit:contain;background:#111}
-.shift-rcpt-frame .rcpt-empty{padding:28px 16px;text-align:center;color:var(--mut);font-size:12px;line-height:1.45}
+.shift-rcpt-frame{margin-top:10px;border:1.5px solid var(--bd2);border-radius:12px;background:#111;overflow:hidden;min-height:180px;display:flex;align-items:center;justify-content:center;position:relative;touch-action:none;cursor:zoom-in}
+.shift-rcpt-frame img{display:block;width:100%;max-height:280px;object-fit:contain;background:#111;pointer-events:none;-webkit-user-drag:none;user-select:none}
+.shift-rcpt-frame .rcpt-empty{padding:28px 16px;text-align:center;color:var(--mut);font-size:12px;line-height:1.45;cursor:default}
 .shift-rcpt-frame .rcpt-empty b{display:block;color:var(--head);font-size:13px;margin-bottom:4px}
-.shift-rcpt-frame .rcpt-pdf{padding:22px 14px;text-align:center;color:var(--head);font-size:13px;font-weight:700}
+.shift-rcpt-frame .rcpt-pdf{padding:22px 14px;text-align:center;color:#f4f4f5;font-size:13px;font-weight:700;cursor:default}
+.shift-rcpt-frame .rcpt-zoom-hint{position:absolute;left:8px;bottom:8px;background:rgba(0,0,0,.62);color:#fff;font-size:10px;font-weight:700;padding:4px 8px;border-radius:999px;pointer-events:none;letter-spacing:.2px}
+.rcpt-zoom{position:fixed;inset:0;z-index:120;background:rgba(5,6,8,.94);display:none;flex-direction:column;touch-action:none}
+.rcpt-zoom.show{display:flex}
+.rcpt-zoom-top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:calc(10px + env(safe-area-inset-top)) 12px 8px;color:#f4f4f5;flex:0 0 auto}
+.rcpt-zoom-top b{font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rcpt-zoom-top button{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.08);color:#fff;border-radius:10px;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer}
+.rcpt-zoom-stage{flex:1;min-height:0;position:relative;overflow:hidden;touch-action:none;cursor:grab}
+.rcpt-zoom-stage.dragging{cursor:grabbing}
+.rcpt-zoom-stage img{position:absolute;left:50%;top:50%;max-width:none;max-height:none;width:auto;height:auto;transform-origin:center center;will-change:transform;pointer-events:none;-webkit-user-drag:none;user-select:none}
+.rcpt-zoom-bar{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 12px calc(14px + env(safe-area-inset-bottom));flex:0 0 auto;position:relative}
+.rcpt-zoom-bar button{min-width:44px;height:42px;border-radius:12px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.1);color:#fff;font-size:18px;font-weight:800;cursor:pointer}
+.rcpt-zoom-bar .rz-lvl{min-width:64px;text-align:center;font-size:12px;font-weight:800;color:#d4d4d8}
+.rcpt-zoom .rz-tip{flex:0 0 auto;text-align:center;font-size:11px;color:rgba(255,255,255,.55);padding:0 12px 6px}
 .shift-rcpt-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px}
 .shift-rcpt-nav .rcpt-count{font-size:11px;font-weight:700;color:var(--mut)}
 .shift-rcpt-nav button{border:1px solid var(--bd2);background:var(--field);color:var(--head);border-radius:8px;padding:7px 10px;font-size:11px;font-weight:700;cursor:pointer}
@@ -604,6 +617,23 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
 
 .hub-wheel .hub-sat.sat-refresh{border-color:var(--acct);background:var(--acct-bg);color:var(--on-acct);box-shadow:0 4px 16px rgba(15,118,110,.22)}
 .hub-wheel .hub-sat.sat-refresh svg{color:var(--acct)}
+.hub-wheel .hub-sat.sat-refresh.spinning svg{animation:refreshSpin .7s linear infinite}
+.hub-wheel .hub-sat.sat-refresh.spinning{pointer-events:none;opacity:.9}
+@keyframes refreshSpin{to{transform:rotate(360deg)}}
+.refresh-stage{display:flex;flex-direction:column;gap:8px;margin:14px 0 4px;text-align:left}
+.refresh-stage .rs{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:10px;border:1px solid var(--bd);background:var(--field);font-size:12px;font-weight:700;color:var(--mut)}
+.refresh-stage .rs.on{border-color:var(--acct);background:var(--acct-bg);color:var(--on-acct)}
+.refresh-stage .rs.done{border-color:var(--inc);background:var(--inc-bg);color:var(--on-inc)}
+.refresh-stage .rs i{width:18px;height:18px;border-radius:50%;border:2px solid currentColor;display:grid;place-items:center;font-style:normal;font-size:10px;flex:0 0 auto}
+.refresh-stage .rs.on i{border-color:transparent;border-top-color:currentColor;animation:refreshSpin .6s linear infinite}
+.refresh-overlay{position:fixed;inset:0;z-index:200;background:rgba(8,10,14,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px}
+.refresh-overlay.show{display:flex}
+.refresh-overlay .ro-card{width:100%;max-width:340px;background:var(--card);border-radius:18px;padding:20px 18px;box-shadow:var(--shadow);text-align:center}
+.refresh-overlay .ro-spin{width:52px;height:52px;margin:0 auto 12px;border-radius:50%;border:3px solid var(--bd2);border-top-color:var(--acct);animation:refreshSpin .7s linear infinite}
+.arch-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:0 0 12px}
+.arch-tabs button{border:1.5px solid var(--bd2);background:var(--field);color:var(--mut);border-radius:10px;padding:9px 6px;font-size:12px;font-weight:800;cursor:pointer}
+.arch-tabs button.on{background:var(--inc);color:var(--btn-ink);border-color:transparent;-webkit-text-fill-color:var(--btn-ink)}
+.eos-row:active{opacity:.65}
 .home-eta-card{background:var(--card);border:1.5px solid var(--bd);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow);margin-top:8px}
 .home-eta-grid{display:flex;align-items:center;gap:12px;margin:8px 0 10px}
 .home-eta-main{flex:0 0 auto;text-align:center;padding:8px 12px;background:var(--grad-inc);border-radius:12px;border:1px solid var(--inc-bg);min-width:110px}
@@ -797,13 +827,12 @@ a.addr-link{display:inline;font-size:12.5px}
 
   <section class="screen" data-tab="shift">
     <div class="steps" id="steps">
-      <button class="stp lit on" data-sub="1"><i></i><span>Receipt</span></button>
+      <button class="stp lit on" data-sub="1"><i></i><span>Attach</span></button>
       <button class="stp" data-sub="2"><i></i><span>Log Shift</span></button>
       <button class="stp" data-sub="3"><i></i><span>Review</span></button>
     </div>
     <div class="msg" id="msg"></div>
     <div data-pane="1">
-      <!-- Date picker: compact row with Today/Yesterday quick buttons + native picker -->
       <div class="card date-card">
         <div class="date-row">
           <button class="date-quick" id="todayBtn">Today</button>
@@ -815,44 +844,75 @@ a.addr-link{display:inline;font-size:12.5px}
         </div>
         <div class="date-label" id="dateLabel">Today</div>
       </div>
-      <div class="card" style="margin-bottom:0">
-        <h5><span class="dot" style="background:var(--dgr)"></span>Shift Receipts <span class="danger" style="font-size:10px;margin-left:auto">≥1 required</span><span class="help" data-help="Attach one or more receipt photos/PDFs first. Preview one at a time and switch between them while logging. On Share, Fareo collages every receipt into a single image attached with your shift report. At least one receipt + hail trips remain compulsory." aria-label="Help">?</span></h5>
-        <p style="font-size:11.5px;color:var(--mut);margin:0 0 10px;line-height:1.4">Add multiple files if needed. Live preview shows one receipt at a time — tap thumbs or arrows to switch.</p>
-        <button class="att" id="rcpt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg><span id="rcptTxt">Add receipt photo / PDF</span></button>
+
+      <div class="card">
+        <h5><span class="dot" style="background:var(--inc)"></span>End of Shift <span class="danger" style="font-size:10px;margin-left:auto">≥1 required</span><span class="help" data-help="Attach EOS slip photo(s). Fareo reads TXN TOTALS into EOS value and Rank/Hail into hail count. Multiple slips create matching EOS value fields. Tap image to zoom &amp; pan." aria-label="Help">?</span></h5>
+        <p style="font-size:11.5px;color:var(--mut);margin:0 0 10px;line-height:1.4">Upload first — OCR fills totals when it can. Switch thumbs to preview each slip.</p>
+        <button class="att" id="rcpt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg><span id="rcptTxt">Add EOS photo / PDF</span></button>
         <input id="rcptFile" type="file" accept="image/*,application/pdf" multiple style="display:none">
         <div class="shift-rcpt-frame" id="rcptPreview">
-          <div class="rcpt-empty"><b>No receipt yet</b>At least one photo or PDF is required before logging payments.</div>
+          <div class="rcpt-empty"><b>No EOS attachment yet</b>At least one End of Shift document is required.</div>
         </div>
         <div class="shift-rcpt-nav" id="rcptNav" style="display:none">
-          <button type="button" id="rcptPrevBtn" aria-label="Previous receipt">&lsaquo; Prev</button>
+          <button type="button" id="rcptPrevBtn" aria-label="Previous">&lsaquo; Prev</button>
           <span class="rcpt-count" id="rcptCount">1 / 1</span>
-          <button type="button" id="rcptNextBtn" aria-label="Next receipt">Next &rsaquo;</button>
+          <button type="button" id="rcptNextBtn" aria-label="Next">Next &rsaquo;</button>
         </div>
         <div class="shift-rcpt-thumbs" id="rcptThumbs"></div>
         <div class="shift-rcpt-acts">
-          <button type="button" class="btn neutral" id="rcptAddMore" style="margin:0;padding:10px;font-size:12px">+ Add another</button>
+          <button type="button" class="btn neutral" id="rcptAddMore" style="margin:0;padding:10px;font-size:12px">+ Add another EOS</button>
           <button type="button" class="btn neutral" id="rcptRemove" style="margin:0;padding:10px;font-size:12px;border-color:var(--dgr);color:var(--dgr)">Remove current</button>
+        </div>
+        <div id="ocrStatus" style="display:none;margin-top:10px;font-size:11.5px;color:var(--mut);line-height:1.4"></div>
+        <div id="ocrManualPrompt" class="msg err" style="display:none;margin-top:10px">OCR could not read TXN TOTALS or hail on one or more slips — enter them manually on the next step.</div>
+      </div>
+
+      <div class="card" style="margin-bottom:0">
+        <h5><span class="dot" style="background:var(--fuel-fill)"></span>Fuel Receipts <span class="help" data-help="Optional. If you attach a fuel receipt, a fuel amount becomes compulsory on the Log Shift step. Fuel snaps are included in the share collage with EOS." aria-label="Help">?</span></h5>
+        <p style="font-size:11.5px;color:var(--mut);margin:0 0 10px;line-height:1.4">Standalone fuel receipt upload. Attaching one makes fuel expense required.</p>
+        <button class="att" id="fuelRcpt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg><span id="fuelRcptTxt">Add fuel receipt</span></button>
+        <input id="fuelRcptFile" type="file" accept="image/*,application/pdf" multiple style="display:none">
+        <div class="shift-rcpt-frame" id="fuelRcptPreview" style="min-height:120px">
+          <div class="rcpt-empty"><b>No fuel receipt</b>Optional — add if you filled up this shift.</div>
+        </div>
+        <div class="shift-rcpt-thumbs" id="fuelRcptThumbs"></div>
+        <div class="shift-rcpt-acts" id="fuelRcptActs" style="display:none">
+          <button type="button" class="btn neutral" id="fuelRcptAddMore" style="margin:0;padding:10px;font-size:12px">+ Add another fuel</button>
+          <button type="button" class="btn neutral" id="fuelRcptRemove" style="margin:0;padding:10px;font-size:12px;border-color:var(--dgr);color:var(--dgr)">Remove current</button>
         </div>
       </div>
     </div>
     <div data-pane="2" style="display:none">
+      <div class="card hero" style="margin-bottom:10px">
+        <div class="lbl">Shift preview · net take-home</div>
+        <div class="total" id="total">$0.00</div>
+        <div class="formula" id="formula">(0 x 0.55) - 0</div>
+        <div class="prev" id="shiftLivePrev" style="margin-top:10px;max-height:120px;overflow:auto;background:var(--card);border-radius:10px;padding:8px 10px;border:1px solid var(--inc-bg)"></div>
+        <button class="btn neutral" id="clearShift" style="margin-top:12px;padding:10px;font-size:12px;border-color:var(--dgr);color:var(--dgr)">Clear all fields</button>
+      </div>
       <div class="shift-rcpt-sticky" id="rcptSticky">
         <img id="rcptStickyImg" alt="" style="display:none">
-        <div class="rp-meta"><b id="rcptStickyTitle">Receipt attached</b><span id="rcptStickyName">—</span></div>
+        <div class="rp-meta"><b id="rcptStickyTitle">Attachments</b><span id="rcptStickyName">—</span></div>
         <div class="rp-sw">
           <button type="button" id="rcptStickyPrev" aria-label="Previous">&lsaquo;</button>
           <button type="button" id="rcptStickyNext" aria-label="Next">&rsaquo;</button>
         </div>
-        <button type="button" id="rcptStickyChange" style="border:1px solid var(--bd2);background:var(--field);color:var(--head);border-radius:8px;padding:7px 9px;font-size:11px;font-weight:700;cursor:pointer">Add</button>
+        <button type="button" id="rcptStickyChange" style="border:1px solid var(--bd2);background:var(--field);color:var(--head);border-radius:8px;padding:7px 9px;font-size:11px;font-weight:700;cursor:pointer">EOS</button>
       </div>
-      <div class="card hero">
-        <div class="lbl">Net take-home</div>
-        <div class="total" id="total">$0.00</div>
-        <div class="formula" id="formula">(0 x 0.55) - 0</div>
-        <button class="btn neutral" id="clearShift" style="margin-top:12px;padding:10px;font-size:12px;border-color:var(--dgr);color:var(--dgr)">Clear all fields</button>
+      <div class="card tx-eos"><h5><span class="dot" style="background:var(--inc)"></span>EOS Takings<span class="help" data-help="One value field per End of Shift attachment (from OCR TXN TOTALS when available). Cash is entered separately." aria-label="Help">?</span><span class="sub-amt" id="eosSub">$0</span></h5>
+        <div id="eosRows"></div>
+        <button class="add" id="addEos">+ Add EOS value</button>
+        <p id="eosOcrHint" style="display:none;margin:8px 0 0;font-size:11px;color:var(--mut)"></p>
       </div>
-      <div class="card tx-eos"><h5><span class="dot" style="background:var(--inc)"></span>EOS Takings<span class="help" data-help="Your EFTPOS terminal total (electronic card payments only). Cash is entered separately." aria-label="Help">?</span><span class="sub-amt" id="eosSub">$0</span></h5>
-        <div id="eosRows"></div><button class="add" id="addEos">+ Add EOS</button></div>
+      <div class="card tx-hail"><h5><span class="dot" style="background:var(--dgr)"></span>Hail Trips <span class="danger" style="font-size:10px;margin-left:auto">required</span><span class="help" data-help="Rank / street-hail trips for CPV levy. Auto-filled from EOS OCR when detected." aria-label="Help">?</span><span class="sub-amt" id="levyTag">$0.00 levy</span></h5>
+        <div class="hailwrap">
+          <div class="hailamt"><small>Private levy</small><b id="levyAmt">$0.00</b><span id="levyRate">$1.20 / trip</span></div>
+          <div class="counter"><button type="button" id="hailMinus">&minus;</button><input id="hail" type="number" min="0" inputmode="numeric" placeholder="0"><button type="button" id="hailPlus">+</button></div>
+        </div>
+        <p id="hailOcrHint" style="display:none;margin:8px 0 0;font-size:11px;color:var(--on-dgr)"></p>
+      </div>
+      <div class="card tx-fuel"><h5><span class="dot" style="background:var(--fuel-fill)"></span>Fuel <span id="fuelReqBadge" class="danger" style="font-size:10px;margin-left:auto;display:none">required</span><span class="help" data-help="Required when a fuel receipt is attached. Tick Paid by operator for operator card fuel." aria-label="Help">?</span><span class="sub-amt" id="fuelSub">$0</span></h5>
+        <div id="fuelRows"></div><button class="add" id="addFuel">+ Add Fuel Fill-up</button></div>
       <div class="card tx-cash"><h5><span class="dot" style="background:var(--levy)"></span>Cash Fares<span class="help" data-help="Cash collected from passengers. Counted in gross revenue, but deducted from your operator settlement because you already hold it." aria-label="Help">?</span><span class="sub-amt" id="cashSub">$0</span></h5>
         <div id="cashRows"></div><button class="add" id="addCash">+ Add Cash Payer</button></div>
       <div class="card tx-square"><h5><span class="dot" style="background:var(--acct)"></span>Square Payments<span class="help" data-help="Taken on your own Square reader. Treated like cash (you hold the money), but tracked separately in reports." aria-label="Help">?</span><span class="sub-amt" id="squareSub">$0</span></h5>
@@ -862,13 +922,6 @@ a.addr-link{display:inline;font-size:12.5px}
       <div class="card tx-acct"><h5><span class="dot" style="background:var(--acct)"></span>Accounts<span class="help" data-help="Invoiced or account jobs billed through the operator. Counted in gross; operator pays your share." aria-label="Help">?</span><span class="sub-amt" id="acctSub">$0</span></h5>
         <div id="acctRows"></div><button class="add" id="addAcct">+ Add Account</button></div>
       <div id="customCards"></div>
-      <div class="card tx-fuel"><h5><span class="dot" style="background:var(--fuel-fill)"></span>Fuel<span class="help" data-help="Log each fill-up. Tick <b>Paid by operator</b> for fuel on the operator's card (not added to your settlement). Fuel you pay yourself is reimbursed. Either way it's tax-deductible \u2014 keep receipts." aria-label="Help">?</span><span class="sub-amt" id="fuelSub">$0</span></h5>
-        <div id="fuelRows"></div><button class="add" id="addFuel">+ Add Fuel Fill-up</button></div>
-      <div class="card tx-hail" style="margin-bottom:0"><h5><span class="dot" style="background:var(--dgr)"></span>Hail Trips <span class="danger" style="font-size:10px;margin-left:auto">required</span><span class="help" data-help="Number of rank or street-hail trips. These attract the state CPV levy (per-trip). Booked trips are excluded \u2014 the booking service pays their levy. Required before Review / Share so levy is never forgotten." aria-label="Help">?</span><span class="sub-amt" id="levyTag">$0.00 levy</span></h5>
-        <div class="hailwrap">
-          <div class="hailamt"><small>Private levy</small><b id="levyAmt">$0.00</b><span id="levyRate">$1.20 / trip</span></div>
-          <div class="counter"><button type="button" id="hailMinus">&minus;</button><input id="hail" type="number" min="0" inputmode="numeric" placeholder="0"><button type="button" id="hailPlus">+</button></div>
-        </div></div>
     </div>
     <div data-pane="3" style="display:none">
       <div class="card"><h5><span class="dot" style="background:var(--head)"></span>Vehicle Rego <span class="danger" style="font-size:10px;margin-left:auto">required</span></h5>
@@ -1147,10 +1200,16 @@ a.addr-link{display:inline;font-size:12.5px}
   <section class="screen" data-tab="refresh">
     <div class="sub">Refresh <small>Cache &amp; updates</small></div>
     <div class="card" style="text-align:center;padding:24px 14px">
-      <div style="width:54px;height:54px;border-radius:50%;background:var(--inc-bg);color:var(--inc);display:grid;place-items:center;margin:0 auto 12px;border:1px solid var(--inc)"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/></svg></div>
-      <b style="font-size:15px;color:var(--head)">Clear cache &amp; check for updates</b>
-      <p style="font-size:11.5px;color:var(--mut);margin:6px 0 14px">Keeps your saved shifts and settings.</p>
-      <button class="btn" id="refreshBtn">Refresh now</button></div>
+      <div id="refreshIconWrap" style="width:54px;height:54px;border-radius:50%;background:var(--inc-bg);color:var(--inc);display:grid;place-items:center;margin:0 auto 12px;border:1px solid var(--inc)"><svg id="refreshIconSvg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/></svg></div>
+      <b style="font-size:15px;color:var(--head)" id="refreshTitle">Clear cache &amp; check for updates</b>
+      <p style="font-size:11.5px;color:var(--mut);margin:6px 0 14px" id="refreshSub">Keeps your saved shifts, EOS archive and receipt jar.</p>
+      <div class="refresh-stage" id="refreshStage" style="display:none">
+        <div class="rs" data-rs="1"><i>1</i><span>Unregister old service worker</span></div>
+        <div class="rs" data-rs="2"><i>2</i><span>Clear cached app files</span></div>
+        <div class="rs" data-rs="3"><i>3</i><span>Reload fresh build</span></div>
+      </div>
+      <button class="btn" id="refreshBtn">Refresh now</button>
+    </div>
   </section>
 
   <section class="screen" data-tab="settings">
@@ -1213,7 +1272,8 @@ a.addr-link{display:inline;font-size:12.5px}
 
       <p class="grp">Data &amp; maintenance</p>
       <div class="card" style="padding:0">
-        <div class="set" id="archiveLink"><div class="sl"><b>Receipt jar</b><p>Snaps by category for tax audit &middot; <span id="archiveCount">0</span> saved</p></div><span class="chev">&rsaquo;</span></div>
+        <div class="set" id="archiveLink"><div class="sl"><b>Receipt &amp; EOS archive</b><p>Shift receipts + end-of-shift snapshots &middot; <span id="archiveCount">0</span> saved</p></div><span class="chev">&rsaquo;</span></div>
+        <div class="set" id="rollbackUpdate"><div class="sl"><b>Roll back previous update</b><p>Restore the last app version only (one step back) if this build is not working for you</p></div><span class="chev">&larr;</span></div>
         <div class="set" id="clearCache"><div class="sl"><b>Clear Cache &amp; Refresh</b><p>Checks for updates</p></div><span class="chev">&rsaquo;</span></div>
         <div class="set" id="newFy"><div class="sl"><b class="danger">Start New Financial Year</b><p>Clear shifts &amp; income &middot; keep settings &amp; address book</p></div><span class="chev danger">&rsaquo;</span></div>
       </div>
@@ -1313,7 +1373,7 @@ a.addr-link{display:inline;font-size:12.5px}
   <div id="changelogBody"></div>
   <button class="btn neutral" id="clClose" style="margin-top:14px">Close</button>
 </div></div>
-<input type="file" id="fuelRcptFile" accept="image/*,application/pdf" style="display:none">
+<input type="file" id="fmRcptFile" accept="image/*,application/pdf" style="display:none">
 <div class="modal" id="fuelModal"><div class="sheet">
   <div class="grip"></div><h3>Add fuel</h3>
   <p class="csub">A fill-up that isn’t on a logged shift. GST is taken off automatically.</p>
@@ -1326,13 +1386,25 @@ a.addr-link{display:inline;font-size:12.5px}
   <div class="two" style="margin-top:14px"><button class="btn neutral" id="fmCancel">Cancel</button><button class="btn" id="fmSave">Save Fuel</button></div>
 </div></div>
 <div class="modal" id="archiveModal"><div class="sheet">
-  <div class="grip"></div><h3>Receipt jar</h3>
-  <p class="csub">Every snap you attached — sorted by category. Same store as expenses and fuel.</p>
+  <div class="grip"></div><h3>Archive</h3>
+  <p class="csub">Saved receipts and end-of-shift reports for future reference.</p>
+  <div class="arch-tabs" id="archTabs">
+    <button type="button" class="on" data-arch="receipts">Receipts</button>
+    <button type="button" data-arch="eos">EOS shifts</button>
+  </div>
   <div class="arch-cats" id="jarCats"></div>
-  <input id="archiveSearch" placeholder="Search description, type or date" style="margin-bottom:10px">
+  <input id="archiveSearch" placeholder="Search description, rego or date" style="margin-bottom:10px">
   <div id="archiveList"></div>
-  <div class="ded-empty" id="archiveEmpty" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.2L14 21l-2-1.2L10 21l-2-1.2L6 21z"/><path d="M9 8h6M9 12h6"/></svg><b>Jar is empty</b><span>Attach receipts to fuel or expenses and they land here.</span></div>
+  <div class="ded-empty" id="archiveEmpty" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.2L14 21l-2-1.2L10 21l-2-1.2L6 21z"/><path d="M9 8h6M9 12h6"/></svg><b id="archiveEmptyTitle">Archive is empty</b><span id="archiveEmptySub">Saved shifts and receipts appear here for later reference.</span></div>
   <button class="btn neutral" id="archiveClose" style="margin-top:14px">Close</button>
+</div></div>
+<div class="modal" id="eosViewModal"><div class="sheet">
+  <div class="grip"></div><h3 id="eosTitle">EOS shift</h3>
+  <p class="csub" id="eosMeta"></p>
+  <div id="eosCollage" style="text-align:center;margin:8px 0"></div>
+  <div class="prev" id="eosMsg" style="margin-top:8px;max-height:180px;overflow:auto"></div>
+  <div class="two" style="margin-top:12px"><button class="btn neutral" id="eosDelete" style="border-color:var(--dgr);color:var(--dgr)">Delete</button><button class="btn neutral" id="eosShare">Share again</button></div>
+  <button class="btn neutral" id="eosClose" style="margin-top:8px">Close</button>
 </div></div>
 <div class="modal" id="rcptViewModal"><div class="sheet">
   <div class="grip"></div><h3 id="rvTitle">Receipt</h3>
@@ -1340,6 +1412,29 @@ a.addr-link{display:inline;font-size:12.5px}
   <div id="rvBody" style="text-align:center;margin:10px 0"></div>
   <div class="two" style="margin-top:12px"><button class="btn neutral" id="rvDelete" style="border-color:var(--dgr);color:var(--dgr)">Delete</button><button class="btn neutral" id="rvClose">Close</button></div>
 </div></div>
+<div id="rcptZoom" class="rcpt-zoom" aria-hidden="true">
+  <div class="rcpt-zoom-top">
+    <b id="rzTitle">Receipt</b>
+    <button type="button" id="rzClose">Done</button>
+  </div>
+  <div class="rcpt-zoom-stage" id="rzStage">
+    <img id="rzImg" alt="Receipt zoom preview">
+  </div>
+  <div class="rz-tip">Pinch or use + / − · drag to pan · double-tap to zoom</div>
+  <div class="rcpt-zoom-bar">
+    <button type="button" id="rzOut" aria-label="Zoom out">&minus;</button>
+    <span class="rz-lvl" id="rzLvl">100%</span>
+    <button type="button" id="rzIn" aria-label="Zoom in">+</button>
+    <button type="button" id="rzReset" aria-label="Reset zoom" style="font-size:12px;min-width:58px">Reset</button>
+  </div>
+</div>
+<div id="refreshOverlay" class="refresh-overlay" aria-hidden="true">
+  <div class="ro-card">
+    <div class="ro-spin"></div>
+    <b id="roTitle" style="display:block;font-size:16px;color:var(--head)">Refreshing Fareo</b>
+    <p id="roSub" style="margin:6px 0 0;font-size:12px;color:var(--mut)">Clearing cache — your data stays on this phone.</p>
+  </div>
+</div>
 <div class="modal" id="askModal"><div class="sheet">
   <div class="grip"></div>
   <h3 id="askTitle">Delete?</h3>
@@ -1502,11 +1597,19 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.8';
+var APP_VERSION='8.9';
 var CHANGELOG=[
+  {v:'8.9',date:'September 11, 2026',notes:[
+    ['Feature','Log Shift Attach step: Date + End of Shift attachments first, with a dedicated Fuel Receipts field. Fuel receipt makes fuel amount compulsory.'],
+    ['Feature','EOS OCR: reads TXN TOTALS into EOS values and Rank/Hail into hail count; multi-slip EOS creates matching value fields; manual prompt if OCR misses.'],
+    ['UI/UX','Shift preview (net take-home + live report) sits at the top of the Log Shift step. Share collage includes EOS + fuel receipts.'],
+    ['Feature','Advanced settings: Roll back previous update (one version only) via saved rollback cache.'],
+    ['Bug Fix','Share always pairs the same shift numbers in WhatsApp text and the collage image (one buildShareLines source).']
+  ]},
   {v:'8.8',date:'September 11, 2026',notes:[
     ['UI/UX','Log Shift rebuilt: receipt upload is the first required step, with a live preview while logging every payment type.'],
     ['Feature','Multiple receipt files supported (at least 1 compulsory). Switch live preview one-at-a-time; Share collages all receipts into a single photo.'],
+    ['UI/UX','Receipt zoom viewer: pinch / +/- / wheel zoom and drag-to-pan for fine detail reading on attached receipts.'],
     ['Feature','Compulsory gates kept: ≥1 receipt to enter Log Shift; receipt + hail trips still required before Review / Share.']
   ]},
   {v:'8.7',date:'August 30, 2026',notes:[
@@ -1687,74 +1790,93 @@ if(!draft.custom)draft.custom={};
 /* [F4] Only reset date/rego for a fresh draft. */
 if(!draft._edit){draft.date=todayStr();draft.rego='';}
 draft.receipt=false;draft.receiptName='';
-/* In-memory shift receipts (not persisted as binary). At least 1 compulsory before logging. */
-var shiftReceipts=[]; /* [{id,file,name,type,url}] */
-var shiftRcptIdx=0;
+/* In-memory attachments. EOS ≥1 compulsory; fuel optional but locks fuel amount if present. */
+var eosReceipts=[]; /* [{id,file,name,type,url,ocrTxn,ocrHail,ocrDone}] */
+var fuelReceipts=[];
+var shiftRcptIdx=0, fuelRcptIdx=0;
+var ocrMissed=false;
+function allShiftAttach(){return eosReceipts.concat(fuelReceipts)}
 function syncDraftReceiptFlag(){
-  draft.receipt=shiftReceipts.length>0;
-  draft.receiptName=shiftReceipts.length?(shiftReceipts.length===1?shiftReceipts[0].name:(shiftReceipts.length+' receipts')):'';
+  draft.receipt=eosReceipts.length>0;
+  var bits=[];
+  if(eosReceipts.length)bits.push(eosReceipts.length+' EOS');
+  if(fuelReceipts.length)bits.push(fuelReceipts.length+' fuel');
+  draft.receiptName=bits.join(' + ')||'';
 }
+function revokeList(list){list.forEach(function(r){if(r.url){try{URL.revokeObjectURL(r.url)}catch(_){}}})}
 function clearReceiptAttach(){
-  shiftReceipts.forEach(function(r){if(r.url){try{URL.revokeObjectURL(r.url)}catch(_){}}});
-  shiftReceipts=[];
-  shiftRcptIdx=0;
+  revokeList(eosReceipts);revokeList(fuelReceipts);
+  eosReceipts=[];fuelReceipts=[];shiftRcptIdx=0;fuelRcptIdx=0;ocrMissed=false;
   syncDraftReceiptFlag();
-  var file=$('#rcptFile');if(file)file.value='';
+  var f1=$('#rcptFile');if(f1)f1.value='';
+  var f2=$('#fuelRcptFile');if(f2)f2.value='';
   updateReceiptUI();
 }
-function currentShiftReceipt(){
-  if(!shiftReceipts.length)return null;
-  if(shiftRcptIdx<0)shiftRcptIdx=0;
-  if(shiftRcptIdx>=shiftReceipts.length)shiftRcptIdx=shiftReceipts.length-1;
-  return shiftReceipts[shiftRcptIdx];
+function fileToAttach(f,label){
+  var url='';
+  if(f.type&&f.type.indexOf('image/')===0){try{url=URL.createObjectURL(f)}catch(_){url=''}}
+  return {id:'sr'+Date.now()+Math.random().toString(36).slice(2,6),file:f,name:f.name||label,type:f.type||'',url:url,ocrTxn:null,ocrHail:null,ocrDone:false};
 }
-function addShiftReceiptFiles(fileList){
-  var files=[].slice.call(fileList||[]);
-  if(!files.length)return 0;
-  var added=0;
-  files.forEach(function(f){
-    if(!f)return;
-    var url='';
-    if(f.type&&f.type.indexOf('image/')===0){try{url=URL.createObjectURL(f)}catch(_){url=''}}
-    shiftReceipts.push({id:'sr'+Date.now()+Math.random().toString(36).slice(2,6),file:f,name:f.name||('Receipt '+(shiftReceipts.length+1)),type:f.type||'',url:url});
-    added++;
+function syncEosFieldsToAttachCount(){
+  var n=Math.max(eosReceipts.length,1);
+  while(draft.eos.length<n)draft.eos.push(0);
+  if(eosReceipts.length&&draft.eos.length>eosReceipts.length){
+    /* keep values for existing slips; trim extras only when slips removed below count */
+    while(draft.eos.length>eosReceipts.length&&draft.eos.length>1)draft.eos.pop();
+  }
+  if(!draft.eos.length)draft.eos=[0];
+}
+function fuelReceiptRequiredOk(){
+  if(!fuelReceipts.length)return true;
+  return draft.fuel.some(function(f){return nn(f.amount)>0});
+}
+function currentEosReceipt(){
+  if(!eosReceipts.length)return null;
+  shiftRcptIdx=Math.max(0,Math.min(eosReceipts.length-1,shiftRcptIdx));
+  return eosReceipts[shiftRcptIdx];
+}
+function currentFuelReceipt(){
+  if(!fuelReceipts.length)return null;
+  fuelRcptIdx=Math.max(0,Math.min(fuelReceipts.length-1,fuelRcptIdx));
+  return fuelReceipts[fuelRcptIdx];
+}
+function renderAttachFrame(frame, cur, emptyTitle, emptySub){
+  if(!frame)return;
+  if(!cur){
+    frame.innerHTML='<div class="rcpt-empty"><b>'+esc(emptyTitle)+'</b>'+esc(emptySub)+'</div>';
+    frame.style.cursor='default';return;
+  }
+  if(cur.type==='application/pdf'){
+    frame.innerHTML='<div class="rcpt-pdf">PDF ready<br><span style="font-size:11px;font-weight:600;color:rgba(255,255,255,.7)">'+esc(cur.name)+'</span></div>';
+    frame.style.cursor='default';
+  }else if(cur.url){
+    frame.innerHTML='<img src="'+cur.url+'" alt="preview"><span class="rcpt-zoom-hint">Tap to zoom &amp; pan</span>';
+    frame.style.cursor='zoom-in';
+  }else{
+    frame.innerHTML='<div class="rcpt-pdf">'+esc(cur.name)+'</div>';
+    frame.style.cursor='default';
+  }
+}
+function renderThumbs(el, list, activeIdx, onPick, onRemove){
+  if(!el)return;
+  el.innerHTML=list.map(function(r,i){
+    var body=r.url?'<img src="'+r.url+'" alt="">':'<div class="rt-pdf">PDF</div>';
+    return '<button type="button" class="rt'+(i===activeIdx?' on':'')+'" data-ri="'+i+'" title="'+esc(r.name)+'">'+body+'<span class="rt-x" data-rx="'+i+'" title="Remove">&times;</span></button>';
+  }).join('');
+  $$('.rt',el).forEach(function(btn){
+    btn.onclick=function(e){
+      if(e.target&&e.target.dataset&&e.target.dataset.rx!=null){e.stopPropagation();onRemove(Number(e.target.dataset.rx));return}
+      onPick(Number(btn.dataset.ri));
+    };
   });
-  if(added){shiftRcptIdx=shiftReceipts.length-1;syncDraftReceiptFlag();updateReceiptUI()}
-  return added;
-}
-function removeShiftReceiptAt(idx){
-  if(idx<0||idx>=shiftReceipts.length)return;
-  var r=shiftReceipts[idx];
-  if(r&&r.url){try{URL.revokeObjectURL(r.url)}catch(_){}}
-  shiftReceipts.splice(idx,1);
-  if(shiftRcptIdx>=shiftReceipts.length)shiftRcptIdx=Math.max(0,shiftReceipts.length-1);
-  syncDraftReceiptFlag();
-  updateReceiptUI();
-}
-function setShiftRcptIdx(i){
-  if(!shiftReceipts.length)return;
-  shiftRcptIdx=Math.max(0,Math.min(shiftReceipts.length-1,i));
-  updateReceiptUI();
 }
 function updateReceiptUI(){
   syncDraftReceiptFlag();
-  var n=shiftReceipts.length;
-  var cur=currentShiftReceipt();
-  var has=n>0;
+  syncEosFieldsToAttachCount();
+  var n=eosReceipts.length, cur=currentEosReceipt(), has=n>0;
   var rc=$('#rcpt');if(rc)rc.classList.toggle('done',has);
-  var txt=$('#rcptTxt');if(txt)txt.textContent=has?('Add more ('+n+' attached)'):'Add receipt photo / PDF';
-  var frame=$('#rcptPreview');
-  if(frame){
-    if(!has){
-      frame.innerHTML='<div class="rcpt-empty"><b>No receipt yet</b>At least one photo or PDF is required before logging payments.</div>';
-    }else if(cur.type==='application/pdf'){
-      frame.innerHTML='<div class="rcpt-pdf">PDF ready<br><span style="font-size:11px;font-weight:600;color:var(--mut)">'+esc(cur.name)+'</span></div>';
-    }else if(cur.url){
-      frame.innerHTML='<img src="'+cur.url+'" alt="Receipt preview">';
-    }else{
-      frame.innerHTML='<div class="rcpt-pdf">'+esc(cur.name)+'</div>';
-    }
-  }
+  var txt=$('#rcptTxt');if(txt)txt.textContent=has?('Add more EOS ('+n+')'):'Add EOS photo / PDF';
+  renderAttachFrame($('#rcptPreview'), cur, 'No EOS attachment yet', 'At least one End of Shift document is required.');
   var nav=$('#rcptNav');
   if(nav){
     nav.style.display=has?'flex':'none';
@@ -1762,42 +1884,217 @@ function updateReceiptUI(){
     var prev=$('#rcptPrevBtn');if(prev)prev.disabled=shiftRcptIdx<=0;
     var next=$('#rcptNextBtn');if(next)next.disabled=shiftRcptIdx>=n-1;
   }
-  var thumbs=$('#rcptThumbs');
-  if(thumbs){
-    thumbs.innerHTML=shiftReceipts.map(function(r,i){
-      var body=r.url?'<img src="'+r.url+'" alt="">':'<div class="rt-pdf">PDF</div>';
-      return '<button type="button" class="rt'+(i===shiftRcptIdx?' on':'')+'" data-ri="'+i+'" title="'+esc(r.name)+'">'+body+'<span class="rt-x" data-rx="'+i+'" title="Remove">&times;</span></button>';
-    }).join('');
-    $$('#rcptThumbs .rt').forEach(function(btn){
-      btn.onclick=function(e){
-        if(e.target&&e.target.dataset&&e.target.dataset.rx!=null){
-          e.stopPropagation();
-          removeShiftReceiptAt(Number(e.target.dataset.rx));
-          return;
-        }
-        setShiftRcptIdx(Number(btn.dataset.ri));
-      };
-    });
-  }
+  renderThumbs($('#rcptThumbs'), eosReceipts, shiftRcptIdx, function(i){shiftRcptIdx=i;updateReceiptUI()}, function(i){removeEosAt(i)});
   var rem=$('#rcptRemove');if(rem)rem.disabled=!has;
+
+  var fn=fuelReceipts.length, fcur=currentFuelReceipt(), fhas=fn>0;
+  var fr=$('#fuelRcpt');if(fr)fr.classList.toggle('done',fhas);
+  var ft=$('#fuelRcptTxt');if(ft)ft.textContent=fhas?('Add more fuel ('+fn+')'):'Add fuel receipt';
+  renderAttachFrame($('#fuelRcptPreview'), fcur, 'No fuel receipt', 'Optional — add if you filled up this shift.');
+  var facts=$('#fuelRcptActs');if(facts)facts.style.display=fhas?'grid':'none';
+  renderThumbs($('#fuelRcptThumbs'), fuelReceipts, fuelRcptIdx, function(i){fuelRcptIdx=i;updateReceiptUI()}, function(i){removeFuelAt(i)});
+  var badge=$('#fuelReqBadge');if(badge)badge.style.display=fhas?'inline':'none';
+
   var sticky=$('#rcptSticky');
   if(sticky){
-    sticky.classList.toggle('on',has);
-    var stImg=$('#rcptStickyImg');
-    var stTitle=$('#rcptStickyTitle');
-    var stName=$('#rcptStickyName');
-    if(stTitle)stTitle.textContent=has?('Receipt '+(shiftRcptIdx+1)+' of '+n):'No receipt';
-    if(stName)stName.textContent=has?(cur.name):'Attach on Receipt step';
+    sticky.classList.toggle('on',has||fhas);
+    var stImg=$('#rcptStickyImg'), stTitle=$('#rcptStickyTitle'), stName=$('#rcptStickyName');
+    var show=cur&&cur.url?cur:(fcur&&fcur.url?fcur:null);
+    if(stTitle)stTitle.textContent=(n||0)+' EOS · '+(fn||0)+' fuel';
+    if(stName)stName.textContent=show?show.name:'Tap EOS to change attachments';
     if(stImg){
-      if(has&&cur.url&&cur.type!=='application/pdf'){stImg.src=cur.url;stImg.style.display='block'}
+      if(show&&show.url&&show.type!=='application/pdf'){stImg.src=show.url;stImg.style.display='block'}
       else{stImg.removeAttribute('src');stImg.style.display='none'}
     }
     var sp=$('#rcptStickyPrev');if(sp)sp.disabled=!has||shiftRcptIdx<=0;
     var sn=$('#rcptStickyNext');if(sn)sn.disabled=!has||shiftRcptIdx>=n-1;
   }
+  var man=$('#ocrManualPrompt');if(man)man.style.display=ocrMissed?'block':'none';
   if(typeof updateFooter==='function')updateFooter();
+  if(typeof rowInputs==='function'){/* keep eos rows in sync after attach count change */}
 }
-/* Build one collage image File from all attached shift receipts (for Share). */
+function removeEosAt(idx){
+  if(idx<0||idx>=eosReceipts.length)return;
+  var r=eosReceipts[idx];if(r&&r.url){try{URL.revokeObjectURL(r.url)}catch(_){}}
+  eosReceipts.splice(idx,1);
+  if(draft.eos.length>idx)draft.eos.splice(idx,1);
+  if(!draft.eos.length)draft.eos=[0];
+  shiftRcptIdx=Math.max(0,Math.min(eosReceipts.length-1,shiftRcptIdx));
+  syncDraftReceiptFlag();updateReceiptUI();rowInputs();render();
+}
+function removeFuelAt(idx){
+  if(idx<0||idx>=fuelReceipts.length)return;
+  var r=fuelReceipts[idx];if(r&&r.url){try{URL.revokeObjectURL(r.url)}catch(_){}}
+  fuelReceipts.splice(idx,1);
+  fuelRcptIdx=Math.max(0,Math.min(fuelReceipts.length-1,fuelRcptIdx));
+  syncDraftReceiptFlag();updateReceiptUI();render();
+}
+function addEosFiles(fileList){
+  var files=[].slice.call(fileList||[]);var added=0;var start=eosReceipts.length;
+  files.forEach(function(f){if(!f)return;eosReceipts.push(fileToAttach(f,'EOS '+(eosReceipts.length+1)));added++});
+  if(added){shiftRcptIdx=eosReceipts.length-1;syncEosFieldsToAttachCount();syncDraftReceiptFlag();updateReceiptUI();rowInputs();render();runEosOcrFrom(start)}
+  return added;
+}
+function addFuelFiles(fileList){
+  var files=[].slice.call(fileList||[]);var added=0;
+  files.forEach(function(f){if(!f)return;fuelReceipts.push(fileToAttach(f,'Fuel '+(fuelReceipts.length+1)));added++});
+  if(added){fuelRcptIdx=fuelReceipts.length-1;syncDraftReceiptFlag();updateReceiptUI();render();toast('Fuel receipt attached — enter fuel amount on Log Shift')}
+  return added;
+}
+
+/* ---------- EOS OCR (Tesseract.js, lazy) ---------- */
+var tessWorker=null, tessLoading=null;
+function loadTesseract(){
+  if(window.Tesseract)return Promise.resolve(window.Tesseract);
+  if(tessLoading)return tessLoading;
+  tessLoading=new Promise(function(res,rej){
+    var s=document.createElement('script');
+    s.src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+    s.onload=function(){res(window.Tesseract)};
+    s.onerror=function(){tessLoading=null;rej(new Error('OCR load failed'))};
+    document.head.appendChild(s);
+  });
+  return tessLoading;
+}
+function parseEosOcrText(text){
+  var t=String(text||'').replace(/\s+/g,' ').toUpperCase();
+  var txn=null,hail=null;
+  var m=t.match(/TXN\s*TOTALS?\s*[:\-]?\s*\$?\s*([0-9]{1,6}[.,][0-9]{2})/)
+    ||t.match(/TRANSACTION\s*TOTALS?\s*[:\-]?\s*\$?\s*([0-9]{1,6}[.,][0-9]{2})/)
+    ||t.match(/(?:EFTPOS|CARD)\s*TOTALS?\s*[:\-]?\s*\$?\s*([0-9]{1,6}[.,][0-9]{2})/)
+    ||t.match(/TOTALS?\s*[:\-]?\s*\$?\s*([0-9]{1,6}[.,][0-9]{2})/);
+  if(m)txn=parseFloat(String(m[1]).replace(',','.'));
+  var h=t.match(/(?:RANK|HAIL|HAILS|STREET\s*HAIL)[^\d]{0,14}(\d{1,3})\b/)
+    ||t.match(/\b(\d{1,3})\s*(?:RANK|HAIL|HAILS)\b/);
+  if(h)hail=parseInt(h[1],10);
+  return {txn:isFinite(txn)?txn:null, hail:isFinite(hail)?hail:null};
+}
+async function ocrImageUrl(url){
+  var T=await loadTesseract();
+  var result=await T.recognize(url,'eng',{logger:function(){}});
+  return parseEosOcrText(result&&result.data&&result.data.text);
+}
+async function runEosOcrFrom(startIdx){
+  var st=$('#ocrStatus');if(st){st.style.display='block';st.textContent='Reading EOS slip(s)…'}
+  ocrMissed=false;
+  var hailSum=nn(draft.hail)||0;
+  var hailFromOcr=0, hailHits=0;
+  try{
+    for(var i=startIdx;i<eosReceipts.length;i++){
+      var r=eosReceipts[i];
+      if(!r.url||r.type==='application/pdf'){ocrMissed=true;continue}
+      if(st)st.textContent='Reading EOS '+(i+1)+' of '+eosReceipts.length+'…';
+      try{
+        var parsed=await ocrImageUrl(r.url);
+        r.ocrTxn=parsed.txn;r.ocrHail=parsed.hail;r.ocrDone=true;
+        if(parsed.txn!=null){draft.eos[i]=parsed.txn}
+        else{ocrMissed=true}
+        if(parsed.hail!=null){hailFromOcr+=parsed.hail;hailHits++}
+        else{ocrMissed=true}
+      }catch(_){ocrMissed=true;r.ocrDone=true}
+    }
+    if(hailHits){draft.hail=hailFromOcr;var hi=$('#hail');if(hi)hi.value=draft.hail}
+    rowInputs();render();
+    if(st)st.textContent=ocrMissed?'OCR finished — some values need a manual check on Log Shift.':'OCR finished — EOS & hail filled where found.';
+    var man=$('#ocrManualPrompt');if(man)man.style.display=ocrMissed?'block':'none';
+    var eh=$('#eosOcrHint');if(eh){eh.style.display='block';eh.textContent=ocrMissed?'Enter any missing EOS values manually.':'Values filled from TXN TOTALS where detected.'}
+    var hh=$('#hailOcrHint');if(hh){hh.style.display=ocrMissed&&!hailHits?'block':'none';hh.textContent='Enter hail / rank count manually (OCR did not detect it).'}
+  }catch(e){
+    ocrMissed=true;
+    if(st)st.textContent='OCR unavailable offline — enter EOS & hail manually on Log Shift.';
+    var man2=$('#ocrManualPrompt');if(man2)man2.style.display='block';
+  }
+}
+
+/* ---------- receipt zoom / pan viewer (kept) ---------- */
+var rz={scale:1,x:0,y:0,min:1,max:5,baseW:0,baseH:0,fit:1,dragging:false,pinching:false,lastX:0,lastY:0,startDist:0,startScale:1,lastTap:0};
+function rzApply(){
+  var img=$('#rzImg');if(!img)return;
+  img.style.transform='translate(-50%,-50%) translate('+rz.x+'px,'+rz.y+'px) scale('+rz.scale+')';
+  var lvl=$('#rzLvl');if(lvl)lvl.textContent=Math.round(rz.scale*100)+'%';
+}
+function rzClampPan(){
+  var stage=$('#rzStage');if(!stage||!rz.baseW)return;
+  var sw=stage.clientWidth,sh=stage.clientHeight;
+  var dw=rz.baseW*rz.scale,dh=rz.baseH*rz.scale;
+  var maxX=Math.max(0,(dw-sw)/2),maxY=Math.max(0,(dh-sh)/2);
+  rz.x=Math.max(-maxX,Math.min(maxX,rz.x));
+  rz.y=Math.max(-maxY,Math.min(maxY,rz.y));
+}
+function rzSetScale(next,cx,cy){
+  var stage=$('#rzStage');
+  var prev=rz.scale;
+  rz.scale=Math.max(rz.min,Math.min(rz.max,next));
+  if(stage&&cx!=null&&cy!=null&&prev>0){
+    var r=stage.getBoundingClientRect();
+    var px=cx-r.left-r.width/2,py=cy-r.top-r.height/2;
+    var k=rz.scale/prev;
+    rz.x=px-(px-rz.x)*k;rz.y=py-(py-rz.y)*k;
+  }
+  if(rz.scale<=1.01){rz.scale=1;rz.x=0;rz.y=0}
+  rzClampPan();rzApply();
+}
+function rzFitImage(){
+  var stage=$('#rzStage'),img=$('#rzImg');
+  if(!stage||!img||!img.naturalWidth)return;
+  var sw=stage.clientWidth,sh=stage.clientHeight;
+  var nw=img.naturalWidth,nh=img.naturalHeight;
+  var fit=Math.min(sw/nw,sh/nh);
+  rz.fit=fit;rz.baseW=nw*fit;rz.baseH=nh*fit;
+  img.style.width=rz.baseW+'px';img.style.height=rz.baseH+'px';
+  rz.scale=1;rz.x=0;rz.y=0;rzApply();
+}
+function openReceiptZoom(src,title){
+  if(!src)return;
+  var z=$('#rcptZoom'),img=$('#rzImg'),t=$('#rzTitle');
+  if(!z||!img)return;
+  if(t)t.textContent=title||'Receipt preview';
+  img.onload=function(){rzFitImage()};
+  img.src=src;
+  rz.scale=1;rz.x=0;rz.y=0;
+  z.classList.add('show');z.setAttribute('aria-hidden','false');
+  if(typeof syncTrailBtns==='function')syncTrailBtns();
+}
+function closeReceiptZoom(){
+  var z=$('#rcptZoom');if(!z)return;
+  z.classList.remove('show');z.setAttribute('aria-hidden','true');
+  var img=$('#rzImg');if(img){img.removeAttribute('src')}
+  if(typeof syncTrailBtns==='function')syncTrailBtns();
+}
+function openCurrentReceiptZoom(){
+  var cur=currentEosReceipt();
+  if(!cur||!cur.url||cur.type==='application/pdf'){
+    var f=currentFuelReceipt();
+    if(f&&f.url&&f.type!=='application/pdf'){openReceiptZoom(f.url,f.name);return}
+    toast(cur&&cur.type==='application/pdf'?'PDF — included in share collage':'No image to zoom');return;
+  }
+  openReceiptZoom(cur.url,cur.name||('EOS '+(shiftRcptIdx+1)));
+}
+
+/* Build share text lines (single source for preview + collage banner + WhatsApp). */
+function buildShareLines(){
+  var L=[];
+  L.push('*Shift Report \u2014 '+fmtDayLong(draft.date)+'*');
+  L.push('\ud83d\ude90 *Rego:* '+(draft.rego||'Not set'));
+  if(eosT()>0){
+    if(draft.eos.filter(function(v){return nn(v)>0}).length>1){
+      draft.eos.forEach(function(v,i){if(nn(v)>0)L.push('\ud83d\udcb3 *EOS '+(i+1)+':* '+money(nn(v)))});
+      L.push('\ud83d\udcb3 *EOS total:* '+money(eosT()));
+    }else L.push('\ud83d\udcb3 *EOS:* '+money(eosT()));
+  }
+  if(cashT()>0){var cb=draft.cash.filter(function(c){return nn(c.amount)>0}).map(function(c){return (c.name||'Cash')+' '+money(nn(c.amount))}).join(', ');L.push('\ud83d\udcb5 *Cash:* '+money(cashT())+(cb?' ('+cb+')':''));}
+  if(squareT()>0){var sb=draft.square.filter(function(c){return nn(c.amount)>0}).map(function(c){return (c.name||'Square')+' '+money(nn(c.amount))}).join(', ');L.push('\ud83d\udcf1 *Square:* '+money(squareT())+(sb?' ('+sb+')':''));}
+  if(nn(draft.runs)>0)L.push('\ud83d\ude95 *Run ('+nn(draft.runs)+'):* '+money(nn(draft.runs)*RUN));
+  if(acctT()>0){var ab=draft.accounts.filter(function(a){return nn(a.amount)>0}).map(function(a){return (a.name||'Account')+' '+money(nn(a.amount))}).join(', ');L.push('\ud83e\uddfe *Accounts:* '+money(acctT())+(ab?' ('+ab+')':''));}
+  settings.payTypes.forEach(function(pt){var amt=customAmt(pt);if(amt>0)L.push('\u2795 *'+pt.name+':* '+money(amt));});
+  if(fuelIPaidT()>0)L.push('\u26fd *Fuel:* '+money(fuelIPaidT()));
+  if(String(draft.hail).trim()!=='')L.push('\ud83d\ude97 *Hail trips:* '+nn(draft.hail)+' ('+money(levyT())+' levy)');
+  var attN=eosReceipts.length, fuelN=fuelReceipts.length;
+  if(attN||fuelN)L.push('\ud83d\uddbc️ *Attachments:* '+attN+' EOS'+(fuelN?' + '+fuelN+' fuel':'')+' (collage)');
+  L.push('');
+  L.push('\ud83d\udcb0 *TOTAL EARNINGS: '+money(takeT())+'*');
+  return L;
+}
 function loadImgFromUrl(url){return new Promise(function(res){var img=new Image();img.onload=function(){res(img)};img.onerror=function(){res(null)};img.src=url})}
 function drawPdfTile(ctx,x,y,w,h,name){
   ctx.fillStyle='#1f2937';ctx.fillRect(x,y,w,h);
@@ -1809,46 +2106,138 @@ function drawPdfTile(ctx,x,y,w,h,name){
   ctx.fillText(label,x+w/2,y+h/2+22);
   ctx.textAlign='left';
 }
-async function buildReceiptCollageFile(){
-  if(!shiftReceipts.length)return null;
-  var pad=24,gap=18,maxW=1080,tiles=[];
-  for(var i=0;i<shiftReceipts.length;i++){
-    var r=shiftReceipts[i];
-    if(r.type==='application/pdf'||!r.url){
-      tiles.push({kind:'pdf',name:r.name,w:maxW-pad*2,h:220});
-    }else{
+function wrapCanvasText(ctx, text, maxW){
+  var words=String(text).split(/\s+/), lines=[], line='';
+  words.forEach(function(w){
+    var test=line?line+' '+w:w;
+    if(ctx.measureText(test).width>maxW&&line){lines.push(line);line=w}else line=test;
+  });
+  if(line)lines.push(line);
+  return lines;
+}
+/* Collage embeds the SAME share lines as WhatsApp text so image + caption stay consistent. */
+async function buildReceiptCollageFile(shareLines){
+  var list=allShiftAttach();
+  if(!list.length)return null;
+  var lines=shareLines||buildShareLines();
+  var pad=24,gap=16,maxW=1080,tiles=[];
+  /* measure text block */
+  var tmp=document.createElement('canvas').getContext('2d');
+  tmp.font='600 22px system-ui,sans-serif';
+  var textLines=[];
+  lines.forEach(function(raw){
+    var clean=String(raw).replace(/\*/g,'').replace(/[^\x20-\x7E]/g,' ').replace(/\s+/g,' ').trim();
+    if(!clean)return;
+    wrapCanvasText(tmp, clean, maxW-pad*2).forEach(function(ln){textLines.push(ln)});
+  });
+  var textBlockH=36+textLines.length*28+pad;
+  for(var i=0;i<eosReceipts.length;i++){
+    var r=eosReceipts[i];
+    if(r.type==='application/pdf'||!r.url)tiles.push({kind:'pdf',name:'EOS · '+r.name,w:maxW-pad*2,h:200,label:'EOS '+(i+1)});
+    else{
       var img=await loadImgFromUrl(r.url);
-      if(!img){tiles.push({kind:'pdf',name:r.name,w:maxW-pad*2,h:220});continue}
+      if(!img){tiles.push({kind:'pdf',name:'EOS · '+r.name,w:maxW-pad*2,h:200,label:'EOS '+(i+1)});continue}
       var iw=img.naturalWidth||img.width,ih=img.naturalHeight||img.height;
       var tw=maxW-pad*2,th=Math.round(ih*(tw/iw));
-      if(th>1600){th=1600;tw=Math.round(iw*(th/ih))}
-      tiles.push({kind:'img',img:img,w:tw,h:th,name:r.name});
+      if(th>1400){th=1400;tw=Math.round(iw*(th/ih))}
+      tiles.push({kind:'img',img:img,w:tw,h:th,name:r.name,label:'EOS '+(i+1)});
     }
   }
-  var totalH=pad;
-  tiles.forEach(function(t,idx){totalH+=t.h+(idx<tiles.length-1?gap:0)});
-  totalH+=pad+36;
-  var c=document.createElement('canvas');c.width=maxW;c.height=Math.max(totalH,200);
+  for(var j=0;j<fuelReceipts.length;j++){
+    var fr=fuelReceipts[j];
+    if(fr.type==='application/pdf'||!fr.url)tiles.push({kind:'pdf',name:'Fuel · '+fr.name,w:maxW-pad*2,h:200,label:'Fuel '+(j+1)});
+    else{
+      var fimg=await loadImgFromUrl(fr.url);
+      if(!fimg){tiles.push({kind:'pdf',name:'Fuel · '+fr.name,w:maxW-pad*2,h:200,label:'Fuel '+(j+1)});continue}
+      var fiw=fimg.naturalWidth||fimg.width,fih=fimg.naturalHeight||fimg.height;
+      var ftw=maxW-pad*2,fth=Math.round(fih*(ftw/fiw));
+      if(fth>1400){fth=1400;ftw=Math.round(fiw*(fth/fih))}
+      tiles.push({kind:'img',img:fimg,w:ftw,h:fth,name:fr.name,label:'Fuel '+(j+1)});
+    }
+  }
+  var totalH=textBlockH+pad;
+  tiles.forEach(function(t,idx){totalH+=28+t.h+(idx<tiles.length-1?gap:0)});
+  totalH+=pad;
+  var c=document.createElement('canvas');c.width=maxW;c.height=Math.max(totalH,240);
   var x=c.getContext('2d');
-  x.fillStyle='#111827';x.fillRect(0,0,c.width,c.height);
-  x.fillStyle='#f9fafb';x.font='700 22px system-ui,sans-serif';
-  x.fillText('Fareo receipts · '+tiles.length+(tiles.length===1?' file':' files'),pad,28);
-  var y=pad+36;
+  x.fillStyle='#0B1220';x.fillRect(0,0,c.width,c.height);
+  x.fillStyle='#ECFDF5';x.fillRect(0,0,c.width,textBlockH);
+  x.fillStyle='#065F46';x.font='800 24px system-ui,sans-serif';
+  x.fillText('Fareo shift · text matches this collage',pad,32);
+  x.fillStyle='#111827';x.font='600 20px system-ui,sans-serif';
+  var ty=58;
+  textLines.forEach(function(ln){x.fillText(ln,pad,ty);ty+=28});
+  var y=textBlockH+8;
   tiles.forEach(function(t,idx){
+    x.fillStyle='#F4F4F5';x.font='700 18px system-ui,sans-serif';
+    x.fillText(t.label||('File '+(idx+1)),pad,y+18);
+    y+=28;
     var left=Math.round((maxW-t.w)/2);
-    if(t.kind==='img'){x.drawImage(t.img,left,y,t.w,t.h)}
-    else{drawPdfTile(x,left,y,t.w,t.h,t.name)}
+    if(t.kind==='img')x.drawImage(t.img,left,y,t.w,t.h);
+    else drawPdfTile(x,left,y,t.w,t.h,t.name);
     y+=t.h+(idx<tiles.length-1?gap:0);
   });
   return new Promise(function(res){
     try{
       c.toBlob(function(blob){
         if(!blob){res(null);return}
-        res(new File([blob],'fareo-receipts-'+todayStr()+'.jpg',{type:'image/jpeg'}));
-      },'image/jpeg',0.82);
+        res(new File([blob],'fareo-shift-'+todayStr()+'.jpg',{type:'image/jpeg'}));
+      },'image/jpeg',0.85);
     }catch(e){res(null)}
   });
 }
+(function bindReceiptZoom(){
+  var stage=$('#rzStage');if(!stage)return;
+  function dist(a,b){var dx=a.clientX-b.clientX,dy=a.clientY-b.clientY;return Math.sqrt(dx*dx+dy*dy)}
+  stage.addEventListener('wheel',function(e){
+    if(!$('#rcptZoom')||!$('#rcptZoom').classList.contains('show'))return;
+    e.preventDefault();
+    rzSetScale(rz.scale*(e.deltaY>0?0.9:1.1),e.clientX,e.clientY);
+  },{passive:false});
+  stage.addEventListener('pointerdown',function(e){
+    if(e.pointerType==='mouse'&&e.button!==0)return;
+    stage.setPointerCapture(e.pointerId);
+    var pts=stage._pts||(stage._pts={});
+    pts[e.pointerId]={clientX:e.clientX,clientY:e.clientY};
+    var list=Object.keys(pts).map(function(k){return pts[k]});
+    if(list.length===2){rz.pinching=true;rz.dragging=false;rz.startDist=dist(list[0],list[1]);rz.startScale=rz.scale}
+    else{
+      var now=Date.now();
+      if(now-rz.lastTap<280){rzSetScale(rz.scale>1.2?1:2.5,e.clientX,e.clientY);rz.lastTap=0}
+      else rz.lastTap=now;
+      rz.dragging=rz.scale>1;rz.pinching=false;rz.lastX=e.clientX;rz.lastY=e.clientY;
+      stage.classList.toggle('dragging',rz.dragging);
+    }
+  });
+  stage.addEventListener('pointermove',function(e){
+    var pts=stage._pts;if(!pts||!pts[e.pointerId])return;
+    pts[e.pointerId]={clientX:e.clientX,clientY:e.clientY};
+    var list=Object.keys(pts).map(function(k){return pts[k]});
+    if(rz.pinching&&list.length===2&&rz.startDist>0){
+      var d=dist(list[0],list[1]);
+      rzSetScale(rz.startScale*(d/rz.startDist),(list[0].clientX+list[1].clientX)/2,(list[0].clientY+list[1].clientY)/2);
+    }else if(rz.dragging&&list.length===1){
+      rz.x+=e.clientX-rz.lastX;rz.y+=e.clientY-rz.lastY;rz.lastX=e.clientX;rz.lastY=e.clientY;rzClampPan();rzApply();
+    }
+  });
+  function endPtr(e){var pts=stage._pts;if(!pts)return;delete pts[e.pointerId];if(Object.keys(pts).length<2)rz.pinching=false;if(!Object.keys(pts).length){rz.dragging=false;stage.classList.remove('dragging')}}
+  stage.addEventListener('pointerup',endPtr);stage.addEventListener('pointercancel',endPtr);
+  if($('#rzClose'))$('#rzClose').onclick=closeReceiptZoom;
+  if($('#rzIn'))$('#rzIn').onclick=function(){var r=$('#rzStage').getBoundingClientRect();rzSetScale(rz.scale*1.25,r.left+r.width/2,r.top+r.height/2)};
+  if($('#rzOut'))$('#rzOut').onclick=function(){var r=$('#rzStage').getBoundingClientRect();rzSetScale(rz.scale/1.25,r.left+r.width/2,r.top+r.height/2)};
+  if($('#rzReset'))$('#rzReset').onclick=function(){rz.scale=1;rz.x=0;rz.y=0;rzApply()};
+  window.addEventListener('resize',function(){if($('#rcptZoom')&&$('#rcptZoom').classList.contains('show'))rzFitImage()});
+})();
+if($('#rcptPreview'))$('#rcptPreview').onclick=function(e){
+  if(e.target&&(e.target.classList.contains('rcpt-empty')||e.target.classList.contains('rcpt-pdf')||(e.target.closest&&e.target.closest('.rcpt-empty,.rcpt-pdf'))))return;
+  openCurrentReceiptZoom();
+};
+if($('#fuelRcptPreview'))$('#fuelRcptPreview').onclick=function(e){
+  if(e.target&&(e.target.classList.contains('rcpt-empty')||e.target.classList.contains('rcpt-pdf')||(e.target.closest&&e.target.closest('.rcpt-empty,.rcpt-pdf'))))return;
+  var f=currentFuelReceipt();if(f&&f.url&&f.type!=='application/pdf')openReceiptZoom(f.url,f.name);
+};
+if($('#rcptStickyImg'))$('#rcptStickyImg').onclick=function(e){e.stopPropagation();openCurrentReceiptZoom()};
+
 var repRange={from:null,to:null,name:""};
 var trackQ=null;
 
@@ -2051,23 +2440,11 @@ function render(){
   updateFooter();
   buildPreview();persist();
 }
-function docsOk(){return draft.receipt && String(draft.hail).trim()!==''}
+function docsOk(){return eosReceipts.length>0 && String(draft.hail).trim()!=='' && fuelReceiptRequiredOk()}
 function buildPreview(){
-  var L=[];
-  L.push('*Shift Report \u2014 '+fmtDayLong(draft.date)+'*');
-  L.push('\ud83d\ude90 *Rego:* '+(draft.rego||'Not set'));
-  if(eosT()>0)L.push('\ud83d\udcb3 *EOS:* '+money(eosT()));
-  if(cashT()>0){var cb=draft.cash.filter(function(c){return nn(c.amount)>0}).map(function(c){return (c.name||'Cash')+' '+money(nn(c.amount))}).join(', ');L.push('\ud83d\udcb5 *Cash:* '+money(cashT())+(cb?' ('+cb+')':''));}
-  if(squareT()>0){var sb=draft.square.filter(function(c){return nn(c.amount)>0}).map(function(c){return (c.name||'Square')+' '+money(nn(c.amount))}).join(', ');L.push('\ud83d\udcf1 *Square:* '+money(squareT())+(sb?' ('+sb+')':''));}
-  if(nn(draft.runs)>0)L.push('\ud83d\ude95 *Run ('+nn(draft.runs)+'):* '+money(nn(draft.runs)*RUN));
-  if(acctT()>0){var ab=draft.accounts.filter(function(a){return nn(a.amount)>0}).map(function(a){return (a.name||'Account')+' '+money(nn(a.amount))}).join(', ');L.push('\ud83e\uddfe *Accounts:* '+money(acctT())+(ab?' ('+ab+')':''));}
-  settings.payTypes.forEach(function(pt){var amt=customAmt(pt);if(amt>0)L.push('\u2795 *'+pt.name+':* '+money(amt));});
-  /* Only fuel I paid appears in the operator message — that's what they reimburse.
-     Operator-paid fuel is omitted (they already have it on their card). */
-  if(fuelIPaidT()>0)L.push('\u26fd *Fuel:* '+money(fuelIPaidT()));
-  L.push('');
-  L.push('\ud83d\udcb0 *TOTAL EARNINGS: '+money(takeT())+'*');
-  $('#prev').textContent=L.join('\n');
+  var txt=buildShareLines().join('\n');
+  var p=$('#prev');if(p)p.textContent=txt;
+  var live=$('#shiftLivePrev');if(live)live.textContent=txt;
 }
 
 /* ---------- shift interactions ---------- */
@@ -2130,23 +2507,33 @@ $('#hailMinus').onclick=function(){draft.hail=Math.max(0,nn(draft.hail)-1);$('#h
 $('#hailPlus').onclick=function(){draft.hail=nn(draft.hail)+1;$('#hail').value=draft.hail;render()};
 $('#rcpt').onclick=function(){$('#rcptFile').click()};
 if($('#rcptAddMore'))$('#rcptAddMore').onclick=function(){$('#rcptFile').click()};
-if($('#rcptStickyChange'))$('#rcptStickyChange').onclick=function(){$('#rcptFile').click()};
-if($('#rcptPrevBtn'))$('#rcptPrevBtn').onclick=function(){setShiftRcptIdx(shiftRcptIdx-1)};
-if($('#rcptNextBtn'))$('#rcptNextBtn').onclick=function(){setShiftRcptIdx(shiftRcptIdx+1)};
-if($('#rcptStickyPrev'))$('#rcptStickyPrev').onclick=function(){setShiftRcptIdx(shiftRcptIdx-1)};
-if($('#rcptStickyNext'))$('#rcptStickyNext').onclick=function(){setShiftRcptIdx(shiftRcptIdx+1)};
+if($('#rcptStickyChange'))$('#rcptStickyChange').onclick=function(){go('shift');setSub(1)};
+if($('#rcptPrevBtn'))$('#rcptPrevBtn').onclick=function(){shiftRcptIdx=Math.max(0,shiftRcptIdx-1);updateReceiptUI()};
+if($('#rcptNextBtn'))$('#rcptNextBtn').onclick=function(){shiftRcptIdx=Math.min(eosReceipts.length-1,shiftRcptIdx+1);updateReceiptUI()};
+if($('#rcptStickyPrev'))$('#rcptStickyPrev').onclick=function(){shiftRcptIdx=Math.max(0,shiftRcptIdx-1);updateReceiptUI()};
+if($('#rcptStickyNext'))$('#rcptStickyNext').onclick=function(){shiftRcptIdx=Math.min(eosReceipts.length-1,shiftRcptIdx+1);updateReceiptUI()};
 if($('#rcptRemove'))$('#rcptRemove').onclick=function(){
-  if(!shiftReceipts.length)return;
-  removeShiftReceiptAt(shiftRcptIdx);
-  toast(shiftReceipts.length?'Receipt removed':'All receipts cleared — add at least one');
+  if(!eosReceipts.length)return;
+  removeEosAt(shiftRcptIdx);
+  toast(eosReceipts.length?'EOS removed':'All EOS cleared — add at least one');
 };
 $('#rcptFile').onchange=function(e){
-  var list=e.target.files;
-  var added=addShiftReceiptFiles(list);
+  var added=addEosFiles(e.target.files);
   e.target.value='';
   persist();
-  render();
-  if(added)toast(added===1?'Receipt added — switch thumbs to preview':'Added '+added+' receipts');
+  if(added)toast(added===1?'EOS added — reading slip…':'Added '+added+' EOS slips');
+};
+if($('#fuelRcpt'))$('#fuelRcpt').onclick=function(){$('#fuelRcptFile').click()};
+if($('#fuelRcptAddMore'))$('#fuelRcptAddMore').onclick=function(){$('#fuelRcptFile').click()};
+if($('#fuelRcptRemove'))$('#fuelRcptRemove').onclick=function(){
+  if(!fuelReceipts.length)return;
+  removeFuelAt(fuelRcptIdx);
+  toast(fuelReceipts.length?'Fuel receipt removed':'Fuel receipts cleared');
+};
+if($('#fuelRcptFile'))$('#fuelRcptFile').onchange=function(e){
+  addFuelFiles(e.target.files);
+  e.target.value='';
+  persist();
 };
 $('#clearShift').onclick=function(){
   draft=freshDraft('');
@@ -2154,22 +2541,24 @@ $('#clearShift').onclick=function(){
   persist();rowInputs();render();setSub(1);toast('Cleared');
 };
 
-/* sub-tabs — Receipt first, then Log Shift (with sticky preview + hail), then Review.
-   Compulsory gates preserved so receipts and hail trips are never skipped. */
+/* sub-tabs — Attach (EOS+fuel) → Log Shift → Review.
+   Gates: ≥1 EOS; hail; fuel amount if fuel receipt; rego on share. */
 var curSub=1;
+function gateFailMsg(){
+  if(!eosReceipts.length)return{text:'Attach ≥1 End of Shift document first.',toast:'EOS required first',pane:1};
+  if(String(draft.hail).trim()==='')return{text:'Enter hail / rank trips (required for levy).',toast:'Hail trips required',pane:2};
+  if(!fuelReceiptRequiredOk())return{text:'Fuel receipt attached — enter the fuel amount on Log Shift.',toast:'Fuel amount required',pane:2};
+  return null;
+}
 function setSub(n){
-  if(n===2&&!draft.receipt){
+  if(n===2&&!eosReceipts.length){
     n=1;
-    var m0=$('#msg');m0.textContent='Attach the shift receipt first so you can preview it while logging payments.';m0.className='msg err';
-    toast('Receipt required first');
-  }else if(n===3&&!docsOk()){
-    n=draft.receipt?2:1;
-    var m=$('#msg');
-    m.textContent=!draft.receipt
-      ?'Attach a receipt and enter hail trips first.'
-      :'Enter the hail trips count before Review / Share.';
-    m.className='msg err';
-    toast(!draft.receipt?'Receipt + hail required':'Hail trips required');
+    var m0=$('#msg');m0.textContent='Attach ≥1 End of Shift document first so you can preview it while logging.';m0.className='msg err';
+    toast('EOS required first');
+  }else if(n===3){
+    var g=gateFailMsg();
+    if(g){n=g.pane;var m=$('#msg');m.textContent=g.text;m.className='msg err';toast(g.toast)}
+    else{$('#msg').className='msg'}
   }else{$('#msg').className='msg'}
   curSub=n;
   [1,2,3].forEach(function(k){$('[data-pane="'+k+'"]').style.display=k===n?'block':'none'});
@@ -2181,23 +2570,19 @@ function updateFooter(){
   var next=$('#snext'),back=$('#sback');if(!next)return;
   back.style.visibility=curSub>1?'visible':'hidden';
   next.textContent=curSub===1?'Next: Log Shift':(curSub===2?'Next: Review':'Share End of Shift');
-  var blocked=(curSub===1&&!draft.receipt)||(curSub===2&&!docsOk())||(curSub===3&&!draft.rego);
+  var blocked=(curSub===1&&!eosReceipts.length)||(curSub===2&&!docsOk())||(curSub===3&&!draft.rego);
   next.classList.toggle('faded',blocked);
 }
 function nextStep(){
   if(curSub===1){
-    if(draft.receipt){setSub(2);return}
-    var m0=$('#msg');m0.textContent='Attach the shift receipt first so you can preview it while logging payments.';m0.className='msg err';
-    toast('Receipt required first');window.scrollTo({top:0,behavior:'smooth'});return;
+    if(eosReceipts.length){setSub(2);return}
+    var m0=$('#msg');m0.textContent='Attach ≥1 End of Shift document first.';m0.className='msg err';
+    toast('EOS required first');window.scrollTo({top:0,behavior:'smooth'});return;
   }
   if(curSub===2){
-    if(docsOk()){setSub(3);return}
-    var m=$('#msg');
-    m.textContent=!draft.receipt
-      ?'Attach a receipt and enter the hail trips count first.'
-      :'Enter the hail trips count first (required for levy).';
-    m.className='msg err';
-    toast(!draft.receipt?'Fill receipt + hail':'Hail trips required');
+    var g=gateFailMsg();
+    if(!g){setSub(3);return}
+    var m=$('#msg');m.textContent=g.text;m.className='msg err';toast(g.toast);
     window.scrollTo({top:0,behavior:'smooth'});return;
   }
   if(curSub===3){if(draft.rego)doShare();else{var m2=$('#msg');m2.textContent='Choose a vehicle rego to share.';m2.className='msg err';toast('Rego required')}}
@@ -2206,32 +2591,61 @@ $('#snext').onclick=nextStep;
 $('#sback').onclick=function(){if(curSub>1)setSub(curSub-1)};
 $$('.stp').forEach(function(b){b.onclick=function(){setSub(+b.dataset.sub)}});
 
-function shareText(){buildPreview();return $('#prev').textContent}
+function downloadShareFile(file){
+  if(!file)return;
+  try{
+    var u=URL.createObjectURL(file);
+    var a=document.createElement('a');a.href=u;a.download=file.name||'fareo-shift-collage.jpg';
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(function(){URL.revokeObjectURL(u)},1600);
+  }catch(_){}
+}
+/* Same buildShareLines() feeds WhatsApp text AND collage banner — always paired. */
 async function doShare(){
-  var txt=shareText();
+  var lines=buildShareLines();
+  var txt=lines.join('\n');
+  var p=$('#prev');if(p)p.textContent=txt;
+  var live=$('#shiftLivePrev');if(live)live.textContent=txt;
   var f=null;
-  if(shiftReceipts.length){
-    try{f=await buildReceiptCollageFile()}catch(_){f=null}
-    if(!f&&shiftReceipts[0]&&shiftReceipts[0].file)f=shiftReceipts[0].file;
+  if(allShiftAttach().length){
+    try{f=await buildReceiptCollageFile(lines)}catch(_){f=null}
+    if(!f){
+      var first=null;
+      allShiftAttach().some(function(r){if(r&&r.file){first=r.file;return true}return false});
+      f=first;
+    }
   }
-  /* Try native share FIRST (while we still have the user gesture), then save. */
   var shared=false;
   if(navigator.share){
     try{
       if(f&&navigator.canShare&&navigator.canShare({files:[f]})){
         await navigator.share({files:[f],text:txt,title:'Fareo Shift'});
+        shared=true;
+      }else if(f){
+        downloadShareFile(f);
+        try{
+          await navigator.share({text:txt,title:'Fareo Shift'});
+          shared=true;
+          toast('Collage downloaded + same text shared');
+        }catch(e2){
+          if(e2&&e2.name==='AbortError'){/* cancelled */}
+          else{copyToClipboard(txt,'Same numbers: text copied + collage downloaded');shared=true}
+        }
       }else{
         await navigator.share({text:txt,title:'Fareo Shift'});
-        if(f)toast('Shared \u2014 attach the receipt collage photo if needed');
+        shared=true;
       }
-      shared=true;
     }catch(e){
       if(e&&e.name==='AbortError'){ /* cancelled: still save below */ }
-      else{ /* share failed: fall back to clipboard */ copyToClipboard(txt,'Shift summary copied to clipboard'); shared=true; }
+      else{
+        if(f)downloadShareFile(f);
+        copyToClipboard(txt,f?'Same numbers: text copied + collage downloaded':'Shift summary copied to clipboard');
+        shared=true;
+      }
     }
   }else{
-    /* No native share (desktop etc.): copy to clipboard. */
-    copyToClipboard(txt,'Shift summary copied to clipboard');
+    if(f)downloadShareFile(f);
+    copyToClipboard(txt,f?'Same numbers: text copied + collage downloaded':'Shift summary copied to clipboard');
     shared=true;
   }
   saveShift(true);
@@ -3044,11 +3458,11 @@ $('#expSave').onclick=async function(){
 };
 /* ---- manual fuel expense (Reports) ---- */
 var fmRcptFile=null;
-function openFuelExp(){fmRcptFile=null;$('#fmAmt').value='';$('#fmType').value=settings.fuel||'Diesel';$('#fmDate').value=todayStr();$('#fmRcptTxt').textContent='Attach Receipt';$('#fmRcpt').classList.remove('done');updateFmGstHint();showModal('fuelModal')}
+function openFuelExp(){fmRcptFile=null;$('#fmAmt').value='';$('#fmType').value=settings.fuel||'Diesel';$('#fmDate').value=todayStr();$('#fmRcptTxt').textContent='Attach Receipt';$('#fmRcpt').classList.remove('done');var ff=$('#fmRcptFile');if(ff)ff.value='';updateFmGstHint();showModal('fuelModal')}
 if($('#fmAmt'))$('#fmAmt').oninput=updateFmGstHint;
 if($('#addFuelExp'))$('#addFuelExp').onclick=openFuelExp;
-if($('#fmRcpt'))$('#fmRcpt').onclick=function(){$('#fuelRcptFile').click()};
-if($('#fuelRcptFile'))$('#fuelRcptFile').onchange=function(e){fmRcptFile=e.target.files[0]||null;$('#fmRcptTxt').textContent=fmRcptFile?'Receipt attached':'Attach Receipt';$('#fmRcpt').classList.toggle('done',!!fmRcptFile)};
+if($('#fmRcpt'))$('#fmRcpt').onclick=function(){$('#fmRcptFile').click()};
+if($('#fmRcptFile'))$('#fmRcptFile').onchange=function(e){fmRcptFile=e.target.files[0]||null;$('#fmRcptTxt').textContent=fmRcptFile?'Receipt attached':'Attach Receipt';$('#fmRcpt').classList.toggle('done',!!fmRcptFile)};
 if($('#fmCancel'))$('#fmCancel').onclick=function(){closeModal('fuelModal')};
 if($('#fmSave'))$('#fmSave').onclick=async function(){
   var amt=nn($('#fmAmt').value);if(!amt){toast('Enter an amount');return}
@@ -4735,6 +5149,7 @@ function applyWaitingUpdate(){
   function go(){if(applyWaitingUpdate._go)return;applyWaitingUpdate._go=true;location.reload()}
   try{if(navigator.serviceWorker)navigator.serviceWorker.addEventListener('controllerchange',go)}catch(_){}
   try{if(updReg&&updReg.waiting)updReg.waiting.postMessage({type:'SKIP_WAITING'})}catch(_){}
+  try{if(navigator.serviceWorker&&navigator.serviceWorker.controller)navigator.serviceWorker.controller.postMessage({type:'CLEAR_ROLLBACK'})}catch(_){}
   setTimeout(go,900);
 }
 function showUpdatePrompt(later){
@@ -4761,6 +5176,31 @@ function onUpdateReady(){
   if(sessionStorage.getItem('fareo_upd_later')==='1')showUpdatePrompt(true);
   else showUpdatePrompt(false);
 }
+async function refreshRollbackRow(){
+  var row=$('#rollbackUpdate');if(!row)return;
+  var ok=false;
+  try{if('caches' in window){var c=await caches.open('fareo-rollback');var keys=await c.keys();ok=keys.length>0}}catch(_){}
+  row.style.opacity=ok?'':'0.45';
+  row.dataset.ready=ok?'1':'0';
+  var p=row.querySelector('p');
+  if(p)p.textContent=ok
+    ?'Restore the last app version only (one step back) if this build is not working for you'
+    :'Available after your next update — Fareo keeps one previous version for rollback';
+}
+if($('#rollbackUpdate'))$('#rollbackUpdate').onclick=function(){
+  if($('#rollbackUpdate').dataset.ready!=='1'){toast('No previous version saved yet');return}
+  ask('Roll back previous update?','Loads the last Fareo version only. Your shifts and address book stay on this phone.','Roll back',function(){
+    if(!navigator.serviceWorker||!navigator.serviceWorker.controller){toast('Rollback needs the installed app');return}
+    var ch=new MessageChannel();
+    ch.port1.onmessage=function(ev){
+      if(ev.data&&ev.data.ok){toast('Rolling back…');setTimeout(function(){location.reload()},400)}
+      else toast('No previous version in cache');
+    };
+    try{navigator.serviceWorker.controller.postMessage({type:'ROLLBACK'},[ch.port2])}
+    catch(_){toast('Rollback failed')}
+  });
+};
+refreshRollbackRow();
 function bindUpdateReg(reg){
   if(!reg)return;
   updReg=reg;
@@ -4793,12 +5233,18 @@ var TABS=['hub','shift','weekly','reports','runs','eta','book','refresh','settin
 var curTab='shift';
 var histI=0,histLen=0;
 function anyModal(){
+  var zoom=$('#rcptZoom');
+  if(zoom&&zoom.classList.contains('show'))return zoom;
   var askM=$('#askModal');
   if(askM&&askM.classList.contains('show'))return askM;
   var list=$$('.modal.show');
   return list[list.length-1]||null;
 }
-function closeTopModal(){var m=anyModal();if(!m)return false;closeModal(m.id);return true}
+function closeTopModal(){
+  var m=anyModal();if(!m)return false;
+  if(m.id==='rcptZoom'){closeReceiptZoom();return true}
+  closeModal(m.id);return true
+}
 function syncTrailBtns(){
   var b=$('#navBack'),f=$('#navFwd');
   if(b)b.disabled=!(histI>0||(histI===0&&curTab!=='hub')||anyModal());
