@@ -109,9 +109,13 @@ input:disabled,select:disabled{background:var(--disbg);color:var(--disink);-webk
 .shift-rcpt-frame.inspect{align-items:stretch;justify-content:stretch;flex-direction:column;cursor:grab;min-height:220px}
 .shift-rcpt-frame.inspect.dragging{cursor:grabbing}
 .shift-rcpt-frame .insp-stage{flex:1;min-height:180px;position:relative;overflow:hidden;touch-action:none;width:100%}
-#logEosPreview.inspect .insp-stage{min-height:min(34vh,280px)}
+#logEosPreview.inspect .insp-stage{min-height:min(28vh,220px)}
 .log-eos-dictate{margin-top:12px;padding-top:12px;border-top:1px dashed var(--bd2)}
 .log-eos-dictate .add{margin-top:8px}
+.log-hail-dictate{margin-top:12px;padding-top:12px;border-top:1px dashed var(--bd2)}
+.log-hail-dictate .hail-head{display:flex;align-items:center;gap:7px;margin:0 0 8px;font-size:12px;font-weight:700;color:var(--head)}
+.log-hail-dictate .hail-head .sub-amt{margin-left:auto;font-size:11px;font-weight:700;color:var(--dgr);font-variant-numeric:tabular-nums}
+.log-hail-dictate .hailwrap{margin:0}
 .shift-net{margin-top:4px;margin-bottom:4px;padding:14px 14px 12px}
 .shift-net .total{font-size:34px;margin:4px 0 2px}
 .shift-net .formula{font-size:10.5px;line-height:1.35;word-break:break-word}
@@ -849,9 +853,9 @@ a.addr-link{display:inline;font-size:12.5px}
     </div>
     <div data-pane="2" style="display:none">
       <div class="card" style="margin-bottom:10px">
-        <h5><span class="dot" style="background:var(--inc)"></span>End of Shift<span class="help" data-help="Inspect the slip and enter EOS dollar values right below it. Pinch, scroll-wheel, or +/- to zoom; drag to pan." aria-label="Help">?</span><span class="sub-amt" id="eosSub">$0</span></h5>
-        <p style="font-size:11.5px;color:var(--mut);margin:0 0 8px;line-height:1.4">Read the slip, then enter EOS values underneath — both stay on screen together.</p>
-        <div class="shift-rcpt-frame" id="logEosPreview" style="min-height:160px;max-height:none">
+        <h5><span class="dot" style="background:var(--inc)"></span>End of Shift<span class="help" data-help="Inspect the slip, then enter EOS dollars and hail count underneath. Pinch, scroll-wheel, or +/- to zoom; drag to pan." aria-label="Help">?</span><span class="sub-amt" id="eosSub">$0</span></h5>
+        <p style="font-size:11.5px;color:var(--mut);margin:0 0 8px;line-height:1.4">Slip, EOS values, and hail count stay together so you can dictate from the photo.</p>
+        <div class="shift-rcpt-frame" id="logEosPreview" style="min-height:140px;max-height:none">
           <div class="rcpt-empty"><b>No EOS attachment</b>Go back to Attach to add an End of Shift document.</div>
         </div>
         <div class="shift-rcpt-nav" id="logEosNav" style="display:none">
@@ -865,6 +869,14 @@ a.addr-link{display:inline;font-size:12.5px}
           <div id="eosRows"></div>
           <button class="add" id="addEos">+ Add EOS value</button>
         </div>
+        <div class="log-hail-dictate">
+          <div class="hail-head"><span class="dot" style="background:var(--dgr)"></span>Hail Trips <span class="danger" style="font-size:10px">required</span><span class="help" data-help="Rank / street-hail trips for CPV levy. When Hail OCR is on, this can auto-fill from the slip; otherwise enter it yourself." aria-label="Help">?</span><span class="sub-amt" id="levyTag">$0.00 levy</span></div>
+          <div class="hailwrap">
+            <div class="hailamt"><small>Private levy</small><b id="levyAmt">$0.00</b><span id="levyRate">$1.20 / trip</span></div>
+            <div class="counter"><button type="button" id="hailMinus">&minus;</button><input id="hail" type="number" min="0" inputmode="numeric" placeholder="0"><button type="button" id="hailPlus">+</button></div>
+          </div>
+          <p id="hailOcrHint" style="display:none;margin:8px 0 0;font-size:11px;color:var(--on-dgr)"></p>
+        </div>
       </div>
       <div class="shift-rcpt-sticky" id="rcptSticky">
         <img id="rcptStickyImg" alt="" style="display:none">
@@ -875,15 +887,8 @@ a.addr-link{display:inline;font-size:12.5px}
         </div>
         <button type="button" id="rcptStickyChange" style="border:1px solid var(--bd2);background:var(--field);color:var(--head);border-radius:8px;padding:7px 9px;font-size:11px;font-weight:700;cursor:pointer">EOS</button>
       </div>
-      <p class="shift-fields-hint">Drag <b style="letter-spacing:1px">:::</b> on a field to reorder — amounts &amp; maths stay the same. EOS stays under the slip.</p>
+      <p class="shift-fields-hint">Drag <b style="letter-spacing:1px">:::</b> on a field to reorder — amounts &amp; maths stay the same. EOS &amp; hail stay under the slip.</p>
       <div class="shift-fields" id="shiftFields">
-      <div class="card tx-hail shift-field" data-field="hail"><h5 class="sf-h5"><button type="button" class="sf-grip" aria-label="Drag to reorder" title="Drag to reorder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></button><span class="dot" style="background:var(--dgr)"></span>Hail Trips <span class="danger" style="font-size:10px;margin-left:auto">required</span><span class="help" data-help="Rank / street-hail trips for CPV levy. When Hail OCR is on, this can auto-fill from the slip; otherwise enter it yourself." aria-label="Help">?</span><span class="sub-amt" id="levyTag">$0.00 levy</span></h5>
-        <div class="hailwrap">
-          <div class="hailamt"><small>Private levy</small><b id="levyAmt">$0.00</b><span id="levyRate">$1.20 / trip</span></div>
-          <div class="counter"><button type="button" id="hailMinus">&minus;</button><input id="hail" type="number" min="0" inputmode="numeric" placeholder="0"><button type="button" id="hailPlus">+</button></div>
-        </div>
-        <p id="hailOcrHint" style="display:none;margin:8px 0 0;font-size:11px;color:var(--on-dgr)"></p>
-      </div>
       <div class="card tx-fuel shift-field" data-field="fuel"><h5 class="sf-h5"><button type="button" class="sf-grip" aria-label="Drag to reorder" title="Drag to reorder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></button><span class="dot" style="background:var(--fuel-fill)"></span>Fuel <span id="fuelReqBadge" class="danger" style="font-size:10px;margin-left:auto;display:none">required</span><span class="help" data-help="Required when a fuel receipt is attached. Tick Paid by operator for operator card fuel." aria-label="Help">?</span><span class="sub-amt" id="fuelSub">$0</span></h5>
         <div id="fuelRows"></div><button class="add" id="addFuel">+ Add Fuel Fill-up</button></div>
       <div class="card tx-cash shift-field" data-field="cash"><h5 class="sf-h5"><button type="button" class="sf-grip" aria-label="Drag to reorder" title="Drag to reorder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></button><span class="dot" style="background:var(--levy)"></span>Cash Fares<span class="help" data-help="Cash collected from passengers. Counted in gross revenue, but deducted from your operator settlement because you already hold it." aria-label="Help">?</span><span class="sub-amt" id="cashSub">$0</span></h5>
@@ -1473,8 +1478,11 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.17';
+var APP_VERSION='8.18';
 var CHANGELOG=[
+  {v:'8.18',date:'September 11, 2026',notes:[
+    ['UI/UX','Log Shift: Hail Trips sits with EOS values under the slip preview so slip, dollars, and hail stay in one view.'],
+  ]},
   {v:'8.17',date:'September 11, 2026',notes:[
     ['UI/UX','Log Shift: EOS dollar fields sit directly under the slip preview so you can read and enter values together.'],
     ['UI/UX','Net take-home preview moved to the bottom of Log Shift as a compact settlement summary.'],
@@ -1678,7 +1686,7 @@ function migrateSettings(){
   if(settings.ocrHail==null)settings.ocrHail=true;
 }
 migrateSettings();
-var SHIFT_FIELD_BUILTINS=['hail','fuel','cash','square','runs','accounts'];
+var SHIFT_FIELD_BUILTINS=['fuel','cash','square','runs','accounts'];
 function shiftFieldKeys(){
   return SHIFT_FIELD_BUILTINS.concat(settings.payTypes.map(function(pt){return 'pt:'+pt.id}));
 }
