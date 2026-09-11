@@ -6,9 +6,9 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
-  "background_color": "#0E1116",
-  "theme_color": "#0E1116",
+  "display_override": ["standalone", "minimal-ui"],
+  "background_color": "#FFFFFF",
+  "theme_color": "#FFFFFF",
   "orientation": "portrait",
   "lang": "en-AU",
   "categories": ["finance", "utilities", "productivity"],
@@ -19,13 +19,6 @@
     { "src": "icon-maskable-512-v52.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
-    {
-      "name": "ETA Calculator",
-      "short_name": "ETA",
-      "description": "Calculate and share arrival ETA timer",
-      "url": "./#eta",
-      "icons": [{ "src": "icon-192-v52.png", "sizes": "192x192" }]
-    },
     {
       "name": "Log Shift",
       "short_name": "Shift",
@@ -38,6 +31,13 @@
       "short_name": "Runs",
       "description": "Driving sequence and stop navigation",
       "url": "./#runs",
+      "icons": [{ "src": "icon-192-v52.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Weekly",
+      "short_name": "Weekly",
+      "description": "Weekly payout tracker",
+      "url": "./#weekly",
       "icons": [{ "src": "icon-192-v52.png", "sizes": "192x192" }]
     }
   ]

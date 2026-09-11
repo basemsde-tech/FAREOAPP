@@ -26,6 +26,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -43,9 +44,9 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--pg:#0D0D0E;--card:#18181B;--field:#222226;--bd:rgba(255,255,255,.08);--bd2:rgba(255,255,255,.16);--head:#F4F4F5;--body:#D4D4D8;--mut:#A1A1AA;--inc:#34D399;--inc-bg:rgba(52,211,153,.12);--on-inc:#6EE7B7;--fuel:#FBBF24;--fuel-fill:#F59E0B;--fuel-bg:rgba(251,191,36,.12);--on-fuel:#FDE68A;--hail:#60A5FA;--hail-fill:#3B82F6;--hail-bg:rgba(96,165,250,.12);--levy:#A78BFA;--levy-bg:rgba(167,139,250,.12);--on-levy:#DDD6FE;--dgr:#F87171;--dgr-bg:rgba(248,113,113,.12);--on-dgr:#FECACA;--fink:#FB923C;--fink-bg:rgba(251,146,60,.12);--on-fink:#FFEDD5;--acct:#2DD4BF;--acct-bg:rgba(45,212,191,.12);--on-acct:#99F6E4;--qtext:#93C5FD;--qsub:#94A3B8;--btn-fill:#10B981;--btn-ink:#022C22;--disbg:#1F1F23;--disink:#71717A;--navmut:#A1A1AA;--grad-inc:linear-gradient(150deg,rgba(52,211,153,.12),rgba(16,185,129,.04));--shadow:0 1px 3px rgba(0,0,0,.45),0 8px 24px rgba(0,0,0,.55)}}
 :root[data-theme="dark"]{--pg:#0D0D0E;--card:#18181B;--field:#222226;--bd:rgba(255,255,255,.08);--bd2:rgba(255,255,255,.16);--head:#F4F4F5;--body:#D4D4D8;--mut:#A1A1AA;--inc:#34D399;--inc-bg:rgba(52,211,153,.12);--on-inc:#6EE7B7;--fuel:#FBBF24;--fuel-fill:#F59E0B;--fuel-bg:rgba(251,191,36,.12);--on-fuel:#FDE68A;--hail:#60A5FA;--hail-fill:#3B82F6;--hail-bg:rgba(96,165,250,.12);--levy:#A78BFA;--levy-bg:rgba(167,139,250,.12);--on-levy:#DDD6FE;--dgr:#F87171;--dgr-bg:rgba(248,113,113,.12);--on-dgr:#FECACA;--fink:#FB923C;--fink-bg:rgba(251,146,60,.12);--on-fink:#FFEDD5;--acct:#2DD4BF;--acct-bg:rgba(45,212,191,.12);--on-acct:#99F6E4;--qtext:#93C5FD;--qsub:#94A3B8;--btn-fill:#10B981;--btn-ink:#022C22;--disbg:#1F1F23;--disink:#71717A;--navmut:#A1A1AA;--grad-inc:linear-gradient(150deg,rgba(52,211,153,.12),rgba(16,185,129,.04));--shadow:0 1px 3px rgba(0,0,0,.45),0 8px 24px rgba(0,0,0,.55)}
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--pg);overflow-x:hidden}
-body{font-family:Outfit,system-ui,sans-serif;color:var(--body);color-scheme:light dark;padding-bottom:calc(72px + env(safe-area-inset-bottom))}
-.app{width:100%;max-width:440px;margin:0 auto;min-height:100vh;background:var(--pg);position:relative;overflow-x:hidden}
+html,body{margin:0;background:var(--pg);overflow-x:hidden;min-height:100%;min-height:100dvh;min-height:-webkit-fill-available}
+body{font-family:Outfit,system-ui,sans-serif;color:var(--body);color-scheme:light dark;padding-bottom:calc(72px + env(safe-area-inset-bottom));-webkit-text-size-adjust:100%;text-size-adjust:100%}
+.app{width:100%;max-width:440px;margin:0 auto;min-height:100vh;min-height:100dvh;min-height:-webkit-fill-available;background:var(--pg);position:relative;overflow-x:hidden}
 input,select,textarea,button{font:inherit}
 .body-p{padding:2px 13px 8px}
 .top{display:flex;align-items:center;justify-content:space-between;padding:calc(10px + env(safe-area-inset-top)) 14px 8px;gap:8px}
@@ -81,7 +82,7 @@ input,select,textarea,button{font:inherit}
 .step button{width:30px;height:30px;border-radius:8px;border:1.5px solid var(--inc);background:transparent;color:var(--inc);font-size:16px;font-weight:800;cursor:pointer}
 .step b{font-size:16px;min-width:46px;text-align:center;color:var(--head)}
 label.fl{display:block;font-size:11px;color:var(--mut);margin:8px 0 4px}
-input,select{width:100%;border-radius:9px;padding:10px;font-size:15px;background:var(--field);border:1.5px solid var(--bd2);color:var(--head);-webkit-text-fill-color:var(--head);font-weight:700}
+input,select,textarea{width:100%;border-radius:9px;padding:10px;font-size:16px;background:var(--field);border:1.5px solid var(--bd2);color:var(--head);-webkit-text-fill-color:var(--head);font-weight:700}
 input:disabled,select:disabled{background:var(--disbg);color:var(--disink);-webkit-text-fill-color:var(--disink);font-weight:400}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
 .mini{display:grid;grid-template-columns:1fr 1fr 34px;gap:6px;margin-top:8px;align-items:center}
@@ -824,7 +825,7 @@ a.addr-link{display:inline;font-size:12.5px}
         <h5><span class="dot" style="background:var(--inc)"></span>End of Shift <span class="danger" style="font-size:10px;margin-left:auto">≥1 required</span><span class="help" data-help="Attach EOS slip photo(s). When Hail OCR is on in Settings, Rank/Hail trip count is read automatically. Enter EOS dollar values on Log Shift. Pinch/scroll to inspect the slip." aria-label="Help">?</span></h5>
         <p id="eosAttachHint" style="font-size:11.5px;color:var(--mut);margin:0 0 10px;line-height:1.4">Upload first — hail count is read when OCR is on. Enter EOS amounts on the next step.</p>
         <button class="att" id="rcpt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg><span id="rcptTxt">Add EOS photo / PDF</span></button>
-        <input id="rcptFile" type="file" accept="image/*,application/pdf" multiple style="display:none">
+        <input id="rcptFile" type="file" accept="image/*,image/jpeg,image/png,image/heic,image/heif,application/pdf" multiple style="display:none">
         <div class="shift-rcpt-frame" id="rcptPreview">
           <div class="rcpt-empty"><b>No EOS attachment yet</b>At least one End of Shift document is required.</div>
         </div>
@@ -845,7 +846,7 @@ a.addr-link{display:inline;font-size:12.5px}
         <h5><span class="dot" style="background:var(--fuel-fill)"></span>Fuel Receipts <span class="help" data-help="Optional. If you attach a fuel receipt, a fuel amount becomes compulsory on the Log Shift step. Fuel snaps are stored for the shift but are not added to the share collage (EOS only)." aria-label="Help">?</span></h5>
         <p style="font-size:11.5px;color:var(--mut);margin:0 0 10px;line-height:1.4">Standalone fuel receipt upload. Attaching one makes fuel expense required.</p>
         <button class="att" id="fuelRcpt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg><span id="fuelRcptTxt">Add fuel receipt</span></button>
-        <input id="fuelRcptFile" type="file" accept="image/*,application/pdf" multiple style="display:none">
+        <input id="fuelRcptFile" type="file" accept="image/*,image/jpeg,image/png,image/heic,image/heif,application/pdf" multiple style="display:none">
         <div class="shift-rcpt-frame" id="fuelRcptPreview" style="min-height:120px">
           <div class="rcpt-empty"><b>No fuel receipt</b>Optional — add if you filled up this shift.</div>
         </div>
@@ -1475,8 +1476,13 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.20';
+var APP_VERSION='8.21';
 var CHANGELOG=[
+  {v:'8.21',date:'September 11, 2026',notes:[
+    ['UI/UX','iPhone-ready share: EOS collage shares as a photo via the iOS share sheet; shift text is copied so you can paste into WhatsApp.'],
+    ['Bug Fix','Safari-safe JPEG export (toBlob fallback), HEIC→JPEG when needed, and smaller collage size on Apple devices to avoid blank shares.'],
+    ['Maintenance','PWA manifest cleaned for iOS (removed dead ETA shortcut); inputs use 16px to stop iOS focus zoom.'],
+  ]},
   {v:'8.20',date:'September 11, 2026',notes:[
     ['UI/UX','Log Shift: EOS + Hail sit side-by-side under the slip; thumb strip and sticky nav removed — Prev / Next only.'],
     ['UI/UX','Share collage is EOS photos only — no text banner or fuel — slips side-by-side with a clear divider.'],
@@ -2259,10 +2265,99 @@ function drawPdfTile(ctx,x,y,w,h,name){
   ctx.fillText(label,x+w/2,y+h/2+22);
   ctx.textAlign='left';
 }
+function isAppleTouch(){
+  var ua=navigator.userAgent||'';
+  return /iPhone|iPad|iPod/i.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
+}
+/* Safari-safe canvas → JPEG File (toBlob can return null on large canvases). */
+function canvasToJpegFile(canvas, name){
+  return new Promise(function(res){
+    function fromData(){
+      try{
+        var url=canvas.toDataURL('image/jpeg',0.85);
+        var parts=url.split(',');if(parts.length<2){res(null);return}
+        var bin=atob(parts[1]), arr=new Uint8Array(bin.length);
+        for(var i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);
+        res(new File([arr], name, {type:'image/jpeg', lastModified:Date.now()}));
+      }catch(_){res(null)}
+    }
+    try{
+      if(typeof canvas.toBlob==='function'){
+        canvas.toBlob(function(blob){
+          if(blob&&blob.size){
+            try{res(new File([blob], name, {type:'image/jpeg', lastModified:Date.now()}))}
+            catch(_){fromData()}
+          }else fromData();
+        },'image/jpeg',0.85);
+      }else fromData();
+    }catch(_){fromData()}
+  });
+}
+/* iOS Web Share only accepts common image MIME + extension. */
+async function ensureShareableImageFile(file){
+  if(!file)return null;
+  var t=String(file.type||'').toLowerCase();
+  var name=String(file.name||'fareo.jpg');
+  if(t==='image/jpeg'||t==='image/jpg'||t==='image/png'||t==='image/gif'||t==='image/webp'){
+    if(t==='image/jpg')t='image/jpeg';
+    if(!/\.(jpe?g|png|gif|webp)$/i.test(name))name+=t.indexOf('png')>=0?'.png':(t.indexOf('webp')>=0?'.webp':(t.indexOf('gif')>=0?'.gif':'.jpg'));
+    if(name===file.name&&(file.type==='image/jpeg'||file.type==='image/png'||file.type==='image/gif'||file.type==='image/webp'))return file;
+    try{return new File([file], name, {type:t, lastModified:file.lastModified||Date.now()})}catch(_){return file}
+  }
+  if(t.indexOf('image/')===0 && typeof createImageBitmap==='function'){
+    try{
+      var bmp=await createImageBitmap(file);
+      var c=document.createElement('canvas');c.width=bmp.width;c.height=bmp.height;
+      c.getContext('2d').drawImage(bmp,0,0);
+      return await canvasToJpegFile(c, 'fareo-eos-'+todayStr()+'.jpg');
+    }catch(_){}
+  }
+  return null;
+}
+async function copyTextQuiet(txt){
+  if(!txt)return;
+  try{
+    if(navigator.clipboard&&navigator.clipboard.writeText){await navigator.clipboard.writeText(txt);return}
+  }catch(_){}
+  try{
+    var ta=document.createElement('textarea');ta.value=txt;ta.setAttribute('readonly','');
+    ta.style.position='fixed';ta.style.left='-9999px';document.body.appendChild(ta);ta.select();
+    document.execCommand('copy');ta.remove();
+  }catch(_){}
+}
+/* iPhone: share photo alone (files+text together often fails); text copied for WhatsApp paste. */
+async function shareFilesAndText(file, txt, title){
+  if(!navigator.share)return {ok:false, reason:'nosupport'};
+  var apple=isAppleTouch();
+  var shareFile=file?await ensureShareableImageFile(file):null;
+  if(apple&&txt)await copyTextQuiet(txt);
+  if(shareFile){
+    var files=[shareFile];
+    if(apple){
+      if(!navigator.canShare||navigator.canShare({files:files})){
+        await navigator.share({files:files});
+        return {ok:true, mode:'ios-photo', copied:!!txt};
+      }
+    }else{
+      var both={files:files, text:txt, title:title||'Fareo'};
+      if(!navigator.canShare||navigator.canShare(both)){
+        try{await navigator.share(both);return {ok:true, mode:'files+text'}}
+        catch(e){if(e&&e.name==='AbortError')throw e}
+      }
+      if(!navigator.canShare||navigator.canShare({files:files})){
+        await navigator.share({files:files});
+        return {ok:true, mode:'files'};
+      }
+    }
+  }
+  await navigator.share({text:txt, title:title||'Fareo'});
+  return {ok:true, mode:'text'};
+}
 /* EOS-only collage: slips side-by-side (equal height), clear divider lines, no text/fuel. */
 async function buildReceiptCollageFile(){
   if(!eosReceipts.length)return null;
-  var DIV=6, MAX_H=1200, MAX_TOTAL_W=2400, tiles=[];
+  var apple=isAppleTouch();
+  var DIV=6, MAX_H=apple?900:1200, MAX_TOTAL_W=apple?1600:2400, tiles=[];
   for(var i=0;i<eosReceipts.length;i++){
     var r=eosReceipts[i];
     if(r.type==='application/pdf'||!r.url){
@@ -2275,7 +2370,7 @@ async function buildReceiptCollageFile(){
   }
   if(!tiles.length)return null;
   var targetH=Math.min(MAX_H, Math.max.apply(null, tiles.map(function(t){return t.nh})));
-  if(!isFinite(targetH)||targetH<240)targetH=900;
+  if(!isFinite(targetH)||targetH<240)targetH=apple?720:900;
   tiles.forEach(function(t){
     var scale=targetH/t.nh;
     t.dw=Math.max(100,Math.round(t.nw*scale));
@@ -2289,8 +2384,16 @@ async function buildReceiptCollageFile(){
     totalW=tiles.reduce(function(a,t){return a+t.dw},0)+(tiles.length-1)*DIV;
   }
   var colH=Math.max.apply(null, tiles.map(function(t){return t.dh}));
+  /* iOS canvas pixel budget (~16MP) — shrink if needed. */
+  if(totalW*colH>14000000){
+    var shrink=Math.sqrt(14000000/(totalW*colH));
+    tiles.forEach(function(t){t.dw=Math.max(60,Math.round(t.dw*shrink));t.dh=Math.max(120,Math.round(t.dh*shrink))});
+    totalW=tiles.reduce(function(a,t){return a+t.dw},0)+(tiles.length-1)*DIV;
+    colH=Math.max.apply(null, tiles.map(function(t){return t.dh}));
+  }
   var c=document.createElement('canvas');c.width=Math.max(totalW,200);c.height=colH;
   var x=c.getContext('2d');
+  if(!x)return null;
   x.fillStyle='#FFFFFF';x.fillRect(0,0,c.width,c.height);
   var left=0;
   tiles.forEach(function(t,idx){
@@ -2303,14 +2406,7 @@ async function buildReceiptCollageFile(){
       left+=DIV;
     }
   });
-  return new Promise(function(res){
-    try{
-      c.toBlob(function(blob){
-        if(!blob){res(null);return}
-        res(new File([blob],'fareo-eos-'+todayStr()+'.jpg',{type:'image/jpeg'}));
-      },'image/jpeg',0.9);
-    }catch(e){res(null)}
-  });
+  return canvasToJpegFile(c, 'fareo-eos-'+todayStr()+'.jpg');
 }
 (function bindReceiptZoom(){
   var stage=$('#rzStage');if(!stage)return;
@@ -2718,12 +2814,18 @@ function downloadShareFile(file){
   if(!file)return;
   try{
     var u=URL.createObjectURL(file);
-    var a=document.createElement('a');a.href=u;a.download=file.name||'fareo-shift-collage.jpg';
+    /* iOS Safari ignores <a download> — open the image so user can Save/Share. */
+    if(isAppleTouch()){
+      window.open(u,'_blank');
+      setTimeout(function(){URL.revokeObjectURL(u)},8000);
+      return;
+    }
+    var a=document.createElement('a');a.href=u;a.download=file.name||'fareo-eos.jpg';
     document.body.appendChild(a);a.click();a.remove();
     setTimeout(function(){URL.revokeObjectURL(u)},1600);
   }catch(_){}
 }
-/* Share: WhatsApp text separate; collage is EOS photos only (side-by-side). */
+/* Share: iPhone gets EOS photo via share sheet; shift text copied for WhatsApp paste. */
 async function doShare(){
   var lines=buildShareLines();
   var txt=lines.join('\n');
@@ -2740,34 +2842,22 @@ async function doShare(){
   var shared=false;
   if(navigator.share){
     try{
-      if(f&&navigator.canShare&&navigator.canShare({files:[f]})){
-        await navigator.share({files:[f],text:txt,title:'Fareo Shift'});
+      var r=await shareFilesAndText(f, txt, 'Fareo Shift');
+      if(r&&r.ok){
         shared=true;
-      }else if(f){
-        downloadShareFile(f);
-        try{
-          await navigator.share({text:txt,title:'Fareo Shift'});
-          shared=true;
-          toast('Collage downloaded + same text shared');
-        }catch(e2){
-          if(e2&&e2.name==='AbortError'){/* cancelled */}
-          else{copyToClipboard(txt,'Same numbers: text copied + collage downloaded');shared=true}
-        }
-      }else{
-        await navigator.share({text:txt,title:'Fareo Shift'});
-        shared=true;
+        if(r.mode==='ios-photo'&&r.copied)toast('Photo shared — text copied, paste in WhatsApp');
       }
     }catch(e){
       if(e&&e.name==='AbortError'){ /* cancelled: still save below */ }
       else{
         if(f)downloadShareFile(f);
-        copyToClipboard(txt,f?'Same numbers: text copied + collage downloaded':'Shift summary copied to clipboard');
+        copyToClipboard(txt, f?'Text copied — save/share the EOS photo':'Shift summary copied to clipboard');
         shared=true;
       }
     }
   }else{
     if(f)downloadShareFile(f);
-    copyToClipboard(txt,f?'Same numbers: text copied + collage downloaded':'Shift summary copied to clipboard');
+    copyToClipboard(txt, f?'Text copied — save/share the EOS photo':'Shift summary copied to clipboard');
     shared=true;
   }
   saveShift(true);
@@ -2876,7 +2966,7 @@ function buildWeekImage(){return new Promise(function(res){try{
   x.fillText('TOTAL',pad,y+36);
   x.fillStyle='#111827';x.font='800 22px system-ui,sans-serif';x.textAlign='right';
   x.fillText(money(W.tot),WD-pad,y+38);x.textAlign='left';
-  c.toBlob(function(b){res(b?new File([b],'fareo-week.png',{type:'image/png'}):null)},'image/png');
+  return canvasToJpegFile(c, 'fareo-week.jpg');
 }catch(err){res(null)}})}
 async function shareWeek(){
   var W=weekData();
@@ -2884,27 +2974,19 @@ async function shareWeek(){
   var txt=W.label+'\nTotal '+money(W.tot);
   var file=null;
   try{file=await buildWeekImage();}catch(e){file=null;}
-  /* Try native share with the image first, then text-only, then fallbacks. */
   if(navigator.share){
     try{
-      if(file&&navigator.canShare&&navigator.canShare({files:[file]})){
-        await navigator.share({files:[file],text:txt,title:'Fareo Weekly'});
+      var r=await shareFilesAndText(file, txt, 'Fareo Weekly');
+      if(r&&r.ok){
+        if(r.mode==='ios-photo'&&r.copied)toast('Week image shared — text copied, paste if needed');
         return;
       }
-      await navigator.share({text:txt,title:'Fareo Weekly'});
-      if(file)toast('Shared \u2014 now attach the saved image');
-      return;
     }catch(e){
-      if(e&&e.name==='AbortError')return;   /* user cancelled the sheet */
-      /* otherwise fall through to download + clipboard */
+      if(e&&e.name==='AbortError')return;
     }
   }
-  /* Fallback 1: download the image so the user can attach it manually. */
-  if(file){
-    try{var u=URL.createObjectURL(file);var a=document.createElement('a');a.href=u;a.download='fareo-week.png';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},1500);}catch(e){}
-  }
-  /* Fallback 2: copy the text to clipboard so nothing is lost. */
-  copyToClipboard(txt,'Week summary copied \u2014 image downloaded');
+  if(file)downloadShareFile(file);
+  copyToClipboard(txt,'Week summary copied');
 }
 /* Robust clipboard copy with a legacy fallback; shows a toast on success. */
 function copyToClipboard(text,okMsg){
