@@ -105,6 +105,31 @@ input:disabled,select:disabled{background:var(--disbg);color:var(--disink);-webk
 .sback{flex:0 0 104px}
 .snext{flex:1}
 .snext.faded{opacity:.45}
+.shift-rcpt-frame{margin-top:10px;border:1.5px solid var(--bd2);border-radius:12px;background:var(--field);overflow:hidden;min-height:180px;display:flex;align-items:center;justify-content:center;position:relative}
+.shift-rcpt-frame img{display:block;width:100%;max-height:280px;object-fit:contain;background:#111}
+.shift-rcpt-frame .rcpt-empty{padding:28px 16px;text-align:center;color:var(--mut);font-size:12px;line-height:1.45}
+.shift-rcpt-frame .rcpt-empty b{display:block;color:var(--head);font-size:13px;margin-bottom:4px}
+.shift-rcpt-frame .rcpt-pdf{padding:22px 14px;text-align:center;color:var(--head);font-size:13px;font-weight:700}
+.shift-rcpt-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px}
+.shift-rcpt-nav .rcpt-count{font-size:11px;font-weight:700;color:var(--mut)}
+.shift-rcpt-nav button{border:1px solid var(--bd2);background:var(--field);color:var(--head);border-radius:8px;padding:7px 10px;font-size:11px;font-weight:700;cursor:pointer}
+.shift-rcpt-nav button:disabled{opacity:.35;pointer-events:none}
+.shift-rcpt-thumbs{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:8px 0 2px;margin-top:2px}
+.shift-rcpt-thumbs .rt{flex:0 0 auto;width:54px;height:54px;border-radius:10px;border:1.5px solid var(--bd2);background:var(--field);overflow:hidden;padding:0;cursor:pointer;position:relative}
+.shift-rcpt-thumbs .rt.on{border-color:var(--inc);box-shadow:0 0 0 2px var(--inc-bg)}
+.shift-rcpt-thumbs .rt img{width:100%;height:100%;object-fit:cover;display:block}
+.shift-rcpt-thumbs .rt .rt-pdf{display:grid;place-items:center;width:100%;height:100%;font-size:9px;font-weight:800;color:var(--mut)}
+.shift-rcpt-thumbs .rt .rt-x{position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:99px;border:0;background:rgba(0,0,0,.55);color:#fff;font-size:11px;line-height:1;padding:0;cursor:pointer}
+.shift-rcpt-acts{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}
+.shift-rcpt-sticky{display:none;align-items:center;gap:8px;padding:8px 10px;margin-bottom:10px;background:var(--card);border:1.5px solid var(--inc);border-radius:12px;box-shadow:var(--shadow);position:sticky;top:calc(8px + env(safe-area-inset-top));z-index:8}
+.shift-rcpt-sticky.on{display:flex}
+.shift-rcpt-sticky img{width:48px;height:48px;border-radius:8px;object-fit:cover;background:var(--field);flex:0 0 auto}
+.shift-rcpt-sticky .rp-meta{flex:1;min-width:0}
+.shift-rcpt-sticky .rp-meta b{display:block;font-size:12px;color:var(--on-inc);font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shift-rcpt-sticky .rp-meta span{display:block;font-size:10.5px;color:var(--mut);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shift-rcpt-sticky .rp-sw{display:flex;gap:4px;flex:0 0 auto}
+.shift-rcpt-sticky .rp-sw button{border:1px solid var(--bd2);background:var(--field);color:var(--head);border-radius:8px;width:30px;height:30px;padding:0;font-size:14px;font-weight:800;cursor:pointer}
+.shift-rcpt-sticky .rp-sw button:disabled{opacity:.35;pointer-events:none}
 .msg{font-size:11.5px;font-weight:600;border-radius:9px;padding:9px 11px;margin-bottom:9px;display:none}
 .msg.err{display:block;background:var(--dgr-bg);border:1px solid var(--dgr);color:var(--on-dgr)}
 .msg.ok{display:block;background:var(--inc-bg);border:1px solid var(--inc);color:var(--on-inc)}
@@ -772,8 +797,8 @@ a.addr-link{display:inline;font-size:12.5px}
 
   <section class="screen" data-tab="shift">
     <div class="steps" id="steps">
-      <button class="stp lit on" data-sub="1"><i></i><span>Log Shift</span></button>
-      <button class="stp" data-sub="2"><i></i><span>Attach</span></button>
+      <button class="stp lit on" data-sub="1"><i></i><span>Receipt</span></button>
+      <button class="stp" data-sub="2"><i></i><span>Log Shift</span></button>
       <button class="stp" data-sub="3"><i></i><span>Review</span></button>
     </div>
     <div class="msg" id="msg"></div>
@@ -789,6 +814,36 @@ a.addr-link{display:inline;font-size:12.5px}
           </div>
         </div>
         <div class="date-label" id="dateLabel">Today</div>
+      </div>
+      <div class="card" style="margin-bottom:0">
+        <h5><span class="dot" style="background:var(--dgr)"></span>Shift Receipts <span class="danger" style="font-size:10px;margin-left:auto">≥1 required</span><span class="help" data-help="Attach one or more receipt photos/PDFs first. Preview one at a time and switch between them while logging. On Share, Fareo collages every receipt into a single image attached with your shift report. At least one receipt + hail trips remain compulsory." aria-label="Help">?</span></h5>
+        <p style="font-size:11.5px;color:var(--mut);margin:0 0 10px;line-height:1.4">Add multiple files if needed. Live preview shows one receipt at a time — tap thumbs or arrows to switch.</p>
+        <button class="att" id="rcpt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg><span id="rcptTxt">Add receipt photo / PDF</span></button>
+        <input id="rcptFile" type="file" accept="image/*,application/pdf" multiple style="display:none">
+        <div class="shift-rcpt-frame" id="rcptPreview">
+          <div class="rcpt-empty"><b>No receipt yet</b>At least one photo or PDF is required before logging payments.</div>
+        </div>
+        <div class="shift-rcpt-nav" id="rcptNav" style="display:none">
+          <button type="button" id="rcptPrevBtn" aria-label="Previous receipt">&lsaquo; Prev</button>
+          <span class="rcpt-count" id="rcptCount">1 / 1</span>
+          <button type="button" id="rcptNextBtn" aria-label="Next receipt">Next &rsaquo;</button>
+        </div>
+        <div class="shift-rcpt-thumbs" id="rcptThumbs"></div>
+        <div class="shift-rcpt-acts">
+          <button type="button" class="btn neutral" id="rcptAddMore" style="margin:0;padding:10px;font-size:12px">+ Add another</button>
+          <button type="button" class="btn neutral" id="rcptRemove" style="margin:0;padding:10px;font-size:12px;border-color:var(--dgr);color:var(--dgr)">Remove current</button>
+        </div>
+      </div>
+    </div>
+    <div data-pane="2" style="display:none">
+      <div class="shift-rcpt-sticky" id="rcptSticky">
+        <img id="rcptStickyImg" alt="" style="display:none">
+        <div class="rp-meta"><b id="rcptStickyTitle">Receipt attached</b><span id="rcptStickyName">—</span></div>
+        <div class="rp-sw">
+          <button type="button" id="rcptStickyPrev" aria-label="Previous">&lsaquo;</button>
+          <button type="button" id="rcptStickyNext" aria-label="Next">&rsaquo;</button>
+        </div>
+        <button type="button" id="rcptStickyChange" style="border:1px solid var(--bd2);background:var(--field);color:var(--head);border-radius:8px;padding:7px 9px;font-size:11px;font-weight:700;cursor:pointer">Add</button>
       </div>
       <div class="card hero">
         <div class="lbl">Net take-home</div>
@@ -807,18 +862,13 @@ a.addr-link{display:inline;font-size:12.5px}
       <div class="card tx-acct"><h5><span class="dot" style="background:var(--acct)"></span>Accounts<span class="help" data-help="Invoiced or account jobs billed through the operator. Counted in gross; operator pays your share." aria-label="Help">?</span><span class="sub-amt" id="acctSub">$0</span></h5>
         <div id="acctRows"></div><button class="add" id="addAcct">+ Add Account</button></div>
       <div id="customCards"></div>
-      <div class="card tx-fuel" style="margin-bottom:0"><h5><span class="dot" style="background:var(--fuel-fill)"></span>Fuel<span class="help" data-help="Log each fill-up. Tick <b>Paid by operator</b> for fuel on the operator's card (not added to your settlement). Fuel you pay yourself is reimbursed. Either way it's tax-deductible \u2014 keep receipts." aria-label="Help">?</span><span class="sub-amt" id="fuelSub">$0</span></h5>
+      <div class="card tx-fuel"><h5><span class="dot" style="background:var(--fuel-fill)"></span>Fuel<span class="help" data-help="Log each fill-up. Tick <b>Paid by operator</b> for fuel on the operator's card (not added to your settlement). Fuel you pay yourself is reimbursed. Either way it's tax-deductible \u2014 keep receipts." aria-label="Help">?</span><span class="sub-amt" id="fuelSub">$0</span></h5>
         <div id="fuelRows"></div><button class="add" id="addFuel">+ Add Fuel Fill-up</button></div>
-    </div>
-    <div data-pane="2" style="display:none">
-      <div class="card tx-hail"><h5><span class="dot" style="background:var(--dgr)"></span>Hail Trips<span class="help" data-help="Number of rank or street-hail trips. These attract the state CPV levy (per-trip). Booked trips are excluded \u2014 the booking service pays their levy." aria-label="Help">?</span><span class="sub-amt" id="levyTag">$0.00 levy</span></h5>
+      <div class="card tx-hail" style="margin-bottom:0"><h5><span class="dot" style="background:var(--dgr)"></span>Hail Trips <span class="danger" style="font-size:10px;margin-left:auto">required</span><span class="help" data-help="Number of rank or street-hail trips. These attract the state CPV levy (per-trip). Booked trips are excluded \u2014 the booking service pays their levy. Required before Review / Share so levy is never forgotten." aria-label="Help">?</span><span class="sub-amt" id="levyTag">$0.00 levy</span></h5>
         <div class="hailwrap">
           <div class="hailamt"><small>Private levy</small><b id="levyAmt">$0.00</b><span id="levyRate">$1.20 / trip</span></div>
           <div class="counter"><button type="button" id="hailMinus">&minus;</button><input id="hail" type="number" min="0" inputmode="numeric" placeholder="0"><button type="button" id="hailPlus">+</button></div>
         </div></div>
-      <div class="card" style="margin-bottom:0"><h5><span class="dot" style="background:var(--dgr)"></span>Receipt Upload<span class="help" data-help="A receipt photo plus the hail-trip count are required before you can share the end-of-shift report." aria-label="Help">?</span></h5>
-        <button class="att" id="rcpt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg><span id="rcptTxt">Attach receipt photo</span></button>
-        <input id="rcptFile" type="file" accept="image/*,application/pdf" style="display:none"></div>
     </div>
     <div data-pane="3" style="display:none">
       <div class="card"><h5><span class="dot" style="background:var(--head)"></span>Vehicle Rego <span class="danger" style="font-size:10px;margin-left:auto">required</span></h5>
@@ -1452,8 +1502,13 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.7';
+var APP_VERSION='8.8';
 var CHANGELOG=[
+  {v:'8.8',date:'September 11, 2026',notes:[
+    ['UI/UX','Log Shift rebuilt: receipt upload is the first required step, with a live preview while logging every payment type.'],
+    ['Feature','Multiple receipt files supported (at least 1 compulsory). Switch live preview one-at-a-time; Share collages all receipts into a single photo.'],
+    ['Feature','Compulsory gates kept: ≥1 receipt to enter Log Shift; receipt + hail trips still required before Review / Share.']
+  ]},
   {v:'8.7',date:'August 30, 2026',notes:[
     ['UI/UX','Pure crisp white background (#FFFFFF) in Light mode with clean contrast and slate-900 typography.']
   ]},
@@ -1632,7 +1687,168 @@ if(!draft.custom)draft.custom={};
 /* [F4] Only reset date/rego for a fresh draft. */
 if(!draft._edit){draft.date=todayStr();draft.rego='';}
 draft.receipt=false;draft.receiptName='';
-var receiptFile=null;
+/* In-memory shift receipts (not persisted as binary). At least 1 compulsory before logging. */
+var shiftReceipts=[]; /* [{id,file,name,type,url}] */
+var shiftRcptIdx=0;
+function syncDraftReceiptFlag(){
+  draft.receipt=shiftReceipts.length>0;
+  draft.receiptName=shiftReceipts.length?(shiftReceipts.length===1?shiftReceipts[0].name:(shiftReceipts.length+' receipts')):'';
+}
+function clearReceiptAttach(){
+  shiftReceipts.forEach(function(r){if(r.url){try{URL.revokeObjectURL(r.url)}catch(_){}}});
+  shiftReceipts=[];
+  shiftRcptIdx=0;
+  syncDraftReceiptFlag();
+  var file=$('#rcptFile');if(file)file.value='';
+  updateReceiptUI();
+}
+function currentShiftReceipt(){
+  if(!shiftReceipts.length)return null;
+  if(shiftRcptIdx<0)shiftRcptIdx=0;
+  if(shiftRcptIdx>=shiftReceipts.length)shiftRcptIdx=shiftReceipts.length-1;
+  return shiftReceipts[shiftRcptIdx];
+}
+function addShiftReceiptFiles(fileList){
+  var files=[].slice.call(fileList||[]);
+  if(!files.length)return 0;
+  var added=0;
+  files.forEach(function(f){
+    if(!f)return;
+    var url='';
+    if(f.type&&f.type.indexOf('image/')===0){try{url=URL.createObjectURL(f)}catch(_){url=''}}
+    shiftReceipts.push({id:'sr'+Date.now()+Math.random().toString(36).slice(2,6),file:f,name:f.name||('Receipt '+(shiftReceipts.length+1)),type:f.type||'',url:url});
+    added++;
+  });
+  if(added){shiftRcptIdx=shiftReceipts.length-1;syncDraftReceiptFlag();updateReceiptUI()}
+  return added;
+}
+function removeShiftReceiptAt(idx){
+  if(idx<0||idx>=shiftReceipts.length)return;
+  var r=shiftReceipts[idx];
+  if(r&&r.url){try{URL.revokeObjectURL(r.url)}catch(_){}}
+  shiftReceipts.splice(idx,1);
+  if(shiftRcptIdx>=shiftReceipts.length)shiftRcptIdx=Math.max(0,shiftReceipts.length-1);
+  syncDraftReceiptFlag();
+  updateReceiptUI();
+}
+function setShiftRcptIdx(i){
+  if(!shiftReceipts.length)return;
+  shiftRcptIdx=Math.max(0,Math.min(shiftReceipts.length-1,i));
+  updateReceiptUI();
+}
+function updateReceiptUI(){
+  syncDraftReceiptFlag();
+  var n=shiftReceipts.length;
+  var cur=currentShiftReceipt();
+  var has=n>0;
+  var rc=$('#rcpt');if(rc)rc.classList.toggle('done',has);
+  var txt=$('#rcptTxt');if(txt)txt.textContent=has?('Add more ('+n+' attached)'):'Add receipt photo / PDF';
+  var frame=$('#rcptPreview');
+  if(frame){
+    if(!has){
+      frame.innerHTML='<div class="rcpt-empty"><b>No receipt yet</b>At least one photo or PDF is required before logging payments.</div>';
+    }else if(cur.type==='application/pdf'){
+      frame.innerHTML='<div class="rcpt-pdf">PDF ready<br><span style="font-size:11px;font-weight:600;color:var(--mut)">'+esc(cur.name)+'</span></div>';
+    }else if(cur.url){
+      frame.innerHTML='<img src="'+cur.url+'" alt="Receipt preview">';
+    }else{
+      frame.innerHTML='<div class="rcpt-pdf">'+esc(cur.name)+'</div>';
+    }
+  }
+  var nav=$('#rcptNav');
+  if(nav){
+    nav.style.display=has?'flex':'none';
+    var cnt=$('#rcptCount');if(cnt)cnt.textContent=(shiftRcptIdx+1)+' / '+n;
+    var prev=$('#rcptPrevBtn');if(prev)prev.disabled=shiftRcptIdx<=0;
+    var next=$('#rcptNextBtn');if(next)next.disabled=shiftRcptIdx>=n-1;
+  }
+  var thumbs=$('#rcptThumbs');
+  if(thumbs){
+    thumbs.innerHTML=shiftReceipts.map(function(r,i){
+      var body=r.url?'<img src="'+r.url+'" alt="">':'<div class="rt-pdf">PDF</div>';
+      return '<button type="button" class="rt'+(i===shiftRcptIdx?' on':'')+'" data-ri="'+i+'" title="'+esc(r.name)+'">'+body+'<span class="rt-x" data-rx="'+i+'" title="Remove">&times;</span></button>';
+    }).join('');
+    $$('#rcptThumbs .rt').forEach(function(btn){
+      btn.onclick=function(e){
+        if(e.target&&e.target.dataset&&e.target.dataset.rx!=null){
+          e.stopPropagation();
+          removeShiftReceiptAt(Number(e.target.dataset.rx));
+          return;
+        }
+        setShiftRcptIdx(Number(btn.dataset.ri));
+      };
+    });
+  }
+  var rem=$('#rcptRemove');if(rem)rem.disabled=!has;
+  var sticky=$('#rcptSticky');
+  if(sticky){
+    sticky.classList.toggle('on',has);
+    var stImg=$('#rcptStickyImg');
+    var stTitle=$('#rcptStickyTitle');
+    var stName=$('#rcptStickyName');
+    if(stTitle)stTitle.textContent=has?('Receipt '+(shiftRcptIdx+1)+' of '+n):'No receipt';
+    if(stName)stName.textContent=has?(cur.name):'Attach on Receipt step';
+    if(stImg){
+      if(has&&cur.url&&cur.type!=='application/pdf'){stImg.src=cur.url;stImg.style.display='block'}
+      else{stImg.removeAttribute('src');stImg.style.display='none'}
+    }
+    var sp=$('#rcptStickyPrev');if(sp)sp.disabled=!has||shiftRcptIdx<=0;
+    var sn=$('#rcptStickyNext');if(sn)sn.disabled=!has||shiftRcptIdx>=n-1;
+  }
+  if(typeof updateFooter==='function')updateFooter();
+}
+/* Build one collage image File from all attached shift receipts (for Share). */
+function loadImgFromUrl(url){return new Promise(function(res){var img=new Image();img.onload=function(){res(img)};img.onerror=function(){res(null)};img.src=url})}
+function drawPdfTile(ctx,x,y,w,h,name){
+  ctx.fillStyle='#1f2937';ctx.fillRect(x,y,w,h);
+  ctx.strokeStyle='#4b5563';ctx.lineWidth=2;ctx.strokeRect(x+1,y+1,w-2,h-2);
+  ctx.fillStyle='#f9fafb';ctx.font='700 28px system-ui,sans-serif';ctx.textAlign='center';
+  ctx.fillText('PDF',x+w/2,y+h/2-8);
+  ctx.fillStyle='#9ca3af';ctx.font='600 18px system-ui,sans-serif';
+  var label=String(name||'Document');if(label.length>36)label=label.slice(0,34)+'…';
+  ctx.fillText(label,x+w/2,y+h/2+22);
+  ctx.textAlign='left';
+}
+async function buildReceiptCollageFile(){
+  if(!shiftReceipts.length)return null;
+  var pad=24,gap=18,maxW=1080,tiles=[];
+  for(var i=0;i<shiftReceipts.length;i++){
+    var r=shiftReceipts[i];
+    if(r.type==='application/pdf'||!r.url){
+      tiles.push({kind:'pdf',name:r.name,w:maxW-pad*2,h:220});
+    }else{
+      var img=await loadImgFromUrl(r.url);
+      if(!img){tiles.push({kind:'pdf',name:r.name,w:maxW-pad*2,h:220});continue}
+      var iw=img.naturalWidth||img.width,ih=img.naturalHeight||img.height;
+      var tw=maxW-pad*2,th=Math.round(ih*(tw/iw));
+      if(th>1600){th=1600;tw=Math.round(iw*(th/ih))}
+      tiles.push({kind:'img',img:img,w:tw,h:th,name:r.name});
+    }
+  }
+  var totalH=pad;
+  tiles.forEach(function(t,idx){totalH+=t.h+(idx<tiles.length-1?gap:0)});
+  totalH+=pad+36;
+  var c=document.createElement('canvas');c.width=maxW;c.height=Math.max(totalH,200);
+  var x=c.getContext('2d');
+  x.fillStyle='#111827';x.fillRect(0,0,c.width,c.height);
+  x.fillStyle='#f9fafb';x.font='700 22px system-ui,sans-serif';
+  x.fillText('Fareo receipts · '+tiles.length+(tiles.length===1?' file':' files'),pad,28);
+  var y=pad+36;
+  tiles.forEach(function(t,idx){
+    var left=Math.round((maxW-t.w)/2);
+    if(t.kind==='img'){x.drawImage(t.img,left,y,t.w,t.h)}
+    else{drawPdfTile(x,left,y,t.w,t.h,t.name)}
+    y+=t.h+(idx<tiles.length-1?gap:0);
+  });
+  return new Promise(function(res){
+    try{
+      c.toBlob(function(blob){
+        if(!blob){res(null);return}
+        res(new File([blob],'fareo-receipts-'+todayStr()+'.jpg',{type:'image/jpeg'}));
+      },'image/jpeg',0.82);
+    }catch(e){res(null)}
+  });
+}
 var repRange={from:null,to:null,name:""};
 var trackQ=null;
 
@@ -1913,32 +2129,77 @@ $('#addFuel').onclick=function(){draft.fuel.push({amount:0,type:settings.fuel,op
 $('#hailMinus').onclick=function(){draft.hail=Math.max(0,nn(draft.hail)-1);$('#hail').value=draft.hail;render()};
 $('#hailPlus').onclick=function(){draft.hail=nn(draft.hail)+1;$('#hail').value=draft.hail;render()};
 $('#rcpt').onclick=function(){$('#rcptFile').click()};
-$('#rcptFile').onchange=function(e){var f=e.target.files[0];receiptFile=f||null;draft.receipt=!!f;draft.receiptName=f?f.name:'';$('#rcpt').classList.toggle('done',draft.receipt);$('#rcptTxt').textContent=draft.receipt?'Receipt attached':'Attach receipt photo';render()};
+if($('#rcptAddMore'))$('#rcptAddMore').onclick=function(){$('#rcptFile').click()};
+if($('#rcptStickyChange'))$('#rcptStickyChange').onclick=function(){$('#rcptFile').click()};
+if($('#rcptPrevBtn'))$('#rcptPrevBtn').onclick=function(){setShiftRcptIdx(shiftRcptIdx-1)};
+if($('#rcptNextBtn'))$('#rcptNextBtn').onclick=function(){setShiftRcptIdx(shiftRcptIdx+1)};
+if($('#rcptStickyPrev'))$('#rcptStickyPrev').onclick=function(){setShiftRcptIdx(shiftRcptIdx-1)};
+if($('#rcptStickyNext'))$('#rcptStickyNext').onclick=function(){setShiftRcptIdx(shiftRcptIdx+1)};
+if($('#rcptRemove'))$('#rcptRemove').onclick=function(){
+  if(!shiftReceipts.length)return;
+  removeShiftReceiptAt(shiftRcptIdx);
+  toast(shiftReceipts.length?'Receipt removed':'All receipts cleared — add at least one');
+};
+$('#rcptFile').onchange=function(e){
+  var list=e.target.files;
+  var added=addShiftReceiptFiles(list);
+  e.target.value='';
+  persist();
+  render();
+  if(added)toast(added===1?'Receipt added — switch thumbs to preview':'Added '+added+' receipts');
+};
 $('#clearShift').onclick=function(){
   draft=freshDraft('');
-  receiptFile=null;var rc=$('#rcpt');if(rc){rc.classList.remove('done');$('#rcptTxt').textContent='Attach receipt photo';}
+  clearReceiptAttach();
   persist();rowInputs();render();setSub(1);toast('Cleared');
 };
 
-/* sub-tabs */
+/* sub-tabs — Receipt first, then Log Shift (with sticky preview + hail), then Review.
+   Compulsory gates preserved so receipts and hail trips are never skipped. */
 var curSub=1;
 function setSub(n){
-  if(n===3&&!docsOk()){n=2;var m=$('#msg');m.textContent='Attach a receipt and enter hail trips first.';m.className='msg err';toast('Attach step required')}else{$('#msg').className='msg'}
+  if(n===2&&!draft.receipt){
+    n=1;
+    var m0=$('#msg');m0.textContent='Attach the shift receipt first so you can preview it while logging payments.';m0.className='msg err';
+    toast('Receipt required first');
+  }else if(n===3&&!docsOk()){
+    n=draft.receipt?2:1;
+    var m=$('#msg');
+    m.textContent=!draft.receipt
+      ?'Attach a receipt and enter hail trips first.'
+      :'Enter the hail trips count before Review / Share.';
+    m.className='msg err';
+    toast(!draft.receipt?'Receipt + hail required':'Hail trips required');
+  }else{$('#msg').className='msg'}
   curSub=n;
   [1,2,3].forEach(function(k){$('[data-pane="'+k+'"]').style.display=k===n?'block':'none'});
   $$('.stp').forEach(function(el){var k=+el.dataset.sub;el.classList.toggle('lit',k<=n);el.classList.toggle('on',k===n)});
+  updateReceiptUI();
   updateFooter();window.scrollTo({top:0,behavior:'smooth'});
 }
 function updateFooter(){
   var next=$('#snext'),back=$('#sback');if(!next)return;
   back.style.visibility=curSub>1?'visible':'hidden';
-  next.textContent=curSub<3?'Next':'Share End of Shift';
-  var blocked=(curSub===2&&!docsOk())||(curSub===3&&!draft.rego);
+  next.textContent=curSub===1?'Next: Log Shift':(curSub===2?'Next: Review':'Share End of Shift');
+  var blocked=(curSub===1&&!draft.receipt)||(curSub===2&&!docsOk())||(curSub===3&&!draft.rego);
   next.classList.toggle('faded',blocked);
 }
 function nextStep(){
-  if(curSub===1){setSub(2);return}
-  if(curSub===2){if(docsOk())setSub(3);else{var m=$('#msg');m.textContent='Attach a receipt and enter the hail trips count first.';m.className='msg err';toast('Fill the Attach step');window.scrollTo({top:0,behavior:'smooth'})}return}
+  if(curSub===1){
+    if(draft.receipt){setSub(2);return}
+    var m0=$('#msg');m0.textContent='Attach the shift receipt first so you can preview it while logging payments.';m0.className='msg err';
+    toast('Receipt required first');window.scrollTo({top:0,behavior:'smooth'});return;
+  }
+  if(curSub===2){
+    if(docsOk()){setSub(3);return}
+    var m=$('#msg');
+    m.textContent=!draft.receipt
+      ?'Attach a receipt and enter the hail trips count first.'
+      :'Enter the hail trips count first (required for levy).';
+    m.className='msg err';
+    toast(!draft.receipt?'Fill receipt + hail':'Hail trips required');
+    window.scrollTo({top:0,behavior:'smooth'});return;
+  }
   if(curSub===3){if(draft.rego)doShare();else{var m2=$('#msg');m2.textContent='Choose a vehicle rego to share.';m2.className='msg err';toast('Rego required')}}
 }
 $('#snext').onclick=nextStep;
@@ -1948,7 +2209,11 @@ $$('.stp').forEach(function(b){b.onclick=function(){setSub(+b.dataset.sub)}});
 function shareText(){buildPreview();return $('#prev').textContent}
 async function doShare(){
   var txt=shareText();
-  var f=receiptFile;
+  var f=null;
+  if(shiftReceipts.length){
+    try{f=await buildReceiptCollageFile()}catch(_){f=null}
+    if(!f&&shiftReceipts[0]&&shiftReceipts[0].file)f=shiftReceipts[0].file;
+  }
   /* Try native share FIRST (while we still have the user gesture), then save. */
   var shared=false;
   if(navigator.share){
@@ -1957,7 +2222,7 @@ async function doShare(){
         await navigator.share({files:[f],text:txt,title:'Fareo Shift'});
       }else{
         await navigator.share({text:txt,title:'Fareo Shift'});
-        if(f)toast('Shared \u2014 now attach the receipt photo');
+        if(f)toast('Shared \u2014 attach the receipt collage photo if needed');
       }
       shared=true;
     }catch(e){
@@ -1986,8 +2251,8 @@ function saveShift(shared){
   entries=entries.filter(function(x){return !(x.date===e.date&&x.rego===e.rego)});
   entries.push(e);save('fareo_entries',entries);
   toast(shared?'Saved & sharing…':'Saved to Weekly');
-  draft=freshDraft('');receiptFile=null;
-  var rc=$('#rcpt');if(rc){rc.classList.remove('done');$('#rcptTxt').textContent='Attach receipt photo';}
+  draft=freshDraft('');
+  clearReceiptAttach();
   persist();rowInputs();render();setSub(1);
 }
 
