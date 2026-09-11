@@ -107,6 +107,7 @@ input:disabled,select:disabled{background:var(--disbg);color:var(--disink);-webk
 .snext.faded{opacity:.45}
 .shift-rcpt-frame{margin-top:10px;border:1.5px solid var(--bd2);border-radius:12px;background:#111;overflow:hidden;min-height:180px;display:flex;align-items:center;justify-content:center;position:relative;touch-action:none;cursor:zoom-in}
 .shift-rcpt-frame img{display:block;width:100%;max-height:280px;object-fit:contain;background:#111;pointer-events:none;-webkit-user-drag:none;user-select:none}
+#logEosPreview img{max-height:min(52vh,440px)}
 .shift-rcpt-frame .rcpt-empty{padding:28px 16px;text-align:center;color:var(--mut);font-size:12px;line-height:1.45;cursor:default}
 .shift-rcpt-frame .rcpt-empty b{display:block;color:var(--head);font-size:13px;margin-bottom:4px}
 .shift-rcpt-frame .rcpt-pdf{padding:22px 14px;text-align:center;color:#f4f4f5;font-size:13px;font-weight:700;cursor:default}
@@ -1434,8 +1435,12 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.11';
+var APP_VERSION='8.12';
 var CHANGELOG=[
+  {v:'8.12',date:'September 11, 2026',notes:[
+    ['Bug Fix','Fixed startup crash from leftover ETA call after ETA removal (hash navigation and service worker register now run).'],
+    ['UI/UX','Log Shift EOS thumbs are preview-only (no accidental delete); taller slip preview for reading while logging.'],
+  ]},
   {v:'8.11',date:'September 11, 2026',notes:[
     ['UI/UX','Log Shift step shows End of Shift attachment preview (zoom/pan) for reading slips while entering values — WhatsApp text preview stays on Review only.'],
     ['Bug Fix','Share / WhatsApp text restored to the previous script (no extra hail or attachments lines).'],
@@ -1705,11 +1710,12 @@ function renderThumbs(el, list, activeIdx, onPick, onRemove){
   if(!el)return;
   el.innerHTML=list.map(function(r,i){
     var body=r.url?'<img src="'+r.url+'" alt="">':'<div class="rt-pdf">PDF</div>';
-    return '<button type="button" class="rt'+(i===activeIdx?' on':'')+'" data-ri="'+i+'" title="'+esc(r.name)+'">'+body+'<span class="rt-x" data-rx="'+i+'" title="Remove">&times;</span></button>';
+    var x=onRemove?'<span class="rt-x" data-rx="'+i+'" title="Remove">&times;</span>':'';
+    return '<button type="button" class="rt'+(i===activeIdx?' on':'')+'" data-ri="'+i+'" title="'+esc(r.name)+'">'+body+x+'</button>';
   }).join('');
   $$('.rt',el).forEach(function(btn){
     btn.onclick=function(e){
-      if(e.target&&e.target.dataset&&e.target.dataset.rx!=null){e.stopPropagation();onRemove(Number(e.target.dataset.rx));return}
+      if(onRemove&&e.target&&e.target.dataset&&e.target.dataset.rx!=null){e.stopPropagation();onRemove(Number(e.target.dataset.rx));return}
       onPick(Number(btn.dataset.ri));
     };
   });
@@ -1737,7 +1743,7 @@ function updateReceiptUI(){
     var ln=$('#logEosNext');if(ln)ln.disabled=shiftRcptIdx>=n-1;
   }
   renderThumbs($('#rcptThumbs'), eosReceipts, shiftRcptIdx, function(i){shiftRcptIdx=i;updateReceiptUI()}, function(i){removeEosAt(i)});
-  renderThumbs($('#logEosThumbs'), eosReceipts, shiftRcptIdx, function(i){shiftRcptIdx=i;updateReceiptUI()}, function(i){removeEosAt(i)});
+  renderThumbs($('#logEosThumbs'), eosReceipts, shiftRcptIdx, function(i){shiftRcptIdx=i;updateReceiptUI()}, null);
   var rem=$('#rcptRemove');if(rem)rem.disabled=!has;
 
   var fn=fuelReceipts.length, fcur=currentFuelReceipt(), fhas=fn>0;
@@ -4864,7 +4870,7 @@ $('#themeBtn').onclick=function(){settings.theme=effectiveDark()?'light':'dark';
 $('#today').textContent=fmtDayLong(new Date());
 var _vl=$('#versionLine');if(_vl)_vl.textContent='Fareo '+APP_VERSION+' \u00b7 tap for release notes';
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(){if(settings.theme==='system')applyTheme()});
-applyTheme();renderNames();rowInputs();render();setSub(1);renderDeadlines();updateEtaView();
+applyTheme();renderNames();rowInputs();render();setSub(1);renderDeadlines();updateReceiptUI();
 (function(){
   var h=(location.hash||'').replace(/^#/,'');
   if(TABS.indexOf(h)<0)h='hub';
