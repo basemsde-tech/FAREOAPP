@@ -89,6 +89,7 @@ input:disabled,select:disabled{background:var(--disbg);color:var(--disink);-webk
 .mini .x{background:transparent;border:1px solid var(--bd2);border-radius:8px;color:var(--mut);height:40px;cursor:pointer;-webkit-text-fill-color:var(--mut);font-weight:700}
 .add{width:100%;border:1.5px dashed var(--bd2);background:transparent;border-radius:9px;padding:10px;color:var(--body);font-weight:700;font-size:12px;cursor:pointer;margin-top:9px}
 .att{display:flex;align-items:center;gap:8px;justify-content:center;width:100%;background:transparent;border:1.5px dashed var(--dgr);border-radius:10px;padding:13px;color:var(--dgr);font-weight:700;cursor:pointer}
+.att.optional{border-color:var(--bd2);color:var(--mut)}
 .att.done{border-style:solid;border-color:var(--inc);color:var(--inc)}
 .att svg{width:17px;height:17px}
 .btn{width:100%;background:var(--btn-fill);border:0;color:var(--btn-ink);border-radius:12px;padding:14px;font-weight:800;font-size:15px;cursor:pointer;margin-top:2px}
@@ -881,12 +882,12 @@ html.fold-flex .home-btn{width:48px;height:48px}
       </div>
 
       <div class="card">
-        <h5><span class="dot" style="background:var(--inc)"></span>End of Shift <span class="danger" style="font-size:10px;margin-left:auto">≥1 required</span><span class="help" data-help="Attach EOS slip photo(s). When Hail OCR is on in Settings, Rank/Hail trip count is read automatically. Enter EOS dollar values on Log Shift. Pinch/scroll to inspect the slip." aria-label="Help">?</span></h5>
-        <p id="eosAttachHint" style="font-size:11.5px;color:var(--mut);margin:0 0 10px;line-height:1.4">Upload first — hail count is read when OCR is on. Enter EOS amounts on the next step.</p>
-        <button class="att" id="rcpt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg><span id="rcptTxt">Add EOS photo / PDF</span></button>
+        <h5><span class="dot" style="background:var(--inc)"></span>End of Shift <span style="font-size:10px;margin-left:auto;color:var(--mut)">optional</span><span class="help" data-help="Attach EOS slip photo(s) if you have them. You can continue without a photo — Fareo will ask you to confirm. When Hail OCR is on in Settings, Rank/Hail trip count is read automatically. Enter EOS dollar values on Log Shift." aria-label="Help">?</span></h5>
+        <p id="eosAttachHint" style="font-size:11.5px;color:var(--mut);margin:0 0 10px;line-height:1.4">Optional — attach a slip if you have one. Hail OCR reads the count when it is on. Enter EOS amounts on the next step.</p>
+        <button class="att optional" id="rcpt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg><span id="rcptTxt">Add EOS photo / PDF</span></button>
         <input id="rcptFile" type="file" accept="image/*,image/jpeg,image/png,image/heic,image/heif,application/pdf" multiple style="display:none">
         <div class="shift-rcpt-frame" id="rcptPreview">
-          <div class="rcpt-empty"><b>No EOS attachment yet</b>At least one End of Shift document is required.</div>
+          <div class="rcpt-empty"><b>No EOS attachment yet</b>Optional — attach a slip if you have one.</div>
         </div>
         <div class="shift-rcpt-nav" id="rcptNav" style="display:none">
           <button type="button" id="rcptPrevBtn" aria-label="Previous">&lsaquo; Prev</button>
@@ -919,9 +920,9 @@ html.fold-flex .home-btn{width:48px;height:48px}
     <div data-pane="2" style="display:none">
       <div class="card" style="margin-bottom:10px">
         <h5><span class="dot" style="background:var(--inc)"></span>End of Shift<span class="help" data-help="Each slip has its own EOS dollars and hail count. Use Prev / Next to switch slips — totals sum across all slips for settlement. Pinch / scroll / +/- to zoom." aria-label="Help">?</span><span class="sub-amt" id="eosSub">$0</span></h5>
-        <p style="font-size:11.5px;color:var(--mut);margin:0 0 8px;line-height:1.4">Enter this slip’s values below. Totals add up across all EOS photos.</p>
+        <p style="font-size:11.5px;color:var(--mut);margin:0 0 8px;line-height:1.4">Enter this slip’s values below. Totals add up across all EOS photos. A photo is optional.</p>
         <div class="shift-rcpt-frame" id="logEosPreview" style="min-height:140px;max-height:none">
-          <div class="rcpt-empty"><b>No EOS attachment</b>Go back to Attach to add an End of Shift document.</div>
+          <div class="rcpt-empty"><b>No EOS attachment</b>You can still enter EOS dollars and hail below.</div>
         </div>
         <div class="shift-rcpt-nav" id="logEosNav" style="display:none">
           <button type="button" id="logEosPrev" aria-label="Previous">&lsaquo; Prev</button>
@@ -1536,8 +1537,11 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.23';
+var APP_VERSION='8.24';
 var CHANGELOG=[
+  {v:'8.24',date:'September 15, 2026',notes:[
+    ['UI/UX','End of Shift photo is optional. If you skip it, Fareo asks “Are you sure?” before you continue.'],
+  ]},
   {v:'8.23',date:'September 13, 2026',notes:[
     ['UI/UX','Works on phones, iOS, tablets, and foldables (Galaxy Z Fold 8 cover, inner 4:3, Flex Mode, split-screen). Wide screens use extra columns; phones stay a single column.'],
     ['UI/UX','Log Shift on the inner display / iPad: slip + hail stay left, fare fields on the right. Home wheel scales up when unfolded.'],
@@ -1867,7 +1871,7 @@ while(draft.hails.length<draft.eos.length)draft.hails.push('');
 /* [F4] Only reset date/rego for a fresh draft. */
 if(!draft._edit){draft.date=todayStr();draft.rego='';}
 draft.receipt=false;draft.receiptName='';
-/* In-memory attachments. EOS ≥1 compulsory; fuel optional but locks fuel amount if present. */
+/* In-memory attachments. EOS optional (confirm if skipped); fuel optional but locks fuel amount if present. */
 var eosReceipts=[]; /* [{id,file,name,type,url,ocrHail,ocrDone}] */
 var fuelReceipts=[];
 var shiftRcptIdx=0, fuelRcptIdx=0;
@@ -1920,9 +1924,9 @@ function currentSlipIndex(){
   return shiftRcptIdx;
 }
 function hailEnteredOk(){
-  if(!eosReceipts.length)return false;
   syncEosFieldsToAttachCount();
-  for(var i=0;i<eosReceipts.length;i++){
+  var n=Math.max(eosReceipts.length,1);
+  for(var i=0;i<n;i++){
     if(String(draft.hails[i]).trim()==='')return false;
   }
   return true;
@@ -1947,17 +1951,17 @@ function fillDictateForCurrentSlip(){
   if(eo){
     var ev=draft.eos[i];
     eo.value=(ev===''||ev==null)?'':ev;
-    eo.disabled=!eosReceipts.length;
+    eo.disabled=false;
   }
   var hi=$('#hailThis');
   if(hi){
     var hv=draft.hails[i];
     hi.value=(hv===''||hv==null)?'':hv;
-    hi.disabled=!eosReceipts.length;
+    hi.disabled=false;
   }
   var hm=$('#hailMinus'), hp=$('#hailPlus');
-  if(hm)hm.disabled=!eosReceipts.length;
-  if(hp)hp.disabled=!eosReceipts.length;
+  if(hm)hm.disabled=false;
+  if(hp)hp.disabled=false;
   updateDictateHints();
 }
 function fuelReceiptRequiredOk(){
@@ -2125,8 +2129,8 @@ function updateReceiptUI(){
   var n=eosReceipts.length, cur=currentEosReceipt(), has=n>0;
   var rc=$('#rcpt');if(rc)rc.classList.toggle('done',has);
   var txt=$('#rcptTxt');if(txt)txt.textContent=has?('Add more EOS ('+n+')'):'Add EOS photo / PDF';
-  renderAttachFrame($('#rcptPreview'), cur, 'No EOS attachment yet', 'At least one End of Shift document is required.');
-  renderAttachFrame($('#logEosPreview'), cur, 'No EOS attachment', 'Go back to Attach to add an End of Shift document.');
+  renderAttachFrame($('#rcptPreview'), cur, 'No EOS attachment yet', 'Optional — attach a slip if you have one.');
+  renderAttachFrame($('#logEosPreview'), cur, 'No EOS attachment', 'You can still enter EOS dollars and hail below.');
   var nav=$('#rcptNav');
   if(nav){
     nav.style.display=has?'flex':'none';
@@ -2161,8 +2165,8 @@ function syncAttachOcrHint(){
   var hint=$('#eosAttachHint');
   if(hint){
     hint.textContent=settings.ocrHail
-      ?'Upload first — hail count is read when OCR can. Enter EOS amounts on the next step.'
-      :'Upload first — Hail OCR is off (Settings). Enter hail and EOS amounts on Log Shift.';
+      ?'Optional — attach a slip if you have one. Hail OCR reads the count when it is on. Enter EOS amounts on Log Shift.'
+      :'Optional — attach a slip if you have one. Hail OCR is off (Settings). Enter hail and EOS amounts on Log Shift.';
   }
   var st=$('#ocrStatus');
   if(st&&!settings.ocrHail){st.style.display='none'}
@@ -2802,7 +2806,7 @@ function render(){
   updateFooter();
   buildPreview();persist();
 }
-function docsOk(){return eosReceipts.length>0 && hailEnteredOk() && fuelReceiptRequiredOk()}
+function docsOk(){return hailEnteredOk() && fuelReceiptRequiredOk()}
 function buildPreview(){
   var txt=buildShareLines().join('\n');
   var p=$('#prev');if(p)p.textContent=txt;
@@ -2868,7 +2872,6 @@ $('#addSquare').onclick=function(){draft.square.push({name:'',amount:0});rowInpu
 $('#addAcct').onclick=function(){draft.accounts.push({name:'',amount:0});rowInputs();render()};
 $('#addFuel').onclick=function(){draft.fuel.push({amount:0,type:settings.fuel,opPaid:false});rowInputs();render()};
 $('#hailMinus').onclick=function(){
-  if(!eosReceipts.length)return;
   syncEosFieldsToAttachCount();
   var i=currentSlipIndex();
   draft.hails[i]=Math.max(0,nn(draft.hails[i])-1);
@@ -2877,7 +2880,6 @@ $('#hailMinus').onclick=function(){
   render();
 };
 $('#hailPlus').onclick=function(){
-  if(!eosReceipts.length)return;
   syncEosFieldsToAttachCount();
   var i=currentSlipIndex();
   draft.hails[i]=nn(draft.hails[i])+1;
@@ -2892,7 +2894,7 @@ if($('#rcptNextBtn'))$('#rcptNextBtn').onclick=function(){shiftRcptIdx=Math.min(
 if($('#rcptRemove'))$('#rcptRemove').onclick=function(){
   if(!eosReceipts.length)return;
   removeEosAt(shiftRcptIdx);
-  toast(eosReceipts.length?'EOS removed':'All EOS cleared — add at least one');
+  toast(eosReceipts.length?'EOS removed':'EOS photo cleared');
 };
 $('#rcptFile').onchange=function(e){
   addEosFiles(e.target.files);
@@ -2918,20 +2920,19 @@ $('#clearShift').onclick=function(){
 };
 
 /* sub-tabs — Attach (EOS+fuel) → Log Shift → Review.
-   Gates: ≥1 EOS; hail; fuel amount if fuel receipt; rego on share. */
+   Gates: hail; fuel amount if fuel receipt; confirm if no EOS photo; rego on share. */
 var curSub=1;
 function gateFailMsg(){
-  if(!eosReceipts.length)return{text:'Attach ≥1 End of Shift document first.',toast:'EOS required first',pane:1};
-  if(!hailEnteredOk())return{text:'Enter hail / rank on every EOS slip (use Prev / Next).',toast:'Hail required on each slip',pane:2};
+  if(!hailEnteredOk())return{text:'Enter hail / rank for this shift (use Prev / Next when you have several slips).',toast:'Hail required',pane:2};
   if(!fuelReceiptRequiredOk())return{text:'Fuel receipt attached — enter the fuel amount on Log Shift.',toast:'Fuel amount required',pane:2};
   return null;
 }
+function confirmNoEosThen(fn){
+  if(eosReceipts.length){fn();return}
+  ask('Are you sure?','You have not attached an End of Shift photo. Continue without a slip?','Continue',fn,{danger:false,noLbl:'Go back'});
+}
 function setSub(n){
-  if(n===2&&!eosReceipts.length){
-    n=1;
-    var m0=$('#msg');m0.textContent='Attach ≥1 End of Shift document first so you can preview it while logging.';m0.className='msg err';
-    toast('EOS required first');
-  }else if(n===3){
+  if(n===3){
     var g=gateFailMsg();
     if(g){n=g.pane;var m=$('#msg');m.textContent=g.text;m.className='msg err';toast(g.toast)}
     else{$('#msg').className='msg'}
@@ -2946,14 +2947,13 @@ function updateFooter(){
   var next=$('#snext'),back=$('#sback');if(!next)return;
   back.style.visibility=curSub>1?'visible':'hidden';
   next.textContent=curSub===1?'Next: Log Shift':(curSub===2?'Next: Review':'Share End of Shift');
-  var blocked=(curSub===1&&!eosReceipts.length)||(curSub===2&&!docsOk())||(curSub===3&&!draft.rego);
+  var blocked=(curSub===2&&!docsOk())||(curSub===3&&!draft.rego);
   next.classList.toggle('faded',blocked);
 }
 function nextStep(){
   if(curSub===1){
-    if(eosReceipts.length){setSub(2);return}
-    var m0=$('#msg');m0.textContent='Attach ≥1 End of Shift document first.';m0.className='msg err';
-    toast('EOS required first');window.scrollTo({top:0,behavior:'smooth'});return;
+    confirmNoEosThen(function(){setSub(2)});
+    return;
   }
   if(curSub===2){
     var g=gateFailMsg();
@@ -2965,7 +2965,14 @@ function nextStep(){
 }
 $('#snext').onclick=nextStep;
 $('#sback').onclick=function(){if(curSub>1)setSub(curSub-1)};
-$$('.stp').forEach(function(b){b.onclick=function(){setSub(+b.dataset.sub)}});
+$$('.stp').forEach(function(b){b.onclick=function(){
+  var n=+b.dataset.sub;
+  if(n>1&&curSub===1&&!eosReceipts.length){
+    confirmNoEosThen(function(){setSub(n)});
+    return;
+  }
+  setSub(n);
+}});
 
 function downloadShareFile(file){
   if(!file)return;
@@ -3255,10 +3262,16 @@ function showModal(id){$('#'+id).classList.add('show');if(typeof syncTrailBtns==
 function closeModal(id){$('#'+id).classList.remove('show');if(id==='askModal')askCb=null;if(typeof syncTrailBtns==='function')syncTrailBtns()}
 $$('.modal').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)closeModal(m.id)})});
 var askCb=null;
-function ask(title,body,okLbl,fn){
+function ask(title,body,okLbl,fn,opts){
+  opts=opts||{};
   $('#askTitle').textContent=title;
   $('#askBody').textContent=body;
-  $('#askYes').textContent=okLbl||'Delete';
+  var yes=$('#askYes'), no=$('#askNo');
+  if(yes){
+    yes.textContent=okLbl||'Delete';
+    yes.style.background=opts.danger===false?'':'var(--dgr)';
+  }
+  if(no)no.textContent=opts.noLbl||'Keep';
   askCb=fn;
   showModal('askModal');
 }
