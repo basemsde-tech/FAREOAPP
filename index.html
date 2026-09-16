@@ -46,7 +46,7 @@
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--pg);overflow-x:hidden;min-height:100%;min-height:100dvh;min-height:-webkit-fill-available}
 html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-body{font-family:Outfit,system-ui,-apple-system,sans-serif;color:var(--body);color-scheme:light dark;padding-bottom:calc(80px + env(safe-area-inset-bottom));-webkit-text-size-adjust:100%;text-size-adjust:100%;letter-spacing:.01em;font-feature-settings:"ss01","kern";line-height:1.45}
+body{font-family:Outfit,system-ui,-apple-system,sans-serif;color:var(--body);color-scheme:light dark;padding-bottom:calc(96px + env(safe-area-inset-bottom));-webkit-text-size-adjust:100%;text-size-adjust:100%;letter-spacing:.01em;font-feature-settings:"ss01","kern";line-height:1.45}
 .app{width:100%;max-width:480px;margin:0 auto;min-height:100vh;min-height:100dvh;min-height:-webkit-fill-available;background:var(--pg);position:relative;overflow-x:hidden;padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
 input,select,textarea,button{font:inherit}
 .body-p{padding:4px 16px 12px}
@@ -104,8 +104,8 @@ input:disabled,select:disabled{background:var(--disbg);color:var(--disink);-webk
 .stp.lit i{background:var(--inc)}
 .stp.on i{transform:scaleY(1.35)}
 .stp.on span{color:var(--inc)}
-.sfoot{display:flex;gap:10px;margin-top:12px;margin-bottom:4px}
-.sfoot .btn{margin-top:0}
+.sfoot{display:flex;gap:10px;margin-top:12px;margin-bottom:4px;position:sticky;bottom:calc(80px + env(safe-area-inset-bottom));z-index:11;background:linear-gradient(180deg,transparent,var(--pg) 28%);padding:10px 0 8px}
+.sfoot .btn{margin-top:0;position:relative;z-index:1}
 .sback{flex:0 0 104px}
 .snext{flex:1}
 .snext.faded{opacity:.45}
@@ -601,7 +601,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .wk-share:active{opacity:1;background:var(--inc-bg)}
 input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text-fill-color:var(--mut)!important;opacity:.4}
 .screen{display:none}.screen.on{display:block}
-.home-btn{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);width:58px;height:58px;border-radius:50%;border:0;background:var(--btn-fill);color:var(--btn-ink);display:grid;place-items:center;cursor:pointer;z-index:20;box-shadow:0 8px 24px var(--glow);-webkit-tap-highlight-color:transparent;transition:transform var(--dur) var(--ease),box-shadow var(--dur)}
+.home-btn{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);width:58px;height:58px;border-radius:50%;border:0;background:var(--btn-fill);color:var(--btn-ink);display:grid;place-items:center;cursor:pointer;z-index:20;box-shadow:0 8px 24px var(--glow);-webkit-tap-highlight-color:transparent;transition:transform var(--dur) var(--ease),box-shadow var(--dur);touch-action:manipulation}
 .home-btn svg{width:24px;height:24px}
 .home-btn.on{box-shadow:0 0 0 3px var(--pg),0 0 0 6px var(--inc),0 8px 24px var(--glow)}
 .home-btn:active{transform:translateX(-50%) scale(.94)}
@@ -617,7 +617,7 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
 .help-pop.show{opacity:1;transform:translateY(0)}
 .help-pop b{color:#fff}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.hub{padding:12px 2px 20px;min-height:360px;display:flex;align-items:center;justify-content:center;position:relative;background:radial-gradient(ellipse at 50% 48%,var(--inc-bg) 0%,transparent 62%)}
+.hub{padding:12px 2px 36px;min-height:360px;display:flex;align-items:center;justify-content:center;position:relative;background:radial-gradient(ellipse at 50% 48%,var(--inc-bg) 0%,transparent 62%)}
 .hub-wheel{--orbit:116px;--core:108px;--sat:62px;position:relative;width:calc(var(--orbit) * 2 + var(--sat) + 16px);height:calc(var(--orbit) * 2 + var(--sat) + 16px);max-width:92vw;display:flex;align-items:center;justify-content:center}
 .hub-wheel::before{content:"";position:absolute;left:50%;top:50%;width:calc(var(--orbit) * 2);height:calc(var(--orbit) * 2);margin:calc(var(--orbit) * -1) 0 0 calc(var(--orbit) * -1);border-radius:50%;border:1.5px dashed var(--bd2);opacity:.65;pointer-events:none}
 .hub-wheel .hub-core{position:absolute;left:50%;top:50%;width:var(--core);height:var(--core);margin:calc(var(--core) / -2) 0 0 calc(var(--core) / -2);border-radius:50%;border:0;background:var(--btn-fill);color:var(--btn-ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 10px 28px var(--glow);z-index:4;-webkit-tap-highlight-color:transparent;animation:corePulse 3.4s ease-in-out infinite;transition:transform .18s var(--ease),box-shadow .18s}
@@ -891,6 +891,7 @@ button,a,.tgl,.chip,.filt,.preset,.sst,.stp,.cli,.tr,.run-client-chip{-webkit-ta
   .home-btn:active{transform:translateX(-50%) scale(.94)}
   .toast{bottom:auto;top:calc(env(viewport-segment-top 0 1) + 68px)}
   .body-p{padding-bottom:calc(16px + env(viewport-segment-height 0 1))}
+  .sfoot{bottom:8px}
 }
 @media (horizontal-viewport-segments:2){
   .app{max-width:none}
@@ -1604,8 +1605,12 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.25';
+var APP_VERSION='8.26';
 var CHANGELOG=[
+  {v:'8.26',date:'September 16, 2026',notes:[
+    ['Bug Fix','Log Shift totals now match the slips on screen. Empty leftover EOS/hail slots are dropped; filled amounts stay editable with Prev / Next even if the photos are gone.'],
+    ['Bug Fix','Home button no longer covers Next, Back, or Add Account. Shift actions stay tappable above the home control.'],
+  ]},
   {v:'8.25',date:'September 16, 2026',notes:[
     ['UI/UX','Full visual refresh: warmer canvas, refined Outfit type, larger tap targets, focus rings, and smoother motion on every screen.'],
     ['UI/UX','Removed the End of Shift slip preview from Log Shift. Attach photos on the first step; enter EOS dollars and hail without the photo beside the fields.'],
@@ -1968,43 +1973,50 @@ function fileToAttach(f,label){
   if(f.type&&f.type.indexOf('image/')===0){try{url=URL.createObjectURL(f)}catch(_){url=''}}
   return {id:'sr'+Date.now()+Math.random().toString(36).slice(2,6),file:f,name:f.name||label,type:f.type||'',url:url,ocrHail:null,ocrDone:false};
 }
+function occupiedSlipCount(){
+  var eos=draft.eos||[], hails=draft.hails||[];
+  var last=-1, len=Math.max(eos.length,hails.length);
+  for(var i=0;i<len;i++){
+    if(String(eos[i]==null?'':eos[i]).trim()!==''||String(hails[i]==null?'':hails[i]).trim()!=='')last=i;
+  }
+  return last+1;
+}
+function slipSlotCount(){return Math.max(eosReceipts.length,occupiedSlipCount(),1)}
 function syncEosFieldsToAttachCount(){
-  var n=Math.max(eosReceipts.length,1);
   if(!Array.isArray(draft.eos))draft.eos=[];
   if(!Array.isArray(draft.hails))draft.hails=[];
+  var n=slipSlotCount();
   while(draft.eos.length<n)draft.eos.push('');
   while(draft.hails.length<n)draft.hails.push('');
-  if(eosReceipts.length){
-    while(draft.eos.length>eosReceipts.length)draft.eos.pop();
-    while(draft.hails.length>eosReceipts.length)draft.hails.pop();
-  }
+  while(draft.eos.length>n)draft.eos.pop();
+  while(draft.hails.length>n)draft.hails.pop();
   if(!draft.eos.length)draft.eos=[''];
   if(!draft.hails.length)draft.hails=[''];
   recomputeHailTotal();
 }
 function recomputeHailTotal(){
-  var any=false, sum=0;
-  (draft.hails||[]).forEach(function(h){
-    if(String(h).trim()!==''){any=true;sum+=nn(h)}
-  });
+  var n=slipSlotCount(), any=false, sum=0, arr=draft.hails||[];
+  for(var i=0;i<n && i<arr.length;i++){
+    if(String(arr[i]).trim()!==''){any=true;sum+=nn(arr[i])}
+  }
   draft.hail=any?sum:'';
 }
 function currentSlipIndex(){
-  if(!eosReceipts.length)return 0;
-  shiftRcptIdx=Math.max(0,Math.min(eosReceipts.length-1,shiftRcptIdx));
+  var n=slipSlotCount();
+  shiftRcptIdx=Math.max(0,Math.min(n-1,shiftRcptIdx));
   return shiftRcptIdx;
 }
 function hailEnteredOk(){
   syncEosFieldsToAttachCount();
-  var n=Math.max(eosReceipts.length,1);
+  var n=slipSlotCount();
   for(var i=0;i<n;i++){
     if(String(draft.hails[i]).trim()==='')return false;
   }
   return true;
 }
 function updateDictateHints(){
-  var n=eosReceipts.length, i=currentSlipIndex();
-  var sl=$('#slipIdxLabel');if(sl)sl.textContent=n?('#'+(i+1)):'—';
+  var n=slipSlotCount(), i=currentSlipIndex();
+  var sl=$('#slipIdxLabel');if(sl)sl.textContent='#'+(i+1);
   var eth=$('#eosTotalHint');
   if(eth)eth.textContent=n>1?('All '+n+' slips · '+money(eosT())):('EOS total · '+money(eosT()));
   var hth=$('#hailTotalHint');
@@ -2210,10 +2222,11 @@ function updateReceiptUI(){
   }
   var lnav=$('#logEosNav');
   if(lnav){
-    lnav.style.display=n>1?'flex':'none';
-    var lcnt=$('#logEosCount');if(lcnt)lcnt.textContent=(shiftRcptIdx+1)+' / '+n;
-    var lp=$('#logEosPrev');if(lp)lp.disabled=shiftRcptIdx<=0;
-    var ln=$('#logEosNext');if(ln)ln.disabled=shiftRcptIdx>=n-1;
+    var slots=slipSlotCount(), si=currentSlipIndex();
+    lnav.style.display=slots>1?'flex':'none';
+    var lcnt=$('#logEosCount');if(lcnt)lcnt.textContent=(si+1)+' / '+slots;
+    var lp=$('#logEosPrev');if(lp)lp.disabled=si<=0;
+    var ln=$('#logEosNext');if(ln)ln.disabled=si>=slots-1;
   }
   renderThumbs($('#rcptThumbs'), eosReceipts, shiftRcptIdx, function(i){shiftRcptIdx=i;updateReceiptUI()}, function(i){removeEosAt(i)});
   var rem=$('#rcptRemove');if(rem)rem.disabled=!has;
@@ -2664,7 +2677,7 @@ async function buildReceiptCollageFile(){
 })();
 /* Prev / Next on Log Shift switches which slip’s EOS $ and hail you are editing. */
 if($('#logEosPrev'))$('#logEosPrev').onclick=function(){shiftRcptIdx=Math.max(0,shiftRcptIdx-1);updateReceiptUI()};
-if($('#logEosNext'))$('#logEosNext').onclick=function(){shiftRcptIdx=Math.min(eosReceipts.length-1,shiftRcptIdx+1);updateReceiptUI()};
+if($('#logEosNext'))$('#logEosNext').onclick=function(){shiftRcptIdx=Math.min(slipSlotCount()-1,shiftRcptIdx+1);updateReceiptUI()};
 
 var repRange={from:null,to:null,name:""};
 var trackQ=null;
@@ -2782,7 +2795,11 @@ function safeFormula(expr,vars){
   var r=out.pop();return (out.length===0&&isFinite(r))?r:null}
 
 /* ---------- calc ---------- */
-function eosT(){return draft.eos.reduce(function(a,b){return a+nn(b)},0)}
+function eosT(){
+  var n=slipSlotCount(), arr=draft.eos||[], s=0;
+  for(var i=0;i<n && i<arr.length;i++)s+=nn(arr[i]);
+  return s;
+}
 function cashT(){return draft.cash.reduce(function(a,b){return a+nn(b.amount)},0)}
 function squareT(){return draft.square.reduce(function(a,b){return a+nn(b.amount)},0)}
 function acctT(){return draft.accounts.reduce(function(a,b){return a+nn(b.amount)},0)}
@@ -3339,7 +3356,7 @@ function ask(title,body,okLbl,fn,opts){
   var yes=$('#askYes'), no=$('#askNo');
   if(yes){
     yes.textContent=okLbl||'Delete';
-    yes.style.background=opts.danger===false?'':'var(--dgr)';
+    yes.style.background=opts.danger===false?'var(--btn-fill)':'var(--dgr)';
   }
   if(no)no.textContent=opts.noLbl||'Keep';
   askCb=fn;
