@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fareo-v8.27';
+const CACHE_NAME = 'fareo-v8.28';
 const ROLLBACK_CACHE = 'fareo-rollback';
 const META_CACHE = 'fareo-meta';
 
@@ -8,6 +8,7 @@ const META_CACHE = 'fareo-meta';
 const ASSETS = [
   './',
   './index.html',
+  './404.html',
   './manifest.webmanifest',
   './icon-192-v52.png',
   './icon-512-v52.png',

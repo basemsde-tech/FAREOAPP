@@ -1613,8 +1613,15 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.27';
+var APP_VERSION='8.28';
 var CHANGELOG=[
+  {v:'8.28',date:'September 17, 2026',notes:[
+    ['Bug Fix','Share Week now finishes generating its image and opens the share or download flow.'],
+    ['Bug Fix','In-progress shifts resume after reopening, and cloud updates safely reload the synced draft without writing stale data back.'],
+    ['Bug Fix','Weekly amount edits now calculate gross from cash, Square, and only the fuel paid by the driver.'],
+    ['Feature','EOS and fuel attachments from saved shifts are added to the receipt archive automatically.'],
+    ['Maintenance','Improved offline address feedback, refresh reliability, and offline page fallback.'],
+  ]},
   {v:'8.27',date:'September 16, 2026',notes:[
     ['UI/UX','Enterprise dark theme by default: slate surfaces, emerald actions, Inter type, and a clean high-contrast light mode.'],
     ['UI/UX','Responsive Log Shift actions stay clear of form controls on phones, tablets, foldables, and desktop.'],
@@ -1942,23 +1949,39 @@ if(!Array.isArray(clients))clients=[];
 var runPlan=load('fareo_run_plan',[])||[];
 if(!Array.isArray(runPlan))runPlan=[];
 var draft=load('fareo_draft',null)||{date:todayStr(),eos:[''],hails:[''],cash:[{name:'',amount:0}],square:[{name:'',amount:0}],runs:0,accounts:[],fuel:[{amount:0,type:settings.fuel,opPaid:false}],hail:'',rego:'',receipt:false,receiptName:'',custom:{}};
-/* Backfill new draft shapes so older drafts don't crash */
-if(!draft.fuel)draft.fuel=[{amount:0,type:settings.fuel,opPaid:false}];
-draft.fuel.forEach(function(f){
-  /* migrate legacy `reimbursed` flag -> opPaid. Old: reimbursed:true = company card (not added). */
-  if(f.opPaid==null)f.opPaid=(f.reimbursed===true);
-  delete f.reimbursed;
-});
-if(!draft.square)draft.square=[{name:'',amount:0}];
-if(!draft.custom)draft.custom={};
-if(!Array.isArray(draft.eos)||!draft.eos.length)draft.eos=[''];
-if(!Array.isArray(draft.hails)){
-  draft.hails=[];
-  if(String(draft.hail).trim()!=='')draft.hails=[draft.hail];
+/* Backfill old/local/cloud draft shapes in one place so reloadAll() is safe too. */
+function normalizeDraft(d){
+  d=(d&&typeof d==='object')?d:freshDraft('');
+  if(!Array.isArray(d.fuel)||!d.fuel.length)d.fuel=[{amount:0,type:settings.fuel,opPaid:false}];
+  d.fuel.forEach(function(f){
+    if(f.opPaid==null)f.opPaid=(f.reimbursed===true);
+    delete f.reimbursed;
+  });
+  if(!Array.isArray(d.cash)||!d.cash.length)d.cash=[{name:'',amount:0}];
+  if(!Array.isArray(d.square)||!d.square.length)d.square=[{name:'',amount:0}];
+  if(!Array.isArray(d.accounts))d.accounts=[];
+  if(!d.custom||typeof d.custom!=='object')d.custom={};
+  if(!Array.isArray(d.eos)||!d.eos.length)d.eos=[''];
+  if(!Array.isArray(d.hails)){
+    d.hails=[];
+    if(String(d.hail==null?'':d.hail).trim()!=='')d.hails=[d.hail];
+  }
+  while(d.hails.length<d.eos.length)d.hails.push('');
+  return d;
 }
-while(draft.hails.length<draft.eos.length)draft.hails.push('');
-/* [F4] Only reset date/rego for a fresh draft. */
-if(!draft._edit){draft.date=todayStr();draft.rego='';}
+function draftHasWork(d){
+  function rowsHave(a){return (a||[]).some(function(r){return nn(r&&r.amount)>0||String((r&&r.name)||'').trim()!==''})}
+  return !!(d&&(
+    d._edit||String(d.rego||'').trim()!==''||nn(d.runs)>0||
+    (d.eos||[]).some(function(v){return nn(v)>0})||
+    (d.hails||[]).some(function(v){return String(v==null?'':v).trim()!==''})||
+    rowsHave(d.cash)||rowsHave(d.square)||rowsHave(d.accounts)||rowsHave(d.fuel)||
+    Object.keys(d.custom||{}).some(function(k){return nn(d.custom[k])>0})
+  ));
+}
+draft=normalizeDraft(draft);
+/* Empty drafts roll to today; any entered shift data resumes exactly as saved. */
+if(!draftHasWork(draft)){draft.date=todayStr();draft.rego='';}
 draft.receipt=false;draft.receiptName='';
 /* In-memory attachments. EOS optional (confirm if skipped); fuel optional but locks fuel amount if present. */
 var eosReceipts=[]; /* [{id,file,name,type,url,ocrHail,ocrDone}] */
@@ -3128,6 +3151,30 @@ async function doShare(){
 }
 $('#saveOnly').onclick=function(){if(!draft.rego){toast('Choose a rego first');return}saveShift(false)};
 
+function archiveShiftAttachments(entry,eosList,fuelList){
+  var jobs=[];
+  (eosList||[]).forEach(function(r,i){
+    if(!r||!r.file)return;
+    jobs.push(compressImage(r.file).then(function(data){
+      return storeReceipt(data,r.name,r.type==='application/pdf'?'pdf':'image',{
+        kind:'shift',category:'EOS',desc:'End of Shift · '+(entry.rego||'No rego'),
+        amount:nn(entry.snap&&entry.snap.eos&&entry.snap.eos[i]),date:entry.date
+      });
+    }));
+  });
+  (fuelList||[]).forEach(function(r,i){
+    if(!r||!r.file)return;
+    jobs.push(compressImage(r.file).then(function(data){
+      var fill=entry.snap&&entry.snap.fuel&&entry.snap.fuel[i];
+      return storeReceipt(data,r.name,r.type==='application/pdf'?'pdf':'image',{
+        kind:'fuel',category:'Fuel',desc:'Shift fuel · '+(entry.rego||'No rego'),
+        amount:fill?nn(fill.amount):(i===0?nn(entry.fuel):0),date:entry.date
+      });
+    }));
+  });
+  if(jobs.length)Promise.all(jobs).catch(function(){toast('A shift receipt could not be archived')});
+}
+
 function saveShift(shared){
   var g=grossT();
   var custom={};settings.payTypes.forEach(function(pt){var a=customAmt(pt);if(a>0)custom[pt.id]=a});
@@ -3140,6 +3187,7 @@ function saveShift(shared){
   draft.cash.forEach(function(c){addName(c.name)});draft.square.forEach(function(c){addName(c.name)});draft.accounts.forEach(function(a){addName(a.name)});
   entries=entries.filter(function(x){return !(x.date===e.date&&x.rego===e.rego)});
   entries.push(e);save('fareo_entries',entries);
+  archiveShiftAttachments(e,eosReceipts.slice(),fuelReceipts.slice());
   toast(shared?'Saved & sharing…':'Saved to Weekly');
   draft=freshDraft('');
   clearReceiptAttach();
@@ -3230,7 +3278,7 @@ function buildWeekImage(){return new Promise(function(res){try{
   x.fillText('TOTAL',pad,y+36);
   x.fillStyle='#111827';x.font='800 22px system-ui,sans-serif';x.textAlign='right';
   x.fillText(money(W.tot),WD-pad,y+38);x.textAlign='left';
-  return canvasToJpegFile(c, 'fareo-week.jpg');
+  canvasToJpegFile(c, 'fareo-week.jpg').then(res).catch(function(){res(null)});
 }catch(err){res(null)}})}
 async function shareWeek(){
   var W=weekData();
@@ -3338,7 +3386,13 @@ if($('#enSave'))$('#enSave').onclick=function(){var date=$('#enDate').value,rego
   if(curEntryId!=null){var e=entries.filter(function(x){return String(x.id)===String(curEntryId)})[0];if(e){entries=entries.filter(function(x){return !(x.date===date&&x.rego===rego&&String(x.id)!==String(curEntryId))});
     e.date=date;e.rego=rego;
     /* [F16] keep gross/share/GST consistent when the amount is edited by hand */
-    if(Math.abs((Number(e.take)||0)-amt)>0.005){e.take=amt;e.gross=backSolveGross(amt,e.cash||0,e.fuel||0);e.share=e.gross*(settings.pct/100);e.manual=true;}
+    if(Math.abs((Number(e.take)||0)-amt)>0.005){
+      var held=nn(e.cash)+nn(e.square);
+      var fuelI=e.fuelIPaid!=null?nn(e.fuelIPaid):(e.fuelPocket!=null?nn(e.fuelPocket):
+        (e.fuelOpPaid!=null?Math.max(0,nn(e.fuel)-nn(e.fuelOpPaid)):
+          (e.fuelCompany!=null?Math.max(0,nn(e.fuel)-nn(e.fuelCompany)):nn(e.fuel))));
+      e.take=amt;e.gross=backSolveGross(amt,held,fuelI);e.share=e.gross*(settings.pct/100);e.manual=true;
+    }
   }}
   else{var g=backSolveGross(amt,0,0);entries=entries.filter(function(x){return !(x.date===date&&x.rego===rego)});entries.push({id:Date.now(),date:date,rego:rego,take:amt,gross:g,share:g*(settings.pct/100),cash:0,fuel:0,fuelByType:{Diesel:0,Petrol:0,LPG:0},hail:0,eos:g,runs:0,fuelCount:0,override:true});}
   save('fareo_entries',entries);closeModal('entryModal');renderWeekly();toast('Saved')};
@@ -4238,9 +4292,9 @@ async function fullRefresh(){
       await Promise.all(keys.map(function(k){return caches.delete(k)}));
     }
   }catch(e){/* offline or blocked — still reload */}
-  /* 3. Hard reload bypassing HTTP cache */
+  /* 3. Reload after storage/SW cleanup; the next request cannot use those caches. */
   toast('Reloading…');
-  setTimeout(function(){location.reload(true)},400);
+  setTimeout(function(){location.reload()},400);
 }
 $('#clearCache').onclick=fullRefresh;
 $('#refreshBtn').onclick=fullRefresh;
@@ -4260,6 +4314,14 @@ var fb={app:null,auth:null,db:null,authM:null,fsM:null,uid:null,email:''},syncOn
 function setSyncState(t){var el=$('#syncState');if(el)el.textContent=t;var out=$('#syncOut');if(out)out.style.display=syncOn?'block':'none'}
 async function fbInit(cfg){if(fb.app)return;var A=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');fb.authM=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');fb.fsM=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');fb.app=A.initializeApp(cfg);fb.auth=fb.authM.getAuth(fb.app);fb.db=fb.fsM.getFirestore(fb.app)}
 function docRef(){return fb.fsM.doc(fb.db,'fareo_users',fb.uid)}
+function applyRemoteData(data,updatedAt){
+  applyingRemote=true;
+  try{
+    applyData(data);
+    localStorage.setItem('fareo_updatedAt',String(updatedAt||Date.now()));
+    reloadAll();
+  }finally{applyingRemote=false}
+}
 async function syncConnect(create){try{
   var cfg=parseCfg($('#fbConfig').value.trim());if(!cfg||!cfg.apiKey){toast('Invalid Firebase config');return}
   var email=$('#syncEmail').value.trim(),pass=$('#syncPass').value;if(!email||!pass){toast('Enter email and password');return}
@@ -4273,15 +4335,15 @@ async function afterAuth(user){
   fb.uid=user.uid;fb.email=user.email;syncOn=true;setSyncState('Connecting...');
   try{
     var snap=await fb.fsM.getDoc(docRef());var localTs=Number(localStorage.getItem('fareo_updatedAt')||0);
-    if(snap.exists()){var rem=snap.data();if((rem.updatedAt||0)>=localTs){applyingRemote=true;applyData(rem.data);localStorage.setItem('fareo_updatedAt',String(rem.updatedAt||Date.now()));applyingRemote=false;reloadAll()}else{pushNow()}}else{pushNow()}
-    fb.fsM.onSnapshot(docRef(),function(sn){if(!sn.exists())return;var r2=sn.data();if(r2._device===deviceId())return;if((r2.updatedAt||0)>Number(localStorage.getItem('fareo_updatedAt')||0)){applyingRemote=true;applyData(r2.data);localStorage.setItem('fareo_updatedAt',String(r2.updatedAt||Date.now()));applyingRemote=false;reloadAll();toast('Synced from another device')}});
+    if(snap.exists()){var rem=snap.data();if((rem.updatedAt||0)>=localTs){applyRemoteData(rem.data,rem.updatedAt)}else{pushNow()}}else{pushNow()}
+    fb.fsM.onSnapshot(docRef(),function(sn){if(!sn.exists())return;var r2=sn.data();if(r2._device===deviceId())return;if((r2.updatedAt||0)>Number(localStorage.getItem('fareo_updatedAt')||0)){applyRemoteData(r2.data,r2.updatedAt);toast('Synced from another device')}});
     setSyncState('On - '+fb.email);
   }catch(e){setSyncState('Sync error - check Firestore rules')}
 }
 function pushNow(){if(!syncOn||!fb.uid||!fb.fsM)return;var ts=Date.now();localStorage.setItem('fareo_updatedAt',String(ts));fb.fsM.setDoc(docRef(),{data:allData(),updatedAt:ts,_device:deviceId()}).then(function(){setSyncState('On - saved')}).catch(function(){setSyncState('Offline - will retry')})}
 function scheduleSync(){if(!syncOn||applyingRemote)return;clearTimeout(syncTimer);syncTimer=setTimeout(pushNow,900)}
 async function syncSignOut(){try{if(fb.auth)await fb.authM.signOut(fb.auth)}catch(_){}syncOn=false;localStorage.removeItem('fareo_sync_on');setSyncState('Off - local only');toast('Signed out (data kept on device)')}
-function reloadAll(){settings=load('fareo_settings',settings)||settings;migrateSettings();entries=load('fareo_entries',[])||[];deductions=load('fareo_deductions',[])||[];recurring=load('fareo_recurring',[])||[];fuelManual=load('fareo_fuelManual',[])||[];receipts=load('fareo_receipts',[])||[];names=load('fareo_names',[])||[];clients=load('fareo_clients',[])||[];if(!Array.isArray(clients))clients=[];runPlan=load('fareo_run_plan',[])||[];if(!Array.isArray(runPlan))runPlan=[];try{renderNames();rowInputs();render();var a=document.querySelector('.screen.on');if(a){var t=a.dataset.tab;if(t==='weekly')renderWeekly();if(t==='reports')renderReports();if(t==='settings')renderSettings();if(t==='runs')renderRuns();if(t==='book')renderBook()}}catch(_){}}
+function reloadAll(){settings=load('fareo_settings',settings)||settings;migrateSettings();entries=load('fareo_entries',[])||[];deductions=load('fareo_deductions',[])||[];recurring=load('fareo_recurring',[])||[];fuelManual=load('fareo_fuelManual',[])||[];receipts=load('fareo_receipts',[])||[];names=load('fareo_names',[])||[];clients=load('fareo_clients',[])||[];if(!Array.isArray(clients))clients=[];runPlan=load('fareo_run_plan',[])||[];if(!Array.isArray(runPlan))runPlan=[];draft=normalizeDraft(load('fareo_draft',draft));clearReceiptAttach();try{renderNames();rowInputs();render();var a=document.querySelector('.screen.on');if(a){var t=a.dataset.tab;if(t==='weekly')renderWeekly();if(t==='reports')renderReports();if(t==='settings')renderSettings();if(t==='runs')renderRuns();if(t==='book')renderBook()}}catch(_){}}
 if($('#syncSignin'))$('#syncSignin').onclick=function(){syncConnect(false)};
 if($('#syncCreate'))$('#syncCreate').onclick=function(){syncConnect(true)};
 if($('#syncOut'))$('#syncOut').onclick=syncSignOut;
@@ -4444,7 +4506,15 @@ function auSuggest(q,cb){
         out.push({line:line,lat:c?c[1]:null,lng:c?c[0]:null,state:p.state});
       });
       cb(out.slice(0,6));
-    }).catch(function(){cb([])});
+    }).catch(function(err){
+      cb([]);
+      if(err&&err.name==='AbortError')return;
+      var now=Date.now();
+      if(!auSuggest._lastFail||now-auSuggest._lastFail>5000){
+        auSuggest._lastFail=now;
+        toast(navigator.onLine===false?'Address search is unavailable offline':'Address search is temporarily unavailable');
+      }
+    });
   },250);
 }
 var bookDay=(new Date()).getDay();
