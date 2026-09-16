@@ -104,7 +104,8 @@ input:disabled,select:disabled{background:var(--disbg);color:var(--disink);-webk
 .stp.lit i{background:var(--inc)}
 .stp.on i{transform:scaleY(1.35)}
 .stp.on span{color:var(--inc)}
-.sfoot{display:flex;gap:10px;margin:0 auto;position:fixed;left:0;right:0;width:100%;max-width:480px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:15;background:linear-gradient(180deg,transparent 0%,var(--pg) 22%);padding:10px 16px calc(8px + env(safe-area-inset-bottom));box-sizing:border-box;pointer-events:none}
+.sfoot{display:none;gap:10px;margin:0 auto;position:fixed;left:0;right:0;width:100%;max-width:480px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:15;background:linear-gradient(180deg,transparent 0%,var(--pg) 22%);padding:10px 16px 8px;box-sizing:border-box;pointer-events:none}
+.sfoot.show{display:flex}
 .sfoot .btn{margin-top:0;position:relative;z-index:1;pointer-events:auto}
 .sback{flex:0 0 104px}
 .snext{flex:1}
@@ -278,7 +279,7 @@ input:disabled,select:disabled{background:var(--disbg);color:var(--disink);-webk
 .preset.on{border-color:var(--inc);background:var(--inc-bg);color:var(--on-inc)}
 .preset.on small{color:var(--on-inc)}
 #printRoot{display:none}
-@media print{body{background:#fff;padding:0}.app,.home-btn,.trail,.toast,.modal{display:none!important}#printRoot{display:block!important}}
+@media print{body{background:#fff;padding:0}.app,.home-btn,.sfoot,.trail,.toast,.modal{display:none!important}#printRoot{display:block!important}}
 .tx-eos{background:var(--inc-bg);border-color:var(--inc);border-width:1.5px}
 .card.tx-eos h5,.tx-eos .add,.tx-eos label.fl{color:var(--on-inc)}
 .tx-eos .sub-amt,.tx-eos input,.tx-eos select{color:var(--inc);-webkit-text-fill-color:var(--inc)}
@@ -1046,10 +1047,6 @@ html.fold-flex .home-btn{width:48px;height:48px}
       <div class="card"><h5><span class="dot" style="background:var(--inc)"></span>WhatsApp Preview</h5><div class="prev" id="prev"></div></div>
       <button class="btn neutral" id="saveOnly">Save to Weekly only</button>
     </div>
-    <div class="sfoot" id="sfoot">
-      <button class="btn neutral sback" id="sback">Back</button>
-      <button class="btn snext" id="snext">Next</button>
-    </div>
   </section>
 
   <section class="screen" data-tab="weekly">
@@ -1580,6 +1577,10 @@ html.fold-flex .home-btn{width:48px;height:48px}
   <button class="btn" id="updNow">Update now</button>
   <button class="btn neutral" id="updLater" style="margin-top:9px">Later</button>
 </div></div>
+<div class="sfoot" id="sfoot">
+  <button class="btn neutral sback" id="sback">Back</button>
+  <button class="btn snext" id="snext">Next</button>
+</div>
 <button type="button" class="home-btn" id="homeBtn" aria-label="Home">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10.5V20h12v-9.5"/></svg>
 </button>
@@ -5444,6 +5445,7 @@ function applyTab(tab){
   curTab=tab;
   $$('.screen').forEach(function(s){s.classList.toggle('on',s.dataset.tab===tab)});
   var home=$('#homeBtn');if(home)home.classList.toggle('on',tab==='hub');
+  var sf=$('#sfoot');if(sf)sf.classList.toggle('show',tab==='shift');
   if(tab==='weekly')renderWeekly();
   if(tab==='reports')renderReports();
   if(tab==='settings')renderSettings();
