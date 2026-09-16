@@ -104,10 +104,11 @@ input:disabled,select:disabled{background:var(--disbg);color:var(--disink);-webk
 .stp.lit i{background:var(--inc)}
 .stp.on i{transform:scaleY(1.35)}
 .stp.on span{color:var(--inc)}
-.sfoot{display:flex;gap:10px;margin-top:12px;margin-bottom:4px;position:sticky;bottom:calc(80px + env(safe-area-inset-bottom));z-index:11;background:linear-gradient(180deg,transparent,var(--pg) 28%);padding:10px 0 8px}
-.sfoot .btn{margin-top:0;position:relative;z-index:1}
+.sfoot{display:flex;gap:10px;margin:0 auto;position:fixed;left:0;right:0;width:100%;max-width:480px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:15;background:linear-gradient(180deg,transparent 0%,var(--pg) 22%);padding:10px 16px calc(8px + env(safe-area-inset-bottom));box-sizing:border-box;pointer-events:none}
+.sfoot .btn{margin-top:0;position:relative;z-index:1;pointer-events:auto}
 .sback{flex:0 0 104px}
 .snext{flex:1}
+.screen[data-tab="shift"].on{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
 .snext.faded{opacity:.45}
 .shift-rcpt-frame{margin-top:10px;border:1.5px solid var(--bd2);border-radius:12px;background:#111;overflow:hidden;min-height:180px;display:flex;align-items:center;justify-content:center;position:relative;touch-action:none;cursor:default}
 .shift-rcpt-frame.inspect{align-items:stretch;justify-content:stretch;flex-direction:column;cursor:grab;min-height:220px}
@@ -828,6 +829,7 @@ button,a,.tgl,.chip,.filt,.preset,.sst,.stp,.cli,.tr,.run-client-chip{-webkit-ta
   [data-tab="weekly"] .wknav,[data-tab="reports"] .rep-hero{max-width:none}
   .dl-grid{gap:12px}
   .set{padding:14px 16px}
+  .sfoot{max-width:860px;padding-left:22px;padding-right:22px}
 }
 @media (min-width:700px) and (min-height:560px){
   [data-tab="book"] .run-client-grid,[data-tab="runs"] .run-client-grid{grid-template-columns:repeat(3,1fr)}
@@ -838,6 +840,7 @@ button,a,.tgl,.chip,.filt,.preset,.sst,.stp,.cli,.tr,.run-client-chip{-webkit-ta
   .body-p{padding:8px 28px 20px}
   [data-tab="reports"] .dl-grid,[data-tab="reports"] .pulse-park{grid-template-columns:1fr 1fr}
   [data-tab="weekly"] .chart{height:200px}
+  .sfoot{max-width:1040px;padding-left:28px;padding-right:28px}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -891,7 +894,7 @@ button,a,.tgl,.chip,.filt,.preset,.sst,.stp,.cli,.tr,.run-client-chip{-webkit-ta
   .home-btn:active{transform:translateX(-50%) scale(.94)}
   .toast{bottom:auto;top:calc(env(viewport-segment-top 0 1) + 68px)}
   .body-p{padding-bottom:calc(16px + env(viewport-segment-height 0 1))}
-  .sfoot{bottom:8px}
+  .sfoot{bottom:8px;padding-bottom:8px}
 }
 @media (horizontal-viewport-segments:2){
   .app{max-width:none}
