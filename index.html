@@ -110,7 +110,7 @@ input:disabled,select:disabled{background:var(--disbg);color:var(--disink);-webk
 .sfoot .btn{margin-top:0;position:relative;z-index:1;pointer-events:auto}
 .sback{flex:0 0 104px}
 .snext{flex:1}
-.screen[data-tab="shift"].on{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+.screen[data-tab="shift"].on{padding-bottom:calc(180px + env(safe-area-inset-bottom))}
 .snext.faded{opacity:.45}
 .shift-rcpt-frame{margin-top:10px;border:1.5px solid var(--bd2);border-radius:12px;background:#111;overflow:hidden;min-height:180px;display:flex;align-items:center;justify-content:center;position:relative;touch-action:none;cursor:default}
 .shift-rcpt-frame.inspect{align-items:stretch;justify-content:stretch;flex-direction:column;cursor:grab;min-height:220px}
@@ -832,6 +832,9 @@ button,a,.tgl,.chip,.filt,.preset,.sst,.stp,.cli,.tr,.run-client-chip{-webkit-ta
   .dl-grid{gap:12px}
   .set{padding:14px 16px}
   .sfoot{max-width:860px;padding-left:22px;padding-right:22px}
+}
+@media (min-width:700px){
+  .sfoot{width:360px;left:auto;right:22px;padding-left:0;padding-right:0}
 }
 @media (min-width:700px) and (min-height:560px){
   [data-tab="book"] .run-client-grid,[data-tab="runs"] .run-client-grid{grid-template-columns:repeat(3,1fr)}
@@ -1614,6 +1617,7 @@ var APP_VERSION='8.27';
 var CHANGELOG=[
   {v:'8.27',date:'September 16, 2026',notes:[
     ['UI/UX','Enterprise dark theme by default: slate surfaces, emerald actions, Inter type, and a clean high-contrast light mode.'],
+    ['UI/UX','Responsive Log Shift actions stay clear of form controls on phones, tablets, foldables, and desktop.'],
   ]},
   {v:'8.26',date:'September 16, 2026',notes:[
     ['Bug Fix','Log Shift totals now match the slips on screen. Empty leftover EOS/hail slots are dropped; filled amounts stay editable with Prev / Next even if the photos are gone.'],
