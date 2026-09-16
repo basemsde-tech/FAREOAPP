@@ -9,6 +9,6 @@
     "allowMixedContent": true,
     "captureInput": true,
     "webContentsDebuggingEnabled": false,
-    "backgroundColor": "#F4F7F5"
+    "backgroundColor": "#E7EEE9"
   }
 }
