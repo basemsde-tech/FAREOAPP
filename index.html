@@ -263,12 +263,13 @@ input:disabled,select:disabled{background:var(--disbg);color:var(--disink);-webk
 .summ{display:inline-flex;align-items:center;justify-content:center;gap:7px}
 .summ svg{width:16px;height:16px}
 .rep-csv{border-width:2.5px;border-style:solid;border-color:var(--inc);color:var(--inc)}
-.modal{position:fixed;inset:0;background:var(--overlay);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:none;align-items:flex-end;justify-content:center;z-index:60}
+.modal{position:fixed;inset:0;background:var(--overlay);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:none;align-items:flex-end;justify-content:center;z-index:220}
 .modal.show{display:flex}
 .modal.show .sheet{animation:sheetSlideUp .24s cubic-bezier(.16,1,.3,1) both}
-#askModal{z-index:100}
-#noticeModal{z-index:100}
-#updModal{z-index:95}
+#askModal{z-index:240}
+#noticeModal{z-index:240}
+#updModal{z-index:230}
+html.modal-open .home-btn,html.modal-open .sfoot{visibility:hidden;pointer-events:none;opacity:0}
 @keyframes sheetSlideUp{0%{transform:translateY(100%)}100%{transform:translateY(0)}}
 .sheet{width:100%;max-width:480px;background:var(--card);border:1px solid var(--ring);border-radius:20px 20px 0 0;padding:12px 18px calc(22px + env(safe-area-inset-bottom));box-shadow:0 0 0 1px var(--ring),0 -20px 56px rgba(0,0,0,.4);max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .grip{width:38px;height:4.5px;border-radius:99px;background:var(--bd2);margin:4px auto 14px;opacity:.8}
@@ -845,7 +846,7 @@ button,a,.tgl,.chip,.filt,.preset,.sst,.stp,.cli,.tr,.run-client-chip{-webkit-ta
   .body-p{padding:8px 28px 20px}
   [data-tab="reports"] .dl-grid,[data-tab="reports"] .pulse-park{grid-template-columns:1fr 1fr}
   [data-tab="weekly"] .chart{height:200px}
-  .sfoot{max-width:1040px;padding-left:28px;padding-right:28px}
+  .sfoot{max-width:360px;padding-left:0;padding-right:0}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -1613,8 +1614,11 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.28';
+var APP_VERSION='8.29';
 var CHANGELOG=[
+  {v:'8.29',date:'September 17, 2026',notes:[
+    ['Bug Fix','Confirm and other sheets no longer sit under Home or Next, so Continue and Go back stay tappable.'],
+  ]},
   {v:'8.28',date:'September 17, 2026',notes:[
     ['Bug Fix','Share Week now finishes generating its image and opens the share or download flow.'],
     ['Bug Fix','In-progress shifts resume after reopening, and cloud updates safely reload the synced draft without writing stale data back.'],
@@ -3412,8 +3416,9 @@ if($('#enShare'))$('#enShare').onclick=function(){
 };
 if($('#enCalc'))$('#enCalc').onclick=function(){var e=entries.filter(function(x){return String(x.id)===String(curEntryId)})[0];if(!e)return;loadEntryToCalc(e);closeModal('entryModal');go('shift');setSub(1);toast('Loaded - adjust & save')};
 /* ---------- reports ---------- */
-function showModal(id){$('#'+id).classList.add('show');if(typeof syncTrailBtns==='function')syncTrailBtns()}
-function closeModal(id){$('#'+id).classList.remove('show');if(id==='askModal')askCb=null;if(typeof syncTrailBtns==='function')syncTrailBtns()}
+function syncModalChrome(){document.documentElement.classList.toggle('modal-open',!!anyModal())}
+function showModal(id){$('#'+id).classList.add('show');syncModalChrome();if(typeof syncTrailBtns==='function')syncTrailBtns()}
+function closeModal(id){$('#'+id).classList.remove('show');if(id==='askModal')askCb=null;syncModalChrome();if(typeof syncTrailBtns==='function')syncTrailBtns()}
 $$('.modal').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)closeModal(m.id)})});
 var askCb=null;
 function ask(title,body,okLbl,fn,opts){
