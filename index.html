@@ -1660,7 +1660,7 @@ var CHANGELOG=[
   {v:'8.33',date:'September 17, 2026',notes:[
     ['Bug Fix','The Log Shift formula now matches take-home when custom types are driver-collected or use a formula.'],
     ['Tax','Cash & Square GST-free is scaled to the driver-share GST base, so mixed EFTPOS + cash days no longer understate G1 / 1A.'],
-    ['Bug Fix','Shared shift text shows flat-rate custom types as dollars, not the raw count.'],
+    ['Bug Fix','Shared shift text shows flat-rate custom types as dollars, not the raw count. Custom type totals on Log Shift update as you type.'],
     ['Tax','Estimated net uses GST after credits (1A − 1B). Expense GST lines follow business-use %.'],
     ['Bug Fix','Saved shifts keep Accounts totals (CSV too). Recurring monthly costs stay on month-end dates.'],
   ]},
@@ -2959,6 +2959,10 @@ function render(){
   $('#runsSub').textContent=money(nn(draft.runs)*RUN);
   $('#acctSub').textContent=money(acctT());
   $('#fuelSub').textContent=money(fuelT());
+  settings.payTypes.forEach(function(pt){
+    var el=document.querySelector('#shiftFields .shift-field[data-field="pt:'+String(pt.id).replace(/"/g,'')+'"] .sub-amt');
+    if(el)el.textContent=money(customAmt(pt));
+  });
   $('#levyTag').textContent=money(levyT())+' levy';
   $('#levyRate').textContent=money(levyRate())+' / trip';
   var la=$('#levyAmt');if(la)la.textContent=money(levyT());
