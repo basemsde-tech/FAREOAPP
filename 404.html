@@ -1639,7 +1639,7 @@ html.fold-flex .sfoot-gap{width:0}
 <script>
 var $=function(s,r){return (r||document).querySelector(s)};
 var $$=function(s,r){return [].slice.call((r||document).querySelectorAll(s))};
-var money=function(v){return '$'+(Number(v)||0).toFixed(2)};
+var money=function(v){var n=Number(v);if(!isFinite(n))n=0;var a=Math.abs(n).toFixed(2);return (n<0?'-$':'$')+a};
 var nn=function(v){var x=Number(v);return isFinite(x)&&x>0?x:0};
 var todayStr=function(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 var parseD=function(s){var p=String(s).split('-').map(Number);return new Date(p[0],(p[1]||1)-1,p[2]||1)};
@@ -1655,8 +1655,15 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.32';
+var APP_VERSION='8.33';
 var CHANGELOG=[
+  {v:'8.33',date:'September 17, 2026',notes:[
+    ['Bug Fix','The Log Shift formula now matches take-home when custom types are driver-collected or use a formula.'],
+    ['Tax','Cash & Square GST-free is scaled to the driver-share GST base, so mixed EFTPOS + cash days no longer understate G1 / 1A.'],
+    ['Bug Fix','Shared shift text shows flat-rate custom types as dollars, not the raw count.'],
+    ['Tax','Estimated net uses GST after credits (1A − 1B). Expense GST lines follow business-use %.'],
+    ['Bug Fix','Saved shifts keep Accounts totals (CSV too). Recurring monthly costs stay on month-end dates.'],
+  ]},
   {v:'8.32',date:'September 17, 2026',notes:[
     ['Feature','Address Book: multiple addresses per contact (Home, Work, Day program, Custom) with Edit and Delete on the profile.'],
     ['Feature','Share asks which address to send, or Share all, with a clean Maps-ready message.'],
@@ -2767,11 +2774,11 @@ function clampBu(v){if(v==null||String(v).trim()==='')return 100;var x=Number(v)
 /* [F12]/[F16] Driver share of an entry. New entries store it; legacy entries
    fall back to gross x current pct. */
 function entryShare(e){var s=Number(e.share);if(isFinite(s)&&s>=0)return s;return (Number(e.gross)||0)*(settings.pct/100)}
-/* [F16] Back-solve gross from a manually entered take-home so GST/G1 stay consistent.
-   take = gross*pct - cash + fuel  =>  gross = (take + cash - fuel)/pct */
 /* Back-solve gross from a manually entered take-home for override entries.
-   Uses only I-paid fuel since that's the part reimbursed into the settlement. */
-function backSolveGross(take,cash,fuelIPaid){var p=settings.pct/100;var g=p>0?((Number(take)||0)+(Number(cash)||0)-(Number(fuelIPaid)||0))/p:(Number(take)||0);return Math.max(0,g)}
+   take = gross×pct − held + fuelIPaid  =>  gross = (take + held − fuelIPaid)/pct
+   `held` is driver-collected income (cash + Square + custom driver types).
+   Fuel is I-paid only — that is the part reimbursed into the settlement. */
+function backSolveGross(take,held,fuelIPaid){var p=settings.pct/100;var g=p>0?((Number(take)||0)+(Number(held)||0)-(Number(fuelIPaid)||0))/p:(Number(take)||0);return Math.max(0,g)}
 
 /* ---------- theme ---------- */
 var sunSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6 19 19M19 5l-1.4 1.4M6.4 17.6 5 19"/></svg>';
@@ -2816,8 +2823,16 @@ function fuelT(){return draft.fuel.reduce(function(a,b){return a+nn(b.amount)},0
    Tax: ALL fuel is deductible + GST-creditable because I hold the receipt either way. */
 function fuelOpPaidT(){return draft.fuel.reduce(function(a,b){return a+(b.opPaid===true?nn(b.amount):0)},0)}
 function fuelIPaidT(){return draft.fuel.reduce(function(a,b){return a+(b.opPaid===true?0:nn(b.amount))},0)}
-/* Custom pay-type raw amount: flat-rate types multiply the entered count by rate */
-function customAmt(pt){var v=draft.custom[pt.id];var raw=nn(v);return (pt.rate!=null&&pt.rate!=='')?raw*Number(pt.rate):raw}
+/* Custom pay-type dollars: flat-rate types multiply the entered count by rate */
+function customShareAmt(pt,raw){
+  raw=nn(raw);
+  if(pt&&pt.rate!=null&&pt.rate!==''){
+    var r=Number(pt.rate);
+    return isFinite(r)?raw*r:raw;
+  }
+  return raw;
+}
+function customAmt(pt){return customShareAmt(pt,draft.custom[pt.id])}
 function customTotalT(){return settings.payTypes.reduce(function(a,pt){return a+customAmt(pt)},0)}
 /* Gross = total fare revenue across every income source (fuel excluded). */
 function grossT(){return eosT()+cashT()+squareT()+nn(draft.runs)*RUN+acctT()+customTotalT()}
@@ -2839,6 +2854,51 @@ function takeT(){
   t+=fuelIPaidT();                                 /* fuel I paid -> reimbursed to me */
   return t}
 function levyT(){return nn(draft.hail)*levyRate()}
+/* Driver-held income deducted from settlement (cash, Square, custom driver types). */
+function heldT(){
+  var h=cashT()+squareT();
+  settings.payTypes.forEach(function(pt){
+    if(pt.formula)return;
+    if(pt.collector==='driver')h+=customAmt(pt);
+  });
+  return h;
+}
+/* Formula types: settlement result minus the default amount×pct already in gross×pct. */
+function formulaAdjT(){
+  var p=settings.pct/100,adj=0;
+  settings.payTypes.forEach(function(pt){
+    if(!pt.formula)return;
+    adj+=customSettle(pt)-customAmt(pt)*p;
+  });
+  return adj;
+}
+function entryAccounts(e){
+  if(e&&e.accounts!=null&&e.accounts!=='')return Number(e.accounts)||0;
+  var sp=e&&e.snap;
+  if(sp&&sp.accounts)return sp.accounts.reduce(function(s,c){return s+nn(c.amount)},0);
+  return 0;
+}
+function entryDriverHeld(e){
+  var h=nn(e.cash)+nn(e.square);
+  if(e.custom)Object.keys(e.custom).forEach(function(k){
+    var pt=settings.payTypes.filter(function(p){return String(p.id)===String(k)})[0];
+    if(pt&&!pt.formula&&pt.collector==='driver')h+=nn(e.custom[k]);
+  });
+  return h;
+}
+/* GST-inclusive sales base for one shift. Cash/Square GST-free is removed from gross,
+   then scaled by this shift's share ratio when GST is set aside on driver share. */
+function entryGstBase(e){
+  var g=Number(e.gross)||0;
+  var free=settings.cashGstFree?((Number(e.cash)||0)+(Number(e.square)||0)):0;
+  var taxable=g-free;if(taxable<0)taxable=0;
+  if(settings.gstBase==='share'){
+    var s=entryShare(e);
+    var ratio=g>0?s/g:(settings.pct/100);
+    return taxable*ratio;
+  }
+  return taxable;
+}
 
 function rowInputs(){
   /* Date picker */
@@ -2886,9 +2946,13 @@ function rowInputs(){
 function render(){
   var g=grossT(),t=takeT(),op=fuelOpPaidT();
   $('#total').textContent=money(t);
-  /* Settlement formula: gross×pct, less driver-held (cash+square), plus fuel I paid (reimbursed) */
-  var held=cashT()+squareT();
-  $('#formula').textContent='('+g.toFixed(2)+' × '+(settings.pct/100).toFixed(2)+') − '+held.toFixed(2)+' + '+fuelIPaidT().toFixed(2)+(op>0?' ('+money(op)+' op. fuel excl.)':'');
+  /* Settlement formula: gross×pct, less driver-held, plus fuel I paid (reimbursed).
+     Must match takeT(), including custom driver types and formula adjustments. */
+  var p=settings.pct/100,held=heldT(),adj=formulaAdjT();
+  var ftxt='('+g.toFixed(2)+' \u00d7 '+p.toFixed(2)+') \u2212 '+held.toFixed(2)+' + '+fuelIPaidT().toFixed(2);
+  if(Math.abs(adj)>0.005)ftxt+=(adj>=0?' + ':' \u2212 ')+Math.abs(adj).toFixed(2);
+  if(op>0)ftxt+=' ('+money(op)+' op. fuel excl.)';
+  $('#formula').textContent=ftxt;
   $('#eosSub').textContent=money(eosT());
   $('#cashSub').textContent=money(cashT());
   $('#squareSub').textContent=money(squareT());
@@ -3144,7 +3208,7 @@ function saveShift(shared){
   var g=grossT();
   var custom={};settings.payTypes.forEach(function(pt){var a=customAmt(pt);if(a>0)custom[pt.id]=a});
   var e={id:Date.now(),date:draft.date,rego:draft.rego,take:takeT(),gross:g,share:g*(settings.pct/100),cash:cashT(),square:squareT(),
-    fuel:fuelT(),fuelIPaid:fuelIPaidT(),fuelOpPaid:fuelOpPaidT(),fuelByType:{Diesel:0,Petrol:0,LPG:0},
+    accounts:acctT(),fuel:fuelT(),fuelIPaid:fuelIPaidT(),fuelOpPaid:fuelOpPaidT(),fuelByType:{Diesel:0,Petrol:0,LPG:0},
     custom:custom,hail:nn(draft.hail),eos:eosT(),runs:nn(draft.runs),receipt:draft.receipt,
     fuelCount:draft.fuel.filter(function(f){return nn(f.amount)>0}).length,
     snap:JSON.parse(JSON.stringify({date:draft.date,rego:draft.rego,eos:draft.eos,cash:draft.cash,square:draft.square,accounts:draft.accounts,runs:draft.runs,fuel:draft.fuel,hail:draft.hail,custom:draft.custom}))};
@@ -3298,7 +3362,14 @@ function entryShareText(e){
     var ab=(sp.accounts||[]).filter(function(c){return nn(c.amount)>0}).map(function(c){return (c.name||'Account')+' '+money(nn(c.amount))}).join(', ');
     L.push('Accounts: '+money(accts)+(ab?' ('+ab+')':''));
   }
-  var custom=sp.custom||e.custom;
+  var custom=e.custom;
+  if(!custom&&sp.custom){
+    custom={};
+    Object.keys(sp.custom).forEach(function(k){
+      var pt=settings.payTypes.filter(function(p){return String(p.id)===String(k)})[0];
+      custom[k]=customShareAmt(pt,sp.custom[k]);
+    });
+  }
   if(custom)Object.keys(custom).forEach(function(k){if(nn(custom[k])){
     var pt=settings.payTypes.filter(function(p){return String(p.id)===String(k)})[0];
     L.push((pt?pt.name:k)+': '+money(custom[k]));
@@ -3337,7 +3408,17 @@ function loadEntryToCalc(e){var sp=e.snap;
     draft={_edit:true,date:sp.date,rego:sp.rego,eos:eos,cash:(sp.cash&&sp.cash.length)?JSON.parse(JSON.stringify(sp.cash)):[{name:'',amount:0}],square:(sp.square&&sp.square.length)?JSON.parse(JSON.stringify(sp.square)):[{name:'',amount:0}],accounts:sp.accounts?JSON.parse(JSON.stringify(sp.accounts)):[],runs:sp.runs||0,fuel:(sp.fuel&&sp.fuel.length)?JSON.parse(JSON.stringify(sp.fuel)):[{amount:0,type:settings.fuel,opPaid:false}],hail:(hail!=null?hail:''),receipt:false,receiptName:'',custom:sp.custom?JSON.parse(JSON.stringify(sp.custom)):{}};
     draft.fuel.forEach(function(f){if(f.opPaid==null)f.opPaid=(f.reimbursed===true);delete f.reimbursed});
   }else{
-    draft={_edit:true,date:e.date,rego:e.rego,eos:[e.eos||''],cash:[{name:'',amount:e.cash||0}],square:[{name:'',amount:e.square||0}],accounts:[],runs:e.runs||0,fuel:[{amount:e.fuel||0,type:'Diesel',opPaid:(e.fuelOpPaid>0?true:false)}],hail:(e.hail!=null?e.hail:''),receipt:false,receiptName:'',custom:e.custom?JSON.parse(JSON.stringify(e.custom)):{}};
+    draft={_edit:true,date:e.date,rego:e.rego,eos:[e.eos||''],cash:[{name:'',amount:e.cash||0}],square:[{name:'',amount:e.square||0}],accounts:entryAccounts(e)?[{name:'',amount:entryAccounts(e)}]:[],runs:e.runs||0,fuel:[{amount:e.fuel||0,type:'Diesel',opPaid:(e.fuelOpPaid>0?true:false)}],hail:(e.hail!=null?e.hail:''),receipt:false,receiptName:'',custom:(function(){
+      var src=e.custom?JSON.parse(JSON.stringify(e.custom)):{};
+      settings.payTypes.forEach(function(pt){
+        if(src[pt.id]==null)return;
+        if(pt.rate!=null&&pt.rate!==''){
+          var r=Number(pt.rate);
+          if(isFinite(r)&&r>0)src[pt.id]=nn(src[pt.id])/r;
+        }
+      });
+      return src;
+    })()};
   }
   clearReceiptAttach();
   persist();rowInputs();render();}
@@ -3353,7 +3434,7 @@ if($('#enSave'))$('#enSave').onclick=function(){var date=$('#enDate').value,rego
     e.date=date;e.rego=rego;
     /* [F16] keep gross/share/GST consistent when the amount is edited by hand */
     if(Math.abs((Number(e.take)||0)-amt)>0.005){
-      var held=nn(e.cash)+nn(e.square);
+      var held=entryDriverHeld(e);
       var fuelI=e.fuelIPaid!=null?nn(e.fuelIPaid):(e.fuelPocket!=null?nn(e.fuelPocket):
         (e.fuelOpPaid!=null?Math.max(0,nn(e.fuel)-nn(e.fuelOpPaid)):
           (e.fuelCompany!=null?Math.max(0,nn(e.fuel)-nn(e.fuelCompany)):nn(e.fuel))));
@@ -3447,7 +3528,11 @@ function selectedQuarter(){
   for(var i=0;i<qs.length;i++){if(qs[i].l===key)return qs[i]}
   return qs[0];
 }
-function daysUntilDate(d){return Math.ceil((d-(new Date()))/(1000*60*60*24))}
+function daysUntilDate(d){
+  var a=new Date();a.setHours(0,0,0,0);
+  var b=new Date(d.getFullYear(),d.getMonth(),d.getDate());
+  return Math.round((b-a)/86400000);
+}
 function fmtDateShort(d){return fmtDMY(d)}
 function aggBetween(from,to){
   var s={from:repRange.from,to:repRange.to,name:repRange.name};
@@ -3549,25 +3634,33 @@ function quartersList(){var y=fyStart(new Date());return [{l:'Q1',m:'Jul - Sep',
 function openQuarter(){var qs=quartersList(),y=fyStart(new Date());$('#qFy').textContent='FY'+String(y).slice(2)+'-'+String(y+1).slice(2);$('#qGrid').innerHTML=qs.map(function(x){var f=iso(x.f),t=iso(x.t);var on=(repRange.from===f&&repRange.to===t);return '<button class="preset'+(on?' on':'')+'" data-f="'+f+'" data-t="'+t+'"><span>'+x.l+'</span><small>'+x.m+'</small></button>'}).join('');$$('#qGrid .preset').forEach(function(b){b.onclick=function(){repRange.from=b.dataset.f;repRange.to=b.dataset.t;repRange.name='Quarter';renderReports();closeModal('quarterModal')}});showModal('quarterModal')}
 function setFilter(key){if(key==='custom'){openCustom();return}if(key==='quarter'){openQuarter();return}var r=filterRange(key);repRange.from=r[0];repRange.to=r[1];repRange.name=r[2];renderReports()}
 function openCustom(){$('#repFrom').value=repRange.from||'';$('#repTo').value=repRange.to||'';showModal('rangeModal')}
+function advanceRecur(d,fr){
+  if(fr==='weekly'){d.setDate(d.getDate()+7);return}
+  if(fr==='fortnightly'){d.setDate(d.getDate()+14);return}
+  var day=d.getDate();
+  d.setDate(1);
+  d.setMonth(d.getMonth()+1);
+  var last=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();
+  d.setDate(Math.min(day,last));
+}
 /* Expand a recurring template into virtual deduction instances that fall within [from, to].
    Returns an array of {name, amount, category, bu, gst, date, _recurring:true, _rid:id}. */
 function expandRecurring(from,to){
   var out=[];
   recurring.forEach(function(r){
     if(!r.start||!r.freq)return;
-    var d=parseD(r.start),end=parseD(to),fr=r.freq;
-    /* cap at 366 iterations to prevent runaway on very old start dates */
-    for(var i=0;i<366;i++){
+    var d=parseD(r.start),fr=r.freq;
+    var skip=0;
+    while(iso(d)<from&&skip<20000){advanceRecur(d,fr);skip++}
+    for(var i=0;i<400;i++){
       var ds=iso(d);
       if(ds>to)break;
       if(ds>=from){out.push({name:r.name,amount:r.amount,category:r.category||'Other',bu:r.bu,gst:r.gst,date:ds,_recurring:true,_rid:r.id})}
-      /* advance to next occurrence */
-      if(fr==='weekly'){d.setDate(d.getDate()+7)}
-      else if(fr==='fortnightly'){d.setDate(d.getDate()+14)}
-      else{/* monthly */ d.setMonth(d.getMonth()+1)}
+      advanceRecur(d,fr);
     }
   });
   return out}
+
 function inRange(d){return(!repRange.from||d>=repRange.from)&&(!repRange.to||d<=repRange.to)}
 function previousPeriod(from,to,name){
   if(!from||!to)return null;
@@ -3585,11 +3678,10 @@ function rangeAgg(){
   var inc=es.reduce(function(a,b){return a+(Number(b.take)||0)},0);
   var gross=es.reduce(function(a,b){return a+(Number(b.gross)||0)},0);
   var share=es.reduce(function(a,b){return a+entryShare(b)},0);
-  /* Cash & Square treated as GST-free income when the toggle is on: subtract them
-     from the GST base (both the gross and share variants) before dividing by 11. */
-  var cashSquare=es.reduce(function(a,b){return a+(Number(b.cash)||0)+(Number(b.square)||0)},0);
-  var gstFree=settings.cashGstFree?cashSquare:0;
-  var gstBaseAmt=(settings.gstBase==='share'?share:gross)-gstFree;
+  /* Cash & Square treated as GST-free income when the toggle is on. Remove them
+     from gross first; if GST is on driver share, scale the leftover by this
+     shift's share ratio so mixed EFTPOS+cash days don't understate G1. */
+  var gstBaseAmt=es.reduce(function(a,b){return a+entryGstBase(b)},0);
   if(gstBaseAmt<0)gstBaseAmt=0;
   var gst=gstBaseAmt/11;
   var hailN=es.reduce(function(a,b){return a+(Number(b.hail)||0)},0),levy=hailN*levyRate();
@@ -3620,6 +3712,7 @@ function rangeAgg(){
   var mixSquare=es.reduce(function(a,b){return a+(Number(b.square)||0)},0);
   var mixRuns=es.reduce(function(a,b){return a+(Number(b.runs)||0)*RUN},0);
   var mixCustom=es.reduce(function(a,b){var s=0;if(b.custom)Object.keys(b.custom).forEach(function(k){s+=Number(b.custom[k])||0});return a+s},0);
+  var mixAcct=es.reduce(function(a,b){return a+entryAccounts(b)},0);
   /* Combine one-off deductions + expanded recurring instances */
   var allDed=deductions.filter(function(d){return inRange(d.date)});
   if(repRange.from&&repRange.to)allDed=allDed.concat(expandRecurring(repRange.from,repRange.to));
@@ -3631,8 +3724,8 @@ function rangeAgg(){
   var fuelCred=fuelAll/11,fuelDed=fuelAll*10/11;
   var oneB=expCred+fuelCred;
   var dedTotal=expDed+fuelDed;
-  var net=inc-gst-dedTotal-levy;
-  return{es:es,inc:inc,gross:gross,share:share,gstBaseAmt:gstBaseAmt,gst:gst,hailN:hailN,levy:levy,fD:fD,fP:fP,fL:fL,fuel:fuelAll,fuelShift:fuel,fuelManual:fuelManualTotal,fmCount:fmCount,fmList:fmList,fuelIPaid:fuelIPaid,fuelOpPaid:fuelOpPaid,fc:fc+fmCount,fcShift:fc,expCred:expCred,expDed:expDed,fuelCred:fuelCred,fuelDed:fuelDed,oneB:oneB,dedTotal:dedTotal,dn:dn,net:net,shifts:es.length,allDed:allDed,mixEftpos:mixEftpos,mixCash:mixCash,mixSquare:mixSquare,mixRuns:mixRuns,mixCustom:mixCustom}}
+  var net=inc-(gst-oneB)-dedTotal-levy;
+  return{es:es,inc:inc,gross:gross,share:share,gstBaseAmt:gstBaseAmt,gst:gst,hailN:hailN,levy:levy,fD:fD,fP:fP,fL:fL,fuel:fuelAll,fuelShift:fuel,fuelManual:fuelManualTotal,fmCount:fmCount,fmList:fmList,fuelIPaid:fuelIPaid,fuelOpPaid:fuelOpPaid,fc:fc+fmCount,fcShift:fc,expCred:expCred,expDed:expDed,fuelCred:fuelCred,fuelDed:fuelDed,oneB:oneB,dedTotal:dedTotal,dn:dn,net:net,shifts:es.length,allDed:allDed,mixEftpos:mixEftpos,mixCash:mixCash,mixSquare:mixSquare,mixRuns:mixRuns,mixCustom:mixCustom,mixAcct:mixAcct}}
 function spentOf(a){return (a.fuel||0)+a.allDed.reduce(function(s,d){return s+nn(d.amount)},0)}
 function daysInRange(from,to){if(!from||!to)return 0;return Math.round((asDate(to)-asDate(from))/86400000)+1}
 function auQStart(d){var m=d.getMonth(),y=d.getFullYear();if(m>=6&&m<=8)return new Date(y,6,1);if(m>=9)return new Date(y,9,1);if(m<=2)return new Date(y,0,1);return new Date(y,3,1)}
@@ -3826,7 +3919,12 @@ function renderReports(){
   var t1=$('#tax1A'),t1b=$('#tax1Bmini'),tn=$('#taxNetAmt'),tl=$('#taxNetLabel');
   if(t1)t1.textContent=money(a.gst);if(t1b)t1b.textContent=money(a.oneB);if(tn)tn.textContent=money(Math.abs(netGst));
   if(tl){tl.textContent=pay?'Pay ATO':'Refund';tl.className=pay?'pay':'ref'}
-  function gstBit(amt,hasGst){amt=nn(amt);if(hasGst===false)return 'no GST \u00b7 deduct '+money(amt);return 'claim '+money(amt/11)}
+  function gstBit(amt,hasGst,bu){
+    amt=nn(amt);
+    var share=clampBu(bu==null?100:bu)/100;
+    if(hasGst===false)return 'no GST \u00b7 deduct '+money(amt*share);
+    return 'claim '+money(amt/11*share);
+  }
   function dedRow(opts){
     var kill=opts.delAttr?'<button class="ded-x kill" '+opts.delAttr+' aria-label="Remove">&times;</button>':'<span></span>';
     return '<div class="ded-row'+(opts.fuel?' fuel':'')+'"'+(opts.rid?' data-rid="'+esc(opts.rid)+'" style="cursor:pointer"':'')+'><div><span class="nm">'+opts.name+'</span><span class="meta">'+opts.meta+'</span></div><div class="am"><b>'+money(opts.amt)+'</b><small>'+opts.sub+'</small></div>'+kill+'</div>';
@@ -3847,18 +3945,19 @@ function renderReports(){
     var key=d.category||'Other';
     if(order.indexOf(key)<0&&!grouped[key])order.push(key);
     var del=d._recurring?'':(d.id!=null?'data-deld="'+esc(d.id)+'"':'');
-    pushG(key,dedRow({name:esc(d.name),meta:fmtDayDMY(d.date)+(d._recurring?' \u00b7 repeats':'')+(d.receiptId?' \u00b7 receipt':''),amt:d.amount,sub:gstBit(d.amount,d.gst!==false),delAttr:del,rid:d.receiptId||'',fuel:false}),d.amount,1);
+    pushG(key,dedRow({name:esc(d.name),meta:fmtDayDMY(d.date)+(d._recurring?' \u00b7 repeats':'')+(d.receiptId?' \u00b7 receipt':''),amt:d.amount,sub:gstBit(d.amount,d.gst!==false,d.bu),delAttr:del,rid:d.receiptId||'',fuel:false}),d.amount,1);
   });
   var keys=order.filter(function(k){return grouped[k]&&grouped[k].count>0});
   Object.keys(grouped).forEach(function(k){if(keys.indexOf(k)<0&&grouped[k]&&grouped[k].count>0)keys.push(k)});
   var totalDedCount=keys.reduce(function(s,k){return s+(grouped[k]?grouped[k].count:0)},0);
+  var catSpend=keys.reduce(function(s,k){return s+(grouped[k]?grouped[k].amt:0)},0);
 
   if(!window.dedCollapsedState) window.dedCollapsedState={};
   var allClosed=keys.length>0&&keys.every(function(k){return window.dedCollapsedState[k]===true});
 
   var outHtml='';
   if(keys.length>0){
-    outHtml+='<div class="ded-ctrl-bar"><span style="font-size:11.5px;font-weight:700;color:var(--head)">Categorised Expenses ('+totalDedCount+' item'+(totalDedCount===1?'':'s')+' \u00b7 '+money(a.dedTotal)+')</span><button type="button" class="ded-ctrl-btn" id="dedToggleAll">'+(allClosed?'Show all':'Hide all')+'</button></div>';
+    outHtml+='<div class="ded-ctrl-bar"><span style="font-size:11.5px;font-weight:700;color:var(--head)">Categorised Expenses ('+totalDedCount+' item'+(totalDedCount===1?'':'s')+' \u00b7 '+money(catSpend)+')</span><button type="button" class="ded-ctrl-btn" id="dedToggleAll">'+(allClosed?'Show all':'Hide all')+'</button></div>';
     outHtml+=keys.map(function(k){
       var isOpen=window.dedCollapsedState[k]!==true;
       return '<div class="cat-group '+(isOpen?'open':'')+'" data-cat="'+esc(k)+'">'
@@ -4159,8 +4258,8 @@ $('#expRcptFile')&&($('#expRcptFile').onchange=function(e){expRcptFile=e.target.
 /* [F9] CSV: quote fields, escape quotes, guard non-numeric values that start
    with a formula trigger so Excel/Sheets can't execute them */
 function csvCell(v){v=String(v==null?'':v);if(!/^-?\d+(\.\d+)?$/.test(v)&&/^[=+\-@\t]/.test(v))v="'"+v;if(/[",\n\r]/.test(v))v='"'+v.replace(/"/g,'""')+'"';return v}
-$('#csvBtn').onclick=function(){var rows=[['Date','Rego','TakeHome','Gross','DriverShare','EFTPOS','Cash','Square','Runs','FuelTotal','FuelIPaid','FuelOpPaid','HailTrips']];
-  entries.filter(function(e){return inRange(e.date)}).forEach(function(e){var fi=(e.fuelIPaid!=null?Number(e.fuelIPaid):(e.fuelPocket!=null?Number(e.fuelPocket):Number(e.fuel)||0));var fo=(e.fuelOpPaid!=null?Number(e.fuelOpPaid):(e.fuelCompany!=null?Number(e.fuelCompany):0));rows.push([e.date,e.rego,(Number(e.take)||0).toFixed(2),(Number(e.gross)||0).toFixed(2),entryShare(e).toFixed(2),(Number(e.eos)||0).toFixed(2),(Number(e.cash)||0).toFixed(2),(Number(e.square)||0).toFixed(2),((Number(e.runs)||0)*RUN).toFixed(2),(Number(e.fuel)||0).toFixed(2),fi.toFixed(2),fo.toFixed(2),Number(e.hail)||0])});
+$('#csvBtn').onclick=function(){var rows=[['Date','Rego','TakeHome','Gross','DriverShare','EFTPOS','Cash','Square','Accounts','Runs','FuelTotal','FuelIPaid','FuelOpPaid','HailTrips']];
+  entries.filter(function(e){return inRange(e.date)}).forEach(function(e){var fi=(e.fuelIPaid!=null?Number(e.fuelIPaid):(e.fuelPocket!=null?Number(e.fuelPocket):Number(e.fuel)||0));var fo=(e.fuelOpPaid!=null?Number(e.fuelOpPaid):(e.fuelCompany!=null?Number(e.fuelCompany):0));rows.push([e.date,e.rego,(Number(e.take)||0).toFixed(2),(Number(e.gross)||0).toFixed(2),entryShare(e).toFixed(2),(Number(e.eos)||0).toFixed(2),(Number(e.cash)||0).toFixed(2),(Number(e.square)||0).toFixed(2),entryAccounts(e).toFixed(2),((Number(e.runs)||0)*RUN).toFixed(2),(Number(e.fuel)||0).toFixed(2),fi.toFixed(2),fo.toFixed(2),Number(e.hail)||0])});
   var csv=rows.map(function(r){return r.map(csvCell).join(',')}).join('\r\n');
   var bl=new Blob([csv],{type:'text/csv'}),u=URL.createObjectURL(bl),an=document.createElement('a');an.href=u;an.download='fareo-report.csv';an.click();setTimeout(function(){URL.revokeObjectURL(u)},1000);toast('CSV exported')};
 /* ---------- settings ---------- */
