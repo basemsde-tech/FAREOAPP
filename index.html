@@ -975,7 +975,7 @@ html.fold-flex .home-btn{width:48px;height:48px}
           <button type="button" id="rcptNextBtn" aria-label="Next">Next &rsaquo;</button>
         </div>
         <div class="shift-rcpt-thumbs" id="rcptThumbs"></div>
-        <div class="shift-rcpt-acts">
+        <div class="shift-rcpt-acts" id="eosRcptActs" style="display:none">
           <button type="button" class="btn neutral" id="rcptAddMore" style="margin:0;padding:10px;font-size:12px">+ Add another EOS</button>
           <button type="button" class="btn neutral" id="rcptRemove" style="margin:0;padding:10px;font-size:12px;border-color:var(--dgr);color:var(--dgr)">Remove current</button>
         </div>
@@ -1608,8 +1608,11 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.30';
+var APP_VERSION='8.31';
 var CHANGELOG=[
+  {v:'8.31',date:'September 17, 2026',notes:[
+    ['Bug Fix','Log Shift EOS amount lines stay in sync after Back / Next, and empty-slip Add/Remove buttons stay hidden until a photo is attached.'],
+  ]},
   {v:'8.30',date:'September 17, 2026',notes:[
     ['UI/UX','Log Shift EOS amounts are add-a-line again (+ Add EOS). Hail is one trip count for the shift, not a separate value per slip.'],
   ]},
@@ -2192,6 +2195,7 @@ function updateReceiptUI(){
     var next=$('#rcptNextBtn');if(next)next.disabled=shiftRcptIdx>=n-1;
   }
   renderThumbs($('#rcptThumbs'), eosReceipts, shiftRcptIdx, function(i){shiftRcptIdx=i;updateReceiptUI()}, function(i){removeEosAt(i)});
+  var acts=$('#eosRcptActs');if(acts)acts.style.display=has?'grid':'none';
   var rem=$('#rcptRemove');if(rem)rem.disabled=!has;
 
   var fn=fuelReceipts.length, fcur=currentFuelReceipt(), fhas=fn>0;
@@ -2960,6 +2964,7 @@ function setSub(n){
   [1,2,3].forEach(function(k){$('[data-pane="'+k+'"]').style.display=k===n?'':'none'});
   $$('.stp').forEach(function(el){var k=+el.dataset.sub;el.classList.toggle('lit',k<=n);el.classList.toggle('on',k===n)});
   updateReceiptUI();
+  if(n===2)rowInputs();
   updateFooter();window.scrollTo({top:0,behavior:'smooth'});
 }
 function updateFooter(){
