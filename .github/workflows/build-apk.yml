@@ -1,10 +1,8 @@
+# Automatic APK CI is paused while Fareo ships as a web app / PWA.
+# The android/ project is kept. Add push/pull_request triggers again when you want APK builds.
 name: Build Android APK
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
