@@ -999,26 +999,20 @@ html.fold-flex .home-btn{width:48px;height:48px}
     </div>
     <div data-pane="2" style="display:none">
       <div class="card" style="margin-bottom:10px">
-        <h5><span class="dot" style="background:var(--inc)"></span>End of Shift<span class="help" data-help="Enter EOS dollars and hail. If you attached several slips, use Prev / Next — each slip keeps its own amounts and hail, summed for settlement." aria-label="Help">?</span><span class="sub-amt" id="eosSub">$0</span></h5>
-        <p style="font-size:11.5px;color:var(--mut);margin:0 0 8px;line-height:1.4">Enter EOS dollars and hail. If you attached several slips, use Prev / Next. Totals add up.</p>
-        <div class="shift-rcpt-nav" id="logEosNav" style="display:none">
-          <button type="button" id="logEosPrev" aria-label="Previous">&lsaquo; Prev</button>
-          <span class="rcpt-count" id="logEosCount">1 / 1</span>
-          <button type="button" id="logEosNext" aria-label="Next">Next &rsaquo;</button>
-        </div>
+        <h5><span class="dot" style="background:var(--inc)"></span>End of Shift<span class="help" data-help="Enter EOS dollar amounts. Tap + Add EOS for another line if you have more than one total. Hail is one trip count for the whole shift." aria-label="Help">?</span><span class="sub-amt" id="eosSub">$0</span></h5>
+        <p style="font-size:11.5px;color:var(--mut);margin:0 0 8px;line-height:1.4">Enter EOS dollars. Use + Add EOS for another line. Hail is one count for the shift.</p>
         <div class="log-dictate-row" id="logDictate">
           <div class="log-eos-dictate">
-            <label class="fl" for="eosThis">EOS this slip <span class="log-dictate-slip" id="slipIdxLabel">#1</span><span class="help" data-help="Dollar amount for this slip. Other slips keep their own amounts; all are summed for settlement." aria-label="Help">?</span></label>
-            <input id="eosThis" type="number" min="0" inputmode="decimal" placeholder="0.00" autocomplete="off">
-            <p class="log-dictate-sum" id="eosTotalHint">All slips · $0.00</p>
+            <label class="fl">EOS Takings <span class="help" data-help="One dollar field per line. Extra photos get a new line automatically; tap + Add EOS if you need another amount without a photo." aria-label="Help">?</span></label>
+            <div id="eosRows"></div>
+            <button class="add" id="addEos" type="button">+ Add EOS</button>
           </div>
           <div class="log-hail-dictate">
-            <div class="hail-head"><span class="dot" style="background:var(--dgr)"></span>Hail this slip <span class="danger" style="font-size:10px">req</span><span class="help" data-help="Rank / hail trips for this slip only. When Hail OCR is on it can auto-fill per slip. Totals sum for the CPV levy." aria-label="Help">?</span><span class="sub-amt" id="levyTag">$0</span></div>
+            <div class="hail-head"><span class="dot" style="background:var(--dgr)"></span>Hail <span class="danger" style="font-size:10px">req</span><span class="help" data-help="Rank / street-hail trips for the CPV levy. When Hail OCR is on, counts from attached slips are summed into this one field." aria-label="Help">?</span><span class="sub-amt" id="levyTag">$0</span></div>
             <div class="hailwrap">
-              <div class="hailamt"><small>This slip</small><b id="levyAmt">$0.00</b><span id="levyRate">$1.20 / trip</span></div>
-              <div class="counter"><button type="button" id="hailMinus" aria-label="Decrease hail">&minus;</button><input id="hailThis" type="number" min="0" inputmode="numeric" placeholder="0" autocomplete="off"><button type="button" id="hailPlus" aria-label="Increase hail">+</button></div>
+              <div class="hailamt"><small>Levy</small><b id="levyAmt">$0.00</b><span id="levyRate">$1.20 / trip</span></div>
+              <div class="counter"><button type="button" id="hailMinus" aria-label="Decrease hail">&minus;</button><input id="hail" type="number" min="0" inputmode="numeric" placeholder="0" autocomplete="off"><button type="button" id="hailPlus" aria-label="Increase hail">+</button></div>
             </div>
-            <p class="log-dictate-sum" id="hailTotalHint">All slips · 0 hail · $0.00 levy</p>
             <p id="hailOcrHint" style="display:none;margin:6px 0 0;font-size:10.5px;color:var(--on-dgr);line-height:1.35"></p>
           </div>
         </div>
@@ -1614,8 +1608,11 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.29';
+var APP_VERSION='8.30';
 var CHANGELOG=[
+  {v:'8.30',date:'September 17, 2026',notes:[
+    ['UI/UX','Log Shift EOS amounts are add-a-line again (+ Add EOS). Hail is one trip count for the shift, not a separate value per slip.'],
+  ]},
   {v:'8.29',date:'September 17, 2026',notes:[
     ['Bug Fix','Confirm and other sheets no longer sit under Home or Next, so Continue and Go back stay tappable.'],
   ]},
@@ -1952,7 +1949,7 @@ var clients=load('fareo_clients',[])||[];
 if(!Array.isArray(clients))clients=[];
 var runPlan=load('fareo_run_plan',[])||[];
 if(!Array.isArray(runPlan))runPlan=[];
-var draft=load('fareo_draft',null)||{date:todayStr(),eos:[''],hails:[''],cash:[{name:'',amount:0}],square:[{name:'',amount:0}],runs:0,accounts:[],fuel:[{amount:0,type:settings.fuel,opPaid:false}],hail:'',rego:'',receipt:false,receiptName:'',custom:{}};
+var draft=load('fareo_draft',null)||{date:todayStr(),eos:[''],cash:[{name:'',amount:0}],square:[{name:'',amount:0}],runs:0,accounts:[],fuel:[{amount:0,type:settings.fuel,opPaid:false}],hail:'',rego:'',receipt:false,receiptName:'',custom:{}};
 /* Backfill old/local/cloud draft shapes in one place so reloadAll() is safe too. */
 function normalizeDraft(d){
   d=(d&&typeof d==='object')?d:freshDraft('');
@@ -1966,11 +1963,11 @@ function normalizeDraft(d){
   if(!Array.isArray(d.accounts))d.accounts=[];
   if(!d.custom||typeof d.custom!=='object')d.custom={};
   if(!Array.isArray(d.eos)||!d.eos.length)d.eos=[''];
-  if(!Array.isArray(d.hails)){
-    d.hails=[];
-    if(String(d.hail==null?'':d.hail).trim()!=='')d.hails=[d.hail];
+  if((d.hail==null||String(d.hail).trim()==='')&&Array.isArray(d.hails)){
+    var hailSum=0,hailAny=false;
+    d.hails.forEach(function(v){if(String(v==null?'':v).trim()!==''){hailAny=true;hailSum+=nn(v)}});
+    if(hailAny)d.hail=hailSum;
   }
-  while(d.hails.length<d.eos.length)d.hails.push('');
   return d;
 }
 function draftHasWork(d){
@@ -1978,7 +1975,7 @@ function draftHasWork(d){
   return !!(d&&(
     d._edit||String(d.rego||'').trim()!==''||nn(d.runs)>0||
     (d.eos||[]).some(function(v){return nn(v)>0})||
-    (d.hails||[]).some(function(v){return String(v==null?'':v).trim()!==''})||
+    String(d.hail==null?'':d.hail).trim()!==''||
     rowsHave(d.cash)||rowsHave(d.square)||rowsHave(d.accounts)||rowsHave(d.fuel)||
     Object.keys(d.custom||{}).some(function(k){return nn(d.custom[k])>0})
   ));
@@ -2013,79 +2010,13 @@ function fileToAttach(f,label){
   if(f.type&&f.type.indexOf('image/')===0){try{url=URL.createObjectURL(f)}catch(_){url=''}}
   return {id:'sr'+Date.now()+Math.random().toString(36).slice(2,6),file:f,name:f.name||label,type:f.type||'',url:url,ocrHail:null,ocrDone:false};
 }
-function occupiedSlipCount(){
-  var eos=draft.eos||[], hails=draft.hails||[];
-  var last=-1, len=Math.max(eos.length,hails.length);
-  for(var i=0;i<len;i++){
-    if(String(eos[i]==null?'':eos[i]).trim()!==''||String(hails[i]==null?'':hails[i]).trim()!=='')last=i;
-  }
-  return last+1;
-}
-function slipSlotCount(){return Math.max(eosReceipts.length,occupiedSlipCount(),1)}
 function syncEosFieldsToAttachCount(){
-  if(!Array.isArray(draft.eos))draft.eos=[];
-  if(!Array.isArray(draft.hails))draft.hails=[];
-  var n=slipSlotCount();
+  if(!Array.isArray(draft.eos)||!draft.eos.length)draft.eos=[''];
+  var n=Math.max(eosReceipts.length,1);
   while(draft.eos.length<n)draft.eos.push('');
-  while(draft.hails.length<n)draft.hails.push('');
-  while(draft.eos.length>n)draft.eos.pop();
-  while(draft.hails.length>n)draft.hails.pop();
-  if(!draft.eos.length)draft.eos=[''];
-  if(!draft.hails.length)draft.hails=[''];
-  recomputeHailTotal();
-}
-function recomputeHailTotal(){
-  var n=slipSlotCount(), any=false, sum=0, arr=draft.hails||[];
-  for(var i=0;i<n && i<arr.length;i++){
-    if(String(arr[i]).trim()!==''){any=true;sum+=nn(arr[i])}
-  }
-  draft.hail=any?sum:'';
-}
-function currentSlipIndex(){
-  var n=slipSlotCount();
-  shiftRcptIdx=Math.max(0,Math.min(n-1,shiftRcptIdx));
-  return shiftRcptIdx;
 }
 function hailEnteredOk(){
-  syncEosFieldsToAttachCount();
-  var n=slipSlotCount();
-  for(var i=0;i<n;i++){
-    if(String(draft.hails[i]).trim()==='')return false;
-  }
-  return true;
-}
-function updateDictateHints(){
-  var n=slipSlotCount(), i=currentSlipIndex();
-  var sl=$('#slipIdxLabel');if(sl)sl.textContent='#'+(i+1);
-  var eth=$('#eosTotalHint');
-  if(eth)eth.textContent=n>1?('All '+n+' slips · '+money(eosT())):('EOS total · '+money(eosT()));
-  var hth=$('#hailTotalHint');
-  if(hth){
-    var ht=nn(draft.hail);
-    hth.textContent=n>1?('All '+n+' slips · '+ht+' hail · '+money(levyT())+' levy'):(ht+' hail · '+money(levyT())+' levy');
-  }
-  var la=$('#levyAmt');
-  if(la)la.textContent=money(nn(draft.hails[i])*levyRate());
-}
-function fillDictateForCurrentSlip(){
-  syncEosFieldsToAttachCount();
-  var i=currentSlipIndex();
-  var eo=$('#eosThis');
-  if(eo){
-    var ev=draft.eos[i];
-    eo.value=(ev===''||ev==null)?'':ev;
-    eo.disabled=false;
-  }
-  var hi=$('#hailThis');
-  if(hi){
-    var hv=draft.hails[i];
-    hi.value=(hv===''||hv==null)?'':hv;
-    hi.disabled=false;
-  }
-  var hm=$('#hailMinus'), hp=$('#hailPlus');
-  if(hm)hm.disabled=false;
-  if(hp)hp.disabled=false;
-  updateDictateHints();
+  return String(draft.hail==null?'':draft.hail).trim()!=='';
 }
 function fuelReceiptRequiredOk(){
   if(!fuelReceipts.length)return true;
@@ -2260,14 +2191,6 @@ function updateReceiptUI(){
     var prev=$('#rcptPrevBtn');if(prev)prev.disabled=shiftRcptIdx<=0;
     var next=$('#rcptNextBtn');if(next)next.disabled=shiftRcptIdx>=n-1;
   }
-  var lnav=$('#logEosNav');
-  if(lnav){
-    var slots=slipSlotCount(), si=currentSlipIndex();
-    lnav.style.display=slots>1?'flex':'none';
-    var lcnt=$('#logEosCount');if(lcnt)lcnt.textContent=(si+1)+' / '+slots;
-    var lp=$('#logEosPrev');if(lp)lp.disabled=si<=0;
-    var ln=$('#logEosNext');if(ln)ln.disabled=si>=slots-1;
-  }
   renderThumbs($('#rcptThumbs'), eosReceipts, shiftRcptIdx, function(i){shiftRcptIdx=i;updateReceiptUI()}, function(i){removeEosAt(i)});
   var rem=$('#rcptRemove');if(rem)rem.disabled=!has;
 
@@ -2280,9 +2203,7 @@ function updateReceiptUI(){
   var badge=$('#fuelReqBadge');if(badge)badge.style.display=fhas?'inline':'none';
 
   syncAttachOcrHint();
-  fillDictateForCurrentSlip();
   if(typeof updateFooter==='function')updateFooter();
-  if(typeof rowInputs==='function'){/* keep eos rows in sync after attach count change */}
 }
 function syncAttachOcrHint(){
   var hint=$('#eosAttachHint');
@@ -2298,10 +2219,6 @@ function removeEosAt(idx){
   if(idx<0||idx>=eosReceipts.length)return;
   var r=eosReceipts[idx];if(r&&r.url){try{URL.revokeObjectURL(r.url)}catch(_){}}
   eosReceipts.splice(idx,1);
-  if(draft.eos.length>idx)draft.eos.splice(idx,1);
-  if(draft.hails&&draft.hails.length>idx)draft.hails.splice(idx,1);
-  if(!draft.eos.length)draft.eos=[''];
-  if(!draft.hails||!draft.hails.length)draft.hails=[''];
   shiftRcptIdx=Math.max(0,Math.min(eosReceipts.length-1,shiftRcptIdx));
   syncEosFieldsToAttachCount();
   syncDraftReceiptFlag();updateReceiptUI();rowInputs();
@@ -2363,26 +2280,25 @@ async function ocrHailFromUrl(url){
   var result=await T.recognize(url,'eng',{logger:function(){}});
   return parseHailOcrText(result&&result.data&&result.data.text);
 }
-/* Per-slip OCR hail → draft.hails[i], then sum into draft.hail for levy. */
+/* Sum hail OCR from every EOS attachment and write the total into the hail field. */
 function applyHailTotalFromOcr(){
-  syncEosFieldsToAttachCount();
   var total=0, hits=0, pending=0, missed=0;
-  eosReceipts.forEach(function(r,i){
+  eosReceipts.forEach(function(r){
     if(!r)return;
-    if(r.ocrHail!=null&&isFinite(r.ocrHail)){
-      draft.hails[i]=Number(r.ocrHail);
-      total+=Number(r.ocrHail);hits++;
-    }else if(!r.ocrDone){pending++}
+    if(r.ocrHail!=null&&isFinite(r.ocrHail)){total+=Number(r.ocrHail);hits++}
+    else if(!r.ocrDone){pending++}
     else{missed++}
   });
-  recomputeHailTotal();
-  fillDictateForCurrentSlip();
+  if(hits>0){
+    draft.hail=total;
+    var hi=$('#hail');if(hi)hi.value=String(total);
+  }
   var hh=$('#hailOcrHint');
   if(hh){
     if(!settings.ocrHail){hh.style.display='none'}
     else{
       hh.style.display=hits===0&&eosReceipts.length>0?'block':'none';
-      hh.textContent='Enter hail on each slip if OCR could not read it.';
+      hh.textContent='Enter hail / rank count manually if OCR could not read it.';
     }
   }
   return {total:total, hits:hits, pending:pending, missed:missed};
@@ -2411,29 +2327,29 @@ async function runHailOcrFrom(startIdx){
     rowInputs();render();
     if(st){
       if(agg.hits>0){
-        st.textContent='Hail total '+agg.total+' (sum of '+agg.hits+' slip'+(agg.hits===1?'':'s')+')'+(agg.missed?' — check remaining slips.':' — filled per slip.');
+        st.textContent='Hail total '+agg.total+' (sum of '+agg.hits+' slip'+(agg.hits===1?'':'s')+')'+(agg.missed?' — check remaining slips.':' — filled into Hail.');
       }else{
-        st.textContent='Hail not detected — enter hail on each slip below.';
+        st.textContent='Hail not detected — enter the count on Log Shift.';
       }
     }
     if(agg.hits===0){
       notifyHailOcrIssue(
         'Could not read hail count',
-        'OCR could not find a Rank / Hail number on '+(eosReceipts.length===1?'this End of Shift slip':'your End of Shift slips')+'. Enter hail on Log Shift (use Prev / Next when you have several slips).'
+        'OCR could not find a Rank / Hail number on '+(eosReceipts.length===1?'this End of Shift slip':'your End of Shift slips')+'. Enter the hail trip count on Log Shift.'
       );
     }else if(agg.missed>0){
       notifyHailOcrIssue(
         'Hail partially read',
-        'Filled hail on '+agg.hits+' slip'+(agg.hits===1?'':'s')+' (total '+agg.total+'). Check remaining slips with Prev / Next.'
+        'Filled hail from '+agg.hits+' slip'+(agg.hits===1?'':'s')+' (total '+agg.total+'). Check the Hail field on Log Shift.'
       );
     }
   }catch(e){
     eosReceipts.forEach(function(r,i){if(i>=startIdx&&!r.ocrDone){r.ocrDone=true;r.ocrHail=null}});
     applyHailTotalFromOcr();
-    if(st)st.textContent='Hail reading unavailable — enter hail on each slip.';
+    if(st)st.textContent='Hail reading unavailable — enter the hail count on Log Shift.';
     notifyHailOcrIssue(
       'Hail reading unavailable',
-      'OCR could not run (offline or blocked). Enter the hail / rank count on each End of Shift slip.'
+      'OCR could not run (offline or blocked). Enter the hail / rank count on Log Shift.'
     );
   }
 }
@@ -2715,9 +2631,7 @@ async function buildReceiptCollageFile(){
   if($('#rzReset'))$('#rzReset').onclick=function(){rz.scale=1;rz.x=0;rz.y=0;rzApply()};
   window.addEventListener('resize',function(){if($('#rcptZoom')&&$('#rcptZoom').classList.contains('show'))rzFitImage()});
 })();
-/* Prev / Next on Log Shift switches which slip’s EOS $ and hail you are editing. */
-if($('#logEosPrev'))$('#logEosPrev').onclick=function(){shiftRcptIdx=Math.max(0,shiftRcptIdx-1);updateReceiptUI()};
-if($('#logEosNext'))$('#logEosNext').onclick=function(){shiftRcptIdx=Math.min(slipSlotCount()-1,shiftRcptIdx+1);updateReceiptUI()};
+/* Receipt zoom Prev / Next stay on the Attach step only. */
 
 var repRange={from:null,to:null,name:""};
 var trackQ=null;
@@ -2835,11 +2749,7 @@ function safeFormula(expr,vars){
   var r=out.pop();return (out.length===0&&isFinite(r))?r:null}
 
 /* ---------- calc ---------- */
-function eosT(){
-  var n=slipSlotCount(), arr=draft.eos||[], s=0;
-  for(var i=0;i<n && i<arr.length;i++)s+=nn(arr[i]);
-  return s;
-}
+function eosT(){return (draft.eos||[]).reduce(function(a,b){return a+nn(b)},0)}
 function cashT(){return draft.cash.reduce(function(a,b){return a+nn(b.amount)},0)}
 function squareT(){return draft.square.reduce(function(a,b){return a+nn(b.amount)},0)}
 function acctT(){return draft.accounts.reduce(function(a,b){return a+nn(b.amount)},0)}
@@ -2883,7 +2793,8 @@ function rowInputs(){
   if($('#todayBtn'))$('#todayBtn').classList.toggle('on',isToday);
   if($('#yesterBtn'))$('#yesterBtn').classList.toggle('on',isYest);
   var LA=settings.autocomplete?' list="nameList"':'';
-  fillDictateForCurrentSlip();
+  $('#eosRows').innerHTML=draft.eos.map(function(v,i){return '<div class="two" style="grid-template-columns:1fr 34px"><input type="number" min="0" inputmode="decimal" data-eos="'+i+'" value="'+esc(v||'')+'" placeholder="EOS '+(i+1)+'"><button class="x" data-deos="'+i+'">&times;</button></div>'}).join('');
+  var hailEl=$('#hail');if(hailEl)hailEl.value=draft.hail==null||draft.hail===''?'':draft.hail;
   $('#cashRows').innerHTML=draft.cash.map(function(r,i){return '<div class="mini"><input data-cn="'+i+'"'+LA+' value="'+esc(r.name||'')+'" placeholder="Payer"><input type="number" min="0" inputmode="decimal" data-ca="'+i+'" value="'+esc(r.amount||'')+'" placeholder="Amount"><button class="x" data-dc="'+i+'">&times;</button></div>'}).join('');
   $('#squareRows').innerHTML=draft.square.map(function(r,i){return '<div class="mini"><input data-sn="'+i+'"'+LA+' value="'+esc(r.name||'')+'" placeholder="Payer"><input type="number" min="0" inputmode="decimal" data-sa="'+i+'" value="'+esc(r.amount||'')+'" placeholder="Amount"><button class="x" data-ds="'+i+'">&times;</button></div>'}).join('');
   $('#acctRows').innerHTML=draft.accounts.map(function(r,i){return '<div class="mini"><input data-an="'+i+'"'+LA+' value="'+esc(r.name||'')+'" placeholder="Account"><input type="number" min="0" inputmode="decimal" data-aa="'+i+'" value="'+esc(r.amount||'')+'" placeholder="Amount"><button class="x" data-da="'+i+'">&times;</button></div>'}).join('');
@@ -2929,7 +2840,7 @@ function render(){
   $('#fuelSub').textContent=money(fuelT());
   $('#levyTag').textContent=money(levyT())+' levy';
   $('#levyRate').textContent=money(levyRate())+' / trip';
-  updateDictateHints();
+  var la=$('#levyAmt');if(la)la.textContent=money(levyT());
   updateFooter();
   buildPreview();persist();
 }
@@ -2942,14 +2853,8 @@ function buildPreview(){
 /* ---------- shift interactions ---------- */
 document.addEventListener('input',function(e){
   var d=e.target.dataset;var v=e.target.value;
-  if(e.target.id==='eosThis'){
-    syncEosFieldsToAttachCount();
-    draft.eos[currentSlipIndex()]=v;
-  }else if(e.target.id==='hailThis'){
-    syncEosFieldsToAttachCount();
-    draft.hails[currentSlipIndex()]=v;
-    recomputeHailTotal();
-  }else if(d.eos!=null)draft.eos[d.eos]=v;
+  if(e.target.id==='hail')draft.hail=v;
+  else if(d.eos!=null)draft.eos[d.eos]=v;
   else if(d.cn!=null)draft.cash[d.cn].name=v;
   else if(d.ca!=null)draft.cash[d.ca].amount=v;
   else if(d.sn!=null)draft.square[d.sn].name=v;
@@ -2979,14 +2884,14 @@ document.addEventListener('click',function(e){
     }else{draft.fuel[i].opPaid=false;}
     rowInputs();render();return;}
   if(t.closest&&t.closest('.x')){var b=t.closest('.x');d=b.dataset;
-    if(d.deos!=null){draft.eos.splice(d.deos,1);if(draft.hails)draft.hails.splice(d.deos,1);if(!draft.eos.length)draft.eos=[''];if(!draft.hails||!draft.hails.length)draft.hails=[''];recomputeHailTotal()}
+    if(d.deos!=null){draft.eos.splice(d.deos,1);if(!draft.eos.length)draft.eos=['']}
     if(d.dc!=null){draft.cash.splice(d.dc,1);if(!draft.cash.length)draft.cash=[{name:'',amount:0}]}
     if(d.ds!=null){draft.square.splice(d.ds,1);if(!draft.square.length)draft.square=[{name:'',amount:0}]}
     if(d.da!=null)draft.accounts.splice(d.da,1);
     if(d.df!=null){draft.fuel.splice(d.df,1);if(!draft.fuel.length)draft.fuel=[{amount:0,type:settings.fuel,opPaid:false}]}
     rowInputs();render();return;}
 });
-function freshDraft(keepRego){return {date:todayStr(),eos:[''],hails:[''],cash:[{name:'',amount:0}],square:[{name:'',amount:0}],runs:0,accounts:[],fuel:[{amount:0,type:settings.fuel,opPaid:false}],hail:'',rego:keepRego||'',receipt:false,receiptName:'',custom:{}}}
+function freshDraft(keepRego){return {date:todayStr(),eos:[''],cash:[{name:'',amount:0}],square:[{name:'',amount:0}],runs:0,accounts:[],fuel:[{amount:0,type:settings.fuel,opPaid:false}],hail:'',rego:keepRego||'',receipt:false,receiptName:'',custom:{}}}
 /* Date picker handlers */
 function setDraftDate(d){draft.date=d;persist();rowInputs();buildPreview();}
 $('#todayBtn').onclick=function(){setDraftDate(todayStr())};
@@ -2998,22 +2903,9 @@ $('#addCash').onclick=function(){draft.cash.push({name:'',amount:0});rowInputs()
 $('#addSquare').onclick=function(){draft.square.push({name:'',amount:0});rowInputs();render()};
 $('#addAcct').onclick=function(){draft.accounts.push({name:'',amount:0});rowInputs();render()};
 $('#addFuel').onclick=function(){draft.fuel.push({amount:0,type:settings.fuel,opPaid:false});rowInputs();render()};
-$('#hailMinus').onclick=function(){
-  syncEosFieldsToAttachCount();
-  var i=currentSlipIndex();
-  draft.hails[i]=Math.max(0,nn(draft.hails[i])-1);
-  recomputeHailTotal();
-  fillDictateForCurrentSlip();
-  render();
-};
-$('#hailPlus').onclick=function(){
-  syncEosFieldsToAttachCount();
-  var i=currentSlipIndex();
-  draft.hails[i]=nn(draft.hails[i])+1;
-  recomputeHailTotal();
-  fillDictateForCurrentSlip();
-  render();
-};
+if($('#addEos'))$('#addEos').onclick=function(){draft.eos.push('');rowInputs();render()};
+$('#hailMinus').onclick=function(){draft.hail=Math.max(0,nn(draft.hail)-1);var h=$('#hail');if(h)h.value=draft.hail;render()};
+$('#hailPlus').onclick=function(){draft.hail=nn(draft.hail)+1;var h=$('#hail');if(h)h.value=draft.hail;render()};
 $('#rcpt').onclick=function(){$('#rcptFile').click()};
 if($('#rcptAddMore'))$('#rcptAddMore').onclick=function(){$('#rcptFile').click()};
 if($('#rcptPrevBtn'))$('#rcptPrevBtn').onclick=function(){shiftRcptIdx=Math.max(0,shiftRcptIdx-1);updateReceiptUI()};
@@ -3050,7 +2942,7 @@ $('#clearShift').onclick=function(){
    Gates: hail; fuel amount if fuel receipt; confirm if no EOS photo; rego on share. */
 var curSub=1;
 function gateFailMsg(){
-  if(!hailEnteredOk())return{text:'Enter hail / rank for this shift (use Prev / Next when you have several slips).',toast:'Hail required',pane:2};
+  if(!hailEnteredOk())return{text:'Enter hail / rank trips (required for levy).',toast:'Hail required',pane:2};
   if(!fuelReceiptRequiredOk())return{text:'Fuel receipt attached — enter the fuel amount on Log Shift.',toast:'Fuel amount required',pane:2};
   return null;
 }
@@ -3186,7 +3078,7 @@ function saveShift(shared){
     fuel:fuelT(),fuelIPaid:fuelIPaidT(),fuelOpPaid:fuelOpPaidT(),fuelByType:{Diesel:0,Petrol:0,LPG:0},
     custom:custom,hail:nn(draft.hail),eos:eosT(),runs:nn(draft.runs),receipt:draft.receipt,
     fuelCount:draft.fuel.filter(function(f){return nn(f.amount)>0}).length,
-    snap:JSON.parse(JSON.stringify({date:draft.date,rego:draft.rego,eos:draft.eos,hails:draft.hails,cash:draft.cash,square:draft.square,accounts:draft.accounts,runs:draft.runs,fuel:draft.fuel,hail:draft.hail,custom:draft.custom}))};
+    snap:JSON.parse(JSON.stringify({date:draft.date,rego:draft.rego,eos:draft.eos,cash:draft.cash,square:draft.square,accounts:draft.accounts,runs:draft.runs,fuel:draft.fuel,hail:draft.hail,custom:draft.custom}))};
   draft.fuel.forEach(function(f){e.fuelByType[f.type]=(e.fuelByType[f.type]||0)+nn(f.amount)});
   draft.cash.forEach(function(c){addName(c.name)});draft.square.forEach(function(c){addName(c.name)});draft.accounts.forEach(function(a){addName(a.name)});
   entries=entries.filter(function(x){return !(x.date===e.date&&x.rego===e.rego)});
@@ -3368,14 +3260,15 @@ function openAddEntry(){curEntryId=null;$('#entryTitle').textContent='Add entry'
 function loadEntryToCalc(e){var sp=e.snap;
   if(sp){
     var eos=(sp.eos&&sp.eos.length)?sp.eos.slice():[''];
-    var hails=(sp.hails&&sp.hails.length)?sp.hails.slice():eos.map(function(_,i){return (i===0&&sp.hail!=null&&String(sp.hail).trim()!=='')?sp.hail:''});
-    while(hails.length<eos.length)hails.push('');
-    draft={_edit:true,date:sp.date,rego:sp.rego,eos:eos,hails:hails,cash:(sp.cash&&sp.cash.length)?JSON.parse(JSON.stringify(sp.cash)):[{name:'',amount:0}],square:(sp.square&&sp.square.length)?JSON.parse(JSON.stringify(sp.square)):[{name:'',amount:0}],accounts:sp.accounts?JSON.parse(JSON.stringify(sp.accounts)):[],runs:sp.runs||0,fuel:(sp.fuel&&sp.fuel.length)?JSON.parse(JSON.stringify(sp.fuel)):[{amount:0,type:settings.fuel,opPaid:false}],hail:(sp.hail!=null?sp.hail:''),receipt:false,receiptName:'',custom:sp.custom?JSON.parse(JSON.stringify(sp.custom)):{}};
+    var hail=sp.hail;
+    if((hail==null||String(hail).trim()==='')&&Array.isArray(sp.hails)){
+      var hs=0,anyH=false;sp.hails.forEach(function(v){if(String(v==null?'':v).trim()!==''){anyH=true;hs+=nn(v)}});
+      if(anyH)hail=hs;
+    }
+    draft={_edit:true,date:sp.date,rego:sp.rego,eos:eos,cash:(sp.cash&&sp.cash.length)?JSON.parse(JSON.stringify(sp.cash)):[{name:'',amount:0}],square:(sp.square&&sp.square.length)?JSON.parse(JSON.stringify(sp.square)):[{name:'',amount:0}],accounts:sp.accounts?JSON.parse(JSON.stringify(sp.accounts)):[],runs:sp.runs||0,fuel:(sp.fuel&&sp.fuel.length)?JSON.parse(JSON.stringify(sp.fuel)):[{amount:0,type:settings.fuel,opPaid:false}],hail:(hail!=null?hail:''),receipt:false,receiptName:'',custom:sp.custom?JSON.parse(JSON.stringify(sp.custom)):{}};
     draft.fuel.forEach(function(f){if(f.opPaid==null)f.opPaid=(f.reimbursed===true);delete f.reimbursed});
-    recomputeHailTotal();
   }else{
-    draft={_edit:true,date:e.date,rego:e.rego,eos:[e.eos||''],hails:[e.hail!=null?e.hail:''],cash:[{name:'',amount:e.cash||0}],square:[{name:'',amount:e.square||0}],accounts:[],runs:e.runs||0,fuel:[{amount:e.fuel||0,type:'Diesel',opPaid:(e.fuelOpPaid>0?true:false)}],hail:(e.hail!=null?e.hail:''),receipt:false,receiptName:'',custom:e.custom?JSON.parse(JSON.stringify(e.custom)):{}};
-    recomputeHailTotal();
+    draft={_edit:true,date:e.date,rego:e.rego,eos:[e.eos||''],cash:[{name:'',amount:e.cash||0}],square:[{name:'',amount:e.square||0}],accounts:[],runs:e.runs||0,fuel:[{amount:e.fuel||0,type:'Diesel',opPaid:(e.fuelOpPaid>0?true:false)}],hail:(e.hail!=null?e.hail:''),receipt:false,receiptName:'',custom:e.custom?JSON.parse(JSON.stringify(e.custom)):{}};
   }
   clearReceiptAttach();
   persist();rowInputs();render();}
