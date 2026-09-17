@@ -737,11 +737,28 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
 .run-seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
 .run-seg button{border:1px solid var(--bd2);background:var(--card);color:var(--mut);border-radius:10px;padding:9px;font-size:12.5px;font-weight:800;cursor:pointer}
 .run-seg button.on{background:var(--inc-bg);color:var(--on-inc);border-color:var(--inc)}
-.cli{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--bd);cursor:pointer}
+.cli{display:flex;flex-direction:column;align-items:stretch;gap:0;padding:12px 0;border-bottom:1px solid var(--bd);cursor:default}
 .cli:last-child{border-bottom:0}
+.cli-main{display:flex;align-items:center;gap:10px;width:100%;cursor:pointer}
+.cli-meta{flex:1;min-width:0}
 .cli-av{width:40px;height:40px;border-radius:50%;background:var(--inc-bg);color:var(--on-inc);display:grid;place-items:center;font-weight:800;font-size:13px;flex:0 0 auto}
-.cli b{display:block;font-size:14.5px;color:var(--head)}
-.cli span{display:block;font-size:11.5px;color:var(--mut);margin-top:1px}
+.cli b,.cli-meta b{display:block;font-size:14.5px;color:var(--head)}
+.cli-meta .cli-sub{display:block;font-size:11.5px;color:var(--mut);margin-top:1px}
+.cli-addrs{display:flex;flex-direction:column;gap:6px;margin:8px 0 0 50px}
+.cli-addr{background:var(--field);border:1px solid var(--bd);border-radius:10px;padding:8px 9px}
+.cli-addr-row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.cli-addr-meta{min-width:0;flex:1}
+.cli-addr-kind{display:block;font-size:10px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--inc)}
+.cli-addr-line{display:block;font-size:12.5px;color:var(--body);margin-top:2px;word-break:break-word;line-height:1.35}
+.cli-addrs-empty{font-size:12px;color:var(--mut);padding:4px 0 0;line-height:1.4}
+.cli-addr-acts{display:flex;gap:4px;flex:0 0 auto}
+.cli-addr-acts button{border:1px solid var(--bd2);background:var(--card);color:var(--head);border-radius:8px;padding:6px 8px;font-size:10.5px;font-weight:800;cursor:pointer}
+.cli-addr-acts button.del{color:var(--dgr);border-color:var(--dgr)}
+.addr-card.hi{box-shadow:0 0 0 2px var(--inc)}
+.addr-empty-hint{font-size:11.5px;color:var(--mut);margin:0 0 6px;line-height:1.4}
+.share-addr-opts{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.share-addr-opts button{width:100%;text-align:left;padding:12px 14px;border:1.5px solid var(--bd2);background:var(--card);color:var(--head);border-radius:12px;font-weight:700;cursor:pointer}
+.share-addr-opts button small{display:block;font-size:11px;color:var(--mut);font-weight:500;margin-top:3px;line-height:1.35}
 .cli-go{width:34px;height:34px;border:1px solid var(--bd2);background:var(--field);color:var(--head);border-radius:10px;display:grid;place-items:center;cursor:pointer;flex:0 0 auto;padding:0;transition:transform .12s,background .12s,color .12s;-webkit-tap-highlight-color:transparent}
 .cli-go:active{transform:scale(.92)}
 .cli-go svg{width:16px;height:16px;pointer-events:none}
@@ -813,7 +830,7 @@ button,a,.tgl,.chip,.filt,.preset,.sst,.stp,.cli,.tr,.run-client-chip{-webkit-ta
   .trail button:hover,.theme:hover{background:var(--field);border-color:var(--inc)}
   .tile:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
   .cli:hover,.tr.wk-row:hover,.set:hover{background:var(--field)}
-  .preset:hover,.pickopt:hover,.filt:hover,.q button:hover{border-color:var(--inc)}
+  .preset:hover,.pickopt:hover,.filt:hover,.q button:hover,.share-addr-opts button:hover{border-color:var(--inc)}
   .hub-wheel .hub-sat:hover{border-color:var(--inc);transform:rotate(var(--a)) translateY(calc(var(--orbit) * -1)) rotate(calc(var(--a) * -1)) scale(1.06)}
   .home-btn:hover{transform:translateX(-50%) translateY(-2px)}
   .sfoot .btn:hover{transform:translateY(-2px) scale(1.04)}
@@ -838,6 +855,7 @@ button,a,.tgl,.chip,.filt,.preset,.sst,.stp,.cli,.tr,.run-client-chip{-webkit-ta
   .sfoot .btn{width:44px;height:44px;min-width:44px;min-height:44px}
   .sfoot .btn svg{width:20px;height:20px}
   .sfoot-gap{width:62px}
+  .cli-addrs{margin-left:0}
 }
 @media (min-width:600px){
   .body-p{padding:6px 22px 18px}
@@ -1152,11 +1170,11 @@ html.fold-flex .sfoot-gap{width:0}
         <button type="button" class="btn" onclick="go('runs')" style="width:auto;padding:8px 14px;font-size:12px;margin:0">Go to Runs &rsaquo;</button>
       </div>
     </div>
-    <input class="cl-search" id="bookSearch" placeholder="Search name or nickname" autocomplete="off">
+    <input class="cl-search" id="bookSearch" placeholder="Search name, nickname, or address" autocomplete="off">
     <div class="card" style="margin-bottom:0">
       <h5><span class="dot" style="background:var(--inc)"></span>Clients<span style="margin-left:auto;font-size:11px;color:var(--mut);font-weight:600" id="cliCount">0</span></h5>
       <div id="cliList"></div>
-      <div class="ded-empty" id="cliEmpty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><b>No clients yet</b><span>Add a name, nickname, and the addresses you actually drive to.</span></div>
+      <div class="ded-empty" id="cliEmpty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><b>No clients yet</b><span>Add a passenger, then save Home, Work, Day program, or a custom address.</span></div>
       <button class="btn" id="addClient" style="margin-top:10px">+ Add client</button>
     </div>
   </section>
@@ -1515,12 +1533,13 @@ html.fold-flex .sfoot-gap{width:0}
 <div class="modal" id="clientModal"><div class="sheet" style="max-height:92vh;overflow:auto">
   <div class="grip"></div>
   <h3 id="clTitle">Client &amp; Address</h3>
-  <p class="csub">Add passenger name and address. Use commas (,) to add multiple passengers at this address.</p>
+  <p class="csub">Add a passenger, then save one or more addresses (Home, Work, Day program, Custom). Commas in the name field link extra riders to the same contact.</p>
   
   <label class="fl">Passenger Name(s)</label>
   <input id="clName" placeholder="e.g. Holly Nguyen, David Nguyen" autocomplete="name">
 
-  <label class="fl" style="margin-top:8px">Address</label>
+  <label class="fl" style="margin-top:8px">Addresses</label>
+  <p class="addr-empty-hint">Tap a category, type the street, or paste a Maps link. Add as many as you drive to.</p>
   <div id="clAddrs"></div>
   <button class="add" id="clAddAddr" type="button" style="margin-top:4px">+ Add another address</button>
 
@@ -1556,6 +1575,14 @@ html.fold-flex .sfoot-gap{width:0}
 
   <button class="btn" id="clSave" style="margin-top:14px">Save client</button>
   <div class="two" style="margin-top:9px"><button class="btn neutral" id="clCancel">Cancel</button><button class="btn neutral" id="clDelete" style="border-color:var(--dgr);color:var(--dgr);display:none">Delete</button></div>
+</div></div>
+<div class="modal" id="shareAddrModal"><div class="sheet">
+  <div class="grip"></div>
+  <h3>Share address</h3>
+  <p class="csub" id="shareAddrWho">Choose which address to send.</p>
+  <div class="share-addr-opts" id="shareAddrOpts"></div>
+  <button class="btn" id="shareAddrAll" style="margin-top:12px">Share all addresses</button>
+  <button class="btn neutral" id="shareAddrCancel" style="margin-top:8px">Cancel</button>
 </div></div>
 <div class="modal" id="addStopModal"><div class="sheet" style="max-height:92vh;overflow:auto">
   <div class="grip"></div>
@@ -1631,6 +1658,9 @@ var RUN=5, RATE=1.20;
 var APP_VERSION='8.32';
 var CHANGELOG=[
   {v:'8.32',date:'September 17, 2026',notes:[
+    ['Feature','Address Book: multiple addresses per contact (Home, Work, Day program, Custom) with Edit and Delete on the profile.'],
+    ['Feature','Share asks which address to send, or Share all, with a clean Maps-ready message.'],
+    ['Bug Fix','Saving a duplicate address on the same contact now warns before you keep both copies.'],
     ['UI/UX','Log Shift Next and Back are compact arrow buttons beside Home. They no longer cover form fields or other screens.'],
   ]},
   {v:'8.31',date:'September 17, 2026',notes:[
@@ -4291,6 +4321,45 @@ function uid(p){return (p||'id')+Date.now().toString(36)+Math.random().toString(
 function clientLabel(c){return ((c.nick||'').trim()||(c.name||'').trim()||'Client')}
 function clientSub(c){var n=(c.name||'').trim(),k=(c.nick||'').trim();return (k&&n&&k!==n)?n:''}
 function clientInitials(c){var s=clientLabel(c);var p=s.split(/[\s,]+/).filter(Boolean);return ((p[0]||'?')[0]+(p[1]?p[1][0]:'')).toUpperCase()}
+function addrLabel(a){return String((a&&a.title)||'').trim()||'Address'}
+function filledAddrs(c){return ((c&&c.addresses)||[]).filter(function(a){return a&&String(a.line||'').trim()})}
+function firstFilledAddr(c){var list=filledAddrs(c);return list[0]||null}
+function normAddrLine(s){return String(s||'').toLowerCase().replace(/[^\w\s]/g,' ').replace(/\s+/g,' ').trim()}
+function dupAddrIn(list,line,exceptId){
+  var key=normAddrLine(line);if(!key)return null;
+  list=list||[];
+  for(var i=0;i<list.length;i++){
+    if(exceptId&&list[i].id===exceptId)continue;
+    if(normAddrLine(list[i].line)===key)return list[i];
+  }
+  return null;
+}
+function firstDupAddr(list){
+  var seen={};
+  for(var i=0;i<(list||[]).length;i++){
+    var k=normAddrLine(list[i]&&list[i].line);
+    if(!k)continue;
+    if(seen[k])return list[i];
+    seen[k]=list[i];
+  }
+  return null;
+}
+function presetOn(title,p){
+  var t=String(title||'').toLowerCase(),n=String(p||'').toLowerCase();
+  if(t===n)return true;
+  if(n==='custom'&&(t==='other'||t==='custom'))return true;
+  if(n==='day program'&&(t==='day program'||t==='dayprogram'))return true;
+  return false;
+}
+function nextAddrPreset(list){
+  var used=(list||[]).map(function(a){return String(a.title||'').toLowerCase()});
+  for(var i=0;i<ADDR_PRESETS.length;i++){
+    var p=ADDR_PRESETS[i].toLowerCase();
+    var hit=used.indexOf(p)>=0||(p==='custom'&&used.indexOf('other')>=0);
+    if(!hit)return ADDR_PRESETS[i];
+  }
+  return 'Custom';
+}
 function blankAddr(){return {id:uid('a'),title:'Home',kind:'home',line:'',lat:null,lng:null}}
 function blankClient(){return {id:uid('c'),name:'',nick:'',phone:'',carer:'',notes:'',flags:{wheelchair:false,nonverbal:false,extra:false,assist:false},school:{on:false,days:[],am:true,pm:true,pickup:'',drop:''},addresses:[blankAddr()]}}
 function findClient(id){for(var i=0;i<clients.length;i++)if(clients[i].id===id)return clients[i];return null}
@@ -4375,6 +4444,59 @@ function shareAddr(addr,owner){
   if(navigator.share){navigator.share({text:txt,title:owner?clientLabel(owner):'Address'}).catch(function(){copyAddr(addr,owner)});return}
   copyAddr(addr,owner);
 }
+function shareAllAddrs(c){
+  if(!c)return;
+  var list=filledAddrs(c);
+  if(!list.length){toast('No address saved for this client');return}
+  if(list.length===1){shareAddr(list[0],c);return}
+  var lines=[clientLabel(c)];
+  var sub=clientSub(c);if(sub)lines.push(sub);
+  list.forEach(function(a){
+    lines.push('');
+    lines.push(addrLabel(a));
+    if(a.line)lines.push(a.line);
+    var u=mapsUrl(a);if(u)lines.push(u);
+  });
+  sharePlain(lines.join('\n'), clientLabel(c));
+}
+var sharePickClient=null;
+function openSharePicker(c){
+  if(!c){toast('No address saved for this client');return}
+  var list=filledAddrs(c);
+  if(!list.length){toast('No address saved for this client');return}
+  if(list.length===1){shareAddr(list[0],c);return}
+  sharePickClient=c;
+  var who=$('#shareAddrWho');
+  if(who)who.textContent='Choose which address to send for '+clientLabel(c)+'.';
+  var box=$('#shareAddrOpts');
+  if(box){
+    box.innerHTML=list.map(function(a){
+      return '<button type="button" data-aid="'+esc(a.id)+'"><b>'+esc(addrLabel(a))+'</b><small>'+esc(a.line)+'</small></button>';
+    }).join('');
+    $$('button',box).forEach(function(b){
+      b.onclick=function(){
+        var owner=sharePickClient,addr=owner&&findAddr(owner,b.dataset.aid);
+        closeModal('shareAddrModal');sharePickClient=null;
+        if(addr)shareAddr(addr,owner);
+      };
+    });
+  }
+  showModal('shareAddrModal');
+}
+function deleteClientAddr(cid,aid){
+  var c=findClient(cid);if(!c)return;
+  var a=findAddr(c,aid);
+  var label=addrLabel(a);
+  var line=a&&a.line?String(a.line).trim():'';
+  ask('Remove this address?',
+    'Removes '+(line?label+' — '+line:label)+' from '+clientLabel(c)+'. The contact stays.',
+    'Remove',
+    function(){
+      c.addresses=(c.addresses||[]).filter(function(x){return x.id!==aid});
+      if(!c.addresses.length)c.addresses=[blankAddr()];
+      persist();renderBook();toast('Address removed');
+    });
+}
 function mapsAnchor(addr,label){
   var u=mapsUrl(addr);if(!u)return '';
   return '<a class="addr-link" href="'+esc(u)+'" target="_blank" rel="noopener" data-ext>'+esc(label||addr.line||'Open in Maps')+'</a>';
@@ -4457,7 +4579,7 @@ function auSuggest(q,cb){
 var bookDay=(new Date()).getDay();
 var bookAmpm='am';
 var bookQ='';
-var ADDR_PRESETS=['Home','Work','School','Day program','Other'];
+var ADDR_PRESETS=['Home','Work','School','Day program','Custom'];
 var NEED_FLAGS=[['wheelchair','Wheelchair'],['nonverbal','Non-verbal'],['extra','Extra seat'],['assist','Assistance']];
 var clDraft=null;
 function schoolOnDay(c,day){
@@ -5124,21 +5246,34 @@ function renderBook(){
   if(box){
     box.innerHTML=list.map(function(c){
       var fl=flagLabels(c);
-      var a0=(c.addresses||[])[0];
-      var sub=clientSub(c)||(a0&&a0.line)||'No address yet';
-      var link=a0&&a0.line?mapsAnchor(a0,sub):esc(sub);
+      var addrs=filledAddrs(c);
+      var n=addrs.length;
+      var sub=clientSub(c)||(n===1?addrs[0].line:(n?n+' addresses':'No address yet'));
+      var addrHtml=n?addrs.map(function(a){
+        return '<div class="cli-addr" data-aid="'+esc(a.id)+'">'
+          +'<div class="cli-addr-row"><div class="cli-addr-meta"><span class="cli-addr-kind">'+esc(addrLabel(a))+'</span>'
+          +'<span class="cli-addr-line">'+mapsAnchor(a,a.line)+'</span></div>'
+          +'<div class="cli-addr-acts">'
+            +'<button type="button" data-aedit="'+esc(c.id)+'" data-aid="'+esc(a.id)+'">Edit</button>'
+            +'<button type="button" class="del" data-adel="'+esc(c.id)+'" data-aid="'+esc(a.id)+'">Delete</button>'
+          +'</div></div></div>';
+      }).join(''):'<div class="cli-addrs-empty">No addresses yet. Tap the name to add Home, Work, Day program, or Custom.</div>';
       return '<div class="cli" data-cid="'+esc(c.id)+'">'
+        +'<div class="cli-main">'
         +'<div class="cli-av">'+esc(clientInitials(c))+'</div>'
-        +'<div style="flex:1;min-width:0"><b>'+esc(clientLabel(c))+'</b><span>'+link+'</span>'+(fl.length?'<div class="cli-need">'+fl.map(function(x){return '<i>'+esc(x)+'</i>'}).join('')+'</div>':'')+'</div>'
+        +'<div class="cli-meta"><b>'+esc(clientLabel(c))+'</b><span class="cli-sub">'+esc(sub)+'</span>'+(fl.length?'<div class="cli-need">'+fl.map(function(x){return '<i>'+esc(x)+'</i>'}).join('')+'</div>':'')+'</div>'
         +'<div style="display:flex;gap:6px;flex:0 0 auto">'
-          +'<button type="button" class="cli-go cli-share" data-share="'+esc(c.id)+'" title="Share address with Maps link" aria-label="Share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>'
+          +'<button type="button" class="cli-go cli-share" data-share="'+esc(c.id)+'" title="Share address" aria-label="Share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>'
           +'<button type="button" class="cli-go cli-nav" data-nav="'+esc(c.id)+'" title="Open in Maps" aria-label="Navigate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg></button>'
-        +'</div>'
+        +'</div></div>'
+        +'<div class="cli-addrs">'+addrHtml+'</div>'
       +'</div>';
     }).join('');
-    $$('#cliList .cli').forEach(function(row){row.onclick=function(){openClient(row.dataset.cid)}});
-    $$('#cliList [data-nav]').forEach(function(b){b.onclick=function(e){e.stopPropagation();var c=findClient(b.dataset.nav);openMaps((c.addresses||[])[0])}});
-    $$('#cliList [data-share]').forEach(function(b){b.onclick=function(e){e.stopPropagation();var c=findClient(b.dataset.share);if(c&&c.addresses&&c.addresses[0]&&c.addresses[0].line){shareAddr(c.addresses[0],c)}else{toast('No address saved for this client')}}});
+    $$('#cliList .cli-main').forEach(function(row){row.onclick=function(){var card=row.closest('.cli');if(card)openClient(card.dataset.cid)}});
+    $$('#cliList [data-nav]').forEach(function(b){b.onclick=function(e){e.stopPropagation();var c=findClient(b.dataset.nav);openMaps(firstFilledAddr(c))}});
+    $$('#cliList [data-share]').forEach(function(b){b.onclick=function(e){e.stopPropagation();openSharePicker(findClient(b.dataset.share))}});
+    $$('#cliList [data-aedit]').forEach(function(b){b.onclick=function(e){e.stopPropagation();openClient(b.dataset.aedit,b.dataset.aid)}});
+    $$('#cliList [data-adel]').forEach(function(b){b.onclick=function(e){e.stopPropagation();deleteClientAddr(b.dataset.adel,b.dataset.aid)}});
     $$('#cliList [data-ext]').forEach(function(a){a.onclick=function(e){e.stopPropagation()}});
   }
 }
@@ -5179,26 +5314,40 @@ function renderClAddrs(){
   box.innerHTML=(clDraft.addresses||[]).map(function(a){
     var u=mapsUrl(a);
     return '<div class="addr-card" data-aid="'+esc(a.id)+'">'
-      +'<input class="ttl" data-k="title" value="'+esc(a.title||'')+'" placeholder="Address title">'
-      +'<div class="addr-presets">'+ADDR_PRESETS.map(function(p){return '<button type="button" data-pre="'+esc(p)+'" class="'+(a.title===p?'on':'')+'">'+esc(p)+'</button>'}).join('')+'</div>'
+      +'<input class="ttl" data-k="title" value="'+esc(a.title||'')+'" placeholder="Home, Work, Custom…">'
+      +'<div class="addr-presets">'+ADDR_PRESETS.map(function(p){return '<button type="button" data-pre="'+esc(p)+'" class="'+(presetOn(a.title,p)?'on':'')+'">'+esc(p)+'</button>'}).join('')+'</div>'
       +'<input data-k="line" value="'+esc(a.line||'')+'" placeholder="Type an address or paste a Maps link">'
       +'<div class="sugg" data-sugg style="display:none"></div>'
       +(u?'<a class="addr-nav" href="'+esc(u)+'" target="_blank" rel="noopener">Open in Maps</a>':'')
-      +'<div class="addr-acts"><button type="button" data-act="nav">Maps</button><button type="button" data-act="copy">Copy</button><button type="button" data-act="share">Share</button>'+(clDraft.addresses.length>1?'<button type="button" data-act="del">Remove</button>':'')+'</div>'
+      +'<div class="addr-acts"><button type="button" data-act="nav">Maps</button><button type="button" data-act="copy">Copy</button><button type="button" data-act="share">Share</button>'+(clDraft.addresses.length>1?'<button type="button" data-act="del">Delete</button>':'')+'</div>'
       +'</div>';
   }).join('');
   $$('#clAddrs .addr-card').forEach(function(card){
     var id=card.dataset.aid;
     var addr=findAddr(clDraft,id);
+    function applyPick(pick,inp,sug){
+      function go(){
+        addr.line=pick.line;addr.lat=pick.lat;addr.lng=pick.lng;
+        if(inp)inp.value=pick.line;
+        if(sug)sug.style.display='none';
+        fillAddrSelects();
+      }
+      var dup=dupAddrIn(clDraft.addresses,pick.line,addr&&addr.id);
+      if(dup){
+        ask('This address already exists',
+          (addrLabel(dup)||'Another entry')+' already uses this line. Add it again anyway?',
+          'Add anyway',go,{danger:false,noLbl:'Cancel'});
+        return;
+      }
+      go();
+    }
     $$('[data-k]',card).forEach(function(inp){
       inp.oninput=function(){
         if(!addr)return;
         if(inp.dataset.k==='line'){
           var pasted=parseMapsPaste(inp.value);
           if(pasted){
-            addr.line=pasted.line;addr.lat=pasted.lat;addr.lng=pasted.lng;
-            inp.value=pasted.line;
-            fillAddrSelects();
+            applyPick(pasted,inp,null);
             return;
           }
           addr.line=inp.value;addr.lat=null;addr.lng=null;
@@ -5212,15 +5361,15 @@ function renderClAddrs(){
             $$('button',sug).forEach(function(b){b.onclick=function(){
               var pick=sug._rows[Number(b.dataset.si)];
               if(!pick||!addr)return;
-              addr.line=pick.line;addr.lat=pick.lat;addr.lng=pick.lng;
-              inp.value=pick.line;sug.style.display='none';
-              fillAddrSelects();
+              applyPick(pick,inp,sug);
             }});
           });
         }else{
           addr[inp.dataset.k]=inp.value;
-          if(inp.dataset.k==='title')$$('[data-pre]',card).forEach(function(p){p.classList.toggle('on',p.dataset.pre===inp.value)});
-          if(inp.dataset.k==='title')fillAddrSelects();
+          if(inp.dataset.k==='title'){
+            $$('[data-pre]',card).forEach(function(p){p.classList.toggle('on',presetOn(inp.value,p.dataset.pre))});
+            fillAddrSelects();
+          }
         }
       };
     });
@@ -5282,7 +5431,7 @@ if($('#clMoreToggle')){
   };
 }
 
-function openClient(id){
+function openClient(id,focusAid){
   var c=id?findClient(id):null;
   clDraft=c?JSON.parse(JSON.stringify(c)):blankClient();
   if(!clDraft.flags)clDraft.flags={wheelchair:false,nonverbal:false,extra:false,assist:false};
@@ -5304,6 +5453,15 @@ function openClient(id){
   var del=$('#clDelete');if(del)del.style.display=c?'block':'none';
   renderClNeeds();renderClSchool();renderClAddrs();
   showModal('clientModal');
+  if(focusAid){
+    setTimeout(function(){
+      var card=$('#clAddrs [data-aid="'+focusAid+'"]');
+      if(!card)return;
+      card.classList.add('hi');
+      var inp=$('[data-k="line"]',card);
+      if(inp){try{inp.focus();inp.scrollIntoView({block:'center',behavior:'smooth'})}catch(_){}}
+    },80);
+  }
 }
 if($('#clNeeds'))$$('#clNeeds [data-flag]').forEach(function(b){b.onclick=function(){if(!clDraft.flags)clDraft.flags={};clDraft.flags[b.dataset.flag]=!clDraft.flags[b.dataset.flag];renderClNeeds()}});
 if($('#clSchOn'))$('#clSchOn').onclick=function(){if(!clDraft.school)clDraft.school={on:false,days:[],am:true,pm:true,pickup:'',drop:''};clDraft.school.on=!clDraft.school.on;renderClSchool()};
@@ -5311,10 +5469,17 @@ if($('#clSchAm'))$('#clSchAm').onclick=function(){clDraft.school.am=clDraft.scho
 if($('#clSchPm'))$('#clSchPm').onclick=function(){clDraft.school.pm=clDraft.school.pm===false;renderClSchool()};
 if($('#clPickup'))$('#clPickup').onchange=function(){clDraft.school.pickup=this.value};
 if($('#clDrop'))$('#clDrop').onchange=function(){clDraft.school.drop=this.value};
-if($('#clAddAddr'))$('#clAddAddr').onclick=function(){clDraft.addresses.push(blankAddr());clDraft.addresses[clDraft.addresses.length-1].title='Address';clDraft.addresses[clDraft.addresses.length-1].kind='other';renderClAddrs();renderClSchool()};
-if($('#clCancel'))$('#clCancel').onclick=function(){closeModal('clientModal');clDraft=null};
-if($('#clSave'))$('#clSave').onclick=function(){
+if($('#clAddAddr'))$('#clAddAddr').onclick=function(){
   if(!clDraft)return;
+  var a=blankAddr();
+  a.title=nextAddrPreset(clDraft.addresses);
+  a.kind=String(a.title).toLowerCase();
+  clDraft.addresses.push(a);
+  renderClAddrs();renderClSchool();
+};
+if($('#clCancel'))$('#clCancel').onclick=function(){closeModal('clientModal');clDraft=null};
+function syncClDraftFields(){
+  if(!clDraft)return false;
   clDraft.name=($('#clName').value||'').trim();
   clDraft.nick=($('#clNick').value||'').trim();
   clDraft.phone=($('#clPhone').value||'').trim();
@@ -5322,16 +5487,39 @@ if($('#clSave'))$('#clSave').onclick=function(){
   clDraft.notes=($('#clNotes').value||'').trim();
   $$('#clAddrs .addr-card').forEach(function(card){
     var a=findAddr(clDraft,card.dataset.aid);if(!a)return;
-    var t=$('[data-k="title"]',card);if(t)a.title=t.value;
-    var l=$('[data-k="line"]',card);if(l)a.line=l.value;
+    var t=$('[data-k="title"]',card);if(t)a.title=String(t.value||'').trim();
+    var l=$('[data-k="line"]',card);if(l)a.line=String(l.value||'').trim();
+    if(!a.title)a.title='Address';
+    if(!a.kind)a.kind=String(a.title).toLowerCase();
   });
-  if(!clDraft.name&&!clDraft.nick){toast('Add a passenger name');return}
-
+  var filled=(clDraft.addresses||[]).filter(function(a){return a&&String(a.line||'').trim()});
+  clDraft.addresses=filled.length?filled:(clDraft.addresses&&clDraft.addresses[0]?[clDraft.addresses[0]]: [blankAddr()]);
+  return true;
+}
+function commitClientSave(){
+  if(!clDraft)return;
   var i=-1;clients.forEach(function(c,n){if(c.id===clDraft.id)i=n});
   if(i>=0)clients[i]=clDraft;else clients.push(clDraft);
   cleanOrphanClients();
   persist();clDraft=null;closeModal('clientModal');renderBook();toast('Client saved');
+}
+if($('#clSave'))$('#clSave').onclick=function(){
+  if(!clDraft)return;
+  if(!syncClDraftFields())return;
+  if(!clDraft.name&&!clDraft.nick){toast('Add a passenger name');return}
+  var dup=firstDupAddr(clDraft.addresses);
+  if(dup){
+    ask('This address already exists',
+      '“'+(dup.line||addrLabel(dup))+'” is already on this contact. Save both copies anyway?',
+      'Save anyway',commitClientSave,{danger:false,noLbl:'Go back'});
+    return;
+  }
+  commitClientSave();
 };
+if($('#shareAddrAll'))$('#shareAddrAll').onclick=function(){
+  var c=sharePickClient;closeModal('shareAddrModal');sharePickClient=null;if(c)shareAllAddrs(c);
+};
+if($('#shareAddrCancel'))$('#shareAddrCancel').onclick=function(){sharePickClient=null;closeModal('shareAddrModal')};
 if($('#clDelete'))$('#clDelete').onclick=function(){
   if(!clDraft)return;
   var id=clDraft.id,lab=clientLabel(clDraft);
@@ -5362,7 +5550,7 @@ function showUpdatePrompt(later){
   var notes=$('#updNotes');
   if(notes){
     var rel=CHANGELOG[0];
-    notes.innerHTML=rel&&rel.notes?rel.notes.slice(0,3).map(function(n){return '<p>'+esc(n[1])+'</p>'}).join(''):'';
+    notes.innerHTML=rel&&rel.notes?rel.notes.slice(0,4).map(function(n){return '<p>'+esc(n[1])+'</p>'}).join(''):'';
   }
   var body=$('#updBody');
   if(body)body.textContent='You are on Fareo '+APP_VERSION+'. A newer build is ready. Shifts and the address book stay on this phone.';
