@@ -98,7 +98,7 @@ input:disabled,select:disabled{background:var(--disbg);color:var(--disink);-webk
 .btn.neutral{background:transparent;border:1.5px solid var(--bd2);color:var(--head);box-shadow:none}
 .btn:active,.add:active,.att:active,.sst:active,.step button:active{transform:scale(.98)}
 .prev{white-space:pre-wrap;font-family:ui-monospace,monospace;font-size:10.5px;line-height:1.55;color:var(--body)}
-.steps{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin:2px 0 13px}
+.steps{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:2px 0 13px}
 .stp{cursor:pointer;text-align:center;background:transparent;border:0;padding:0}
 .stp i{display:block;height:5px;border-radius:999px;background:var(--bd2);transition:background .28s var(--ease),transform .28s var(--ease)}
 .stp span{display:block;font-size:11px;font-weight:700;color:var(--mut);margin-top:7px;transition:color var(--dur)}
@@ -220,7 +220,23 @@ html.kb-open .sfoot{opacity:0;visibility:hidden;pointer-events:none;transform:tr
 .date-cal-ico{width:15px;height:15px;stroke:var(--mut);flex:0 0 auto}
 .date-native-wrap input[type="date"]{border:0;background:transparent;font-size:12.5px;font-weight:600;color:var(--body);width:100%;min-width:0;cursor:pointer;padding:0}
 .date-native-wrap input[type="date"]::-webkit-calendar-picker-indicator{opacity:0;position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
+.date-kicker{font-size:10px;font-weight:800;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;margin:0 0 8px}
 .date-label{font-size:13.5px;color:var(--head);margin-top:8px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:.2px}
+.review-sum{display:flex;align-items:baseline;justify-content:space-between;gap:8px 12px;flex-wrap:wrap;padding:11px 13px;margin:0 0 10px;background:var(--card);border:1.5px solid var(--bd);border-radius:14px}
+.review-sum .rs-date{font-size:12.5px;font-weight:800;color:var(--head)}
+.review-sum .rs-take{font-size:16px;font-weight:800;color:var(--inc);font-variant-numeric:tabular-nums}
+.review-sum .rs-meta{width:100%;font-size:11px;font-weight:600;color:var(--mut);line-height:1.35}
+.review-attach{display:flex;flex-direction:column;gap:10px;margin-bottom:10px}
+.review-share{display:flex;flex-direction:column;gap:10px}
+.attach-compact{padding:12px 13px}
+.attach-compact > p{font-size:11px;color:var(--mut);margin:0 0 8px;line-height:1.4}
+.attach-compact .att{padding:11px}
+.attach-compact .shift-rcpt-frame{min-height:108px;margin-top:8px}
+.attach-compact .shift-rcpt-frame.inspect{min-height:120px}
+.attach-compact .shift-rcpt-frame .insp-stage{min-height:96px}
+.attach-compact .shift-rcpt-frame img{max-height:132px}
+.attach-compact .shift-rcpt-frame .rcpt-empty{padding:14px 12px}
+.attach-compact .shift-rcpt-nav{display:none}
 .datef small{font-size:9px;color:var(--mut);text-transform:uppercase;letter-spacing:.4px;font-weight:600}
 .datef input{border:0;background:transparent;padding:2px 0;font-size:13px}
 .tr{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--bd);font-size:12.5px;color:var(--body)}
@@ -900,10 +916,11 @@ button,a,.tgl,.chip,.filt,.preset,.sst,.stp,.cli,.tr,.run-client-chip{-webkit-ta
   .refresh-overlay .ro-card{max-width:400px}
 }
 @media (min-width:700px) and (min-height:560px){
-  [data-pane="1"]{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
-  [data-pane="1"] > .date-card{grid-column:1/-1}
-  [data-pane="2"] > .shift-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .shift-rcpt-frame img{max-height:360px}
+  [data-pane="1"] .shift-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  [data-pane="2"]{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
+  [data-pane="2"] .review-sum{grid-column:1/-1}
+  [data-pane="2"] .review-attach{margin-bottom:0}
+  .attach-compact .shift-rcpt-frame img{max-height:180px}
   .modal.show{align-items:center}
   .modal.show .sheet{border-radius:20px;max-height:min(86dvh,820px);animation:none}
   .catrow{grid-template-columns:repeat(6,1fr)}
@@ -911,7 +928,7 @@ button,a,.tgl,.chip,.filt,.preset,.sst,.stp,.cli,.tr,.run-client-chip{-webkit-ta
 @media (min-width:900px){
   .app{max-width:1040px}
   .hub-wheel{--orbit:168px;--core:132px;--sat:76px}
-  [data-pane="2"] > .shift-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  [data-pane="1"] .shift-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .run-client-grid{grid-template-columns:repeat(4,1fr)}
 }
 @media (max-height:520px) and (min-width:520px){
@@ -975,13 +992,13 @@ html.fold-flex .sfoot-gap{width:0}
 
   <section class="screen" data-tab="shift">
     <div class="steps" id="steps">
-      <button class="stp lit on" data-sub="1"><i></i><span>Attach</span></button>
-      <button class="stp" data-sub="2"><i></i><span>Log Shift</span></button>
-      <button class="stp" data-sub="3"><i></i><span>Review</span></button>
+      <button class="stp lit on" data-sub="1"><i></i><span>Log</span></button>
+      <button class="stp" data-sub="2"><i></i><span>Share</span></button>
     </div>
     <div class="msg" id="msg"></div>
     <div data-pane="1">
       <div class="card date-card">
+        <div class="date-kicker">Shift date</div>
         <div class="date-row">
           <button class="date-quick" id="todayBtn">Today</button>
           <button class="date-quick" id="yesterBtn">Yesterday</button>
@@ -993,49 +1010,12 @@ html.fold-flex .sfoot-gap{width:0}
         <div class="date-label" id="dateLabel">Today</div>
       </div>
 
-      <div class="card">
-        <h5><span class="dot" style="background:var(--inc)"></span>End of Shift <span style="font-size:10px;margin-left:auto;color:var(--mut)">optional</span><span class="help" data-help="Attach EOS slip photo(s) if you have them. You can continue without a photo — Fareo will ask you to confirm. When Hail OCR is on in Settings, Rank/Hail trip count is read automatically. Enter EOS dollar values on Log Shift." aria-label="Help">?</span></h5>
-        <p id="eosAttachHint" style="font-size:11.5px;color:var(--mut);margin:0 0 10px;line-height:1.4">Optional — attach a slip if you have one. Hail OCR reads the count when it is on. Enter EOS amounts on the next step.</p>
-        <button class="att optional" id="rcpt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg><span id="rcptTxt">Add EOS photo / PDF</span></button>
-        <input id="rcptFile" type="file" accept="image/*,image/jpeg,image/png,image/heic,image/heif,application/pdf" multiple style="display:none">
-        <div class="shift-rcpt-frame" id="rcptPreview">
-          <div class="rcpt-empty"><b>No EOS attachment yet</b>Optional — attach a slip if you have one.</div>
-        </div>
-        <div class="shift-rcpt-nav" id="rcptNav" style="display:none">
-          <button type="button" id="rcptPrevBtn" aria-label="Previous">&lsaquo; Prev</button>
-          <span class="rcpt-count" id="rcptCount">1 / 1</span>
-          <button type="button" id="rcptNextBtn" aria-label="Next">Next &rsaquo;</button>
-        </div>
-        <div class="shift-rcpt-thumbs" id="rcptThumbs"></div>
-        <div class="shift-rcpt-acts" id="eosRcptActs" style="display:none">
-          <button type="button" class="btn neutral" id="rcptAddMore" style="margin:0;padding:10px;font-size:12px">+ Add another EOS</button>
-          <button type="button" class="btn neutral" id="rcptRemove" style="margin:0;padding:10px;font-size:12px;border-color:var(--dgr);color:var(--dgr)">Remove current</button>
-        </div>
-        <div id="ocrStatus" style="display:none;margin-top:10px;font-size:11.5px;color:var(--mut);line-height:1.4"></div>
-      </div>
-
-      <div class="card" style="margin-bottom:0">
-        <h5><span class="dot" style="background:var(--fuel-fill)"></span>Fuel Receipts <span class="help" data-help="Optional. If you attach a fuel receipt, a fuel amount becomes compulsory on the Log Shift step. Fuel snaps are stored for the shift but are not added to the share collage (EOS only)." aria-label="Help">?</span></h5>
-        <p style="font-size:11.5px;color:var(--mut);margin:0 0 10px;line-height:1.4">Standalone fuel receipt upload. Attaching one makes fuel expense required.</p>
-        <button class="att" id="fuelRcpt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg><span id="fuelRcptTxt">Add fuel receipt</span></button>
-        <input id="fuelRcptFile" type="file" accept="image/*,image/jpeg,image/png,image/heic,image/heif,application/pdf" multiple style="display:none">
-        <div class="shift-rcpt-frame" id="fuelRcptPreview" style="min-height:120px">
-          <div class="rcpt-empty"><b>No fuel receipt</b>Optional — add if you filled up this shift.</div>
-        </div>
-        <div class="shift-rcpt-thumbs" id="fuelRcptThumbs"></div>
-        <div class="shift-rcpt-acts" id="fuelRcptActs" style="display:none">
-          <button type="button" class="btn neutral" id="fuelRcptAddMore" style="margin:0;padding:10px;font-size:12px">+ Add another fuel</button>
-          <button type="button" class="btn neutral" id="fuelRcptRemove" style="margin:0;padding:10px;font-size:12px;border-color:var(--dgr);color:var(--dgr)">Remove current</button>
-        </div>
-      </div>
-    </div>
-    <div data-pane="2" style="display:none">
       <div class="card" style="margin-bottom:10px">
-        <h5><span class="dot" style="background:var(--inc)"></span>End of Shift<span class="help" data-help="Enter EOS dollar amounts. Tap + Add EOS for another line if you have more than one total. Hail is one trip count for the whole shift." aria-label="Help">?</span><span class="sub-amt" id="eosSub">$0</span></h5>
-        <p style="font-size:11.5px;color:var(--mut);margin:0 0 8px;line-height:1.4">Enter EOS dollars. Use + Add EOS for another line. Hail is one count for the shift.</p>
+        <h5><span class="dot" style="background:var(--inc)"></span>End of Shift<span class="help" data-help="Enter EOS dollar amounts. Tap + Add EOS for another line if you have more than one total. Hail is one trip count for the whole shift. Attach slips on Share." aria-label="Help">?</span><span class="sub-amt" id="eosSub">$0</span></h5>
+        <p style="font-size:11.5px;color:var(--mut);margin:0 0 8px;line-height:1.4">Log EOS dollars and hail first. Photos go on the next step.</p>
         <div class="log-dictate-row" id="logDictate">
           <div class="log-eos-dictate">
-            <label class="fl">EOS Takings <span class="help" data-help="One dollar field per line. Extra photos get a new line automatically; tap + Add EOS if you need another amount without a photo." aria-label="Help">?</span></label>
+            <label class="fl">EOS Takings <span class="help" data-help="One dollar field per line. Extra photos on Share add a new line automatically; tap + Add EOS if you need another amount without a photo." aria-label="Help">?</span></label>
             <div id="eosRows"></div>
             <button class="add" id="addEos" type="button">+ Add EOS</button>
           </div>
@@ -1049,7 +1029,7 @@ html.fold-flex .sfoot-gap{width:0}
           </div>
         </div>
       </div>
-      <p class="shift-fields-hint">Drag <b style="letter-spacing:1px">:::</b> on a field to reorder — amounts &amp; maths stay the same. EOS &amp; hail stay at the top.</p>
+      <p class="shift-fields-hint">Drag <b style="letter-spacing:1px">:::</b> on a field to reorder — amounts &amp; maths stay the same. Date, EOS &amp; hail stay at the top.</p>
       <div class="shift-fields" id="shiftFields">
       <div class="card tx-fuel shift-field" data-field="fuel"><h5 class="sf-h5"><button type="button" class="sf-grip" aria-label="Drag to reorder" title="Drag to reorder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></button><span class="dot" style="background:var(--fuel-fill)"></span>Fuel <span id="fuelReqBadge" class="danger" style="font-size:10px;margin-left:auto;display:none">required</span><span class="help" data-help="Required when a fuel receipt is attached. Tick Paid by operator for operator card fuel." aria-label="Help">?</span><span class="sub-amt" id="fuelSub">$0</span></h5>
         <div id="fuelRows"></div><button class="add" id="addFuel">+ Add Fuel Fill-up</button></div>
@@ -1072,11 +1052,54 @@ html.fold-flex .sfoot-gap{width:0}
         </div>
       </div>
     </div>
-    <div data-pane="3" style="display:none">
-      <div class="card"><h5><span class="dot" style="background:var(--head)"></span>Vehicle Rego <span class="danger" style="font-size:10px;margin-left:auto">required</span></h5>
-        <select id="rego"></select></div>
-      <div class="card"><h5><span class="dot" style="background:var(--inc)"></span>WhatsApp Preview</h5><div class="prev" id="prev"></div></div>
-      <button class="btn neutral" id="saveOnly">Save to Weekly only</button>
+    <div data-pane="2" style="display:none">
+      <div class="review-sum" id="reviewSum">
+        <span class="rs-date" id="reviewSumDate">Today</span>
+        <span class="rs-take" id="reviewSumTake">$0.00</span>
+        <span class="rs-meta" id="reviewSumMeta">Hail not set · no slips</span>
+      </div>
+      <div class="review-attach">
+        <div class="card attach-compact">
+          <h5><span class="dot" style="background:var(--inc)"></span>EOS slips <span style="font-size:10px;margin-left:auto;color:var(--mut)">optional</span><span class="help" data-help="Attach EOS slip photo(s) if you have them. You can share without a photo — Fareo will ask you to confirm. When Hail OCR is on, Rank/Hail is read automatically." aria-label="Help">?</span></h5>
+          <p id="eosAttachHint">Optional — add slips here. Hail OCR fills the count on Log when it is on.</p>
+          <button class="att optional" id="rcpt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg><span id="rcptTxt">Add EOS photo / PDF</span></button>
+          <input id="rcptFile" type="file" accept="image/*,image/jpeg,image/png,image/heic,image/heif,application/pdf" multiple style="display:none">
+          <div class="shift-rcpt-thumbs" id="rcptThumbs"></div>
+          <div class="shift-rcpt-frame" id="rcptPreview" style="display:none">
+            <div class="rcpt-empty"><b>No EOS attachment yet</b>Optional — attach a slip if you have one.</div>
+          </div>
+          <div class="shift-rcpt-nav" id="rcptNav" style="display:none">
+            <button type="button" id="rcptPrevBtn" aria-label="Previous">&lsaquo; Prev</button>
+            <span class="rcpt-count" id="rcptCount">1 / 1</span>
+            <button type="button" id="rcptNextBtn" aria-label="Next">Next &rsaquo;</button>
+          </div>
+          <div class="shift-rcpt-acts" id="eosRcptActs" style="display:none">
+            <button type="button" class="btn neutral" id="rcptAddMore" style="margin:0;padding:10px;font-size:12px">+ Add another EOS</button>
+            <button type="button" class="btn neutral" id="rcptRemove" style="margin:0;padding:10px;font-size:12px;border-color:var(--dgr);color:var(--dgr)">Remove current</button>
+          </div>
+          <div id="ocrStatus" style="display:none;margin-top:10px;font-size:11.5px;color:var(--mut);line-height:1.4"></div>
+        </div>
+        <div class="card attach-compact">
+          <h5><span class="dot" style="background:var(--fuel-fill)"></span>Fuel receipts <span class="help" data-help="Optional. If you attach a fuel receipt, a fuel amount is required on Log. Fuel snaps are stored for the shift but are not added to the share collage (EOS only)." aria-label="Help">?</span></h5>
+          <p>Optional. Attaching a receipt requires a fuel amount on Log.</p>
+          <button class="att" id="fuelRcpt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg><span id="fuelRcptTxt">Add fuel receipt</span></button>
+          <input id="fuelRcptFile" type="file" accept="image/*,image/jpeg,image/png,image/heic,image/heif,application/pdf" multiple style="display:none">
+          <div class="shift-rcpt-thumbs" id="fuelRcptThumbs"></div>
+          <div class="shift-rcpt-frame" id="fuelRcptPreview" style="display:none">
+            <div class="rcpt-empty"><b>No fuel receipt</b>Optional — add if you filled up this shift.</div>
+          </div>
+          <div class="shift-rcpt-acts" id="fuelRcptActs" style="display:none">
+            <button type="button" class="btn neutral" id="fuelRcptAddMore" style="margin:0;padding:10px;font-size:12px">+ Add another fuel</button>
+            <button type="button" class="btn neutral" id="fuelRcptRemove" style="margin:0;padding:10px;font-size:12px;border-color:var(--dgr);color:var(--dgr)">Remove current</button>
+          </div>
+        </div>
+      </div>
+      <div class="review-share">
+        <div class="card"><h5><span class="dot" style="background:var(--head)"></span>Vehicle Rego <span class="danger" style="font-size:10px;margin-left:auto">required</span></h5>
+          <select id="rego"></select></div>
+        <div class="card"><h5><span class="dot" style="background:var(--inc)"></span>Message preview</h5><div class="prev" id="prev"></div></div>
+        <button class="btn neutral" id="saveOnly">Save to Weekly only</button>
+      </div>
     </div>
   </section>
 
@@ -1655,8 +1678,12 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.33';
+var APP_VERSION='8.34';
 var CHANGELOG=[
+  {v:'8.34',date:'September 18, 2026',notes:[
+    ['UI/UX','Log Shift is two steps: pick the date and log amounts first, then compact slips, rego, and the share message.'],
+    ['UI/UX','Attachments sit on Share as compact thumbs. Hail is still required before you leave Log; a fuel receipt still needs a fuel amount.'],
+  ]},
   {v:'8.33',date:'September 17, 2026',notes:[
     ['Bug Fix','The Log Shift formula now matches take-home when custom types are driver-collected or use a formula.'],
     ['Tax','Cash & Square GST-free is scaled to the driver-share GST base, so mixed EFTPOS + cash days no longer understate G1 / 1A.'],
@@ -2247,6 +2274,7 @@ function updateReceiptUI(){
   var rc=$('#rcpt');if(rc)rc.classList.toggle('done',has);
   var txt=$('#rcptTxt');if(txt)txt.textContent=has?('Add more EOS ('+n+')'):'Add EOS photo / PDF';
   renderAttachFrame($('#rcptPreview'), cur, 'No EOS attachment yet', 'Optional — attach a slip if you have one.');
+  var preview=$('#rcptPreview');if(preview)preview.style.display=has?'':'none';
   var nav=$('#rcptNav');
   if(nav){
     nav.style.display=has?'flex':'none';
@@ -2262,6 +2290,7 @@ function updateReceiptUI(){
   var fr=$('#fuelRcpt');if(fr)fr.classList.toggle('done',fhas);
   var ft=$('#fuelRcptTxt');if(ft)ft.textContent=fhas?('Add more fuel ('+fn+')'):'Add fuel receipt';
   renderAttachFrame($('#fuelRcptPreview'), fcur, 'No fuel receipt', 'Optional — add if you filled up this shift.');
+  var fprev=$('#fuelRcptPreview');if(fprev)fprev.style.display=fhas?'':'none';
   var facts=$('#fuelRcptActs');if(facts)facts.style.display=fhas?'grid':'none';
   renderThumbs($('#fuelRcptThumbs'), fuelReceipts, fuelRcptIdx, function(i){fuelRcptIdx=i;updateReceiptUI()}, function(i){removeFuelAt(i)});
   var badge=$('#fuelReqBadge');if(badge)badge.style.display=fhas?'inline':'none';
@@ -2273,8 +2302,8 @@ function syncAttachOcrHint(){
   var hint=$('#eosAttachHint');
   if(hint){
     hint.textContent=settings.ocrHail
-      ?'Optional — attach a slip if you have one. Hail OCR reads the count when it is on. Enter EOS amounts on Log Shift.'
-      :'Optional — attach a slip if you have one. Hail OCR is off (Settings). Enter hail and EOS amounts on Log Shift.';
+      ?'Optional — add slips here. Hail OCR fills the count on Log when it is on.'
+      :'Optional — add slips here. Hail OCR is off (Settings). Hail is entered on Log.';
   }
   var st=$('#ocrStatus');
   if(st&&!settings.ocrHail){st.style.display='none'}
@@ -2313,7 +2342,11 @@ function addEosFiles(fileList){
 function addFuelFiles(fileList){
   var files=[].slice.call(fileList||[]);var added=0;
   files.forEach(function(f){if(!f)return;fuelReceipts.push(fileToAttach(f,'Fuel '+(fuelReceipts.length+1)));added++});
-  if(added){fuelRcptIdx=fuelReceipts.length-1;syncDraftReceiptFlag();updateReceiptUI();render();toast('Fuel receipt attached — enter fuel amount on Log Shift')}
+  if(added){
+    fuelRcptIdx=fuelReceipts.length-1;syncDraftReceiptFlag();updateReceiptUI();render();
+    var hasAmt=draft.fuel.some(function(f){return nn(f.amount)>0});
+    toast(hasAmt?'Fuel receipt attached':'Fuel receipt attached — add the fill amount on Log');
+  }
   return added;
 }
 
@@ -2393,27 +2426,27 @@ async function runHailOcrFrom(startIdx){
       if(agg.hits>0){
         st.textContent='Hail total '+agg.total+' (sum of '+agg.hits+' slip'+(agg.hits===1?'':'s')+')'+(agg.missed?' — check remaining slips.':' — filled into Hail.');
       }else{
-        st.textContent='Hail not detected — enter the count on Log Shift.';
+        st.textContent='Hail not detected — enter the count on Log.';
       }
     }
     if(agg.hits===0){
       notifyHailOcrIssue(
         'Could not read hail count',
-        'OCR could not find a Rank / Hail number on '+(eosReceipts.length===1?'this End of Shift slip':'your End of Shift slips')+'. Enter the hail trip count on Log Shift.'
+        'OCR could not find a Rank / Hail number on '+(eosReceipts.length===1?'this End of Shift slip':'your End of Shift slips')+'. Enter the hail trip count on Log.'
       );
     }else if(agg.missed>0){
       notifyHailOcrIssue(
         'Hail partially read',
-        'Filled hail from '+agg.hits+' slip'+(agg.hits===1?'':'s')+' (total '+agg.total+'). Check the Hail field on Log Shift.'
+        'Filled hail from '+agg.hits+' slip'+(agg.hits===1?'':'s')+' (total '+agg.total+'). Check Hail on Log.'
       );
     }
   }catch(e){
     eosReceipts.forEach(function(r,i){if(i>=startIdx&&!r.ocrDone){r.ocrDone=true;r.ocrHail=null}});
     applyHailTotalFromOcr();
-    if(st)st.textContent='Hail reading unavailable — enter the hail count on Log Shift.';
+    if(st)st.textContent='Hail reading unavailable — enter the hail count on Log.';
     notifyHailOcrIssue(
       'Hail reading unavailable',
-      'OCR could not run (offline or blocked). Enter the hail / rank count on Log Shift.'
+      'OCR could not run (offline or blocked). Enter the hail / rank count on Log.'
     );
   }
 }
@@ -2941,7 +2974,11 @@ function rowInputs(){
       +'<label class="fuel-op'+(op?' on':'')+'" data-fop="'+i+'"><span class="fuel-box'+(op?' on':'')+'">'+(op?'\u2713':'')+'</span>Paid by operator <small>(not added to settlement)</small></label></div>'
   }).join('');
   $('#runs').value=draft.runs||'';
-  var rg=$('#rego');rg.innerHTML='<option value="">Choose rego…</option>'+settings.regos.map(function(r){return '<option value="'+esc(r)+'"'+(r===draft.rego?' selected':'')+'>'+esc(r)+'</option>'}).join('');
+  var rg=$('#rego');
+  if(rg){
+    if(!draft.rego&&settings.regos&&settings.regos.length===1)draft.rego=settings.regos[0];
+    rg.innerHTML='<option value="">Choose rego…</option>'+settings.regos.map(function(r){return '<option value="'+esc(r)+'"'+(r===draft.rego?' selected':'')+'>'+esc(r)+'</option>'}).join('');
+  }
 }
 function render(){
   var g=grossT(),t=takeT(),op=fuelOpPaidT();
@@ -2967,6 +3004,7 @@ function render(){
   $('#levyRate').textContent=money(levyRate())+' / trip';
   var la=$('#levyAmt');if(la)la.textContent=money(levyT());
   updateFooter();
+  if(typeof updateReviewSum==='function')updateReviewSum();
   buildPreview();persist();
 }
 function docsOk(){return hailEnteredOk() && fuelReceiptRequiredOk()}
@@ -2995,7 +3033,7 @@ document.addEventListener('input',function(e){
 document.addEventListener('change',function(e){
   var d=e.target.dataset;
   if(d.ft!=null){draft.fuel[d.ft].type=e.target.value;render()}
-  else if(e.target.id==='rego'){draft.rego=e.target.value;buildPreview();persist();if(typeof updateFooter==='function')updateFooter();}
+  else if(e.target.id==='rego'){draft.rego=e.target.value;buildPreview();persist();if(typeof updateFooter==='function')updateFooter();if(typeof updateReviewSum==='function')updateReviewSum();}
   if(d.cn!=null||d.an!=null||d.sn!=null)addName(e.target.value);
 });
 document.addEventListener('click',function(e){
@@ -3018,7 +3056,7 @@ document.addEventListener('click',function(e){
 });
 function freshDraft(keepRego){return {date:todayStr(),eos:[''],cash:[{name:'',amount:0}],square:[{name:'',amount:0}],runs:0,accounts:[],fuel:[{amount:0,type:settings.fuel,opPaid:false}],hail:'',rego:keepRego||'',receipt:false,receiptName:'',custom:{}}}
 /* Date picker handlers */
-function setDraftDate(d){draft.date=d;persist();rowInputs();buildPreview();}
+function setDraftDate(d){draft.date=d;persist();rowInputs();buildPreview();if(typeof updateReviewSum==='function')updateReviewSum();}
 $('#todayBtn').onclick=function(){setDraftDate(todayStr())};
 $('#yesterBtn').onclick=function(){setDraftDate(yesterdayStr())};
 $('#shiftDate').oninput=function(){if(this.value)setDraftDate(this.value)};
@@ -3063,29 +3101,55 @@ $('#clearShift').onclick=function(){
   persist();rowInputs();render();setSub(1);toast('Cleared');
 };
 
-/* sub-tabs — Attach (EOS+fuel) → Log Shift → Review.
-   Gates: hail; fuel amount if fuel receipt; confirm if no EOS photo; rego on share. */
+/* sub-tabs — Log (date + amounts) → Share (compact slips + rego + preview).
+   Gates: hail before leaving Log; fuel amount if a fuel receipt is attached; confirm if no EOS photo on share; rego on share. */
 var curSub=1;
 function gateFailMsg(){
-  if(!hailEnteredOk())return{text:'Enter hail / rank trips (required for levy).',toast:'Hail required',pane:2};
-  if(!fuelReceiptRequiredOk())return{text:'Fuel receipt attached — enter the fuel amount on Log Shift.',toast:'Fuel amount required',pane:2};
+  if(!hailEnteredOk())return{text:'Enter hail / rank trips (required for levy).',toast:'Hail required',pane:1};
+  if(!fuelReceiptRequiredOk())return{text:'Fuel receipt attached — enter the fuel amount on Log.',toast:'Fuel amount required',pane:1};
   return null;
 }
 function confirmNoEosThen(fn){
   if(eosReceipts.length){fn();return}
   ask('Are you sure?','You have not attached an End of Shift photo. Continue without a slip?','Continue',fn,{danger:false,noLbl:'Go back'});
 }
+function ensureShiftRego(){
+  if(!draft.rego&&settings.regos&&settings.regos.length===1){
+    draft.rego=settings.regos[0];
+    persist();
+  }
+  var rg=$('#rego');
+  if(rg&&draft.rego)rg.value=draft.rego;
+}
+function updateReviewSum(){
+  var d=$('#reviewSumDate');if(d)d.textContent=friendlyDate(draft.date||todayStr());
+  var t=$('#reviewSumTake');if(t)t.textContent=money(takeT());
+  var m=$('#reviewSumMeta');if(!m)return;
+  var bits=[];
+  bits.push(hailEnteredOk()?('Hail '+String(draft.hail)):'Hail not set');
+  if(eosReceipts.length)bits.push(eosReceipts.length+' EOS');
+  else bits.push('No EOS slip');
+  if(fuelReceipts.length)bits.push(fuelReceipts.length+' fuel');
+  if(draft.rego)bits.push(draft.rego);
+  m.textContent=bits.join(' · ');
+}
 function setSub(n){
-  if(n===3){
+  n=n<1?1:(n>2?2:n);
+  if(n===2){
     var g=gateFailMsg();
-    if(g){n=g.pane;var m=$('#msg');m.textContent=g.text;m.className='msg err';toast(g.toast)}
+    if(g){n=g.pane||1;var m=$('#msg');m.textContent=g.text;m.className='msg err';toast(g.toast)}
     else{$('#msg').className='msg'}
   }else{$('#msg').className='msg'}
   curSub=n;
-  [1,2,3].forEach(function(k){$('[data-pane="'+k+'"]').style.display=k===n?'':'none'});
+  [1,2].forEach(function(k){
+    var el=$('[data-pane="'+k+'"]');
+    if(el)el.style.display=k===n?'':'none';
+  });
   $$('.stp').forEach(function(el){var k=+el.dataset.sub;el.classList.toggle('lit',k<=n);el.classList.toggle('on',k===n)});
+  if(n===1)rowInputs();
+  if(n===2){ensureShiftRego();rowInputs();buildPreview()}
   updateReceiptUI();
-  if(n===2)rowInputs();
+  updateReviewSum();
   updateFooter();window.scrollTo({top:0,behavior:'smooth'});
 }
 function updateFooter(){
@@ -3094,11 +3158,11 @@ function updateFooter(){
   back.classList.toggle('off',!showBack);
   back.setAttribute('aria-hidden',showBack?'false':'true');
   back.tabIndex=showBack?0:-1;
-  var share=curSub===3;
+  var share=curSub===2;
   next.classList.toggle('share',share);
-  next.setAttribute('aria-label',share?'Share End of Shift':(curSub===1?'Next: Log Shift':'Next: Review'));
-  next.setAttribute('title',share?'Share End of Shift':(curSub===1?'Next: Log Shift':'Next: Review'));
-  var blocked=(curSub===2&&!docsOk())||(curSub===3&&!draft.rego);
+  next.setAttribute('aria-label',share?'Share End of Shift':'Next: Attach & share');
+  next.setAttribute('title',share?'Share End of Shift':'Next: Attach & share');
+  var blocked=(curSub===1&&!hailEnteredOk())||(curSub===2&&(!docsOk()||!draft.rego));
   next.classList.toggle('faded',blocked);
 }
 function syncShiftDock(){
@@ -3108,27 +3172,20 @@ function syncShiftDock(){
 }
 function nextStep(){
   if(curSub===1){
-    confirmNoEosThen(function(){setSub(2)});
-    return;
+    var g=gateFailMsg();
+    if(g){var m=$('#msg');m.textContent=g.text;m.className='msg err';toast(g.toast);window.scrollTo({top:0,behavior:'smooth'});return}
+    setSub(2);return;
   }
   if(curSub===2){
-    var g=gateFailMsg();
-    if(!g){setSub(3);return}
-    var m=$('#msg');m.textContent=g.text;m.className='msg err';toast(g.toast);
-    window.scrollTo({top:0,behavior:'smooth'});return;
+    var g2=gateFailMsg();
+    if(g2){var m2=$('#msg');m2.textContent=g2.text;m2.className='msg err';toast(g2.toast);setSub(g2.pane||1);return}
+    if(!draft.rego){var m3=$('#msg');m3.textContent='Choose a vehicle rego to share.';m3.className='msg err';toast('Rego required');return}
+    confirmNoEosThen(function(){doShare()});
   }
-  if(curSub===3){if(draft.rego)doShare();else{var m2=$('#msg');m2.textContent='Choose a vehicle rego to share.';m2.className='msg err';toast('Rego required')}}
 }
 $('#snext').onclick=nextStep;
 $('#sback').onclick=function(){if(curSub>1)setSub(curSub-1)};
-$$('.stp').forEach(function(b){b.onclick=function(){
-  var n=+b.dataset.sub;
-  if(n>1&&curSub===1&&!eosReceipts.length){
-    confirmNoEosThen(function(){setSub(n)});
-    return;
-  }
-  setSub(n);
-}});
+$$('.stp').forEach(function(b){b.onclick=function(){setSub(+b.dataset.sub)}});
 
 function downloadShareFile(file){
   if(!file)return;
@@ -3182,7 +3239,12 @@ async function doShare(){
   }
   saveShift(true);
 }
-$('#saveOnly').onclick=function(){if(!draft.rego){toast('Choose a rego first');return}saveShift(false)};
+$('#saveOnly').onclick=function(){
+  var g=gateFailMsg();
+  if(g){toast(g.toast);if(g.pane)setSub(g.pane);return}
+  if(!draft.rego){toast('Choose a rego first');return}
+  saveShift(false)
+};
 
 function archiveShiftAttachments(entry,eosList,fuelList){
   var jobs=[];
