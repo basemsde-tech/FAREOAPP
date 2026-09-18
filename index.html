@@ -60,7 +60,15 @@ input,select,textarea,button{font:inherit}
 .hi h4{margin:0;font-size:16px;font-weight:700;color:var(--head);letter-spacing:-.02em}
 .hi p{margin:1px 0 0;font-size:11.5px;color:var(--mut);font-weight:500}
 .tg{display:flex;align-items:center;gap:6px}
-.wx{font-size:11px;color:var(--mut);border:1px solid var(--bd);background:var(--card);border-radius:999px;padding:6px 11px;font-weight:600}
+.wx{font-size:11px;color:var(--mut);border:1px solid var(--bd);background:var(--card);border-radius:999px;padding:6px 11px;font-weight:600;display:inline-flex;align-items:center;gap:6px;margin:0;line-height:1.2;-webkit-appearance:none;appearance:none;font:inherit;cursor:default;max-width:118px;white-space:nowrap;transition:color var(--dur),background var(--dur),border-color var(--dur),box-shadow var(--dur)}
+.wx .wx-pip{display:none;width:6px;height:6px;border-radius:50%;background:currentColor;flex:0 0 auto;box-shadow:0 0 0 0 currentColor;animation:livePip 1.8s ease-out infinite}
+.wx .wx-txt{overflow:hidden;text-overflow:ellipsis}
+.wx.live{cursor:pointer;color:var(--on-inc);border-color:var(--inc);background:var(--inc-bg);padding:5px 9px 5px 8px}
+.wx.live .wx-pip{display:block}
+.wx.live.stale{color:var(--on-fuel);border-color:var(--fuel-fill);background:var(--fuel-bg)}
+.wx.live.edit{color:var(--hail);border-color:var(--hail);background:var(--hail-bg)}
+.wx.live:active{transform:scale(.97)}
+@keyframes livePip{0%{box-shadow:0 0 0 0 currentColor}70%{box-shadow:0 0 0 6px transparent}100%{box-shadow:0 0 0 0 transparent}}
 .theme{width:40px;height:40px;min-width:40px;min-height:40px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--head);display:grid;place-items:center;cursor:pointer;transition:transform var(--dur) var(--ease),background var(--dur),box-shadow var(--dur)}
 .theme svg{width:16px;height:16px}
 .sub{font-size:26px;font-weight:800;margin:6px 0 14px;color:var(--head);letter-spacing:-.03em;line-height:1.15}
@@ -635,6 +643,10 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
 .home-btn svg{width:24px;height:24px}
 .home-btn.on{box-shadow:0 0 0 3px var(--pg),0 0 0 6px var(--inc),0 8px 24px var(--glow)}
 .home-btn:active{transform:translateX(-50%) scale(.94)}
+.home-btn .live-pip{display:none;position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:50%;background:#6EE7B7;border:2px solid var(--btn-fill);box-shadow:0 0 0 0 rgba(110,231,183,.7);animation:livePip 1.8s ease-out infinite;pointer-events:none}
+.home-btn.log-live .live-pip{display:block}
+.home-btn.log-live.stale .live-pip{background:var(--fuel);box-shadow:0 0 0 0 rgba(251,191,36,.7)}
+.home-btn.log-live.edit .live-pip{background:#C7D2FE;box-shadow:0 0 0 0 rgba(129,140,248,.7)}
 .toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%) translateY(16px);background:var(--head);color:var(--pg);border-radius:999px;padding:11px 16px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:opacity var(--dur-slow) var(--ease),transform var(--dur-slow) var(--ease);z-index:999;box-shadow:var(--shadow-lg)}
 .advtoggle{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px 15px;margin-bottom:10px;cursor:pointer;box-shadow:var(--shadow);text-align:left}
 .advtoggle b{display:block;font-size:13.5px;font-weight:700;color:var(--head)}
@@ -653,6 +665,12 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
 .hub-wheel .hub-core{position:absolute;left:50%;top:50%;width:var(--core);height:var(--core);margin:calc(var(--core) / -2) 0 0 calc(var(--core) / -2);border-radius:50%;border:0;background:var(--btn-fill);color:var(--btn-ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 10px 28px var(--glow);z-index:4;-webkit-tap-highlight-color:transparent;animation:corePulse 3.4s ease-in-out infinite;transition:transform .18s var(--ease),box-shadow .18s}
 .hub-wheel .hub-core svg{width:30px;height:30px}
 .hub-wheel .hub-core:active{transform:scale(.94);box-shadow:0 4px 14px var(--glow)}
+.hub-wheel .hub-core .hub-live-pip{display:none;position:absolute;top:11px;right:15px;width:9px;height:9px;border-radius:50%;background:#ECFDF5;border:2px solid var(--btn-fill);box-shadow:0 0 0 0 rgba(236,253,245,.8);animation:livePip 1.8s ease-out infinite;pointer-events:none}
+.hub-wheel .hub-core .hub-core-lbl{line-height:1.1;font-variant-numeric:tabular-nums}
+.hub-wheel .hub-core.live .hub-live-pip{display:block}
+.hub-wheel .hub-core.live .hub-core-lbl{font-size:12px;letter-spacing:-.02em}
+.hub-wheel .hub-core.live.stale .hub-live-pip{background:var(--fuel)}
+.hub-wheel .hub-core.live.edit .hub-live-pip{background:#C7D2FE}
 @keyframes corePulse{0%,100%{box-shadow:0 8px 24px var(--glow)}50%{box-shadow:0 12px 36px var(--glow),0 0 0 5px var(--inc-bg)}}
 .hub-wheel .hub-sat{position:absolute;left:50%;top:50%;width:var(--sat);height:var(--sat);margin:calc(var(--sat) / -2) 0 0 calc(var(--sat) / -2);border-radius:50%;border:1.5px solid var(--bd2);background:var(--card);color:var(--head);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:9px;font-weight:800;cursor:pointer;box-shadow:var(--shadow);transform:rotate(var(--a)) translateY(calc(var(--orbit) * -1)) rotate(calc(var(--a) * -1));-webkit-tap-highlight-color:transparent;transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .15s,border-color .15s,background .15s;z-index:2;animation:orbitPop .45s cubic-bezier(.34,1.56,.64,1) both;animation-delay:calc(var(--i, 0) * .04s)}
 .hub-wheel .hub-sat svg{width:18px;height:18px;pointer-events:none}
@@ -782,6 +800,8 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
 .cli-go.cli-nav{color:var(--inc);border-color:var(--inc);background:var(--inc-bg)}
 .addr-card{background:var(--field);border:1px solid var(--bd);border-radius:12px;padding:11px;margin-top:8px}
 .addr-card .ttl{width:100%;border:0;background:transparent;padding:0;font-size:13px;font-weight:800;color:var(--head);-webkit-text-fill-color:var(--head);text-align:left;margin-bottom:4px}
+.addr-card .addr-kind-lbl{margin:0 0 6px;font-size:10px;letter-spacing:.4px;text-transform:uppercase;color:var(--mut);font-weight:800}
+.addr-card .fl{margin-top:6px}
 .addr-link{color:var(--inc);font-weight:700;text-decoration:underline;text-underline-offset:2px;word-break:break-word}
 a.addr-link{display:inline;font-size:12.5px}
 .addr-nav{display:inline-block;margin-top:6px;font-size:12px;font-weight:800;color:var(--inc);text-decoration:none;border:1px solid var(--inc);border-radius:9px;padding:6px 10px}
@@ -969,7 +989,7 @@ html.fold-flex .sfoot-gap{width:0}
       <div class="av">FA</div>
       <div class="hi"><h4 id="greet">Hey, Driver</h4><p id="today">Today</p></div>
     </div>
-    <div class="tg"><div class="wx" id="wx">Fareo</div>
+    <div class="tg"><button type="button" class="wx" id="wx" aria-label="Fareo"><span class="wx-pip" aria-hidden="true"></span><span class="wx-txt">Fareo</span></button>
       <button class="theme" id="themeBtn" aria-label="Theme"></button></div>
   </div>
   <div class="body-p">
@@ -984,7 +1004,7 @@ html.fold-flex .sfoot-gap{width:0}
         <button type="button" class="hub-sat sat-reports" data-hub="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-7"/></svg>Reports</button>
         <button type="button" class="hub-sat sat-settings" data-hub="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1-2 3.4-.2-.1a1.7 1.7 0 0 0-1.9-.1 1.7 1.7 0 0 0-.9 1.5V22H9.2v-.3a1.7 1.7 0 0 0-.9-1.5 1.7 1.7 0 0 0-1.9.1l-.2.1-2-3.4.1-.1A1.7 1.7 0 0 0 4.6 15 1.7 1.7 0 0 0 3 14H2v-4h1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1 2-3.4.2.1a1.7 1.7 0 0 0 1.9.1A1.7 1.7 0 0 0 9.2 2V2h5.6v.3a1.7 1.7 0 0 0 .9 1.5 1.7 1.7 0 0 0 1.9-.1l.2-.1 2 3.4-.1.1A1.7 1.7 0 0 0 19.4 9 1.7 1.7 0 0 0 21 10h1v4h-1a1.7 1.7 0 0 0-1.6 1Z"/></svg>Settings</button>
         <button type="button" class="hub-sat sat-refresh" data-hub="refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/></svg>Refresh</button>
-        <button type="button" class="hub-core" data-hub="shift"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/><path d="M12 3.5v6M4.2 16.5l5.2-3M19.8 16.5l-5.2-3"/></svg>Log Shift</button>
+        <button type="button" class="hub-core" data-hub="shift" id="hubLog" aria-label="Log Shift"><span class="hub-live-pip" aria-hidden="true"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/><path d="M12 3.5v6M4.2 16.5l5.2-3M19.8 16.5l-5.2-3"/></svg><span class="hub-core-lbl" id="hubLogLbl">Log Shift</span></button>
       </div>
     </div>
 
@@ -1012,7 +1032,6 @@ html.fold-flex .sfoot-gap{width:0}
 
       <div class="card" style="margin-bottom:10px">
         <h5><span class="dot" style="background:var(--inc)"></span>End of Shift<span class="help" data-help="Enter EOS dollar amounts. Tap + Add EOS for another line if you have more than one total. Hail is one trip count for the whole shift. Attach slips on Share." aria-label="Help">?</span><span class="sub-amt" id="eosSub">$0</span></h5>
-        <p style="font-size:11.5px;color:var(--mut);margin:0 0 8px;line-height:1.4">Log EOS dollars and hail first. Photos go on the next step.</p>
         <div class="log-dictate-row" id="logDictate">
           <div class="log-eos-dictate">
             <label class="fl">EOS Takings <span class="help" data-help="One dollar field per line. Extra photos on Share add a new line automatically; tap + Add EOS if you need another amount without a photo." aria-label="Help">?</span></label>
@@ -1029,7 +1048,6 @@ html.fold-flex .sfoot-gap{width:0}
           </div>
         </div>
       </div>
-      <p class="shift-fields-hint">Drag <b style="letter-spacing:1px">:::</b> on a field to reorder — amounts &amp; maths stay the same. Date, EOS &amp; hail stay at the top.</p>
       <div class="shift-fields" id="shiftFields">
       <div class="card tx-fuel shift-field" data-field="fuel"><h5 class="sf-h5"><button type="button" class="sf-grip" aria-label="Drag to reorder" title="Drag to reorder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></button><span class="dot" style="background:var(--fuel-fill)"></span>Fuel <span id="fuelReqBadge" class="danger" style="font-size:10px;margin-left:auto;display:none">required</span><span class="help" data-help="Required when a fuel receipt is attached. Tick Paid by operator for operator card fuel." aria-label="Help">?</span><span class="sub-amt" id="fuelSub">$0</span></h5>
         <div id="fuelRows"></div><button class="add" id="addFuel">+ Add Fuel Fill-up</button></div>
@@ -1060,8 +1078,7 @@ html.fold-flex .sfoot-gap{width:0}
       </div>
       <div class="review-attach">
         <div class="card attach-compact">
-          <h5><span class="dot" style="background:var(--inc)"></span>EOS slips <span style="font-size:10px;margin-left:auto;color:var(--mut)">optional</span><span class="help" data-help="Attach EOS slip photo(s) if you have them. You can share without a photo — Fareo will ask you to confirm. When Hail OCR is on, Rank/Hail is read automatically." aria-label="Help">?</span></h5>
-          <p id="eosAttachHint">Optional — add slips here. Hail OCR fills the count on Log when it is on.</p>
+          <h5><span class="dot" style="background:var(--inc)"></span>EOS slips <span style="font-size:10px;margin-left:auto;color:var(--mut)">optional</span><span class="help" id="eosAttachHelp" data-help="Attach EOS slip photo(s) if you have them. You can share without a photo — Fareo will ask you to confirm. When Hail OCR is on, Rank/Hail is read automatically." aria-label="Help">?</span></h5>
           <button class="att optional" id="rcpt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg><span id="rcptTxt">Add EOS photo / PDF</span></button>
           <input id="rcptFile" type="file" accept="image/*,image/jpeg,image/png,image/heic,image/heif,application/pdf" multiple style="display:none">
           <div class="shift-rcpt-thumbs" id="rcptThumbs"></div>
@@ -1081,7 +1098,6 @@ html.fold-flex .sfoot-gap{width:0}
         </div>
         <div class="card attach-compact">
           <h5><span class="dot" style="background:var(--fuel-fill)"></span>Fuel receipts <span class="help" data-help="Optional. If you attach a fuel receipt, a fuel amount is required on Log. Fuel snaps are stored for the shift but are not added to the share collage (EOS only)." aria-label="Help">?</span></h5>
-          <p>Optional. Attaching a receipt requires a fuel amount on Log.</p>
           <button class="att" id="fuelRcpt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg><span id="fuelRcptTxt">Add fuel receipt</span></button>
           <input id="fuelRcptFile" type="file" accept="image/*,image/jpeg,image/png,image/heic,image/heif,application/pdf" multiple style="display:none">
           <div class="shift-rcpt-thumbs" id="fuelRcptThumbs"></div>
@@ -1555,14 +1571,12 @@ html.fold-flex .sfoot-gap{width:0}
 </div></div>
 <div class="modal" id="clientModal"><div class="sheet" style="max-height:92vh;overflow:auto">
   <div class="grip"></div>
-  <h3 id="clTitle">Client &amp; Address</h3>
-  <p class="csub">Add a passenger, then save one or more addresses (Home, Work, Day program, Custom). Commas in the name field link extra riders to the same contact.</p>
+  <h3><span id="clTitle">Client &amp; Address</span> <span class="help" data-help="Name the passenger, pick Home / Work / School / Day program / Custom, then type the street. Custom lets you name it (Nanna’s, gym, church). Commas in the name field link extra riders to the same contact." aria-label="Help">?</span></h3>
   
   <label class="fl">Passenger Name(s)</label>
   <input id="clName" placeholder="e.g. Holly Nguyen, David Nguyen" autocomplete="name">
 
-  <label class="fl" style="margin-top:8px">Addresses</label>
-  <p class="addr-empty-hint">Tap a category, type the street, or paste a Maps link. Add as many as you drive to.</p>
+  <label class="fl" style="margin-top:8px">Addresses <span class="help" data-help="Tap a kind, then type the street or paste a Maps link. Custom asks what the address is called." aria-label="Help">?</span></label>
   <div id="clAddrs"></div>
   <button class="add" id="clAddAddr" type="button" style="margin-top:4px">+ Add another address</button>
 
@@ -1610,14 +1624,16 @@ html.fold-flex .sfoot-gap{width:0}
 <div class="modal" id="addStopModal"><div class="sheet" style="max-height:92vh;overflow:auto">
   <div class="grip"></div>
   <h3>Add Stop to Run Plan</h3>
-  <p class="csub">Pick from your client list or enter a custom stop</p>
 
   <label class="fl">Select Client</label>
   <select id="addStopClientSelect"></select>
 
-  <div id="addStopAddrWrap" style="margin-top:8px">
-    <label class="fl">Select Address</label>
+  <div id="addStopAddrWrap" style="margin-top:8px;display:none">
+    <label class="fl" id="addStopAddrLbl">Address for this stop</label>
     <select id="addStopAddrSelect"></select>
+    <label class="fl" style="margin-top:8px">Or type a new address</label>
+    <input id="addStopNewLine" placeholder="Type an address or paste a Maps link" autocomplete="street-address">
+    <div class="sugg" id="addStopNewSugg" style="display:none"></div>
   </div>
 
   <div style="text-align:center;margin:12px 0 8px;font-size:11px;color:var(--mut);font-weight:700">── OR CUSTOM STOP ──</div>
@@ -1652,6 +1668,7 @@ html.fold-flex .sfoot-gap{width:0}
 </div>
 <button type="button" class="home-btn" id="homeBtn" aria-label="Home">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10.5V20h12v-9.5"/></svg>
+  <span class="live-pip" aria-hidden="true"></span>
 </button>
 <div class="upd-banner" id="updBanner">
   <div><b>Update ready</b><span>New Fareo version — your data stays</span></div>
@@ -1678,8 +1695,13 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.34';
+var APP_VERSION='8.35';
 var CHANGELOG=[
+  {v:'8.35',date:'September 18, 2026',notes:[
+    ['UI/UX','A tiny live chip shows when a shift log is in progress. Today shows take-home; yesterday and edits use a quieter cue. Tap the chip to jump back \u2014 Home\u2019s Log Shift button matches.'],
+    ['UI/UX','Add client: pick Home / Work / School / Day program / Custom, then type the street. Custom asks what the address is. Choosing a client on a run stop also lets you type a new address.'],
+    ['UI/UX','Helper copy on Log Shift and Address Book sits in the ? tooltips only, so the screens stay compact.'],
+  ]},
   {v:'8.34',date:'September 18, 2026',notes:[
     ['UI/UX','Log Shift is two steps: pick the date and log amounts first, then compact slips, rego, and the share message.'],
     ['UI/UX','Attachments sit on Share as compact thumbs. Hail is still required before you leave Log; a fuel receipt still needs a fuel amount.'],
@@ -2070,6 +2092,95 @@ function draftHasWork(d){
     Object.keys(d.custom||{}).some(function(k){return nn(d.custom[k])>0})
   ));
 }
+function draftHasOpenLog(d){
+  d=d||draft;
+  function rowsHave(a){return (a||[]).some(function(r){return nn(r&&r.amount)>0||String((r&&r.name)||'').trim()!==''})}
+  return !!(d&&(
+    d._edit||nn(d.runs)>0||
+    (d.eos||[]).some(function(v){return nn(v)>0})||
+    String(d.hail==null?'':d.hail).trim()!==''||
+    rowsHave(d.cash)||rowsHave(d.square)||rowsHave(d.accounts)||rowsHave(d.fuel)||
+    Object.keys(d.custom||{}).some(function(k){return nn(d.custom[k])>0})||
+    (typeof eosReceipts!=='undefined'&&eosReceipts&&eosReceipts.length)||
+    (typeof fuelReceipts!=='undefined'&&fuelReceipts&&fuelReceipts.length)
+  ));
+}
+function compactMoney(v){
+  var n=Number(v);if(!isFinite(n))n=0;
+  var sign=n<0?'-':'';
+  var a=Math.abs(n);
+  if(a>=1000)return sign+'$'+Math.round(a);
+  if(Math.abs(a-Math.round(a))<0.005)return sign+'$'+Math.round(a);
+  return sign+'$'+a.toFixed(2);
+}
+function draftLiveState(){
+  if(!draftHasOpenLog())return null;
+  var date=draft.date||todayStr();
+  var today=todayStr();
+  var yest=typeof yesterdayStr==='function'?yesterdayStr():'';
+  var take=typeof takeT==='function'?takeT():0;
+  var editing=!!draft._edit;
+  var mode=editing?'edit':(date===today?'live':'stale');
+  var hasTake=Math.abs(take)>0.005;
+  var takeTxt=compactMoney(take);
+  var chip,hub,aria;
+  if(editing){
+    chip='Edit';
+    hub=hasTake?takeTxt:'Edit';
+    aria='Editing saved shift for '+fmtDayLong(date)+', take-home '+money(take)+'. Open log.';
+  }else if(date===today){
+    chip=hasTake?takeTxt:'Live';
+    hub=hasTake?takeTxt:'Live';
+    aria='Log in progress, take-home '+money(take)+'. Open log.';
+  }else if(date===yest){
+    chip='Yest';
+    hub=hasTake?takeTxt:'Yest';
+    aria='Yesterday log still open, take-home '+money(take)+'. Open log.';
+  }else{
+    var dd=asDate(date);
+    var short=isNaN(dd.getTime())?'Log':pad2(dd.getDate())+'/'+pad2(dd.getMonth()+1);
+    chip=short;
+    hub=hasTake?takeTxt:short;
+    aria='Unfinished log for '+fmtDayLong(date)+', take-home '+money(take)+'. Open log.';
+  }
+  return {mode:mode,chip:chip,hub:hub,aria:aria};
+}
+function updateLogProgress(){
+  var st=draftLiveState();
+  var wx=$('#wx');
+  if(wx){
+    var txt=$('.wx-txt',wx);
+    wx.classList.toggle('live',!!st);
+    wx.classList.toggle('stale',!!(st&&st.mode==='stale'));
+    wx.classList.toggle('edit',!!(st&&st.mode==='edit'));
+    if(st){
+      wx.setAttribute('aria-label',st.aria);
+      wx.setAttribute('title',st.aria);
+      if(txt)txt.textContent=st.chip;
+    }else{
+      wx.setAttribute('aria-label','Fareo');
+      wx.removeAttribute('title');
+      if(txt)txt.textContent='Fareo';
+    }
+  }
+  var core=$('#hubLog');
+  if(core){
+    var lbl=$('#hubLogLbl');
+    core.classList.toggle('live',!!st);
+    core.classList.toggle('stale',!!(st&&st.mode==='stale'));
+    core.classList.toggle('edit',!!(st&&st.mode==='edit'));
+    core.setAttribute('aria-label',st?st.aria:'Log Shift');
+    if(lbl)lbl.textContent=st?st.hub:'Log Shift';
+  }
+  var home=$('#homeBtn');
+  if(home){
+    var showPip=!!st&&typeof curTab==='string'&&curTab!=='hub'&&curTab!=='shift';
+    home.classList.toggle('log-live',showPip);
+    home.classList.toggle('stale',showPip&&st.mode==='stale');
+    home.classList.toggle('edit',showPip&&st.mode==='edit');
+    home.setAttribute('aria-label',showPip?'Home, log in progress':'Home');
+  }
+}
 draft=normalizeDraft(draft);
 /* Empty drafts roll to today; any entered shift data resumes exactly as saved. */
 if(!draftHasWork(draft)){draft.date=todayStr();draft.rego='';}
@@ -2299,11 +2410,11 @@ function updateReceiptUI(){
   if(typeof updateFooter==='function')updateFooter();
 }
 function syncAttachOcrHint(){
-  var hint=$('#eosAttachHint');
-  if(hint){
-    hint.textContent=settings.ocrHail
-      ?'Optional — add slips here. Hail OCR fills the count on Log when it is on.'
-      :'Optional — add slips here. Hail OCR is off (Settings). Hail is entered on Log.';
+  var help=$('#eosAttachHelp');
+  if(help){
+    help.setAttribute('data-help', settings.ocrHail
+      ? 'Attach EOS slip photo(s) if you have them. You can share without a photo — Fareo will ask you to confirm. When Hail OCR is on, Rank/Hail is read automatically.'
+      : 'Attach EOS slip photo(s) if you have them. You can share without a photo — Fareo will ask you to confirm. Hail OCR is off (Settings). Hail is entered on Log.');
   }
   var st=$('#ocrStatus');
   if(st&&!settings.ocrHail){st.style.display='none'}
@@ -3005,6 +3116,7 @@ function render(){
   var la=$('#levyAmt');if(la)la.textContent=money(levyT());
   updateFooter();
   if(typeof updateReviewSum==='function')updateReviewSum();
+  if(typeof updateLogProgress==='function')updateLogProgress();
   buildPreview();persist();
 }
 function docsOk(){return hailEnteredOk() && fuelReceiptRequiredOk()}
@@ -3033,7 +3145,7 @@ document.addEventListener('input',function(e){
 document.addEventListener('change',function(e){
   var d=e.target.dataset;
   if(d.ft!=null){draft.fuel[d.ft].type=e.target.value;render()}
-  else if(e.target.id==='rego'){draft.rego=e.target.value;buildPreview();persist();if(typeof updateFooter==='function')updateFooter();if(typeof updateReviewSum==='function')updateReviewSum();}
+  else if(e.target.id==='rego'){draft.rego=e.target.value;buildPreview();persist();if(typeof updateFooter==='function')updateFooter();if(typeof updateReviewSum==='function')updateReviewSum();if(typeof updateLogProgress==='function')updateLogProgress();}
   if(d.cn!=null||d.an!=null||d.sn!=null)addName(e.target.value);
 });
 document.addEventListener('click',function(e){
@@ -3056,7 +3168,7 @@ document.addEventListener('click',function(e){
 });
 function freshDraft(keepRego){return {date:todayStr(),eos:[''],cash:[{name:'',amount:0}],square:[{name:'',amount:0}],runs:0,accounts:[],fuel:[{amount:0,type:settings.fuel,opPaid:false}],hail:'',rego:keepRego||'',receipt:false,receiptName:'',custom:{}}}
 /* Date picker handlers */
-function setDraftDate(d){draft.date=d;persist();rowInputs();buildPreview();if(typeof updateReviewSum==='function')updateReviewSum();}
+function setDraftDate(d){draft.date=d;persist();rowInputs();buildPreview();if(typeof updateReviewSum==='function')updateReviewSum();if(typeof updateLogProgress==='function')updateLogProgress();}
 $('#todayBtn').onclick=function(){setDraftDate(todayStr())};
 $('#yesterBtn').onclick=function(){setDraftDate(yesterdayStr())};
 $('#shiftDate').oninput=function(){if(this.value)setDraftDate(this.value)};
@@ -4511,10 +4623,17 @@ function firstDupAddr(list){
 }
 function presetOn(title,p){
   var t=String(title||'').toLowerCase(),n=String(p||'').toLowerCase();
-  if(t===n)return true;
-  if(n==='custom'&&(t==='other'||t==='custom'))return true;
   if(n==='day program'&&(t==='day program'||t==='dayprogram'))return true;
-  return false;
+  if(n==='custom'){
+    if(t==='other'||t==='custom'||!t)return true;
+    if(t==='home'||t==='work'||t==='school'||t==='day program'||t==='dayprogram')return false;
+    return true;
+  }
+  return t===n;
+}
+function isNamedAddrKind(title){
+  var t=String(title||'').toLowerCase();
+  return t==='home'||t==='work'||t==='school'||t==='day program'||t==='dayprogram';
 }
 function nextAddrPreset(list){
   var used=(list||[]).map(function(a){return String(a.title||'').toLowerCase()});
@@ -5210,24 +5329,75 @@ function updateAddStopAddrOptions(){
   var cid = cSel ? cSel.value : '';
   var aWrap = $('#addStopAddrWrap');
   var aSel = $('#addStopAddrSelect');
+  var aLbl = $('#addStopAddrLbl');
+  var newLine = $('#addStopNewLine');
+  var sug = $('#addStopNewSugg');
+  if(newLine){ newLine.value = ''; newLine._lat = null; newLine._lng = null; }
+  if(sug){ sug.style.display = 'none'; sug.innerHTML = ''; }
   if(!cid){
     if(aWrap) aWrap.style.display = 'none';
     return;
   }
   var c = findClient(cid);
-  if(!c || !c.addresses || !c.addresses.length){
+  if(!c){
     if(aWrap) aWrap.style.display = 'none';
     return;
   }
   if(aWrap) aWrap.style.display = 'block';
+  var filled = (c.addresses || []).filter(function(a){ return a && String(a.line || '').trim(); });
   if(aSel){
-    aSel.innerHTML = c.addresses.map(function(a){
-      return '<option value="' + esc(a.id) + '">' + esc(a.title || 'Address') + (a.line ? ' — ' + esc(a.line) : '') + '</option>';
-    }).join('');
+    if(filled.length){
+      aSel.style.display = '';
+      if(aLbl) aLbl.style.display = '';
+      aSel.innerHTML = '<option value="">Type a new address below</option>' + filled.map(function(a){
+        return '<option value="' + esc(a.id) + '">' + esc(a.title || 'Address') + (a.line ? ' — ' + esc(a.line) : '') + '</option>';
+      }).join('');
+      aSel.value = filled.length === 1 ? filled[0].id : '';
+    }else{
+      aSel.style.display = 'none';
+      aSel.innerHTML = '';
+      if(aLbl) aLbl.style.display = 'none';
+    }
+  }
+  if(newLine){
+    setTimeout(function(){ try{ if(!filled.length) newLine.focus(); }catch(_){} }, 60);
   }
 }
 
 if($('#addStopClientSelect')) $('#addStopClientSelect').onchange = updateAddStopAddrOptions;
+
+if($('#addStopNewLine')){
+  $('#addStopNewLine').oninput = function(){
+    var val = this.value;
+    var pasted = parseMapsPaste(val);
+    if(pasted){
+      this.value = pasted.line;
+      this._lat = pasted.lat;
+      this._lng = pasted.lng;
+      return;
+    }
+    this._lat = null; this._lng = null;
+    var sug = $('#addStopNewSugg');
+    auSuggest(val, function(rows){
+      if(!sug) return;
+      if(!rows.length){ sug.style.display = 'none'; sug.innerHTML = ''; return; }
+      sug.style.display = 'block';
+      sug.innerHTML = rows.map(function(r, n){ return '<button type="button" data-ani="' + n + '">' + esc(r.line) + '</button>'; }).join('');
+      sug._rows = rows;
+      $$('button', sug).forEach(function(b){
+        b.onclick = function(){
+          var pick = sug._rows[Number(b.dataset.ani)];
+          if(!pick) return;
+          var inp = $('#addStopNewLine');
+          inp.value = pick.line;
+          inp._lat = pick.lat;
+          inp._lng = pick.lng;
+          sug.style.display = 'none';
+        };
+      });
+    });
+  };
+}
 
 if($('#addStopCustomLine')) {
   $('#addStopCustomLine').oninput = function(){
@@ -5267,9 +5437,31 @@ if($('#addStopConfirmBtn')) $('#addStopConfirmBtn').onclick = function(){
   if(cid){
     var c = findClient(cid);
     if(c){
-      var aSel = $('#addStopAddrSelect');
-      var aid = aSel ? aSel.value : '';
-      var addr = (c.addresses || []).filter(function(a){ return a.id === aid; })[0] || (c.addresses || [])[0];
+      var typed = ($('#addStopNewLine') ? $('#addStopNewLine').value : '').trim();
+      var typedInp = $('#addStopNewLine');
+      var addr = null;
+      if(typed){
+        if(!c.addresses) c.addresses = [];
+        addr = {
+          id: uid('a'),
+          title: nextAddrPreset(c.addresses),
+          kind: 'custom',
+          line: typed,
+          lat: typedInp ? typedInp._lat : null,
+          lng: typedInp ? typedInp._lng : null
+        };
+        addr.kind = String(addr.title).toLowerCase();
+        c.addresses.push(addr);
+      }else{
+        var aSel = $('#addStopAddrSelect');
+        var aid = aSel ? aSel.value : '';
+        addr = (c.addresses || []).filter(function(a){ return a.id === aid; })[0] || firstFilledAddr(c);
+      }
+      if(!addr || !String(addr.line || '').trim()){
+        toast('Type an address for this client');
+        if(typedInp) try{ typedInp.focus(); }catch(_){}
+        return;
+      }
       var fl = flagLabels(c);
       runPlan.push({
         id: uid('s'),
@@ -5286,7 +5478,7 @@ if($('#addStopConfirmBtn')) $('#addStopConfirmBtn').onclick = function(){
       persist();
       renderRuns();
       closeModal('addStopModal');
-      toast('Stop added to run plan');
+      toast(typed ? 'Address saved on client & added to run' : 'Stop added to run plan');
       return;
     }
   }
@@ -5474,14 +5666,20 @@ function renderClSchool(){
   if(pm)pm.classList.toggle('on',clDraft.school.pm!==false);
   fillAddrSelects();
 }
-function renderClAddrs(){
+function renderClAddrs(focusAid,focusKey){
   var box=$('#clAddrs');if(!box||!clDraft)return;
   box.innerHTML=(clDraft.addresses||[]).map(function(a){
     var u=mapsUrl(a);
+    var named=isNamedAddrKind(a.title);
+    var customVal=named?'':(String(a.title||'').toLowerCase()==='custom'?'':(a.title||''));
     return '<div class="addr-card" data-aid="'+esc(a.id)+'">'
-      +'<input class="ttl" data-k="title" value="'+esc(a.title||'')+'" placeholder="Home, Work, Custom…">'
+      +'<div class="addr-kind-lbl">What address</div>'
       +'<div class="addr-presets">'+ADDR_PRESETS.map(function(p){return '<button type="button" data-pre="'+esc(p)+'" class="'+(presetOn(a.title,p)?'on':'')+'">'+esc(p)+'</button>'}).join('')+'</div>'
-      +'<input data-k="line" value="'+esc(a.line||'')+'" placeholder="Type an address or paste a Maps link">'
+      +(named
+        ? '<input type="hidden" data-k="title" value="'+esc(a.title||'')+'">'
+        : '<label class="fl">What is this address?</label><input data-k="title" value="'+esc(customVal)+'" placeholder="e.g. Nanna\'s, gym, church" autocomplete="off">')
+      +'<label class="fl">Street address</label>'
+      +'<input data-k="line" value="'+esc(a.line||'')+'" placeholder="Type the street, suburb, or paste a Maps link" autocomplete="street-address">'
       +'<div class="sugg" data-sugg style="display:none"></div>'
       +(u?'<a class="addr-nav" href="'+esc(u)+'" target="_blank" rel="noopener">Open in Maps</a>':'')
       +'<div class="addr-acts"><button type="button" data-act="nav">Maps</button><button type="button" data-act="copy">Copy</button><button type="button" data-act="share">Share</button>'+(clDraft.addresses.length>1?'<button type="button" data-act="del">Delete</button>':'')+'</div>'
@@ -5532,13 +5730,27 @@ function renderClAddrs(){
         }else{
           addr[inp.dataset.k]=inp.value;
           if(inp.dataset.k==='title'){
+            if(!String(addr.title||'').trim())addr.kind='custom';
+            else addr.kind=String(addr.title).toLowerCase();
             $$('[data-pre]',card).forEach(function(p){p.classList.toggle('on',presetOn(inp.value,p.dataset.pre))});
             fillAddrSelects();
           }
         }
       };
     });
-    $$('[data-pre]',card).forEach(function(p){p.onclick=function(){if(!addr)return;addr.title=p.dataset.pre;addr.kind=String(p.dataset.pre).toLowerCase();renderClAddrs()}});
+    $$('[data-pre]',card).forEach(function(p){p.onclick=function(){
+      if(!addr)return;
+      var pre=p.dataset.pre;
+      if(pre==='Custom'){
+        if(isNamedAddrKind(addr.title)||String(addr.title||'').toLowerCase()==='custom')addr.title='';
+        addr.kind='custom';
+        renderClAddrs(id,'title');
+      }else{
+        addr.title=pre;
+        addr.kind=String(pre).toLowerCase();
+        renderClAddrs(id,'line');
+      }
+    }});
     $$('[data-act]',card).forEach(function(b){
       b.onclick=function(){
         if(!addr)return;
@@ -5551,6 +5763,15 @@ function renderClAddrs(){
     });
   });
   fillAddrSelects();
+  if(focusAid){
+    var focusCard=$('#clAddrs [data-aid="'+focusAid+'"]');
+    if(focusCard){
+      var focusInp=$('[data-k="'+(focusKey||'line')+'"]',focusCard);
+      if(focusInp&&focusInp.focus){
+        try{focusInp.focus();if(focusKey==='title'&&focusInp.select)focusInp.select()}catch(_){}
+      }
+    }
+  }
 }
 function syncShared(owner){
   (owner.addresses||[]).forEach(function(a){
@@ -5654,7 +5875,7 @@ function syncClDraftFields(){
     var a=findAddr(clDraft,card.dataset.aid);if(!a)return;
     var t=$('[data-k="title"]',card);if(t)a.title=String(t.value||'').trim();
     var l=$('[data-k="line"]',card);if(l)a.line=String(l.value||'').trim();
-    if(!a.title)a.title='Address';
+    if(!a.title)a.title=isNamedAddrKind(a.kind)?'Home':'Custom';
     if(!a.kind)a.kind=String(a.title).toLowerCase();
   });
   var filled=(clDraft.addresses||[]).filter(function(a){return a&&String(a.line||'').trim()});
@@ -5822,6 +6043,7 @@ function applyTab(tab){
   if(tab==='book')renderBook();
   window.scrollTo({top:0});
   syncTrailBtns();
+  if(typeof updateLogProgress==='function')updateLogProgress();
 }
 function go(tab){
   if(TABS.indexOf(tab)<0)return;
@@ -5850,6 +6072,7 @@ window.addEventListener('popstate',function(e){
   applyTab(tab);
 });
 if($('#homeBtn'))$('#homeBtn').onclick=function(){go('hub')};
+if($('#wx'))$('#wx').onclick=function(){if(this.classList.contains('live'))go('shift')};
 if($('#navBack'))$('#navBack').onclick=smartBack;
 if($('#navFwd'))$('#navFwd').onclick=smartFwd;
 $$('[data-hub]').forEach(function(b){b.onclick=function(){go(b.dataset.hub)}});
