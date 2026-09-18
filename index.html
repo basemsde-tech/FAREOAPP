@@ -1039,7 +1039,7 @@ html.fold-flex .sfoot-gap{width:0}
             <button class="add" id="addEos" type="button">+ Add EOS</button>
           </div>
           <div class="log-hail-dictate">
-            <div class="hail-head"><span class="dot" style="background:var(--dgr)"></span>Hail <span class="danger" style="font-size:10px">req</span><span class="help" data-help="Rank / street-hail trips for the CPV levy. When Hail OCR is on, counts from attached slips are summed into this one field." aria-label="Help">?</span><span class="sub-amt" id="levyTag">$0</span></div>
+            <div class="hail-head"><span class="dot" style="background:var(--dgr)"></span>Hail <span class="danger" style="font-size:10px">req</span><span class="help" data-help="Rank / street-hail trips for the CPV levy. When you pass the levy on in the fare, it becomes part of the taxable supply — GST is 1/11 of the full fare. The amount you remit to SRO comes off take-home (no GST credit). Hail OCR sums Rank/Hail counts from attached slips into this field." aria-label="Help">?</span><span class="sub-amt" id="levyTag">$0</span></div>
             <div class="hailwrap">
               <div class="hailamt"><small>Levy</small><b id="levyAmt">$0.00</b><span id="levyRate">$1.20 / trip</span></div>
               <div class="counter"><button type="button" id="hailMinus" aria-label="Decrease hail">&minus;</button><input id="hail" type="number" min="0" inputmode="numeric" placeholder="0" autocomplete="off"><button type="button" id="hailPlus" aria-label="Increase hail">+</button></div>
@@ -1274,7 +1274,7 @@ html.fold-flex .sfoot-gap{width:0}
     <div class="card" id="deadlineCard" style="padding:13px">
       <div class="ph-head">
         <span class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></span>
-        <div class="ph-t"><b>GST &amp; levy <span class="help" data-help="GST goes on the ATO BAS. Hail levy is taken off your take-home as a GST-free expense and lodged with SRO Victoria, not the BAS." aria-label="Help">?</span></b><p id="dlQLabel">Q1 · Jul – Sep</p></div>
+        <div class="ph-t"><b>GST &amp; levy <span class="help" data-help="GST is 1/11 of the full fare, including any levy you passed on to the passenger (BAS G1 / 1A). The levy you remit to SRO is a regulatory fee from your take-home — no GST credit, and not a BAS box." aria-label="Help">?</span></b><p id="dlQLabel">Q1 · Jul – Sep</p></div>
         <span class="ph-pill" id="dlLodgePill">This quarter</span>
       </div>
       <div class="q-switch" id="qSwitch"></div>
@@ -1297,7 +1297,7 @@ html.fold-flex .sfoot-gap{width:0}
     <div class="card" id="taxCard">
       <div class="ph-head">
         <span class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.2L14 21l-2-1.2L10 21l-2-1.2L6 21z"/><path d="M9 8h6M9 12h6"/></svg></span>
-        <div class="ph-t"><b>Costs &amp; GST</b><p id="taxRangeLbl">0 items</p></div>
+        <div class="ph-t"><b>Costs &amp; GST <span class="help" data-help="Fuel and receipts can claim GST (1B). Hail levy remittance has no GST credit — GST on that levy is already in the fare on G1 / 1A." aria-label="Help">?</span></b><p id="taxRangeLbl">0 items</p></div>
         <button class="ph-pill tap" id="taxGstNet" type="button" title="Open BAS figures">Pay $0.00</button>
       </div>
       <div class="two">
@@ -1346,7 +1346,7 @@ html.fold-flex .sfoot-gap{width:0}
     <p class="grp">Essentials</p>
     <div class="card" style="padding:0">
       <div class="set hot"><div class="sl"><b>Driver Percentage Share</b><p>Global &middot; flows to every calc</p></div><input id="setPct" type="number" min="0" max="100" inputmode="decimal"></div>
-      <div class="set"><div class="sl"><b>Hail Trip Levy</b><p>From your income in Reports &middot; 0 if BSP pays</p></div><input id="setLevy" type="number" min="0" inputmode="decimal"></div>
+      <div class="set"><div class="sl"><b>Hail Trip Levy <span class="help" data-help="When you add this levy to the passenger fare it becomes part of the taxable supply — GST is 1/11 of the full fare. The amount you remit to SRO Victoria comes off your take-home (no GST credit). Set 0 if your BSP pays it." aria-label="Help">?</span></b><p>From your income in Reports &middot; 0 if BSP pays</p></div><input id="setLevy" type="number" min="0" inputmode="decimal"></div>
       <div class="set"><div class="sl"><b>State Address Focus <span class="help" data-help="Prioritises and predicts addresses in your Australian state (Victoria by default)." aria-label="Help">?</span></b><p>Address search predictions</p></div><select id="setState" style="width:125px"><option value="VIC">VIC (Victoria)</option><option value="NSW">NSW</option><option value="QLD">QLD</option><option value="SA">SA</option><option value="WA">WA</option><option value="TAS">TAS</option><option value="ACT">ACT</option><option value="NT">NT</option><option value="ALL">All Australia</option></select></div>
       <div class="set"><div class="sl"><b>Cash &amp; Square GST-free <span class="help" data-help="When on, cash and Square fares are excluded from your GST-on-sales calculation (treated as GST-free income). EFTPOS, accounts and runs stay GST-inclusive." aria-label="Help">?</span></b><p>Exclude cash-type fares from GST</p></div><button class="tgl" id="setCashGst" aria-label="Toggle cash GST-free"></button></div>
       <div class="set"><div class="sl"><b>Week Cycle</b><p>Which day your week starts</p></div><select id="setWeek"></select></div>
@@ -1367,7 +1367,7 @@ html.fold-flex .sfoot-gap{width:0}
 
       <p class="grp">Tax model</p>
       <div class="card" style="padding:0">
-        <div class="set"><div class="sl"><b>GST Base <span class="help" data-help="Whether GST (1/11) is set aside on your full gross fares or only your driver share. Match this to your bailment agreement \u2014 ask your operator or tax agent which applies." aria-label="Help">?</span></b><p>Amount GST is set aside on</p></div><select id="setGstBase" class="wide"><option value="gross">Full gross</option><option value="share">Driver share</option></select></div>
+        <div class="set"><div class="sl"><b>GST Base <span class="help" data-help="Whether GST (1/11) is set aside on your full gross fares or only your driver share. GST applies to the whole fare, including any levy you passed on. The SRO levy payment is separate (no GST credit). Match this to your bailment agreement \u2014 ask your operator or tax agent which applies." aria-label="Help">?</span></b><p>Amount GST is set aside on</p></div><select id="setGstBase" class="wide"><option value="gross">Full gross</option><option value="share">Driver share</option></select></div>
       </div>
 
       <p class="grp">Payment Types</p>
@@ -1701,8 +1701,11 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.35';
+var APP_VERSION='8.36';
 var CHANGELOG=[
+  {v:'8.36',date:'September 18, 2026',notes:[
+    ['Tax','GST is 1/11 of the full fare, including any hail levy you passed on (G1 / 1A). The SRO remittance stays an expense from take-home with no GST credit (not 1B).'],
+  ]},
   {v:'8.35',date:'September 18, 2026',notes:[
     ['UI/UX','A tiny live chip shows when a shift log is in progress. Today shows take-home; yesterday and edits use a quieter cue. Tap the chip to jump back \u2014 Home\u2019s Log Shift button matches.'],
     ['UI/UX','Add client: pick Home / Work / School / Day program / Custom, then type the street. Custom asks what the address is. Choosing a client on a run stop also lets you type a new address.'],
@@ -3036,8 +3039,13 @@ function entryDriverHeld(e){
   });
   return h;
 }
-/* GST-inclusive sales base for one shift. Cash/Square GST-free is removed from gross,
-   then scaled by this shift's share ratio when GST is set aside on driver share. */
+function entryLevy(e){return (Number(e.hail)||0)*levyRate()}
+/* GST-inclusive sales base for one shift.
+   Logged fares (gross) are what passengers paid. Passing the levy on converts it
+   into a component of that taxable supply — GST is 1/11 of the full fare, not a
+   GST-free disbursement. Do not add hail×rate again (it is already in the fare).
+   Cash/Square GST-free is removed from gross, then scaled by this shift's share
+   ratio when GST is set aside on driver share. */
 function entryGstBase(e){
   var g=Number(e.gross)||0;
   var free=settings.cashGstFree?((Number(e.cash)||0)+(Number(e.square)||0)):0;
@@ -3864,11 +3872,12 @@ function rangeAgg(){
   var share=es.reduce(function(a,b){return a+entryShare(b)},0);
   /* Cash & Square treated as GST-free income when the toggle is on. Remove them
      from gross first; if GST is on driver share, scale the leftover by this
-     shift's share ratio so mixed EFTPOS+cash days don't understate G1. */
+     shift's share ratio so mixed EFTPOS+cash days don't understate G1.
+     Passed-on levy is already inside logged fares, so G1/1A include it. */
   var gstBaseAmt=es.reduce(function(a,b){return a+entryGstBase(b)},0);
   if(gstBaseAmt<0)gstBaseAmt=0;
   var gst=gstBaseAmt/11;
-  var hailN=es.reduce(function(a,b){return a+(Number(b.hail)||0)},0),levy=hailN*levyRate();
+  var hailN=es.reduce(function(a,b){return a+(Number(b.hail)||0)},0),levy=es.reduce(function(a,b){return a+entryLevy(b)},0);
   var fD=es.reduce(function(a,b){return a+(b.fuelByType?(Number(b.fuelByType.Diesel)||0):0)},0),fP=es.reduce(function(a,b){return a+(b.fuelByType?(Number(b.fuelByType.Petrol)||0):0)},0),fL=es.reduce(function(a,b){return a+(b.fuelByType?(Number(b.fuelByType.LPG)||0):0)},0);
   var fuel=es.reduce(function(a,b){return a+(Number(b.fuel)||0)},0);
   /* Fuel split by who paid (display only). opPaid fuel is excluded from settlement,
@@ -3907,7 +3916,8 @@ function rangeAgg(){
      Fuel is GST-inclusive, so credit = 1/11, deduction = 10/11. */
   var fuelCred=fuelAll/11,fuelDed=fuelAll*10/11;
   var oneB=expCred+fuelCred;
-  /* Levy is GST-free: full amount comes off income and is deductible. Lodge with SRO, not BAS. */
+  /* SRO remittance is a regulatory fee: full amount comes off income, no 1B.
+     GST on the passed-on levy sits in G1/1A (logged fares), not in this line. */
   var dedTotal=expDed+fuelDed+levy;
   var pocket=inc-levy;
   var net=inc-(gst-oneB)-dedTotal;
@@ -4134,7 +4144,7 @@ function renderReports(){
     grouped[key].amt+=nn(amt);
     grouped[key].count+=(cnt||1);
   }
-  if(a.levy>0)pushG('Levy',dedRow({name:'Hail / CPV levy',meta:(a.hailN||0)+' hail trip'+(a.hailN!==1?'s':'')+' \u00d7 '+money(levyRate())+' \u00b7 SRO',amt:a.levy,sub:'from income \u00b7 GST-free \u00b7 deduct '+money(a.levy)}),a.levy,1);
+  if(a.levy>0)pushG('Levy',dedRow({name:'Hail / CPV levy',meta:(a.hailN||0)+' hail trip'+(a.hailN!==1?'s':'')+' \u00d7 '+money(levyRate())+' \u00b7 SRO',amt:a.levy,sub:'from income \u00b7 no GST credit \u00b7 deduct '+money(a.levy)}),a.levy,1);
   if(a.fuelShift>0)pushG('Fuel',dedRow({fuel:true,name:'Fuel from shifts',meta:'Auto from tracker \u00b7 '+a.fcShift+' fill'+(a.fcShift===1?'':'s'),amt:a.fuelShift,sub:gstBit(a.fuelShift,true)}),a.fuelShift,a.fcShift);
   a.fmList.slice().sort(function(x,y){return x.date<y.date?1:-1}).forEach(function(m){
     pushG('Fuel',dedRow({fuel:true,name:'Fuel ('+esc(m.type)+')',meta:fmtDayDMY(m.date)+(m.receiptId?' \u00b7 receipt':' \u00b7 no receipt'),amt:m.amount,sub:gstBit(m.amount,true),delAttr:'data-delfm="'+esc(m.id)+'"',rid:m.receiptId||''}),m.amount,1);
@@ -4332,7 +4342,7 @@ function summaryHTML(light){var a=rangeAgg();
     +r('Gross revenue',money(a.gross))
     +r('Driver share',money(a.share))
     +r('Hail levy (expense from income, '+a.hailN+' trips)',money(a.levy))
-    +r('GST set aside (1/11 of '+(settings.gstBase==='share'?'driver share':'full gross')+')',money(a.gst))
+    +r('GST on sales (1/11 of '+(settings.gstBase==='share'?'driver share':'full fare')+', incl. levy in the fare)',money(a.gst))
     +r('Fuel ('+a.fc+' fills): I paid '+money(a.fuelIPaid)+', operator paid '+money(a.fuelOpPaid),money(a.fuel))
     +r('GST credits (1B)',money(a.oneB))+r('Deductible expenses (incl. levy)',money(a.dedTotal))
     +r('Est. net after GST & expenses',money(a.net),true)
@@ -4346,7 +4356,7 @@ function basSummaryHTML(light){var a=rangeAgg();
   return '<div style="font-family:Inter,system-ui,sans-serif;color:'+c.head+'">'
     +'<h3 style="margin:0 0 2px;font-size:20px;color:'+c.head+'">BAS prep summary</h3>'
     +'<p style="margin:0 0 4px;color:'+c.mut+';font-size:12.5px">'+esc(repRange.name)+' \u00b7 '+fmtDMY(repRange.from)+' \u2013 '+fmtDMY(repRange.to)+' &middot; Goods &amp; services tax (GST)</p>'
-    +'<p style="margin:0 0 14px;color:'+c.mut+';font-size:11px">Enter these on your ATO activity statement. Sales base: '+(settings.gstBase==='share'?'driver share':'full gross')+'.</p>'
+    +'<p style="margin:0 0 14px;color:'+c.mut+';font-size:11px">Enter these on your ATO activity statement. Sales base: '+(settings.gstBase==='share'?'driver share':'full fare')+'. G1 includes levy recovery in logged fares.</p>'
     +box('G1','Total sales (GST inclusive)',money(g1))
     +'<div style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:'+c.mut+';font-weight:700;margin:10px 0 2px">You owe ATO</div>'
     +box('1A','GST on sales',money(oneA),true)
@@ -4357,11 +4367,11 @@ function basSummaryHTML(light){var a=rangeAgg();
     +'<div style="background:'+c.card+';border-radius:12px;padding:14px;margin-top:14px;text-align:center">'
       +'<div style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:'+c.mut+';font-weight:700">'+(net>=0?'Amount payable to ATO':'Refund from ATO')+'</div>'
       +'<div style="font-size:30px;font-weight:800;margin-top:4px;color:'+(net>=0?c.red:c.grn)+'">'+money(Math.abs(net))+'</div></div>'
-    +'<p style="margin:12px 0 0;color:'+c.mut+';font-size:10.5px">Hail levy ('+money(a.levy)+') is an expense from your income. Lodge it with SRO — not on the BAS.</p>'
+    +'<p style="margin:12px 0 0;color:'+c.mut+';font-size:10.5px">G1 / 1A include levy recovery in the fare. The SRO remittance ('+money(a.levy)+') comes off income — do not claim 1B on it.</p>'
     +'<p style="margin:6px 0 0;color:'+c.mut+';font-size:10.5px">Helper only \u2014 check with your tax agent before you lodge. Fareo &middot; '+fmtDayLong(new Date())+'</p></div>'}
 function basHowHTML(){
   return '<div class="basguide">'
-    +'<p class="bas-note">A BAS is the ATO form you lodge every 3 months. Fareo works out the GST boxes. The hail-trip (CPV) levy is a <b>different</b> form for the SRO in Victoria — leave it off the BAS.</p>'
+    +'<p class="bas-note">A BAS is the ATO form you lodge every 3 months. Fareo works out the GST boxes. G1 is the full fare including any levy you passed on. The hail-trip (CPV) levy you remit is a <b>different</b> form for the SRO in Victoria — no GST credit, leave that payment off the BAS.</p>'
     +'<div class="bas-step"><span class="bas-n">1</span><p><b>Show this quarter.</b> BAS periods are Jul–Sep, Oct–Dec, Jan–Mar and Apr–Jun. Use the Quarter filter at the top so the numbers match that period.</p></div>'
     +'<div class="bas-step"><span class="bas-n">2</span><p><b>Log every cost.</b> Add fuel and expenses (tolls, wash, repairs). Snap the receipt. Fareo splits GST for you.</p></div>'
     +'<div class="bas-step"><span class="bas-n">3</span><p><b>Open BAS figures.</b> You will see: <b>G1</b> total sales, <b>1A</b> GST you collected (you owe this), <b>1B</b> GST you paid on fuel and costs (you claim this back). The big number is 1A minus 1B — pay it if it is positive, or wait for a refund if it is negative.</p></div>'
@@ -4404,7 +4414,7 @@ if($('#pulseShifts'))$('#pulseShifts').onclick=function(){if(repRange.name==='Th
 if($('#qGstTile'))$('#qGstTile').onclick=function(){showTrackedQuarter();openSummary('bas')};
 if($('#qLevyTile'))$('#qLevyTile').onclick=function(){
   showTrackedQuarter();
-  toast('Levy comes off your take-home. Lodge with SRO, not the BAS');
+  toast('Levy remittance comes off take-home. Lodge with SRO. GST on the fare (incl. levy) is on the BAS');
 };
 function openSummary(mode){
   curSummaryMode=mode;
