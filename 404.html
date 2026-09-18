@@ -1257,18 +1257,24 @@ html.fold-flex .sfoot-gap{width:0}
         <div><small>Per shift</small><b id="pulseAvg">$0.00</b></div>
         <div><small>Days on</small><b id="pulseDays">0/7</b></div>
       </div>
+      <div class="levy-inline" id="pulseLevyRow" hidden>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v18M8 7h7a3 3 0 0 1 0 6H9a3 3 0 0 0 0 6h8"/></svg>
+        <span>Levy off income</span>
+        <b id="pulseLevyAmt">$0.00</b>
+        <span id="pulseLevyMeta" style="margin-left:auto;color:var(--mut);font-size:11px;font-weight:600"></span>
+      </div>
     </div>
 
     <div class="card chart-card" id="insightCard">
       <div class="chart-head"><b>Income vs costs</b><span id="chartGrainLbl">This range</span></div>
-      <div class="chart-sum"><span class="ci">Take-home <b id="chartInc">$0.00</b></span><span class="ce">Costs <b id="chartExp">$0.00</b></span></div>
+      <div class="chart-sum"><span class="ci">After levy <b id="chartInc">$0.00</b></span><span class="ce">Costs <b id="chartExp">$0.00</b></span></div>
       <div class="chart pie" id="chartBars"></div>
     </div>
 
     <div class="card" id="deadlineCard" style="padding:13px">
       <div class="ph-head">
         <span class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></span>
-        <div class="ph-t"><b>GST &amp; levy</b><p id="dlQLabel">Q1 · Jul – Sep</p></div>
+        <div class="ph-t"><b>GST &amp; levy <span class="help" data-help="GST goes on the ATO BAS. Hail levy is taken off your take-home as a GST-free expense and lodged with SRO Victoria, not the BAS." aria-label="Help">?</span></b><p id="dlQLabel">Q1 · Jul – Sep</p></div>
         <span class="ph-pill" id="dlLodgePill">This quarter</span>
       </div>
       <div class="q-switch" id="qSwitch"></div>
@@ -1281,9 +1287,9 @@ html.fold-flex .sfoot-gap{width:0}
           <span class="sub" id="qGstSub">1A $0 · 1B $0</span>
         </button>
         <button type="button" id="qLevyTile">
-          <small>Hail levy · SRO</small>
+          <small>Levy · from income</small>
           <b id="qLevyAmt" style="color:var(--levy)">$0.00</b>
-          <span class="sub" id="qLevySub">0 trips · not on the BAS</span>
+          <span class="sub" id="qLevySub">0 trips · SRO</span>
         </button>
       </div>
     </div>
@@ -1340,7 +1346,7 @@ html.fold-flex .sfoot-gap{width:0}
     <p class="grp">Essentials</p>
     <div class="card" style="padding:0">
       <div class="set hot"><div class="sl"><b>Driver Percentage Share</b><p>Global &middot; flows to every calc</p></div><input id="setPct" type="number" min="0" max="100" inputmode="decimal"></div>
-      <div class="set"><div class="sl"><b>Hail Trip Levy</b><p>Per trip ($) &middot; 0 allowed if BSP pays</p></div><input id="setLevy" type="number" min="0" inputmode="decimal"></div>
+      <div class="set"><div class="sl"><b>Hail Trip Levy</b><p>From your income in Reports &middot; 0 if BSP pays</p></div><input id="setLevy" type="number" min="0" inputmode="decimal"></div>
       <div class="set"><div class="sl"><b>State Address Focus <span class="help" data-help="Prioritises and predicts addresses in your Australian state (Victoria by default)." aria-label="Help">?</span></b><p>Address search predictions</p></div><select id="setState" style="width:125px"><option value="VIC">VIC (Victoria)</option><option value="NSW">NSW</option><option value="QLD">QLD</option><option value="SA">SA</option><option value="WA">WA</option><option value="TAS">TAS</option><option value="ACT">ACT</option><option value="NT">NT</option><option value="ALL">All Australia</option></select></div>
       <div class="set"><div class="sl"><b>Cash &amp; Square GST-free <span class="help" data-help="When on, cash and Square fares are excluded from your GST-on-sales calculation (treated as GST-free income). EFTPOS, accounts and runs stay GST-inclusive." aria-label="Help">?</span></b><p>Exclude cash-type fares from GST</p></div><button class="tgl" id="setCashGst" aria-label="Toggle cash GST-free"></button></div>
       <div class="set"><div class="sl"><b>Week Cycle</b><p>Which day your week starts</p></div><select id="setWeek"></select></div>
@@ -1700,7 +1706,7 @@ var CHANGELOG=[
   {v:'8.35',date:'September 18, 2026',notes:[
     ['UI/UX','A tiny live chip shows when a shift log is in progress. Today shows take-home; yesterday and edits use a quieter cue. Tap the chip to jump back \u2014 Home\u2019s Log Shift button matches.'],
     ['UI/UX','Add client: pick Home / Work / School / Day program / Custom, then type the street. Custom asks what the address is. Choosing a client on a run stop also lets you type a new address.'],
-    ['UI/UX','Helper copy on Log Shift and Address Book sits in the ? tooltips only, so the screens stay compact.'],
+    ['Tax','Reports treat hail levy as an expense from your take-home (GST-free). Pulse, costs pie, deductions and summaries subtract it; BAS boxes stay GST-only (SRO lodges separately).'],
   ]},
   {v:'8.34',date:'September 18, 2026',notes:[
     ['UI/UX','Log Shift is two steps: pick the date and log amounts first, then compact slips, rego, and the share message.'],
@@ -3774,7 +3780,7 @@ function renderDeadlines(){
   var ga=$('#qGstAmt');if(ga){ga.textContent=(gstPay?'Pay ':'Refund ')+money(Math.abs(dl.netGst));ga.style.color=gstPay?'var(--dgr)':'var(--inc)'}
   var gs=$('#qGstSub');if(gs)gs.textContent='1A '+money(dl.gst1A)+' · 1B '+money(dl.gst1B)+' · due '+dl.basDueFmt;
   var la=$('#qLevyAmt');if(la)la.textContent=money(dl.levy);
-  var ls=$('#qLevySub');if(ls)ls.textContent=dl.qHail+' hail trip'+(dl.qHail!==1?'s':'')+' · due '+dl.levyDueFmt+' · not BAS';
+  var ls=$('#qLevySub');if(ls)ls.textContent=dl.qHail+' hail trip'+(dl.qHail!==1?'s':'')+' · from income · '+dl.levyDueFmt;
   var qs=quartersList(),cur=currentQuarterKey(),key=trackQ||cur;
   var sw=$('#qSwitch');
   if(sw){
@@ -3901,10 +3907,13 @@ function rangeAgg(){
      Fuel is GST-inclusive, so credit = 1/11, deduction = 10/11. */
   var fuelCred=fuelAll/11,fuelDed=fuelAll*10/11;
   var oneB=expCred+fuelCred;
-  var dedTotal=expDed+fuelDed;
-  var net=inc-(gst-oneB)-dedTotal-levy;
-  return{es:es,inc:inc,gross:gross,share:share,gstBaseAmt:gstBaseAmt,gst:gst,hailN:hailN,levy:levy,fD:fD,fP:fP,fL:fL,fuel:fuelAll,fuelShift:fuel,fuelManual:fuelManualTotal,fmCount:fmCount,fmList:fmList,fuelIPaid:fuelIPaid,fuelOpPaid:fuelOpPaid,fc:fc+fmCount,fcShift:fc,expCred:expCred,expDed:expDed,fuelCred:fuelCred,fuelDed:fuelDed,oneB:oneB,dedTotal:dedTotal,dn:dn,net:net,shifts:es.length,allDed:allDed,mixEftpos:mixEftpos,mixCash:mixCash,mixSquare:mixSquare,mixRuns:mixRuns,mixCustom:mixCustom,mixAcct:mixAcct}}
-function spentOf(a){return (a.fuel||0)+a.allDed.reduce(function(s,d){return s+nn(d.amount)},0)}
+  /* Levy is GST-free: full amount comes off income and is deductible. Lodge with SRO, not BAS. */
+  var dedTotal=expDed+fuelDed+levy;
+  var pocket=inc-levy;
+  var net=inc-(gst-oneB)-dedTotal;
+  return{es:es,inc:inc,pocket:pocket,gross:gross,share:share,gstBaseAmt:gstBaseAmt,gst:gst,hailN:hailN,levy:levy,fD:fD,fP:fP,fL:fL,fuel:fuelAll,fuelShift:fuel,fuelManual:fuelManualTotal,fmCount:fmCount,fmList:fmList,fuelIPaid:fuelIPaid,fuelOpPaid:fuelOpPaid,fc:fc+fmCount,fcShift:fc,expCred:expCred,expDed:expDed,fuelCred:fuelCred,fuelDed:fuelDed,oneB:oneB,dedTotal:dedTotal,dn:dn,net:net,shifts:es.length,allDed:allDed,mixEftpos:mixEftpos,mixCash:mixCash,mixSquare:mixSquare,mixRuns:mixRuns,mixCustom:mixCustom,mixAcct:mixAcct}}
+function spentOf(a){return (a.fuel||0)+a.allDed.reduce(function(s,d){return s+nn(d.amount)},0)+(a.levy||0)}
+function pocketOf(a){return a&&a.pocket!=null?a.pocket:((a&&a.inc||0)-(a&&a.levy||0))}
 function daysInRange(from,to){if(!from||!to)return 0;return Math.round((asDate(to)-asDate(from))/86400000)+1}
 function auQStart(d){var m=d.getMonth(),y=d.getFullYear();if(m>=6&&m<=8)return new Date(y,6,1);if(m>=9)return new Date(y,9,1);if(m<=2)return new Date(y,0,1);return new Date(y,3,1)}
 function auQEnd(start){var m=start.getMonth(),y=start.getFullYear();if(m===6)return new Date(y,8,30);if(m===9)return new Date(y,11,31);if(m===0)return new Date(y,2,31);return new Date(y,5,30)}
@@ -3942,7 +3951,7 @@ function chartBuckets(){
 }
 function renderChart(a){
   var box=$('#chartBars'),lab=$('#chartGrainLbl'),incEl=$('#chartInc'),expEl=$('#chartExp');
-  var spent=spentOf(a),inc=a.inc||0;
+  var spent=spentOf(a),inc=pocketOf(a);
   if(incEl)incEl.textContent=money(inc);
   if(expEl)expEl.textContent=money(spent);
   if(lab)lab.textContent=repRange.name||'This range';
@@ -3956,7 +3965,7 @@ function renderChart(a){
     +'<circle cx="'+c+'" cy="'+c+'" r="'+r+'" fill="none" stroke="var(--fuel)" stroke-width="18"></circle>'
     +'<circle cx="'+c+'" cy="'+c+'" r="'+r+'" fill="none" stroke="var(--inc)" stroke-width="18" stroke-linecap="butt" stroke-dasharray="'+dashInc.toFixed(2)+' '+circ.toFixed(2)+'" transform="rotate(-90 '+c+' '+c+')"></circle>'
     +'</svg><div class="pie-leg">'
-    +'<div><span style="display:flex;align-items:center;gap:7px"><i class="pie-sw" style="background:var(--inc)"></i>Take-home</span><b>'+money(inc)+'</b></div>'
+    +'<div><span style="display:flex;align-items:center;gap:7px"><i class="pie-sw" style="background:var(--inc)"></i>After levy</span><b>'+money(inc)+'</b></div>'
     +'<div><span style="display:flex;align-items:center;gap:7px"><i class="pie-sw" style="background:var(--fuel)"></i>Costs</span><b>'+money(spent)+'</b></div>'
     +'<div><span style="color:var(--mut)">Yours of the mix</span><b>'+Math.round(keep)+'%</b></div>'
     +'</div></div>';
@@ -3965,7 +3974,8 @@ function renderCyclePulse(a){
   a=a||rangeAgg();
   var isWeek=repRange.name==='This Week';
   var prev=previousPeriod(repRange.from,repRange.to,repRange.name);
-  var lastA=prev?aggBetween(prev.from,prev.to):{inc:0,shifts:0};
+  var lastA=prev?aggBetween(prev.from,prev.to):{inc:0,pocket:0,levy:0,shifts:0};
+  var pocket=pocketOf(a),lastPocket=pocketOf(lastA);
   var cyc=cycleOf(0);
   var title=$('#pulseTitle');if(title)title.textContent=isWeek?'This cycle':(repRange.name||'This range');
   var sub=$('#pulseSub');
@@ -3975,16 +3985,16 @@ function renderCyclePulse(a){
     else sub.textContent=repRange.name||'Selected range';
   }
   $('#pulseShifts').textContent=a.shifts+' shift'+(a.shifts===1?'':'s');
-  $('#repTake').textContent=money(a.inc);
+  $('#repTake').textContent=money(pocket);
   $('#repGross').textContent=money(a.gross);
   var rn=$('#repNet');if(rn)rn.textContent=money(a.net);
-  var avgEl=$('#pulseAvg');if(avgEl)avgEl.textContent=a.shifts?money(a.inc/a.shifts):money(0);
+  var avgEl=$('#pulseAvg');if(avgEl)avgEl.textContent=a.shifts?money(pocket/a.shifts):money(0);
   var daysWorked={};
   a.es.forEach(function(e){daysWorked[e.date]=1});
   var nDays=Object.keys(daysWorked).length;
   var spanDays=daysInRange(repRange.from,repRange.to)||nDays;
   var pd=$('#pulseDays');if(pd)pd.textContent=isWeek?(nDays+'/7'):(nDays+'/'+spanDays);
-  var heroLbl=$('#pulseHeroLbl');if(heroLbl)heroLbl.textContent=(isWeek?'This cycle':(repRange.name||'Range'))+' take-home';
+  var heroLbl=$('#pulseHeroLbl');if(heroLbl)heroLbl.textContent=(isWeek?'This cycle':(repRange.name||'Range'))+' after levy';
   var keepPct=a.gross>0?Math.round((a.share||0)/a.gross*100):(Number(settings.pct)||0);
   if(keepPct<0)keepPct=0;if(keepPct>100)keepPct=100;
   var fill=$('#pulseKeepFill'),kp=$('#pulseKeepPct'),op=$('#pulseOpLbl'),keepBox=$('#pulseKeep');
@@ -3992,6 +4002,15 @@ function renderCyclePulse(a){
   if(kp)kp.textContent=keepPct+'%';
   if(op)op.textContent='operator '+(100-keepPct)+'%';
   if(keepBox)keepBox.style.display=a.gross>0?'block':'none';
+  var levyRow=$('#pulseLevyRow');
+  if(levyRow){
+    var hasLevy=a.levy>0.005;
+    levyRow.hidden=!hasLevy;
+    if(hasLevy){
+      var la=$('#pulseLevyAmt');if(la)la.textContent='\u2212 '+money(a.levy);
+      var lm=$('#pulseLevyMeta');if(lm)lm.textContent=(a.hailN||0)+' hail \u00d7 '+money(levyRate());
+    }
+  }
   var weekBits=$('#pulseWeekBits');if(weekBits)weekBits.style.display=isWeek?'block':'none';
   var delta=$('#pulseDelta');
   var vs=prev?prev.label:'last period';
@@ -3999,9 +4018,9 @@ function renderCyclePulse(a){
     if(repRange.name==='All Time'){delta.className='pulse-delta';delta.textContent=''}
     else if(a.shifts||lastA.shifts){
       var cls='flat',txt='Even vs '+vs;
-      if(lastA.inc<=0&&a.inc>0){cls='up';txt='New vs '+vs}
-      else if(lastA.inc>0){
-        var pct=Math.round((a.inc-lastA.inc)/lastA.inc*100);
+      if(lastPocket<=0&&pocket>0){cls='up';txt='New vs '+vs}
+      else if(lastA.shifts||lastPocket>0){
+        var pct=lastPocket>0?Math.round((pocket-lastPocket)/lastPocket*100):0;
         if(pct>=3){cls='up';txt='Up '+pct+'% vs '+vs}
         else if(pct<=-3){cls='down';txt='Down '+Math.abs(pct)+'% vs '+vs}
         else txt='About even vs '+vs;
@@ -4038,6 +4057,7 @@ function renderCyclePulse(a){
 function catLabel(c){
   var map = {
     Fuel: 'Fuel & Oil',
+    Levy: 'Hail levy (from income)',
     Tolls: 'Tolls & Parking',
     Maintenance: 'Repairs & Maintenance',
     Cleaning: 'Wash & Detailing',
@@ -4089,7 +4109,7 @@ function renderReports(){
   renderChart(a);
   renderJarMeta();
   $('#repGstCred').textContent=money(a.oneB);$('#repDeduct').textContent=money(a.dedTotal);
-  var trl=$('#taxRangeLbl');if(trl)trl.textContent=(a.dn+a.fc)+' item'+(a.dn+a.fc===1?'':'s');
+  var trl=$('#taxRangeLbl');if(trl)trl.textContent=(a.dn+a.fc+(a.levy>0?1:0))+' item'+(a.dn+a.fc+(a.levy>0?1:0)===1?'':'s');
   var netGst=a.gst-a.oneB;
   var pay=netGst>=0;
   var pill=$('#taxGstNet');
@@ -4107,13 +4127,14 @@ function renderReports(){
     var kill=opts.delAttr?'<button class="ded-x kill" '+opts.delAttr+' aria-label="Remove">&times;</button>':'<span></span>';
     return '<div class="ded-row'+(opts.fuel?' fuel':'')+'"'+(opts.rid?' data-rid="'+esc(opts.rid)+'" style="cursor:pointer"':'')+'><div><span class="nm">'+opts.name+'</span><span class="meta">'+opts.meta+'</span></div><div class="am"><b>'+money(opts.amt)+'</b><small>'+opts.sub+'</small></div>'+kill+'</div>';
   }
-  var grouped={},order=['Fuel','Tolls','Maintenance','Cleaning','Insurance','Phone','Other'];
+  var grouped={},order=['Levy','Fuel','Tolls','Maintenance','Cleaning','Insurance','Phone','Other'];
   function pushG(key,html,amt,cnt){
     if(!grouped[key])grouped[key]={html:'',amt:0,count:0};
     grouped[key].html+=html;
     grouped[key].amt+=nn(amt);
     grouped[key].count+=(cnt||1);
   }
+  if(a.levy>0)pushG('Levy',dedRow({name:'Hail / CPV levy',meta:(a.hailN||0)+' hail trip'+(a.hailN!==1?'s':'')+' \u00d7 '+money(levyRate())+' \u00b7 SRO',amt:a.levy,sub:'from income \u00b7 GST-free \u00b7 deduct '+money(a.levy)}),a.levy,1);
   if(a.fuelShift>0)pushG('Fuel',dedRow({fuel:true,name:'Fuel from shifts',meta:'Auto from tracker \u00b7 '+a.fcShift+' fill'+(a.fcShift===1?'':'s'),amt:a.fuelShift,sub:gstBit(a.fuelShift,true)}),a.fuelShift,a.fcShift);
   a.fmList.slice().sort(function(x,y){return x.date<y.date?1:-1}).forEach(function(m){
     pushG('Fuel',dedRow({fuel:true,name:'Fuel ('+esc(m.type)+')',meta:fmtDayDMY(m.date)+(m.receiptId?' \u00b7 receipt':' \u00b7 no receipt'),amt:m.amount,sub:gstBit(m.amount,true),delAttr:'data-delfm="'+esc(m.id)+'"',rid:m.receiptId||''}),m.amount,1);
@@ -4305,15 +4326,16 @@ function summaryHTML(light){var a=rangeAgg();
     +'<h3 style="margin:0 0 2px;font-size:20px;color:'+c.head+'">Fareo summary</h3>'
     +'<p style="margin:0 0 14px;color:'+c.mut+';font-size:12.5px">'+esc(repRange.name)+' \u00b7 '+fmtDMY(repRange.from)+' \u2013 '+fmtDMY(repRange.to)+(a.shifts?' \u00b7 '+a.shifts+' shifts':'')+'</p>'
     +'<div style="background:'+c.card+';border-radius:14px;padding:15px;margin-bottom:12px;text-align:center">'
-      +'<div style="font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:'+c.mut+';font-weight:700">Net take-home</div>'
-      +'<div style="font-size:36px;font-weight:800;color:'+c.inc+';margin-top:4px">'+money(a.inc)+'</div></div>'
-    +r('Gross revenue',money(a.gross),true)
+      +'<div style="font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:'+c.mut+';font-weight:700">Take-home after levy</div>'
+      +'<div style="font-size:36px;font-weight:800;color:'+c.inc+';margin-top:4px">'+money(pocketOf(a))+'</div></div>'
+    +r('Settlement take-home',money(a.inc),true)
+    +r('Gross revenue',money(a.gross))
     +r('Driver share',money(a.share))
+    +r('Hail levy (expense from income, '+a.hailN+' trips)',money(a.levy))
     +r('GST set aside (1/11 of '+(settings.gstBase==='share'?'driver share':'full gross')+')',money(a.gst))
-    +r('CPV levy ('+a.hailN+' hail trips) — SRO return',money(a.levy))
     +r('Fuel ('+a.fc+' fills): I paid '+money(a.fuelIPaid)+', operator paid '+money(a.fuelOpPaid),money(a.fuel))
-    +r('GST credits (1B)',money(a.oneB))+r('Deductible expenses',money(a.dedTotal))
-    +r('Est. net after GST, expenses & levy',money(a.net),true)
+    +r('GST credits (1B)',money(a.oneB))+r('Deductible expenses (incl. levy)',money(a.dedTotal))
+    +r('Est. net after GST & expenses',money(a.net),true)
     +'<p style="margin:14px 0 0;color:'+c.mut+';font-size:10.5px">Estimate only — confirm figures with your tax agent. Generated by Fareo \u00b7 '+fmtDayLong(new Date())+'</p></div>'}
 var curSummaryMode='income';
 function basSummaryHTML(light){var a=rangeAgg();
@@ -4335,7 +4357,7 @@ function basSummaryHTML(light){var a=rangeAgg();
     +'<div style="background:'+c.card+';border-radius:12px;padding:14px;margin-top:14px;text-align:center">'
       +'<div style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:'+c.mut+';font-weight:700">'+(net>=0?'Amount payable to ATO':'Refund from ATO')+'</div>'
       +'<div style="font-size:30px;font-weight:800;margin-top:4px;color:'+(net>=0?c.red:c.grn)+'">'+money(Math.abs(net))+'</div></div>'
-    +'<p style="margin:12px 0 0;color:'+c.mut+';font-size:10.5px">Hail-trip levy ('+money(a.levy)+' this period) is a <b>separate</b> SRO form — do not type it on the BAS.</p>'
+    +'<p style="margin:12px 0 0;color:'+c.mut+';font-size:10.5px">Hail levy ('+money(a.levy)+') is an expense from your income. Lodge it with SRO — not on the BAS.</p>'
     +'<p style="margin:6px 0 0;color:'+c.mut+';font-size:10.5px">Helper only \u2014 check with your tax agent before you lodge. Fareo &middot; '+fmtDayLong(new Date())+'</p></div>'}
 function basHowHTML(){
   return '<div class="basguide">'
@@ -4382,7 +4404,7 @@ if($('#pulseShifts'))$('#pulseShifts').onclick=function(){if(repRange.name==='Th
 if($('#qGstTile'))$('#qGstTile').onclick=function(){showTrackedQuarter();openSummary('bas')};
 if($('#qLevyTile'))$('#qLevyTile').onclick=function(){
   showTrackedQuarter();
-  toast('Hail levy is an SRO return — not on the BAS');
+  toast('Levy comes off your take-home. Lodge with SRO, not the BAS');
 };
 function openSummary(mode){
   curSummaryMode=mode;
@@ -4412,11 +4434,12 @@ function summaryText(mode){
     L.push('1B GST credits: '+money(a.oneB));
     L.push('Net GST: '+money(a.gst-a.oneB));
   }else{
-    L.push('Take-home: '+money(a.inc));
+    L.push('Settlement: '+money(a.inc));
+    L.push('Levy (from income): '+money(a.levy));
+    L.push('After levy: '+money(pocketOf(a)));
     L.push('Gross: '+money(a.gross));
     L.push('GST set aside: '+money(a.gst));
-    L.push('Deductions: '+money(a.dedTotal));
-    L.push('Levy: '+money(a.levy));
+    L.push('Deductions (incl. levy): '+money(a.dedTotal));
     L.push('Est. net: '+money(a.net));
   }
   L.push('');L.push('Shifts: '+a.shifts+' \u00b7 via Fareo');
@@ -4436,8 +4459,8 @@ $('#expRcptFile')&&($('#expRcptFile').onchange=function(e){expRcptFile=e.target.
 /* [F9] CSV: quote fields, escape quotes, guard non-numeric values that start
    with a formula trigger so Excel/Sheets can't execute them */
 function csvCell(v){v=String(v==null?'':v);if(!/^-?\d+(\.\d+)?$/.test(v)&&/^[=+\-@\t]/.test(v))v="'"+v;if(/[",\n\r]/.test(v))v='"'+v.replace(/"/g,'""')+'"';return v}
-$('#csvBtn').onclick=function(){var rows=[['Date','Rego','TakeHome','Gross','DriverShare','EFTPOS','Cash','Square','Accounts','Runs','FuelTotal','FuelIPaid','FuelOpPaid','HailTrips']];
-  entries.filter(function(e){return inRange(e.date)}).forEach(function(e){var fi=(e.fuelIPaid!=null?Number(e.fuelIPaid):(e.fuelPocket!=null?Number(e.fuelPocket):Number(e.fuel)||0));var fo=(e.fuelOpPaid!=null?Number(e.fuelOpPaid):(e.fuelCompany!=null?Number(e.fuelCompany):0));rows.push([e.date,e.rego,(Number(e.take)||0).toFixed(2),(Number(e.gross)||0).toFixed(2),entryShare(e).toFixed(2),(Number(e.eos)||0).toFixed(2),(Number(e.cash)||0).toFixed(2),(Number(e.square)||0).toFixed(2),entryAccounts(e).toFixed(2),((Number(e.runs)||0)*RUN).toFixed(2),(Number(e.fuel)||0).toFixed(2),fi.toFixed(2),fo.toFixed(2),Number(e.hail)||0])});
+$('#csvBtn').onclick=function(){var rows=[['Date','Rego','TakeHome','AfterLevy','Gross','DriverShare','EFTPOS','Cash','Square','Accounts','Runs','FuelTotal','FuelIPaid','FuelOpPaid','HailTrips','Levy']];
+  entries.filter(function(e){return inRange(e.date)}).forEach(function(e){var fi=(e.fuelIPaid!=null?Number(e.fuelIPaid):(e.fuelPocket!=null?Number(e.fuelPocket):Number(e.fuel)||0));var fo=(e.fuelOpPaid!=null?Number(e.fuelOpPaid):(e.fuelCompany!=null?Number(e.fuelCompany):0));var hail=Number(e.hail)||0;var take=Number(e.take)||0;var lev=hail*levyRate();rows.push([e.date,e.rego,take.toFixed(2),(take-lev).toFixed(2),(Number(e.gross)||0).toFixed(2),entryShare(e).toFixed(2),(Number(e.eos)||0).toFixed(2),(Number(e.cash)||0).toFixed(2),(Number(e.square)||0).toFixed(2),entryAccounts(e).toFixed(2),((Number(e.runs)||0)*RUN).toFixed(2),(Number(e.fuel)||0).toFixed(2),fi.toFixed(2),fo.toFixed(2),hail,lev.toFixed(2)])});
   var csv=rows.map(function(r){return r.map(csvCell).join(',')}).join('\r\n');
   var bl=new Blob([csv],{type:'text/csv'}),u=URL.createObjectURL(bl),an=document.createElement('a');an.href=u;an.download='fareo-report.csv';an.click();setTimeout(function(){URL.revokeObjectURL(u)},1000);toast('CSV exported')};
 /* ---------- settings ---------- */
