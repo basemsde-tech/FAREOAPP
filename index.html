@@ -556,6 +556,18 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .bas-step p b{color:var(--head)}
 .bas-note{font-size:11.5px;color:var(--mut);background:var(--field);border-radius:10px;padding:10px 12px;margin:8px 0 12px;line-height:1.45}
 .bas-note b{color:var(--head)}
+.bas-box{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--bd)}
+.bas-code{min-width:38px;text-align:center;border:1.5px solid #2DD4BF;color:#2DD4BF;border-radius:8px;padding:5px 4px;font-weight:800;font-size:13px;flex:0 0 auto}
+.bas-lab{flex:1;color:var(--mut);font-size:12.5px;min-width:0}
+.bas-amt-wrap{display:flex;align-items:center;gap:3px;flex:0 0 auto}
+.bas-amt-wrap .pre{color:var(--head);font-weight:700;font-size:14px}
+.bas-amt{width:108px;padding:7px 8px;font-size:16px;font-weight:800;text-align:right;border-radius:10px;background:var(--field);border:1.5px solid var(--bd2);color:var(--head);-webkit-text-fill-color:var(--head);font-variant-numeric:tabular-nums}
+.bas-amt:focus{border-color:var(--inc);outline:none}
+.bas-amt.strong{color:var(--head)}
+.bas-disp{color:var(--head);font-weight:700;font-size:14px;font-variant-numeric:tabular-nums;text-align:right;min-width:72px}
+.bas-reset{display:none;width:100%;margin:10px 0 0;padding:8px 10px;border-radius:10px;border:1px solid var(--bd2);background:transparent;color:var(--mut);font-size:12px;font-weight:700;cursor:pointer}
+.bas-reset.on{display:block}
+.bas-box.locked .bas-disp{font-weight:800;font-size:14px}
 .tax-live{font-size:11.5px;color:var(--on-inc);background:var(--inc-bg);border-radius:9px;padding:8px 11px;margin:8px 0 0;line-height:1.4}
 .ph-pill.tap{cursor:pointer}
 /* Report bottom actions row */
@@ -1466,7 +1478,7 @@ html.fold-flex .sfoot-gap{width:0}
 <div class="modal" id="sumPick"><div class="sheet">
   <div class="grip"></div><h3>Summary type</h3><p class="csub">Choose what to generate.</p>
   <button class="pickopt" id="pickIncome"><span><b>Smart summary</b><small>Income overview &amp; totals</small></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></button>
-  <button class="pickopt" id="pickBas"><span><b>BAS prep (ATO)</b><small>Copy G1, 1A and 1B — with a simple how-to</small></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></button>
+  <button class="pickopt" id="pickBas"><span><b>BAS prep (ATO)</b><small>Copy G1, 1A and 1B as whole dollars</small></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></button>
 </div></div>
 <div class="modal" id="entryModal"><div class="sheet">
   <div class="grip"></div><h3 id="entryTitle">Edit entry</h3>
@@ -1701,8 +1713,11 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.36';
+var APP_VERSION='8.37';
 var CHANGELOG=[
+  {v:'8.37',date:'September 28, 2026',notes:[
+    ['Tax','BAS prep uses ATO whole dollars, G1 as total sales, G3 for GST-free cash/Square, and 1A as 1/11 of the taxable fare (levy included). Figures on that sheet can be amended for lodgement without changing shifts or Reports.'],
+  ]},
   {v:'8.36',date:'September 18, 2026',notes:[
     ['Tax','GST is 1/11 of the full fare, including any hail levy you passed on (G1 / 1A). The SRO remittance stays an expense from take-home with no GST credit (not 1B).'],
   ]},
@@ -3040,12 +3055,36 @@ function entryDriverHeld(e){
   return h;
 }
 function entryLevy(e){return (Number(e.hail)||0)*levyRate()}
-/* GST-inclusive sales base for one shift.
-   Logged fares (gross) are what passengers paid. Passing the levy on converts it
-   into a component of that taxable supply — GST is 1/11 of the full fare, not a
-   GST-free disbursement. Do not add hail×rate again (it is already in the fare).
-   Cash/Square GST-free is removed from gross, then scaled by this shift's share
-   ratio when GST is set aside on driver share. */
+/* ATO BAS: whole dollars. 50c and under down, 51c and over up. */
+function roundAtoDollar(n){
+  n=Number(n)||0;
+  var sign=n<0?-1:1,a=Math.abs(n),w=Math.floor(a+1e-9),frac=a-w;
+  if(frac>0.50+1e-9)w+=1;
+  return sign*w;
+}
+/* GST-inclusive sales for G1 (gross, or driver share). Includes GST-free cash. */
+function entrySales(e){
+  var g=Number(e.gross)||0;
+  if(settings.gstBase==='share'){
+    var s=entryShare(e);
+    return (isFinite(s)&&s>=0)?s:g*(settings.pct/100);
+  }
+  return g;
+}
+/* G3 — Cash & Square treated as GST-free when that Essentials toggle is on. */
+function entryGstFreeAmt(e){
+  if(!settings.cashGstFree)return 0;
+  var g=Number(e.gross)||0,free=(Number(e.cash)||0)+(Number(e.square)||0);
+  if(free<0)free=0;
+  if(settings.gstBase==='share'){
+    var s=entryShare(e);
+    var ratio=g>0?s/g:(settings.pct/100);
+    return free*ratio;
+  }
+  return free;
+}
+/* Taxable GST-inclusive sales for 1A (G1 minus G3). Levy recovery stays in the fare.
+   Do not add hail×rate again. Scaled to driver share when GST base is share. */
 function entryGstBase(e){
   var g=Number(e.gross)||0;
   var free=settings.cashGstFree?((Number(e.cash)||0)+(Number(e.square)||0)):0;
@@ -3653,7 +3692,7 @@ if($('#enCalc'))$('#enCalc').onclick=function(){var e=entries.filter(function(x)
 /* ---------- reports ---------- */
 function syncModalChrome(){document.documentElement.classList.toggle('modal-open',!!anyModal())}
 function showModal(id){$('#'+id).classList.add('show');syncModalChrome();if(typeof syncTrailBtns==='function')syncTrailBtns()}
-function closeModal(id){$('#'+id).classList.remove('show');if(id==='askModal')askCb=null;syncModalChrome();if(typeof syncTrailBtns==='function')syncTrailBtns()}
+function closeModal(id){$('#'+id).classList.remove('show');if(id==='askModal')askCb=null;if(id==='summaryModal')basDraft=null;syncModalChrome();if(typeof syncTrailBtns==='function')syncTrailBtns()}
 $$('.modal').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)closeModal(m.id)})});
 var askCb=null;
 function ask(title,body,okLbl,fn,opts){
@@ -4348,34 +4387,137 @@ function summaryHTML(light){var a=rangeAgg();
     +r('Est. net after GST & expenses',money(a.net),true)
     +'<p style="margin:14px 0 0;color:'+c.mut+';font-size:10.5px">Estimate only — confirm figures with your tax agent. Generated by Fareo \u00b7 '+fmtDayLong(new Date())+'</p></div>'}
 var curSummaryMode='income';
-function basSummaryHTML(light){var a=rangeAgg();
+/* BAS prep overlay: in-memory only while this sheet is open. Never written to
+   shifts, Reports, income, or localStorage. */
+var basDraft=null;
+function basOneAFromSales(g1,g3){
+  var t=(Number(g1)||0)-(Number(g3)||0);
+  if(t<0)t=0;
+  return roundAtoDollar(t/11);
+}
+function basLiveVals(){
+  var a=rangeAgg();
+  var g1p=a.es.reduce(function(s,e){return s+entrySales(e)},0);
+  var g3p=a.es.reduce(function(s,e){return s+entryGstFreeAmt(e)},0);
+  if(g3p<0)g3p=0;
+  if(g3p>g1p)g3p=g1p;
+  return{
+    g1:roundAtoDollar(g1p),
+    g3:roundAtoDollar(g3p),
+    oneA:roundAtoDollar(a.gstBaseAmt/11),
+    oneB:roundAtoDollar(a.oneB),
+    levy:a.levy,
+    showG3:roundAtoDollar(g3p)>0
+  };
+}
+function basShownVals(){
+  var live=basLiveVals();
+  if(!basDraft)return live;
+  return{g1:basDraft.g1,g3:basDraft.g3,oneA:basDraft.oneA,oneB:basDraft.oneB,levy:live.levy,showG3:live.showG3||(basDraft.g3>0)};
+}
+function basIsDirty(){
+  if(!basDraft)return false;
+  var l=basLiveVals();
+  return Math.abs(basDraft.g1-l.g1)>0||Math.abs(basDraft.g3-l.g3)>0||Math.abs(basDraft.oneA-l.oneA)>0||Math.abs(basDraft.oneB-l.oneB)>0;
+}
+function parseBasAmt(raw){
+  var n=Number(String(raw==null?'':raw).replace(/,/g,'').trim());
+  if(!isFinite(n)||n<0)return 0;
+  return n;
+}
+function applyBasEdit(key,raw,src){
+  var live=basLiveVals();
+  if(!basDraft)basDraft={g1:live.g1,g3:live.g3,oneA:live.oneA,oneB:live.oneB};
+  var n=roundAtoDollar(parseBasAmt(raw));
+  if(key==='g1'){basDraft.g1=n;basDraft.oneA=basOneAFromSales(basDraft.g1,basDraft.g3)}
+  else if(key==='g3'){basDraft.g3=n;if(basDraft.g3>basDraft.g1)basDraft.g3=basDraft.g1;basDraft.oneA=basOneAFromSales(basDraft.g1,basDraft.g3)}
+  else if(key==='1a')basDraft.oneA=n;
+  else if(key==='1b')basDraft.oneB=n;
+  paintBasDerived(src);
+}
+function paintBasDerived(except){
+  var v=basShownVals();
+  var net=v.oneA-v.oneB;
+  function setInp(sel,val){
+    var el=$(sel);
+    if(!el||el===except||document.activeElement===el)return;
+    var s=String(val);
+    if(el.value!==s)el.value=s;
+  }
+  setInp('#basG1',v.g1);
+  setInp('#basG3',v.g3);
+  setInp('#bas1A',v.oneA);
+  setInp('#bas1B',v.oneB);
+  var a8=$('#bas8ADisp');if(a8)a8.textContent=money(v.oneA);
+  var b8=$('#bas8BDisp');if(b8)b8.textContent=money(v.oneB);
+  var pay=net>=0;
+  var lbl=$('#basNetLbl');if(lbl)lbl.textContent=pay?'Amount payable to ATO':'Refund from ATO';
+  var amt=$('#basNetAmt');
+  if(amt){amt.textContent=money(Math.abs(net));amt.style.color=pay?'var(--dgr)':'var(--inc)'}
+  var rst=$('#basReset');if(rst)rst.classList.toggle('on',basIsDirty());
+}
+function bindBasPrep(){
+  var body=$('#summaryBody');if(!body)return;
+  $$('[data-bas]',body).forEach(function(inp){
+    inp.addEventListener('input',function(){
+      var s=String(this.value).trim();
+      if(s===''||s==='.')return;
+      applyBasEdit(this.getAttribute('data-bas'),this.value,this);
+    });
+    inp.addEventListener('blur',function(){
+      var n=roundAtoDollar(parseBasAmt(this.value));
+      applyBasEdit(this.getAttribute('data-bas'),String(n),this);
+      this.value=String(n);
+    });
+  });
+  var rst=$('#basReset');
+  if(rst)rst.onclick=function(){
+    basDraft=null;
+    $('#summaryBody').innerHTML=basSummaryHTML(false);
+    bindBasPrep();
+  };
+}
+function basSummaryHTML(light){
+  var a=rangeAgg();
+  var v=basShownVals();
   var c=light?{head:'#111827',mut:'#6B7280',line:'#E5E7EB',card:'#FFFFFF',teal:'#0D9488',red:'#DC2626',grn:'#059669'}:{head:'var(--head)',mut:'var(--mut)',line:'var(--bd)',card:'var(--field)',teal:'#2DD4BF',red:'var(--dgr)',grn:'var(--inc)'};
-  /* [F12] G1/1A use the configured GST base; [F14] 1B comes from the shared aggregate */
-  var g1=a.gstBaseAmt,oneA=a.gstBaseAmt/11,oneB=a.oneB,net=oneA-oneB;
-  function box(code,label,val,strong){return '<div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid '+c.line+'"><span style="min-width:38px;text-align:center;border:1.5px solid '+c.teal+';color:'+c.teal+';border-radius:8px;padding:5px 4px;font-weight:800;font-size:13px">'+code+'</span><span style="flex:1;color:'+c.mut+';font-size:12.5px">'+label+'</span><span style="color:'+c.head+';font-weight:'+(strong?800:700)+';font-size:14px">'+val+'</span></div>'}
-  return '<div style="font-family:Inter,system-ui,sans-serif;color:'+c.head+'">'
-    +'<h3 style="margin:0 0 2px;font-size:20px;color:'+c.head+'">BAS prep summary</h3>'
+  var g1=v.g1,g3=v.g3,oneA=v.oneA,oneB=v.oneB,net=oneA-oneB,showG3=v.showG3;
+  function boxStatic(code,label,val,strong,id){return '<div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid '+c.line+'"><span style="min-width:38px;text-align:center;border:1.5px solid '+c.teal+';color:'+c.teal+';border-radius:8px;padding:5px 4px;font-weight:800;font-size:13px">'+code+'</span><span style="flex:1;color:'+c.mut+';font-size:12.5px">'+label+'</span><span '+(id?'id="'+id+'" ':'')+'style="color:'+c.head+';font-weight:'+(strong?800:700)+';font-size:14px">'+money(val)+'</span></div>'}
+  function boxEdit(code,label,val,key,id){
+    return '<div class="bas-box"><span class="bas-code">'+code+'</span><span class="bas-lab">'+label+'</span><div class="bas-amt-wrap"><span class="pre">$</span><input class="bas-amt" id="'+id+'" data-bas="'+key+'" type="number" min="0" step="1" inputmode="numeric" autocomplete="off" value="'+String(val)+'" aria-label="'+code+' '+label+'"></div></div>';
+  }
+  var titleHelp=light?'':' <span class="help" data-help="Copy these onto your ATO activity statement. Amounts are whole dollars (50c and under down, 51c and over up). G1 is total sales including GST. G3 is GST-free cash/Square if that toggle is on. 1A is 1/11 of the rest (levy in the fare). 8A equals 1A and 8B equals 1B. Tap a figure to amend this copy only — shifts, Reports and income do not change." aria-label="Help">?</span>';
+  var reset=light?'':'<button type="button" class="bas-reset'+(basIsDirty()?' on':'')+'" id="basReset">Reset to Fareo figures</button>';
+  var g3Box=showG3?(light?boxStatic('G3','GST-free sales (cash / Square)',g3):boxEdit('G3','GST-free sales (cash / Square)',g3,'g3','basG3')):'';
+  var intro='Enter these on your ATO activity statement (whole dollars). Sales base: '+(settings.gstBase==='share'?'driver share':'full fare')+'. G1 is total sales; 1A is GST on taxable fares including levy recovery.';
+  var body=
+    '<div style="font-family:Inter,system-ui,sans-serif;color:'+c.head+'">'
+    +'<h3 style="margin:0 0 2px;font-size:20px;color:'+c.head+'">BAS prep summary'+titleHelp+'</h3>'
     +'<p style="margin:0 0 4px;color:'+c.mut+';font-size:12.5px">'+esc(repRange.name)+' \u00b7 '+fmtDMY(repRange.from)+' \u2013 '+fmtDMY(repRange.to)+' &middot; Goods &amp; services tax (GST)</p>'
-    +'<p style="margin:0 0 14px;color:'+c.mut+';font-size:11px">Enter these on your ATO activity statement. Sales base: '+(settings.gstBase==='share'?'driver share':'full fare')+'. G1 includes levy recovery in logged fares.</p>'
-    +box('G1','Total sales (GST inclusive)',money(g1))
+    +'<p style="margin:0 0 14px;color:'+c.mut+';font-size:11px">'+intro+'</p>'
+    +(light?boxStatic('G1','Total sales (GST inclusive)',g1):boxEdit('G1','Total sales (GST inclusive)',g1,'g1','basG1'))
+    +g3Box
     +'<div style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:'+c.mut+';font-weight:700;margin:10px 0 2px">You owe ATO</div>'
-    +box('1A','GST on sales',money(oneA),true)
+    +(light?boxStatic('1A','GST on sales',oneA,true):boxEdit('1A','GST on sales',oneA,'1a','bas1A'))
     +'<div style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:'+c.mut+';font-weight:700;margin:10px 0 2px">ATO owes you</div>'
-    +box('1B','GST on purchases (expenses + fuel)',money(oneB),true)
-    +box('8A','Subtotal — you owe',money(oneA))
-    +box('8B','Subtotal — ATO owes',money(oneB))
+    +(light?boxStatic('1B','GST on purchases (expenses + fuel)',oneB,true):boxEdit('1B','GST on purchases (expenses + fuel)',oneB,'1b','bas1B'))
+    +boxStatic('8A','Subtotal — you owe (same as 1A)',oneA,false,light?'':'bas8ADisp')
+    +boxStatic('8B','Subtotal — ATO owes (same as 1B)',oneB,false,light?'':'bas8BDisp')
     +'<div style="background:'+c.card+';border-radius:12px;padding:14px;margin-top:14px;text-align:center">'
-      +'<div style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:'+c.mut+';font-weight:700">'+(net>=0?'Amount payable to ATO':'Refund from ATO')+'</div>'
-      +'<div style="font-size:30px;font-weight:800;margin-top:4px;color:'+(net>=0?c.red:c.grn)+'">'+money(Math.abs(net))+'</div></div>'
-    +'<p style="margin:12px 0 0;color:'+c.mut+';font-size:10.5px">G1 / 1A include levy recovery in the fare. The SRO remittance ('+money(a.levy)+') comes off income — do not claim 1B on it.</p>'
-    +'<p style="margin:6px 0 0;color:'+c.mut+';font-size:10.5px">Helper only \u2014 check with your tax agent before you lodge. Fareo &middot; '+fmtDayLong(new Date())+'</p></div>'}
+      +'<div id="basNetLbl" style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:'+c.mut+';font-weight:700">'+(net>=0?'Amount payable to ATO':'Refund from ATO')+'</div>'
+      +'<div id="basNetAmt" style="font-size:30px;font-weight:800;margin-top:4px;color:'+(net>=0?(light?c.red:'var(--dgr)'):(light?c.grn:'var(--inc)'))+'">'+money(Math.abs(net))+'</div></div>'
+    +reset
+    +'<p style="margin:12px 0 0;color:'+c.mut+';font-size:10.5px">G1 includes levy recovery in the fare. The SRO remittance ('+money(a.levy)+') comes off income — do not claim 1B on it.</p>'
+    +'<p style="margin:6px 0 0;color:'+c.mut+';font-size:10.5px">Helper only \u2014 check with your tax agent before you lodge. Fareo &middot; '+fmtDayLong(new Date())+'</p></div>';
+  return body;
+}
 function basHowHTML(){
   return '<div class="basguide">'
-    +'<p class="bas-note">A BAS is the ATO form you lodge every 3 months. Fareo works out the GST boxes. G1 is the full fare including any levy you passed on. The hail-trip (CPV) levy you remit is a <b>different</b> form for the SRO in Victoria — no GST credit, leave that payment off the BAS.</p>'
+    +'<p class="bas-note">A BAS is the ATO form you lodge every 3 months. Copy <b>whole dollars</b>. <b>G1</b> is total sales (GST inclusive). If Cash &amp; Square GST-free is on, that amount is <b>G3</b> and is not in 1A. <b>1A</b> is 1/11 of the taxable fare, including any levy you passed on. <b>8A</b> equals 1A and <b>8B</b> equals 1B. The hail-trip (CPV) levy remittance is a <b>different</b> SRO form — no GST credit.</p>'
     +'<div class="bas-step"><span class="bas-n">1</span><p><b>Show this quarter.</b> BAS periods are Jul–Sep, Oct–Dec, Jan–Mar and Apr–Jun. Use the Quarter filter at the top so the numbers match that period.</p></div>'
     +'<div class="bas-step"><span class="bas-n">2</span><p><b>Log every cost.</b> Add fuel and expenses (tolls, wash, repairs). Snap the receipt. Fareo splits GST for you.</p></div>'
-    +'<div class="bas-step"><span class="bas-n">3</span><p><b>Open BAS figures.</b> You will see: <b>G1</b> total sales, <b>1A</b> GST you collected (you owe this), <b>1B</b> GST you paid on fuel and costs (you claim this back). The big number is 1A minus 1B — pay it if it is positive, or wait for a refund if it is negative.</p></div>'
-    +'<div class="bas-step"><span class="bas-n">4</span><p><b>Copy into myGov.</b> Log in → BAS / activity statement → type G1, 1A and 1B. 8A is usually the same as 1A. 8B is usually the same as 1B.</p></div>'
+    +'<div class="bas-step"><span class="bas-n">3</span><p><b>Open BAS figures.</b> You will see: <b>G1</b> total sales, <b>G3</b> GST-free (if used), <b>1A</b> GST you collected, <b>1B</b> GST you paid on fuel and costs. The big number is 1A minus 1B — pay it if it is positive, or wait for a refund if it is negative. You can amend a box on this sheet only.</p></div>'
+    +'<div class="bas-step"><span class="bas-n">4</span><p><b>Copy into myGov.</b> Log in → BAS / activity statement → type G1, G3 (if any), 1A and 1B as whole dollars. 8A is the same as 1A. 8B is the same as 1B.</p></div>'
     +'<div class="bas-step"><span class="bas-n">5</span><p><b>Lodge and pay.</b> Due about 28 days after the quarter ends (late Oct, Feb, Apr, Jul). Confirm with your tax agent first — Fareo is a helper, not advice.</p></div>'
     +'</div>';
 }
@@ -4418,7 +4560,9 @@ if($('#qLevyTile'))$('#qLevyTile').onclick=function(){
 };
 function openSummary(mode){
   curSummaryMode=mode;
+  if(mode==='bas')basDraft=null;
   $('#summaryBody').innerHTML=(mode==='bas'?basSummaryHTML(false):summaryHTML(false));
+  if(mode==='bas')bindBasPrep();
   var how=$('#basHowToggle'),body=$('#basHowBody');
   if(how){how.style.display=mode==='bas'?'flex':'none';how.classList.remove('open')}
   if(body){body.style.display='none';if(mode==='bas')body.innerHTML=basHowHTML()}
@@ -4432,17 +4576,20 @@ if($('#basHowToggle'))$('#basHowToggle').onclick=function(){
 $('#summaryBtn').onclick=function(){showModal('sumPick')};
 $('#pickIncome').onclick=function(){openSummary('income')};
 $('#pickBas').onclick=function(){openSummary('bas')};
-$('#closeSummary').onclick=function(){closeModal('summaryModal')};
+$('#closeSummary').onclick=function(){basDraft=null;closeModal('summaryModal')};
 function summaryText(mode){
   var a=rangeAgg();var L=[];
   L.push('*Fareo '+(mode==='bas'?'BAS':'Income')+' Summary*');
   L.push(repRange.name||'Selected period');
   L.push('');
   if(mode==='bas'){
-    L.push('G1 Total sales: '+money(a.gstBaseAmt));
-    L.push('1A GST on sales: '+money(a.gst));
-    L.push('1B GST credits: '+money(a.oneB));
-    L.push('Net GST: '+money(a.gst-a.oneB));
+    var v=basShownVals();
+    L.push('G1 Total sales: '+money(v.g1));
+    if(v.showG3)L.push('G3 GST-free sales: '+money(v.g3));
+    L.push('1A GST on sales: '+money(v.oneA));
+    L.push('1B GST credits: '+money(v.oneB));
+    L.push('8A: '+money(v.oneA)+'  8B: '+money(v.oneB));
+    L.push('Net GST: '+money(v.oneA-v.oneB));
   }else{
     L.push('Settlement: '+money(a.inc));
     L.push('Levy (from income): '+money(a.levy));
