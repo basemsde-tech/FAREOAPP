@@ -1713,8 +1713,13 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.37';
+var APP_VERSION='8.38';
 var CHANGELOG=[
+  {v:'8.38',date:'September 28, 2026',notes:[
+    ['Bug Fix','Editing a saved shift and changing the date or rego no longer leaves a duplicate in Weekly.'],
+    ['Tax','GST 1A follows rounded G1 minus G3 (ATO whole dollars). Reports and BAS deadline tiles match the figures you lodge.'],
+    ['Bug Fix','Formula payment types now store the real driver share. Comma-linked passengers copy the address to each rider. Hail OCR and empty-draft dates stay in sync after a refresh.'],
+  ]},
   {v:'8.37',date:'September 28, 2026',notes:[
     ['Tax','BAS prep uses ATO whole dollars, G1 as total sales, G3 for GST-free cash/Square, and 1A as 1/11 of the taxable fare (levy included). Figures on that sheet can be amended for lodgement without changing shifts or Reports.'],
   ]},
@@ -3021,6 +3026,13 @@ function takeT(){
   settings.payTypes.forEach(function(pt){t+=customSettle(pt)});
   t+=fuelIPaidT();                                 /* fuel I paid -> reimbursed to me */
   return t}
+/* Driver share of fares (GST-on-share / G1 share base). Settlement take-home
+   plus driver-held, minus fuel reimbursement, so formula types stay honest. */
+function fareShareT(){
+  var s=takeT()+heldT()-fuelIPaidT();
+  if(!(isFinite(s)&&s>=0))return grossT()*(settings.pct/100);
+  return s;
+}
 function levyT(){return nn(draft.hail)*levyRate()}
 /* Driver-held income deducted from settlement (cash, Square, custom driver types). */
 function heldT(){
@@ -3438,14 +3450,18 @@ function archiveShiftAttachments(entry,eosList,fuelList){
 function saveShift(shared){
   var g=grossT();
   var custom={};settings.payTypes.forEach(function(pt){var a=customAmt(pt);if(a>0)custom[pt.id]=a});
-  var e={id:Date.now(),date:draft.date,rego:draft.rego,take:takeT(),gross:g,share:g*(settings.pct/100),cash:cashT(),square:squareT(),
+  var srcId=draft._sourceEntryId;
+  var e={id:srcId||Date.now(),date:draft.date,rego:draft.rego,take:takeT(),gross:g,share:fareShareT(),cash:cashT(),square:squareT(),
     accounts:acctT(),fuel:fuelT(),fuelIPaid:fuelIPaidT(),fuelOpPaid:fuelOpPaidT(),fuelByType:{Diesel:0,Petrol:0,LPG:0},
     custom:custom,hail:nn(draft.hail),eos:eosT(),runs:nn(draft.runs),receipt:draft.receipt,
     fuelCount:draft.fuel.filter(function(f){return nn(f.amount)>0}).length,
     snap:JSON.parse(JSON.stringify({date:draft.date,rego:draft.rego,eos:draft.eos,cash:draft.cash,square:draft.square,accounts:draft.accounts,runs:draft.runs,fuel:draft.fuel,hail:draft.hail,custom:draft.custom}))};
   draft.fuel.forEach(function(f){e.fuelByType[f.type]=(e.fuelByType[f.type]||0)+nn(f.amount)});
   draft.cash.forEach(function(c){addName(c.name)});draft.square.forEach(function(c){addName(c.name)});draft.accounts.forEach(function(a){addName(a.name)});
-  entries=entries.filter(function(x){return !(x.date===e.date&&x.rego===e.rego)});
+  entries=entries.filter(function(x){
+    if(srcId!=null&&String(x.id)===String(srcId))return false;
+    return !(x.date===e.date&&x.rego===e.rego);
+  });
   entries.push(e);save('fareo_entries',entries);
   archiveShiftAttachments(e,eosReceipts.slice(),fuelReceipts.slice());
   toast(shared?'Saved & sharing…':'Saved to Weekly');
@@ -3636,10 +3652,10 @@ function loadEntryToCalc(e){var sp=e.snap;
       var hs=0,anyH=false;sp.hails.forEach(function(v){if(String(v==null?'':v).trim()!==''){anyH=true;hs+=nn(v)}});
       if(anyH)hail=hs;
     }
-    draft={_edit:true,date:sp.date,rego:sp.rego,eos:eos,cash:(sp.cash&&sp.cash.length)?JSON.parse(JSON.stringify(sp.cash)):[{name:'',amount:0}],square:(sp.square&&sp.square.length)?JSON.parse(JSON.stringify(sp.square)):[{name:'',amount:0}],accounts:sp.accounts?JSON.parse(JSON.stringify(sp.accounts)):[],runs:sp.runs||0,fuel:(sp.fuel&&sp.fuel.length)?JSON.parse(JSON.stringify(sp.fuel)):[{amount:0,type:settings.fuel,opPaid:false}],hail:(hail!=null?hail:''),receipt:false,receiptName:'',custom:sp.custom?JSON.parse(JSON.stringify(sp.custom)):{}};
+    draft={_edit:true,_sourceEntryId:e.id,date:sp.date,rego:sp.rego,eos:eos,cash:(sp.cash&&sp.cash.length)?JSON.parse(JSON.stringify(sp.cash)):[{name:'',amount:0}],square:(sp.square&&sp.square.length)?JSON.parse(JSON.stringify(sp.square)):[{name:'',amount:0}],accounts:sp.accounts?JSON.parse(JSON.stringify(sp.accounts)):[],runs:sp.runs||0,fuel:(sp.fuel&&sp.fuel.length)?JSON.parse(JSON.stringify(sp.fuel)):[{amount:0,type:settings.fuel,opPaid:false}],hail:(hail!=null?hail:''),receipt:false,receiptName:'',custom:sp.custom?JSON.parse(JSON.stringify(sp.custom)):{}};
     draft.fuel.forEach(function(f){if(f.opPaid==null)f.opPaid=(f.reimbursed===true);delete f.reimbursed});
   }else{
-    draft={_edit:true,date:e.date,rego:e.rego,eos:[e.eos||''],cash:[{name:'',amount:e.cash||0}],square:[{name:'',amount:e.square||0}],accounts:entryAccounts(e)?[{name:'',amount:entryAccounts(e)}]:[],runs:e.runs||0,fuel:[{amount:e.fuel||0,type:'Diesel',opPaid:(e.fuelOpPaid>0?true:false)}],hail:(e.hail!=null?e.hail:''),receipt:false,receiptName:'',custom:(function(){
+    draft={_edit:true,_sourceEntryId:e.id,date:e.date,rego:e.rego,eos:[e.eos||''],cash:[{name:'',amount:e.cash||0}],square:[{name:'',amount:e.square||0}],accounts:entryAccounts(e)?[{name:'',amount:entryAccounts(e)}]:[],runs:e.runs||0,fuel:[{amount:e.fuel||0,type:'Diesel',opPaid:(e.fuelOpPaid>0?true:false)}],hail:(e.hail!=null?e.hail:''),receipt:false,receiptName:'',custom:(function(){
       var src=e.custom?JSON.parse(JSON.stringify(e.custom)):{};
       settings.payTypes.forEach(function(pt){
         if(src[pt.id]==null)return;
@@ -3776,8 +3792,8 @@ function currentDeadlines(){
   var row=selectedQuarter();
   var dues=dueDatesFor(row.l,row.t);
   var a=aggBetween(iso(row.f),iso(row.t));
-  var net=a.gst-a.oneB;
-  return{q:row.l,from:row.f,to:row.t,months:row.m,basDue:dues.bas,levyDue:dues.levy,basDays:daysUntilDate(dues.bas),levyDays:daysUntilDate(dues.levy),basDueFmt:fmtDateShort(dues.bas),levyDueFmt:fmtDateShort(dues.levy),netGst:net,gst1A:a.gst,gst1B:a.oneB,levy:a.levy,qHail:a.hailN,shifts:a.shifts,inc:a.inc};
+  var b=basValsFromAgg(a);
+  return{q:row.l,from:row.f,to:row.t,months:row.m,basDue:dues.bas,levyDue:dues.levy,basDays:daysUntilDate(dues.bas),levyDays:daysUntilDate(dues.levy),basDueFmt:fmtDateShort(dues.bas),levyDueFmt:fmtDateShort(dues.levy),netGst:b.net,gst1A:b.oneA,gst1B:b.oneB,levy:a.levy,qHail:a.hailN,shifts:a.shifts,inc:a.inc};
 }
 function dlBadgeClass(days){return days<=14?'dl-hot':days<=30?'dl-warn':'dl-safe'}
 function dlUrgencyLabel(days){return days<=14?'Urgent':days<=30?'Soon':'On track'}
@@ -4157,14 +4173,15 @@ function renderReports(){
   renderCyclePulse(a);
   renderChart(a);
   renderJarMeta();
-  $('#repGstCred').textContent=money(a.oneB);$('#repDeduct').textContent=money(a.dedTotal);
+  var lodgement=basValsFromAgg(a);
+  $('#repGstCred').textContent=money(lodgement.oneB);$('#repDeduct').textContent=money(a.dedTotal);
   var trl=$('#taxRangeLbl');if(trl)trl.textContent=(a.dn+a.fc+(a.levy>0?1:0))+' item'+(a.dn+a.fc+(a.levy>0?1:0)===1?'':'s');
-  var netGst=a.gst-a.oneB;
+  var netGst=lodgement.net;
   var pay=netGst>=0;
   var pill=$('#taxGstNet');
   if(pill){pill.textContent=(pay?'Pay ':'Refund ')+money(Math.abs(netGst));pill.style.color=pay?'var(--dgr)':'var(--inc)';pill.style.borderColor=pay?'var(--dgr)':'var(--inc)';pill.style.background=pay?'var(--dgr-bg)':'var(--inc-bg)'}
   var t1=$('#tax1A'),t1b=$('#tax1Bmini'),tn=$('#taxNetAmt'),tl=$('#taxNetLabel');
-  if(t1)t1.textContent=money(a.gst);if(t1b)t1b.textContent=money(a.oneB);if(tn)tn.textContent=money(Math.abs(netGst));
+  if(t1)t1.textContent=money(lodgement.oneA);if(t1b)t1b.textContent=money(lodgement.oneB);if(tn)tn.textContent=money(Math.abs(netGst));
   if(tl){tl.textContent=pay?'Pay ATO':'Refund';tl.className=pay?'pay':'ref'}
   function gstBit(amt,hasGst,bu){
     amt=nn(amt);
@@ -4381,9 +4398,9 @@ function summaryHTML(light){var a=rangeAgg();
     +r('Gross revenue',money(a.gross))
     +r('Driver share',money(a.share))
     +r('Hail levy (expense from income, '+a.hailN+' trips)',money(a.levy))
-    +r('GST on sales (1/11 of '+(settings.gstBase==='share'?'driver share':'full fare')+', incl. levy in the fare)',money(a.gst))
+    +r('GST on sales (1/11 of '+(settings.gstBase==='share'?'driver share':'full fare')+', incl. levy in the fare)',money(basValsFromAgg(a).oneA))
     +r('Fuel ('+a.fc+' fills): I paid '+money(a.fuelIPaid)+', operator paid '+money(a.fuelOpPaid),money(a.fuel))
-    +r('GST credits (1B)',money(a.oneB))+r('Deductible expenses (incl. levy)',money(a.dedTotal))
+    +r('GST credits (1B)',money(basValsFromAgg(a).oneB))+r('Deductible expenses (incl. levy)',money(a.dedTotal))
     +r('Est. net after GST & expenses',money(a.net),true)
     +'<p style="margin:14px 0 0;color:'+c.mut+';font-size:10.5px">Estimate only — confirm figures with your tax agent. Generated by Fareo \u00b7 '+fmtDayLong(new Date())+'</p></div>'}
 var curSummaryMode='income';
@@ -4395,21 +4412,19 @@ function basOneAFromSales(g1,g3){
   if(t<0)t=0;
   return roundAtoDollar(t/11);
 }
-function basLiveVals(){
-  var a=rangeAgg();
-  var g1p=a.es.reduce(function(s,e){return s+entrySales(e)},0);
-  var g3p=a.es.reduce(function(s,e){return s+entryGstFreeAmt(e)},0);
+function basValsFromAgg(a){
+  a=a||rangeAgg();
+  var es=a.es||[];
+  var g1p=es.reduce(function(s,e){return s+entrySales(e)},0);
+  var g3p=es.reduce(function(s,e){return s+entryGstFreeAmt(e)},0);
   if(g3p<0)g3p=0;
   if(g3p>g1p)g3p=g1p;
-  return{
-    g1:roundAtoDollar(g1p),
-    g3:roundAtoDollar(g3p),
-    oneA:roundAtoDollar(a.gstBaseAmt/11),
-    oneB:roundAtoDollar(a.oneB),
-    levy:a.levy,
-    showG3:roundAtoDollar(g3p)>0
-  };
+  var g1=roundAtoDollar(g1p),g3=roundAtoDollar(g3p);
+  var oneA=basOneAFromSales(g1,g3);
+  var oneB=roundAtoDollar(a.oneB);
+  return{g1:g1,g3:g3,oneA:oneA,oneB:oneB,levy:a.levy,showG3:g3>0,net:oneA-oneB};
 }
+function basLiveVals(){return basValsFromAgg(rangeAgg())}
 function basShownVals(){
   var live=basLiveVals();
   if(!basDraft)return live;
@@ -4595,7 +4610,7 @@ function summaryText(mode){
     L.push('Levy (from income): '+money(a.levy));
     L.push('After levy: '+money(pocketOf(a)));
     L.push('Gross: '+money(a.gross));
-    L.push('GST set aside: '+money(a.gst));
+    L.push('GST set aside: '+money(basValsFromAgg(a).oneA));
     L.push('Deductions (incl. levy): '+money(a.dedTotal));
     L.push('Est. net: '+money(a.net));
   }
@@ -4694,11 +4709,11 @@ $('#setCredit').onchange=function(){settings.creditedDay=parseInt(this.value,10)
 $('#setWeek').onchange=function(){settings.weekStart=parseInt(this.value,10);persist();wkOffset=0;renderWeekly();renderReports();toast('Week starts '+DAYS[settings.weekStart])};
 $('#setAuto').onclick=function(){settings.autocomplete=!settings.autocomplete;persist();this.classList.toggle('on',settings.autocomplete);rowInputs();toast(settings.autocomplete?'Autocomplete on':'Autocomplete off')};
 if($('#setOcrHail'))$('#setOcrHail').onclick=function(){
-  settings.ocrHail=!settings.ocrHail;
+  settings.ocrHail=!(settings.ocrHail!==false);
   persist();
-  this.classList.toggle('on',!!settings.ocrHail);
+  this.classList.toggle('on',settings.ocrHail!==false);
   syncAttachOcrHint();
-  toast(settings.ocrHail?'Hail OCR on — reads Rank/Hail from EOS photos':'Hail OCR off — enter hail manually');
+  toast(settings.ocrHail!==false?'Hail OCR on — reads Rank/Hail from EOS photos':'Hail OCR off — enter hail manually');
 };
 $('#addRego').onclick=function(){var v=$('#newRego').value.trim().toUpperCase();if(!v){toast('Enter a rego');return}if(settings.regos.indexOf(v)<0)settings.regos.push(v);$('#newRego').value='';persist();renderSettings();rowInputs();toast('Rego added')};
 $('#newFy').onclick=function(){ask('Start a new financial year?','Clears shifts, income, deductions and manual fuel. Settings, receipt jar and address book stay.','Clear year',function(){entries=[];deductions=[];fuelManual=[];draft=freshDraft(settings.regos[0]||'');persist();toast('New financial year started');rowInputs();render();renderWeekly();renderReports()})};
@@ -4767,7 +4782,7 @@ async function afterAuth(user){
 function pushNow(){if(!syncOn||!fb.uid||!fb.fsM)return;var ts=Date.now();localStorage.setItem('fareo_updatedAt',String(ts));fb.fsM.setDoc(docRef(),{data:allData(),updatedAt:ts,_device:deviceId()}).then(function(){setSyncState('On - saved')}).catch(function(){setSyncState('Offline - will retry')})}
 function scheduleSync(){if(!syncOn||applyingRemote)return;clearTimeout(syncTimer);syncTimer=setTimeout(pushNow,900)}
 async function syncSignOut(){try{if(fb.auth)await fb.authM.signOut(fb.auth)}catch(_){}syncOn=false;localStorage.removeItem('fareo_sync_on');setSyncState('Off - local only');toast('Signed out (data kept on device)')}
-function reloadAll(){settings=load('fareo_settings',settings)||settings;migrateSettings();entries=load('fareo_entries',[])||[];deductions=load('fareo_deductions',[])||[];recurring=load('fareo_recurring',[])||[];fuelManual=load('fareo_fuelManual',[])||[];receipts=load('fareo_receipts',[])||[];names=load('fareo_names',[])||[];clients=load('fareo_clients',[])||[];if(!Array.isArray(clients))clients=[];runPlan=load('fareo_run_plan',[])||[];if(!Array.isArray(runPlan))runPlan=[];draft=normalizeDraft(load('fareo_draft',draft));clearReceiptAttach();try{renderNames();rowInputs();render();var a=document.querySelector('.screen.on');if(a){var t=a.dataset.tab;if(t==='weekly')renderWeekly();if(t==='reports')renderReports();if(t==='settings')renderSettings();if(t==='runs')renderRuns();if(t==='book')renderBook()}}catch(_){}}
+function reloadAll(){settings=load('fareo_settings',settings)||settings;migrateSettings();entries=load('fareo_entries',[])||[];deductions=load('fareo_deductions',[])||[];recurring=load('fareo_recurring',[])||[];fuelManual=load('fareo_fuelManual',[])||[];receipts=load('fareo_receipts',[])||[];names=load('fareo_names',[])||[];clients=load('fareo_clients',[])||[];if(!Array.isArray(clients))clients=[];runPlan=load('fareo_run_plan',[])||[];if(!Array.isArray(runPlan))runPlan=[];draft=normalizeDraft(load('fareo_draft',draft));if(typeof draftHasWork==='function'&&!draftHasWork(draft)){draft.date=todayStr();draft.rego=''}clearReceiptAttach();try{renderNames();rowInputs();render();var a=document.querySelector('.screen.on');if(a){var t=a.dataset.tab;if(t==='weekly')renderWeekly();if(t==='reports')renderReports();if(t==='settings')renderSettings();if(t==='runs')renderRuns();if(t==='book')renderBook()}}catch(_){}}
 if($('#syncSignin'))$('#syncSignin').onclick=function(){syncConnect(false)};
 if($('#syncCreate'))$('#syncCreate').onclick=function(){syncConnect(true)};
 if($('#syncOut'))$('#syncOut').onclick=syncSignOut;
@@ -6062,10 +6077,28 @@ function syncClDraftFields(){
   clDraft.addresses=filled.length?filled:(clDraft.addresses&&clDraft.addresses[0]?[clDraft.addresses[0]]: [blankAddr()]);
   return true;
 }
+function applyCommaLinkedPeople(owner){
+  if(!owner)return;
+  var raw=(owner.name||'').trim();
+  var parts=raw.split(',').map(function(s){return s.trim()}).filter(Boolean);
+  if(parts.length<2)return;
+  owner.name=parts[0];
+  var extras=parts.slice(1);
+  (owner.addresses||[]).forEach(function(a){
+    if(!a||!String(a.line||'').trim())return;
+    if(!Array.isArray(a.people))a.people=[];
+    extras.forEach(function(n){
+      var exists=a.people.some(function(p){return p&&String(p.name||'').trim().toLowerCase()===n.toLowerCase()});
+      if(!exists)a.people.push({name:n});
+    });
+  });
+}
 function commitClientSave(){
   if(!clDraft)return;
+  applyCommaLinkedPeople(clDraft);
   var i=-1;clients.forEach(function(c,n){if(c.id===clDraft.id)i=n});
   if(i>=0)clients[i]=clDraft;else clients.push(clDraft);
+  syncShared(clDraft);
   cleanOrphanClients();
   persist();clDraft=null;closeModal('clientModal');renderBook();toast('Client saved');
 }
