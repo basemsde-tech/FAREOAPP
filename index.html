@@ -427,18 +427,26 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .jar-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding:12px 13px;border:1.5px solid var(--bd2);border-radius:12px;background:var(--field);cursor:pointer;text-align:left}
 .jar-btn b{display:block;font-size:13.5px;color:var(--head)}
 .jar-btn span{font-size:11.5px;color:var(--mut);font-weight:600}
-.ded-ctrl-bar{display:flex;align-items:center;justify-content:space-between;margin:12px 0 8px;padding:2px 0}
-.ded-ctrl-btn{border:1px solid var(--bd2);background:var(--field);color:var(--mut);border-radius:8px;padding:4px 9px;font-size:11px;font-weight:700;cursor:pointer}
-.cat-group{background:var(--field);border:1px solid var(--bd);border-radius:12px;margin-bottom:8px;overflow:hidden;transition:border-color .15s}
+.ded-ctrl-bar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:12px 0 8px;padding:2px 0}
+.ded-ctrl-bar .ded-ctrl-copy{min-width:0}
+.ded-ctrl-bar b{display:block;font-size:12.5px;font-weight:800;color:var(--head)}
+.ded-ctrl-bar small{display:block;font-size:10.5px;color:var(--mut);font-weight:600;margin-top:2px;line-height:1.35}
+.ded-ctrl-btn{border:1px solid var(--bd2);background:var(--field);color:var(--mut);border-radius:8px;padding:5px 9px;font-size:11px;font-weight:700;cursor:pointer;flex:0 0 auto}
+.cat-group{background:var(--field);border:1px solid var(--bd);border-radius:14px;margin-bottom:8px;overflow:hidden}
 .cat-group.open{border-color:var(--bd2)}
-.cat-head{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+.cat-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 12px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
 .cat-head:active{background:var(--bd)}
-.cat-title{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:var(--head)}
-.cat-count{font-size:10.5px;font-weight:600;color:var(--mut);background:var(--card);border:1px solid var(--bd2);padding:2px 6px;border-radius:999px}
-.cat-sum{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800;color:var(--inc);font-variant-numeric:tabular-nums}
+.cat-title{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:800;color:var(--head);min-width:0}
+.cat-title>span:first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cat-count{font-size:10.5px;font-weight:700;color:var(--mut);background:var(--card);border:1px solid var(--bd2);padding:2px 7px;border-radius:999px;flex:0 0 auto}
+.cat-sum{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:800;color:var(--inc);font-variant-numeric:tabular-nums;flex:0 0 auto}
+.cat-sum .cat-off{font-size:10.5px;font-weight:700;color:var(--mut)}
 .cat-sum .cat-chev{font-size:16px;color:var(--mut);transition:transform .18s;line-height:1}
 .cat-group.open .cat-chev{transform:rotate(90deg)}
-.cat-body{padding:0 12px 4px;border-top:1px solid var(--bd);background:var(--card)}
+.cat-all{border:1px solid var(--inc);background:var(--inc-bg);color:var(--on-inc);border-radius:999px;padding:4px 9px;font-size:10.5px;font-weight:800;cursor:pointer;line-height:1.2}
+.cat-all.mixed{border-color:var(--fuel);background:var(--fuel-bg);color:var(--on-fuel)}
+.cat-all.off{border-color:var(--bd2);background:transparent;color:var(--mut)}
+.cat-body{padding:2px 8px 8px;border-top:1px solid var(--bd);background:var(--card)}
 .cat-group:not(.open) .cat-body{display:none}
 .cat-h{display:flex;justify-content:space-between;align-items:baseline;margin:14px 0 4px;font-size:10.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--mut)}
 .cat-h:first-child{margin-top:8px}
@@ -542,17 +550,24 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .tax-add{display:flex;align-items:center;justify-content:center;gap:7px;padding:11px 10px;border-radius:12px;border:1.5px solid var(--inc);background:var(--inc-bg);color:var(--on-inc);font-weight:800;font-size:13px;cursor:pointer}
 .tax-add.fuel{border-color:var(--fuel-fill);background:var(--fuel-bg);color:var(--fuel)}
 .tax-add svg{width:16px;height:16px}
+.ded-claim-hint{font-size:11.5px;color:var(--mut);margin:8px 0 2px;line-height:1.4}
 .tax-hint{font-size:11.5px;color:var(--on-fuel);background:var(--fuel-bg);border:1px solid var(--fuel);border-radius:10px;padding:8px 11px;margin:8px 0;line-height:1.4}
-.ded-row{display:grid;grid-template-columns:1fr auto 28px;gap:8px;align-items:center;padding:11px 0;border-bottom:1px solid var(--bd)}
+.ded-row{display:grid;grid-template-columns:26px 1fr auto 28px;gap:8px;align-items:center;padding:10px 4px;border-bottom:1px solid var(--bd)}
 .ded-row:last-child{border-bottom:0}
-.ded-row.fuel{background:var(--fuel-bg);border-radius:10px;padding:10px 8px;margin:0 0 6px;border-bottom:0}
+.ded-row.fuel{background:transparent}
+.ded-row.off{opacity:.62}
 .ded-row .nm{display:block;font-size:13px;font-weight:700;color:var(--head)}
 .ded-row.fuel .nm{color:var(--fuel)}
+.ded-row.off .nm{color:var(--mut)}
 .ded-row .meta{display:block;font-size:10.5px;color:var(--mut);margin-top:2px}
 .ded-row .am{text-align:right}
-.ded-row .am b{display:block;font-size:14px;font-weight:800;color:var(--inc);font-variant-numeric:tabular-nums}
+.ded-row .am b{display:block;font-size:13.5px;font-weight:800;color:var(--inc);font-variant-numeric:tabular-nums}
 .ded-row.fuel .am b{color:var(--fuel)}
+.ded-row.off .am b{color:var(--mut);text-decoration:line-through}
 .ded-row .am small{display:block;font-size:9.5px;color:var(--mut);font-weight:600;margin-top:1px}
+.ded-chk{width:22px;height:22px;border-radius:7px;border:1.5px solid var(--inc);background:var(--inc-bg);color:var(--on-inc);display:grid;place-items:center;cursor:pointer;padding:0;flex:0 0 auto}
+.ded-chk svg{width:12px;height:12px}
+.ded-chk.off{border-color:var(--bd2);background:transparent;color:transparent}
 .ded-x{width:28px;height:28px;border-radius:8px;border:1px solid var(--bd2);background:transparent;color:var(--mut);font-weight:700;cursor:pointer;line-height:1}
 .ded-x.kill{border-color:var(--dgr);color:var(--dgr)}
 .basguide-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:transparent;border:1.5px dashed var(--bd2);border-radius:12px;padding:12px 13px;margin-top:12px;cursor:pointer;text-align:left}
@@ -1338,13 +1353,14 @@ html.fold-flex .sfoot-gap{width:0}
     <div class="card" id="taxCard">
       <div class="ph-head">
         <span class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.2L14 21l-2-1.2L10 21l-2-1.2L6 21z"/><path d="M9 8h6M9 12h6"/></svg></span>
-        <div class="ph-t"><b>Costs &amp; credits <span class="help" data-help="Fuel and receipts can claim GST (1B). Hail levy remittance has no GST credit — GST on that levy is already in the fare on G1 / 1A. Levy is tax-free as a cost (SRO, not BAS)." aria-label="Help">?</span></b><p id="taxRangeLbl">0 items</p></div>
+        <div class="ph-t"><b>Costs &amp; credits <span class="help" data-help="Tick a cost to claim it on tax (deduction and GST 1B). Untick keeps the entry but leaves it off 1B and deductions. Use All on a category to claim or skip the whole group. Fuel and receipts can claim GST (1B). Hail levy remittance has no GST credit — GST on that levy is already in the fare on G1 / 1A. Levy is tax-free as a cost (SRO, not BAS)." aria-label="Help">?</span></b><p id="taxRangeLbl">0 items</p></div>
         <button class="ph-pill tap" id="taxGstNet" type="button" title="Open BAS figures">Pay $0.00</button>
       </div>
       <div class="two">
         <div class="tri-p accent-inc"><small>GST you can claim · 1B</small><b id="repGstCred" style="color:var(--inc)">$0.00</b></div>
         <div class="tri-p"><small>Costs you can deduct</small><b id="repDeduct">$0.00</b></div>
       </div>
+      <p class="ded-claim-hint" id="dedClaimHint">Tick what to claim. Untick keeps the cost, off 1B and deductions.</p>
       <div class="tax-actions">
         <button class="tax-add fuel" id="addFuelExp" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg>+ Fuel</button>
         <button class="tax-add" id="addExp" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>+ Expense</button>
@@ -1742,8 +1758,12 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.40';
+var APP_VERSION='8.41';
 var CHANGELOG=[
+  {v:'8.41',date:'October 1, 2026',notes:[
+    ['Feature','Untick any cost to leave it off deductions and 1B without deleting it. Each category has All / Some / None.'],
+    ['UI/UX','Costs & credits is grouped by category with claimed totals, cleaner rows, and shift fuel listed per fill.'],
+  ]},
   {v:'8.40',date:'October 1, 2026',notes:[
     ['Tax','Tax-free means cash and Square are not taxable income. They are left out of G1 and 1A. You still keep that money in take-home and Weekly. EFTPOS, accounts and runs stay in G1. 1A is 1/11 of G1.'],
     ['UI/UX','Copy onto your BAS lists taxable G1, tax-free cash kept out of G1, then 1A, 1B, 8A and 8B for myGov.'],
@@ -2039,6 +2059,7 @@ function migrateSettings(){
   /* Hail OCR from EOS photos (default on). When off, Tesseract is never loaded. */
   if(settings.ocrHail==null)settings.ocrHail=true;
   if(!settings.theme)settings.theme='dark';
+  if(!settings.claimOff||typeof settings.claimOff!=='object')settings.claimOff={};
 }
 migrateSettings();
 var SHIFT_FIELD_BUILTINS=['fuel','cash','square','runs','accounts'];
@@ -3958,6 +3979,48 @@ function previousPeriod(from,to,name){
   var label={Today:'yesterday','This Week':'last week','7 Days':'previous 7 days',Quarter:'last quarter','Fin Year':'last financial year','All Time':'the previous stretch',Custom:'the previous stretch'}[name]||'last period';
   return{from:iso(nf),to:iso(nt),label:label};
 }
+function claimOffMap(){
+  if(!settings.claimOff||typeof settings.claimOff!=='object')settings.claimOff={};
+  return settings.claimOff;
+}
+function costClaimed(key){return !claimOffMap()[String(key)]}
+function setCostClaim(key,on){
+  var m=claimOffMap();
+  if(on)delete m[String(key)];
+  else m[String(key)]=1;
+}
+function setCostClaims(keys,on){
+  (keys||[]).forEach(function(k){setCostClaim(k,on)});
+  persist();
+}
+function toggleCostClaim(key){
+  setCostClaim(key,!costClaimed(key));
+  persist();
+}
+function recCostKey(d){
+  if(d&&d._recurring)return 'r:'+d._rid+':'+d.date;
+  return 'd:'+(d&&d.id);
+}
+function shiftFuelCostItems(es){
+  var out=[];
+  (es||[]).forEach(function(e){
+    if(!e)return;
+    var fills=e.snap&&Array.isArray(e.snap.fuel)?e.snap.fuel:null;
+    var used=false;
+    if(fills){
+      fills.forEach(function(f,i){
+        var amt=nn(f&&f.amount);
+        if(amt<=0)return;
+        used=true;
+        out.push({key:'sf:'+e.id+':'+i,amount:amt,date:e.date,type:(f.type||'Diesel'),rego:e.rego||''});
+      });
+    }
+    if(!used&&nn(e.fuel)>0){
+      out.push({key:'sf:'+e.id,amount:nn(e.fuel),date:e.date,type:'Fuel',rego:e.rego||''});
+    }
+  });
+  return out;
+}
 /* single source of truth for all report figures */
 function rangeAgg(){
   var es=entries.filter(function(e){return inRange(e.date)});
@@ -3972,8 +4035,8 @@ function rangeAgg(){
   var hailN=es.reduce(function(a,b){return a+(Number(b.hail)||0)},0),levy=es.reduce(function(a,b){return a+entryLevy(b)},0);
   var fD=es.reduce(function(a,b){return a+(b.fuelByType?(Number(b.fuelByType.Diesel)||0):0)},0),fP=es.reduce(function(a,b){return a+(b.fuelByType?(Number(b.fuelByType.Petrol)||0):0)},0),fL=es.reduce(function(a,b){return a+(b.fuelByType?(Number(b.fuelByType.LPG)||0):0)},0);
   var fuel=es.reduce(function(a,b){return a+(Number(b.fuel)||0)},0);
-  /* Fuel split by who paid (display only). opPaid fuel is excluded from settlement,
-     but ALL fuel is tax-deductible + GST-creditable (driver holds the receipt).
+  /* Fuel split by who paid (display only). opPaid fuel is excluded from settlement.
+     Claimed fuel is tax-deductible + GST-creditable (driver holds the receipt).
      Legacy fallback: older entries used fuelPocket(I-paid)/fuelCompany(op-paid). */
   var fuelIPaid=es.reduce(function(a,b){
     if(b.fuelIPaid!=null)return a+Number(b.fuelIPaid);
@@ -3990,7 +4053,7 @@ function rangeAgg(){
   var fmList=fuelManual.filter(function(m){return inRange(m.date)});
   var fuelManualTotal=fmList.reduce(function(a,m){return a+nn(m.amount)},0);
   var fmCount=fmList.length;
-  var fuelAll=fuel+fuelManualTotal;   /* combined fuel for tax purposes */
+  var fuelAll=fuel+fuelManualTotal;   /* all fuel spent (chart); tax uses fuelClaimAll */
   /* Payment mix for the report breakdown */
   var mixEftpos=es.reduce(function(a,b){return a+(Number(b.eos)||0)},0);
   var mixCash=es.reduce(function(a,b){return a+(Number(b.cash)||0)},0);
@@ -4001,19 +4064,29 @@ function rangeAgg(){
   /* Combine one-off deductions + expanded recurring instances */
   var allDed=deductions.filter(function(d){return inRange(d.date)});
   if(repRange.from&&repRange.to)allDed=allDed.concat(expandRecurring(repRange.from,repRange.to));
-  var expCred=0,expDed=0,dn=0;
-  allDed.forEach(function(d){var bu=clampBu(d.bu==null?100:d.bu)/100;var amt=nn(d.amount);var hasGst=d.gst!==false;
-    if(hasGst){expCred+=amt/11*bu;expDed+=amt*10/11*bu}else{expDed+=amt*bu}dn++});
-  /* ALL fuel (shift-logged + manual) is deductible + GST-creditable.
-     Fuel is GST-inclusive, so credit = 1/11, deduction = 10/11. */
-  var fuelCred=fuelAll/11,fuelDed=fuelAll*10/11;
+  var expCred=0,expDed=0,dn=0,dnClaim=0;
+  allDed.forEach(function(d){
+    dn++;
+    if(!costClaimed(recCostKey(d)))return;
+    dnClaim++;
+    var bu=clampBu(d.bu==null?100:d.bu)/100;var amt=nn(d.amount);var hasGst=d.gst!==false;
+    if(hasGst){expCred+=amt/11*bu;expDed+=amt*10/11*bu}else{expDed+=amt*bu}
+  });
+  /* Claimed fuel only (shift-logged + manual) is deductible + GST-creditable. */
+  var sfItems=shiftFuelCostItems(es);
+  var fuelShiftClaim=sfItems.reduce(function(s,it){return s+(costClaimed(it.key)?it.amount:0)},0);
+  var fuelManualClaim=fmList.reduce(function(s,m){return s+(costClaimed('fm:'+m.id)?nn(m.amount):0)},0);
+  var fuelClaimAll=fuelShiftClaim+fuelManualClaim;
+  var fuelCred=fuelClaimAll/11,fuelDed=fuelClaimAll*10/11;
   var oneB=expCred+fuelCred;
   /* SRO remittance is a regulatory fee: full amount comes off income, no 1B.
-     GST on the passed-on levy sits in G1/1A (logged fares), not in this line. */
-  var dedTotal=expDed+fuelDed+levy;
+     GST on the passed-on levy sits in G1/1A (logged fares), not in this line.
+     Unticking levy leaves it off the tax deduction only. */
+  var levyDed=costClaimed('levy')?levy:0;
+  var dedTotal=expDed+fuelDed+levyDed;
   var pocket=inc-levy;
   var net=inc-(gst-oneB)-dedTotal;
-  return{es:es,inc:inc,pocket:pocket,gross:gross,share:share,gstBaseAmt:gstBaseAmt,gst:gst,hailN:hailN,levy:levy,fD:fD,fP:fP,fL:fL,fuel:fuelAll,fuelShift:fuel,fuelManual:fuelManualTotal,fmCount:fmCount,fmList:fmList,fuelIPaid:fuelIPaid,fuelOpPaid:fuelOpPaid,fc:fc+fmCount,fcShift:fc,expCred:expCred,expDed:expDed,fuelCred:fuelCred,fuelDed:fuelDed,oneB:oneB,dedTotal:dedTotal,dn:dn,net:net,shifts:es.length,allDed:allDed,mixEftpos:mixEftpos,mixCash:mixCash,mixSquare:mixSquare,mixRuns:mixRuns,mixCustom:mixCustom,mixAcct:mixAcct}}
+  return{es:es,inc:inc,pocket:pocket,gross:gross,share:share,gstBaseAmt:gstBaseAmt,gst:gst,hailN:hailN,levy:levy,fD:fD,fP:fP,fL:fL,fuel:fuelAll,fuelShift:fuel,fuelManual:fuelManualTotal,fmCount:fmCount,fmList:fmList,fuelIPaid:fuelIPaid,fuelOpPaid:fuelOpPaid,fc:fc+fmCount,fcShift:fc,expCred:expCred,expDed:expDed,fuelCred:fuelCred,fuelDed:fuelDed,oneB:oneB,dedTotal:dedTotal,dn:dn,dnClaim:dnClaim,net:net,shifts:es.length,allDed:allDed,sfItems:sfItems,fuelClaimAll:fuelClaimAll,levyDed:levyDed,mixEftpos:mixEftpos,mixCash:mixCash,mixSquare:mixSquare,mixRuns:mixRuns,mixCustom:mixCustom,mixAcct:mixAcct}}
 function spentOf(a){return (a.fuel||0)+a.allDed.reduce(function(s,d){return s+nn(d.amount)},0)+(a.levy||0)}
 function pocketOf(a){return a&&a.pocket!=null?a.pocket:((a&&a.inc||0)-(a&&a.levy||0))}
 function daysInRange(from,to){if(!from||!to)return 0;return Math.round((asDate(to)-asDate(from))/86400000)+1}
@@ -4212,7 +4285,6 @@ function renderReports(){
   renderJarMeta();
   var lodgement=basValsFromAgg(a);
   $('#repGstCred').textContent=money(lodgement.oneB);$('#repDeduct').textContent=money(a.dedTotal);
-  var trl=$('#taxRangeLbl');if(trl)trl.textContent=(a.dn+a.fc+(a.levy>0?1:0))+' item'+(a.dn+a.fc+(a.levy>0?1:0)===1?'':'s');
   var netGst=lodgement.net;
   var pay=netGst>=0;
   var pill=$('#taxGstNet');
@@ -4240,48 +4312,83 @@ function renderReports(){
     if(hasGst===false)return 'no GST \u00b7 deduct '+money(amt*share);
     return 'claim '+money(amt/11*share);
   }
+  var CHK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>';
   function dedRow(opts){
+    var on=opts.claimed!==false;
     var kill=opts.delAttr?'<button class="ded-x kill" '+opts.delAttr+' aria-label="Remove">&times;</button>':'<span></span>';
-    return '<div class="ded-row'+(opts.fuel?' fuel':'')+'"'+(opts.rid?' data-rid="'+esc(opts.rid)+'" style="cursor:pointer"':'')+'><div><span class="nm">'+opts.name+'</span><span class="meta">'+opts.meta+'</span></div><div class="am"><b>'+money(opts.amt)+'</b><small>'+opts.sub+'</small></div>'+kill+'</div>';
+    var chk='<button type="button" class="ded-chk'+(on?'':' off')+'" data-claim="'+esc(opts.key)+'" aria-pressed="'+(on?'true':'false')+'" aria-label="'+(on?'Claimed — tap to leave off deductions':'Not deducted — tap to claim')+'">'+CHK+'</button>';
+    var sub=on?opts.sub:'kept \u00b7 not deducted';
+    return '<div class="ded-row'+(opts.fuel?' fuel':'')+(on?'':' off')+'">'
+      +chk
+      +'<div'+(opts.rid?' data-rid="'+esc(opts.rid)+'" style="cursor:pointer"':'')+'><span class="nm">'+opts.name+'</span><span class="meta">'+opts.meta+'</span></div>'
+      +'<div class="am"><b>'+money(opts.amt)+'</b><small>'+sub+'</small></div>'
+      +kill+'</div>';
   }
   var grouped={},order=['Levy','Fuel','Tolls','Maintenance','Cleaning','Insurance','Phone','Other'];
-  function pushG(key,html,amt,cnt){
-    if(!grouped[key])grouped[key]={html:'',amt:0,count:0};
+  function pushG(key,html,amt,cnt,claimedAmt,claimKey){
+    if(!grouped[key])grouped[key]={html:'',amt:0,count:0,claimed:0,claimedN:0,keys:[]};
     grouped[key].html+=html;
     grouped[key].amt+=nn(amt);
     grouped[key].count+=(cnt||1);
+    grouped[key].claimed+=nn(claimedAmt);
+    if(claimKey&&costClaimed(claimKey))grouped[key].claimedN+=1;
+    if(claimKey)grouped[key].keys.push(claimKey);
   }
-  if(a.levy>0)pushG('Levy',dedRow({name:'Hail / CPV levy',meta:(a.hailN||0)+' hail trip'+(a.hailN!==1?'s':'')+' \u00d7 '+money(levyRate())+' \u00b7 SRO',amt:a.levy,sub:'from income \u00b7 tax-free \u00b7 deduct '+money(a.levy)}),a.levy,1);
-  if(a.fuelShift>0)pushG('Fuel',dedRow({fuel:true,name:'Fuel from shifts',meta:'Auto from tracker \u00b7 '+a.fcShift+' fill'+(a.fcShift===1?'':'s'),amt:a.fuelShift,sub:gstBit(a.fuelShift,true)}),a.fuelShift,a.fcShift);
+  if(a.levy>0){
+    var levyOn=costClaimed('levy');
+    pushG('Levy',dedRow({key:'levy',name:'Hail / CPV levy',meta:(a.hailN||0)+' hail trip'+(a.hailN!==1?'s':'')+' \u00d7 '+money(levyRate())+' \u00b7 SRO',amt:a.levy,claimed:levyOn,sub:'from income \u00b7 tax-free \u00b7 deduct '+money(a.levy)}),a.levy,1,levyOn?a.levy:0,'levy');
+  }
+  (a.sfItems||[]).forEach(function(it){
+    var on=costClaimed(it.key);
+    pushG('Fuel',dedRow({key:it.key,fuel:true,name:'Fuel ('+esc(it.type)+')',meta:fmtDayDMY(it.date)+(it.rego?' \u00b7 '+esc(it.rego):'')+' \u00b7 shift',amt:it.amount,claimed:on,sub:gstBit(it.amount,true)}),it.amount,1,on?it.amount:0,it.key);
+  });
   a.fmList.slice().sort(function(x,y){return x.date<y.date?1:-1}).forEach(function(m){
-    pushG('Fuel',dedRow({fuel:true,name:'Fuel ('+esc(m.type)+')',meta:fmtDayDMY(m.date)+(m.receiptId?' \u00b7 receipt':' \u00b7 no receipt'),amt:m.amount,sub:gstBit(m.amount,true),delAttr:'data-delfm="'+esc(m.id)+'"',rid:m.receiptId||''}),m.amount,1);
+    var k='fm:'+m.id,on=costClaimed(k);
+    pushG('Fuel',dedRow({key:k,fuel:true,name:'Fuel ('+esc(m.type)+')',meta:fmtDayDMY(m.date)+(m.receiptId?' \u00b7 receipt':' \u00b7 no receipt'),amt:m.amount,claimed:on,sub:gstBit(m.amount,true),delAttr:'data-delfm="'+esc(m.id)+'"',rid:m.receiptId||''}),m.amount,1,on?m.amount:0,k);
   });
   var ds=a.allDed.sort(function(x,y){return x.date<y.date?1:-1});
   ds.forEach(function(d){
     var key=d.category||'Other';
     if(order.indexOf(key)<0&&!grouped[key])order.push(key);
+    var ck=recCostKey(d),on=costClaimed(ck);
     var del=d._recurring?'':(d.id!=null?'data-deld="'+esc(d.id)+'"':'');
-    pushG(key,dedRow({name:esc(d.name),meta:fmtDayDMY(d.date)+(d._recurring?' \u00b7 repeats':'')+(d.receiptId?' \u00b7 receipt':''),amt:d.amount,sub:gstBit(d.amount,d.gst!==false,d.bu),delAttr:del,rid:d.receiptId||'',fuel:false}),d.amount,1);
+    pushG(key,dedRow({key:ck,name:esc(d.name),meta:fmtDayDMY(d.date)+(d._recurring?' \u00b7 repeats':'')+(d.receiptId?' \u00b7 receipt':''),amt:d.amount,claimed:on,sub:gstBit(d.amount,d.gst!==false,d.bu),delAttr:del,rid:d.receiptId||'',fuel:false}),d.amount,1,on?d.amount:0,ck);
   });
   var keys=order.filter(function(k){return grouped[k]&&grouped[k].count>0});
   Object.keys(grouped).forEach(function(k){if(keys.indexOf(k)<0&&grouped[k]&&grouped[k].count>0)keys.push(k)});
   var totalDedCount=keys.reduce(function(s,k){return s+(grouped[k]?grouped[k].count:0)},0);
-  var catSpend=keys.reduce(function(s,k){return s+(grouped[k]?grouped[k].amt:0)},0);
+  var claimedN=keys.reduce(function(s,k){return s+(grouped[k]?grouped[k].claimedN:0)},0);
+  var claimedSpend=keys.reduce(function(s,k){return s+(grouped[k]?grouped[k].claimed:0)},0);
+  var offN=totalDedCount-claimedN;
 
   if(!window.dedCollapsedState) window.dedCollapsedState={};
   var allClosed=keys.length>0&&keys.every(function(k){return window.dedCollapsedState[k]===true});
 
+  var trl2=$('#taxRangeLbl');
+  if(trl2){
+    if(!totalDedCount)trl2.textContent='0 items';
+    else trl2.textContent=claimedN+' claimed'+(offN?' \u00b7 '+offN+' off':'')+' \u00b7 '+money(claimedSpend);
+  }
+
   var outHtml='';
   if(keys.length>0){
-    outHtml+='<div class="ded-ctrl-bar"><span style="font-size:11.5px;font-weight:700;color:var(--head)">Categorised Expenses ('+totalDedCount+' item'+(totalDedCount===1?'':'s')+' \u00b7 '+money(catSpend)+')</span><button type="button" class="ded-ctrl-btn" id="dedToggleAll">'+(allClosed?'Show all':'Hide all')+'</button></div>';
+    outHtml+='<div class="ded-ctrl-bar"><div class="ded-ctrl-copy"><b>Claim these costs</b><small>Tick to deduct. Untick keeps the entry off 1B'+(offN?' \u00b7 '+offN+' off':'')+'</small></div><button type="button" class="ded-ctrl-btn" id="dedToggleAll">'+(allClosed?'Show all':'Hide all')+'</button></div>';
     outHtml+=keys.map(function(k){
-      var isOpen=window.dedCollapsedState[k]!==true;
+      var g=grouped[k],isOpen=window.dedCollapsedState[k]!==true;
+      var nOn=g.claimedN,n=g.count;
+      var allCls=nOn===n?'':(nOn===0?' off':' mixed');
+      var allLbl=nOn===n?'All':(nOn===0?'None':'Some');
       return '<div class="cat-group '+(isOpen?'open':'')+'" data-cat="'+esc(k)+'">'
         +'<div class="cat-head" data-cat-toggle="'+esc(k)+'">'
-          +'<div class="cat-title"><span>'+esc(catLabel(k))+'</span><span class="cat-count">'+grouped[k].count+'</span></div>'
-          +'<div class="cat-sum"><b>'+money(grouped[k].amt)+'</b><span class="cat-chev">&rsaquo;</span></div>'
+          +'<div class="cat-title"><span>'+esc(catLabel(k))+'</span><span class="cat-count">'+nOn+'/'+n+'</span></div>'
+          +'<div class="cat-sum">'
+            +'<button type="button" class="cat-all'+allCls+'" data-cat-all="'+esc(k)+'">'+allLbl+'</button>'
+            +'<b>'+money(g.claimed)+'</b>'
+            +(g.claimed+0.005<g.amt?'<span class="cat-off">of '+money(g.amt)+'</span>':'')
+            +'<span class="cat-chev">&rsaquo;</span>'
+          +'</div>'
         +'</div>'
-        +'<div class="cat-body">'+grouped[k].html+'</div>'
+        +'<div class="cat-body">'+g.html+'</div>'
       +'</div>';
     }).join('');
   }
@@ -4311,10 +4418,30 @@ function renderReports(){
       }
     };
   });
+  $$('#dedRows [data-cat-all]').forEach(function(b){
+    b.onclick=function(e){
+      e.stopPropagation();
+      var cat=b.dataset.catAll;
+      var g=grouped[cat];
+      if(!g||!g.keys.length)return;
+      var allOn=g.keys.every(function(k){return costClaimed(k)});
+      setCostClaims(g.keys,!allOn);
+      renderReports();
+      toast(allOn?(catLabel(cat)+': none claimed'):(catLabel(cat)+': all claimed'));
+    };
+  });
+  $$('#dedRows [data-claim]').forEach(function(b){
+    b.onclick=function(e){
+      e.stopPropagation();
+      toggleCostClaim(b.dataset.claim);
+      renderReports();
+    };
+  });
   $$('#dedRows [data-delfm]').forEach(function(b){b.onclick=function(e){e.stopPropagation();var id=Number(b.dataset.delfm);var m=fuelManual.filter(function(x){return x.id===id})[0];ask('Remove this fuel?',(m?fmtDayDMY(m.date)+' \u00b7 '+money(m.amount)+'. ':'')+'The receipt snap stays in the jar unless you delete it there.','Remove',function(){fuelManual=fuelManual.filter(function(x){return x.id!==id});save('fareo_fuelManual',fuelManual);renderReports();toast('Fuel expense removed')})}});
   $$('#dedRows [data-deld]').forEach(function(b){b.onclick=function(e){e.stopPropagation();var id=Number(b.dataset.deld);var d=deductions.filter(function(x){return x.id===id})[0];ask('Remove this expense?',(d?(d.name||'')+' \u00b7 '+fmtDayDMY(d.date)+' \u00b7 '+money(d.amount)+'. ':'')+'The receipt snap stays in the jar unless you delete it there.','Remove',function(){deductions=deductions.filter(function(x){return x.id!==id});save('fareo_deductions',deductions);renderReports();toast('Expense removed')})}});
   $$('#dedRows [data-rid]').forEach(function(row){row.onclick=function(){if(row.dataset.rid)viewReceipt(row.dataset.rid)}});
   $('#dedEmpty').style.display=(totalDedCount>0)?'none':'block';
+  var hint=$('#dedClaimHint');if(hint)hint.style.display=totalDedCount?'block':'none';
   /* Recurring templates list with delete */
   var hasRecur=recurring.length>0;
   $('#recurSection').style.display=hasRecur?'block':'none';
