@@ -428,6 +428,17 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .alert-body b{display:block;font-size:13.5px;font-weight:800}
 .alert-body span{display:block;margin-top:2px;font-size:11.5px;font-weight:600;opacity:.9}
 .alert-x{width:28px;height:28px;border-radius:8px;border:1px solid currentColor;background:transparent;color:inherit;font-size:16px;font-weight:700;line-height:1;cursor:pointer;flex:0 0 auto;opacity:.75}
+.pay-alert{background:var(--field);border:1px solid var(--bd2);border-radius:14px;margin-bottom:10px;overflow:hidden}
+.pay-alert-k{padding:8px 12px 6px;font-size:10.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--mut)}
+.pay-alert-row{display:flex;align-items:center;gap:10px;width:100%;padding:10px 10px 10px 12px;border-top:1px solid var(--bd);background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.pay-alert-row:disabled{cursor:default}
+.pay-alert-row .lab{flex:1;min-width:0;background:none;border:0;padding:0;margin:0;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.pay-alert-row .lab b{display:block;font-size:13.5px;font-weight:800;color:var(--head)}
+.pay-alert-row .lab span{display:block;margin-top:1px;font-size:11.5px;font-weight:600;color:var(--mut)}
+.pay-alert-row .amt{font-size:16px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--dgr)}
+.pay-alert-row .amt.ref{color:var(--inc)}
+.pay-alert-row .amt.levy{color:var(--levy)}
+.pay-alert-row .alert-x{border-color:var(--bd2);color:var(--mut)}
 .jar-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding:12px 13px;border:1.5px solid var(--bd2);border-radius:12px;background:var(--field);cursor:pointer;text-align:left}
 .jar-btn b{display:block;font-size:13.5px;color:var(--head)}
 .jar-btn span{font-size:11.5px;color:var(--mut);font-weight:600}
@@ -1762,8 +1773,11 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.42';
+var APP_VERSION='8.43';
 var CHANGELOG=[
+  {v:'8.43',date:'October 1, 2026',notes:[
+    ['Bug Fix','Last-quarter levy now shows next to the ATO amount on a dismissable payment card, not only the BAS figure.'],
+  ]},
   {v:'8.42',date:'October 1, 2026',notes:[
     ['Feature','Reports shows dismissable ATO and levy payment alerts with last quarter\u2019s amount, due date, and a tap to open that quarter.'],
   ]},
@@ -3987,9 +4001,18 @@ function dismissPayAlert(id){
 }
 function payAlertVisible(days,id){
   if(alertDismissed(id))return false;
-  if(days>40)return false;
-  if(days<-60)return false;
+  var d=Number(days);
+  if(!isFinite(d))return true;
+  if(d>60)return false;
+  if(d<-90)return false;
   return true;
+}
+function payDuePhrase(days){
+  var d=Number(days);
+  if(!isFinite(d))return 'due date set';
+  if(d<0)return 'overdue '+Math.abs(d)+'d';
+  if(d===0)return 'due today';
+  return 'due in '+d+'d';
 }
 function showPayQuarter(pq){
   if(!pq)return;
@@ -4309,36 +4332,43 @@ function renderJarMeta(){
 }
 function renderAlerts(a){
   var box=$('#alertStrip');if(!box)return;
-  var items=[],pq=payQuarterInfo();
+  var html='',items=[],pq=payQuarterInfo();
   if(pq){
     var atoId='ato:'+pq.key,levyId='levy:'+pq.key;
     var atoAmt=Math.abs(pq.netGst||0);
-    if(atoAmt>=1&&payAlertVisible(pq.basDays,atoId)){
-      var gstPay=pq.netGst>=0;
-      var atoHead=gstPay?('Pay ATO '+money(atoAmt)):('ATO refund '+money(atoAmt));
-      var atoWhen=pq.basDays<0?('overdue '+Math.abs(pq.basDays)+'d'):(pq.basDays===0?'due today':'due in '+pq.basDays+'d');
-      items.push({id:atoId,cls:(pq.basDays<0||pq.basDays<=7)?'hot':'warn',act:'ato',
-        title:atoHead,
-        sub:'Last quarter '+pq.q+' \u00b7 '+pq.months+' \u00b7 '+atoWhen+' \u00b7 '+pq.basDueFmt});
-    }
-    if((pq.levy||0)>=0.5&&payAlertVisible(pq.levyDays,levyId)){
-      var levyWhen=pq.levyDays<0?('overdue '+Math.abs(pq.levyDays)+'d'):(pq.levyDays===0?'due today':'due in '+pq.levyDays+'d');
-      items.push({id:levyId,cls:(pq.levyDays<0||pq.levyDays<=7)?'hot':'warn',act:'levy',
-        title:'Pay SRO levy '+money(pq.levy),
-        sub:'Last quarter '+pq.q+' \u00b7 '+pq.months+' \u00b7 '+(pq.hailN||0)+' hail \u00b7 '+levyWhen+' \u00b7 '+pq.levyDueFmt});
+    var levyAmt=nn(pq.levy);
+    if(levyAmt<0.005&&(pq.hailN||0)>0)levyAmt=nn(pq.hailN)*levyRate();
+    var showAto=atoAmt>=1&&payAlertVisible(pq.basDays,atoId);
+    var showLevy=levyAmt>=0.005&&payAlertVisible(pq.levyDays,levyId);
+    if(showAto||showLevy){
+      html+='<div class="pay-alert">';
+      html+='<div class="pay-alert-k">Last quarter '+esc(pq.q)+' \u00b7 '+esc(pq.months)+'</div>';
+      if(showAto){
+        var gstPay=pq.netGst>=0;
+        html+='<div class="pay-alert-row">';
+        html+='<button type="button" class="lab" data-alert-go="ato"><b>'+(gstPay?'Pay ATO':'ATO refund')+'</b><span>'+esc(payDuePhrase(pq.basDays))+' \u00b7 '+esc(pq.basDueFmt)+'</span></button>';
+        html+='<span class="amt'+(gstPay?'':' ref')+'">'+esc(money(atoAmt))+'</span>';
+        html+='<button type="button" class="alert-x" data-alert-x="'+esc(atoId)+'" aria-label="Dismiss ATO alert">&times;</button>';
+        html+='</div>';
+      }
+      if(showLevy){
+        html+='<div class="pay-alert-row">';
+        html+='<button type="button" class="lab" data-alert-go="levy"><b>Pay SRO levy</b><span>'+(pq.hailN||0)+' hail \u00b7 '+esc(payDuePhrase(pq.levyDays))+' \u00b7 '+esc(pq.levyDueFmt)+'</span></button>';
+        html+='<span class="amt levy">'+esc(money(levyAmt))+'</span>';
+        html+='<button type="button" class="alert-x" data-alert-x="'+esc(levyId)+'" aria-label="Dismiss levy alert">&times;</button>';
+        html+='</div>';
+      }
+      html+='</div>';
     }
   }
   var noN=0,noAmt=0;
   a.allDed.forEach(function(d){if(!d._recurring&&!d.receiptId){noN++;noAmt+=nn(d.amount)}});
   a.fmList.forEach(function(m){if(!m.receiptId){noN++;noAmt+=nn(m.amount)}});
   if(noN)items.push({id:null,cls:'info',act:null,title:noN+' cost'+(noN===1?'':'s')+' with no snap',sub:money(noAmt)+' \u00b7 add a photo in the receipt jar'});
-  box.innerHTML=items.map(function(x){
-    var go=x.act?' data-alert-go="'+esc(x.act)+'"':'';
-    var xbtn=x.id?'<button type="button" class="alert-x" data-alert-x="'+esc(x.id)+'" aria-label="Dismiss">&times;</button>':'';
-    var bodyTag=x.act?'button type="button" class="alert-body"'+go:'div class="alert-body"';
-    var bodyEnd=x.act?'button':'div';
-    return '<div class="alert '+x.cls+'"><'+bodyTag+'><b>'+esc(x.title)+'</b><span>'+esc(x.sub)+'</span></'+bodyEnd+'>'+xbtn+'</div>';
+  html+=items.map(function(x){
+    return '<div class="alert '+x.cls+'"><div class="alert-body"><b>'+esc(x.title)+'</b><span>'+esc(x.sub)+'</span></div></div>';
   }).join('');
+  box.innerHTML=html;
   $$('#alertStrip [data-alert-x]').forEach(function(b){
     b.onclick=function(e){e.stopPropagation();dismissPayAlert(b.dataset.alertX)};
   });

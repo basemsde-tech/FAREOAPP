@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fareo-v8.42';
+const CACHE_NAME = 'fareo-v8.43';
 const ROLLBACK_CACHE = 'fareo-rollback';
 const META_CACHE = 'fareo-meta';
 
