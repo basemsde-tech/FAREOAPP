@@ -534,7 +534,8 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .bas-copy-row .code{min-width:36px;text-align:center;border:1.5px solid var(--acct);color:var(--acct);border-radius:8px;padding:4px 3px;font-weight:800;font-size:12px;flex:0 0 auto}
 .bas-copy-row .lab{flex:1;color:var(--mut);font-size:12.5px;line-height:1.3;min-width:0}
 .bas-copy-row .amt{font-weight:800;font-size:15px;color:var(--head);font-variant-numeric:tabular-nums}
-.bas-copy-pay{background:var(--field);border-radius:12px;padding:12px;margin:12px 0 10px;text-align:center}
+.bas-copy-pay{background:var(--field);border-radius:12px;padding:12px;margin:12px 0 4px;text-align:center;cursor:pointer;border:1px solid var(--bd)}
+.bas-copy-pay:active{transform:scale(.99)}
 .bas-copy-pay small{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--mut);font-weight:700}
 .bas-copy-pay b{display:block;margin-top:4px;font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}
 .tax-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 4px}
@@ -1330,8 +1331,7 @@ html.fold-flex .sfoot-gap{width:0}
       <div class="bas-copy-row"><span class="code">1B</span><span class="lab">GST on purchases</span><span class="amt" id="tax1Bmini">$0</span></div>
       <div class="bas-copy-row"><span class="code">8A</span><span class="lab">Same as 1A</span><span class="amt" id="basCopy8A">$0</span></div>
       <div class="bas-copy-row"><span class="code">8B</span><span class="lab">Same as 1B</span><span class="amt" id="basCopy8B">$0</span></div>
-      <div class="bas-copy-pay"><small id="taxNetLabel">Pay ATO</small><b id="taxNetAmt">$0.00</b></div>
-      <button class="btn" id="basCopyOpenBtn" type="button">Open BAS sheet</button>
+      <div class="bas-copy-pay" id="basCopyPay" role="button" tabindex="0"><small id="taxNetLabel">Pay ATO</small><b id="taxNetAmt">$0.00</b></div>
     </div>
 
     <div class="card" id="taxCard">
@@ -4599,7 +4599,10 @@ if($('#basGuideToggle'))$('#basGuideToggle').onclick=function(){
 };
 if($('#taxGstNet'))$('#taxGstNet').onclick=function(){openSummary('bas')};
 if($('#basCopyOpen'))$('#basCopyOpen').onclick=function(){openSummary('bas')};
-if($('#basCopyOpenBtn'))$('#basCopyOpenBtn').onclick=function(){openSummary('bas')};
+if($('#basCopyPay')){
+  $('#basCopyPay').onclick=function(){openSummary('bas')};
+  $('#basCopyPay').onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();openSummary('bas')}};
+}
 if($('#basCopyUseQtr'))$('#basCopyUseQtr').onclick=function(){showTrackedQuarter();toast('Showing this quarter')};
 function showTrackedQuarter(){
   var row=selectedQuarter();
