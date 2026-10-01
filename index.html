@@ -420,10 +420,14 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .filt svg{display:none}
 .filt.on{background:var(--inc);color:var(--btn-ink);-webkit-text-fill-color:var(--btn-ink);border-color:transparent}
 .filt-range{font-size:11.5px;color:var(--mut);font-weight:600;margin:0 0 10px;letter-spacing:.2px;font-variant-numeric:tabular-nums}
-.alert{padding:9px 12px;border-radius:12px;margin-bottom:8px;font-size:12.5px;font-weight:600;line-height:1.4}
+.alert{display:flex;align-items:flex-start;gap:10px;padding:10px 10px 10px 12px;border-radius:12px;margin-bottom:8px;font-size:12.5px;font-weight:600;line-height:1.4}
 .alert.hot{background:var(--dgr-bg);color:var(--on-dgr);border:1px solid var(--dgr)}
 .alert.warn{background:var(--fuel-bg);color:var(--on-fuel);border:1px solid var(--fuel)}
 .alert.info{background:var(--inc-bg);color:var(--on-inc);border:1px solid var(--inc)}
+.alert-body{flex:1;min-width:0;text-align:left;background:transparent;border:0;padding:0;color:inherit;font:inherit;cursor:pointer}
+.alert-body b{display:block;font-size:13.5px;font-weight:800}
+.alert-body span{display:block;margin-top:2px;font-size:11.5px;font-weight:600;opacity:.9}
+.alert-x{width:28px;height:28px;border-radius:8px;border:1px solid currentColor;background:transparent;color:inherit;font-size:16px;font-weight:700;line-height:1;cursor:pointer;flex:0 0 auto;opacity:.75}
 .jar-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding:12px 13px;border:1.5px solid var(--bd2);border-radius:12px;background:var(--field);cursor:pointer;text-align:left}
 .jar-btn b{display:block;font-size:13.5px;color:var(--head)}
 .jar-btn span{font-size:11.5px;color:var(--mut);font-weight:600}
@@ -1758,8 +1762,11 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.41';
+var APP_VERSION='8.42';
 var CHANGELOG=[
+  {v:'8.42',date:'October 1, 2026',notes:[
+    ['Feature','Reports shows dismissable ATO and levy payment alerts with last quarter\u2019s amount, due date, and a tap to open that quarter.'],
+  ]},
   {v:'8.41',date:'October 1, 2026',notes:[
     ['Feature','Untick any cost to leave it off deductions and 1B without deleting it. Each category has All / Some / None.'],
     ['UI/UX','Costs & credits is grouped by category with claimed totals, cleaner rows, and shift fuel listed per fill.'],
@@ -2060,6 +2067,7 @@ function migrateSettings(){
   if(settings.ocrHail==null)settings.ocrHail=true;
   if(!settings.theme)settings.theme='dark';
   if(!settings.claimOff||typeof settings.claimOff!=='object')settings.claimOff={};
+  if(!settings.alertDismiss||typeof settings.alertDismiss!=='object')settings.alertDismiss={};
 }
 migrateSettings();
 var SHIFT_FIELD_BUILTINS=['fuel','cash','square','runs','accounts'];
@@ -3938,6 +3946,56 @@ function dataSpan(){
   return{from:dates[0],to:last>t?last:t};
 }
 function quartersList(){var y=fyStart(new Date());return [{l:'Q1',m:'Jul - Sep',f:new Date(y,6,1),t:new Date(y,8,30)},{l:'Q2',m:'Oct - Dec',f:new Date(y,9,1),t:new Date(y,11,31)},{l:'Q3',m:'Jan - Mar',f:new Date(y+1,0,1),t:new Date(y+1,2,31)},{l:'Q4',m:'Apr - Jun',f:new Date(y+1,3,1),t:new Date(y+1,5,30)}]}
+function lastCompletedQuarter(){
+  var now=new Date();now.setHours(0,0,0,0);
+  var y=fyStart(now);
+  function q(l,m,fy,f,t){return {l:l,m:m,fy:fy,f:f,t:t}}
+  var list=[
+    q('Q4','Apr - Jun',y-1,new Date(y-1,3,1),new Date(y-1,5,30)),
+    q('Q1','Jul - Sep',y,new Date(y,6,1),new Date(y,8,30)),
+    q('Q2','Oct - Dec',y,new Date(y,9,1),new Date(y,11,31)),
+    q('Q3','Jan - Mar',y,new Date(y+1,0,1),new Date(y+1,2,31)),
+    q('Q4','Apr - Jun',y,new Date(y+1,3,1),new Date(y+1,5,30))
+  ];
+  var last=null;
+  for(var i=0;i<list.length;i++){if(list[i].t.getTime()<now.getTime())last=list[i]}
+  return last;
+}
+function payQuarterInfo(){
+  var row=lastCompletedQuarter();
+  if(!row)return null;
+  var dues=dueDatesFor(row.l,row.t);
+  var a=aggBetween(iso(row.f),iso(row.t));
+  var b=basValsFromAgg(a);
+  return{
+    key:row.fy+'-'+row.l,q:row.l,months:row.m,fy:row.fy,from:row.f,to:row.t,
+    basDue:dues.bas,levyDue:dues.levy,basDays:daysUntilDate(dues.bas),levyDays:daysUntilDate(dues.levy),
+    basDueFmt:fmtDateShort(dues.bas),levyDueFmt:fmtDateShort(dues.levy),
+    netGst:b.net,oneA:b.oneA,oneB:b.oneB,levy:a.levy,hailN:a.hailN,shifts:a.shifts
+  };
+}
+function alertDismissMap(){
+  if(!settings.alertDismiss||typeof settings.alertDismiss!=='object')settings.alertDismiss={};
+  return settings.alertDismiss;
+}
+function alertDismissed(id){return !!alertDismissMap()[id]}
+function dismissPayAlert(id){
+  alertDismissMap()[id]=todayStr();
+  persist();
+  renderReports();
+  toast('Alert dismissed');
+}
+function payAlertVisible(days,id){
+  if(alertDismissed(id))return false;
+  if(days>40)return false;
+  if(days<-60)return false;
+  return true;
+}
+function showPayQuarter(pq){
+  if(!pq)return;
+  repRange.from=iso(pq.from);repRange.to=iso(pq.to);repRange.name='Quarter';
+  trackQ=pq.q;
+}
 function openQuarter(){var qs=quartersList(),y=fyStart(new Date());$('#qFy').textContent='FY'+String(y).slice(2)+'-'+String(y+1).slice(2);$('#qGrid').innerHTML=qs.map(function(x){var f=iso(x.f),t=iso(x.t);var on=(repRange.from===f&&repRange.to===t);return '<button class="preset'+(on?' on':'')+'" data-f="'+f+'" data-t="'+t+'"><span>'+x.l+'</span><small>'+x.m+'</small></button>'}).join('');$$('#qGrid .preset').forEach(function(b){b.onclick=function(){repRange.from=b.dataset.f;repRange.to=b.dataset.t;repRange.name='Quarter';renderReports();closeModal('quarterModal')}});showModal('quarterModal')}
 function setFilter(key){if(key==='custom'){openCustom();return}if(key==='quarter'){openQuarter();return}var r=filterRange(key);repRange.from=r[0];repRange.to=r[1];repRange.name=r[2];renderReports()}
 function openCustom(){$('#repFrom').value=repRange.from||'';$('#repTo').value=repRange.to||'';showModal('rangeModal')}
@@ -4251,23 +4309,47 @@ function renderJarMeta(){
 }
 function renderAlerts(a){
   var box=$('#alertStrip');if(!box)return;
-  var items=[],dl=currentDeadlines();
-  if(dl.basDays<=14){
-    var gstPay=dl.netGst>=0;
-    items.push({cls:(dl.basDays<0||dl.basDays<=7)?'hot':'warn',t:
-      (dl.basDays<0?'BAS overdue '+Math.abs(dl.basDays)+'d':dl.basDays===0?'BAS due today':'BAS in '+dl.basDays+'d')
-      +' \u00b7 '+(gstPay?'pay ':'refund ')+money(Math.abs(dl.netGst))+' \u00b7 due '+dl.basDueFmt});
-  }
-  if(dl.levyDays<=14){
-    items.push({cls:(dl.levyDays<0||dl.levyDays<=7)?'hot':'warn',t:
-      (dl.levyDays<0?'Levy overdue '+Math.abs(dl.levyDays)+'d':dl.levyDays===0?'Levy due today':'Levy in '+dl.levyDays+'d')
-      +' \u00b7 '+money(dl.levy)+' SRO \u00b7 due '+dl.levyDueFmt});
+  var items=[],pq=payQuarterInfo();
+  if(pq){
+    var atoId='ato:'+pq.key,levyId='levy:'+pq.key;
+    var atoAmt=Math.abs(pq.netGst||0);
+    if(atoAmt>=1&&payAlertVisible(pq.basDays,atoId)){
+      var gstPay=pq.netGst>=0;
+      var atoHead=gstPay?('Pay ATO '+money(atoAmt)):('ATO refund '+money(atoAmt));
+      var atoWhen=pq.basDays<0?('overdue '+Math.abs(pq.basDays)+'d'):(pq.basDays===0?'due today':'due in '+pq.basDays+'d');
+      items.push({id:atoId,cls:(pq.basDays<0||pq.basDays<=7)?'hot':'warn',act:'ato',
+        title:atoHead,
+        sub:'Last quarter '+pq.q+' \u00b7 '+pq.months+' \u00b7 '+atoWhen+' \u00b7 '+pq.basDueFmt});
+    }
+    if((pq.levy||0)>=0.5&&payAlertVisible(pq.levyDays,levyId)){
+      var levyWhen=pq.levyDays<0?('overdue '+Math.abs(pq.levyDays)+'d'):(pq.levyDays===0?'due today':'due in '+pq.levyDays+'d');
+      items.push({id:levyId,cls:(pq.levyDays<0||pq.levyDays<=7)?'hot':'warn',act:'levy',
+        title:'Pay SRO levy '+money(pq.levy),
+        sub:'Last quarter '+pq.q+' \u00b7 '+pq.months+' \u00b7 '+(pq.hailN||0)+' hail \u00b7 '+levyWhen+' \u00b7 '+pq.levyDueFmt});
+    }
   }
   var noN=0,noAmt=0;
   a.allDed.forEach(function(d){if(!d._recurring&&!d.receiptId){noN++;noAmt+=nn(d.amount)}});
   a.fmList.forEach(function(m){if(!m.receiptId){noN++;noAmt+=nn(m.amount)}});
-  if(noN)items.push({cls:'info',t:noN+' cost'+(noN===1?'':'s')+' with no snap \u00b7 '+money(noAmt)});
-  box.innerHTML=items.map(function(x){return '<div class="alert '+x.cls+'">'+esc(x.t)+'</div>'}).join('');
+  if(noN)items.push({id:null,cls:'info',act:null,title:noN+' cost'+(noN===1?'':'s')+' with no snap',sub:money(noAmt)+' \u00b7 add a photo in the receipt jar'});
+  box.innerHTML=items.map(function(x){
+    var go=x.act?' data-alert-go="'+esc(x.act)+'"':'';
+    var xbtn=x.id?'<button type="button" class="alert-x" data-alert-x="'+esc(x.id)+'" aria-label="Dismiss">&times;</button>':'';
+    var bodyTag=x.act?'button type="button" class="alert-body"'+go:'div class="alert-body"';
+    var bodyEnd=x.act?'button':'div';
+    return '<div class="alert '+x.cls+'"><'+bodyTag+'><b>'+esc(x.title)+'</b><span>'+esc(x.sub)+'</span></'+bodyEnd+'>'+xbtn+'</div>';
+  }).join('');
+  $$('#alertStrip [data-alert-x]').forEach(function(b){
+    b.onclick=function(e){e.stopPropagation();dismissPayAlert(b.dataset.alertX)};
+  });
+  $$('#alertStrip [data-alert-go]').forEach(function(b){
+    b.onclick=function(){
+      var pq2=payQuarterInfo();
+      showPayQuarter(pq2);
+      renderReports();
+      if(b.dataset.alertGo==='ato')openSummary('bas');
+    };
+  });
 }
 function renderReports(){
   renderDeadlines();
