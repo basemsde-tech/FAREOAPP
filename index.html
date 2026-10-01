@@ -1074,9 +1074,9 @@ html.fold-flex .sfoot-gap{width:0}
       <div class="shift-fields" id="shiftFields">
       <div class="card tx-fuel shift-field" data-field="fuel"><h5 class="sf-h5"><button type="button" class="sf-grip" aria-label="Drag to reorder" title="Drag to reorder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></button><span class="dot" style="background:var(--fuel-fill)"></span>Fuel <span id="fuelReqBadge" class="danger" style="font-size:10px;margin-left:auto;display:none">required</span><span class="help" data-help="Required when a fuel receipt is attached. Tick Paid by operator for operator card fuel." aria-label="Help">?</span><span class="sub-amt" id="fuelSub">$0</span></h5>
         <div id="fuelRows"></div><button class="add" id="addFuel">+ Add Fuel Fill-up</button></div>
-      <div class="card tx-cash shift-field" data-field="cash"><h5 class="sf-h5"><button type="button" class="sf-grip" aria-label="Drag to reorder" title="Drag to reorder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></button><span class="dot" style="background:var(--levy)"></span>Cash Fares<span class="help" data-help="Cash collected from passengers. Counted in gross revenue, but deducted from your operator settlement because you already hold it." aria-label="Help">?</span><span class="sub-amt" id="cashSub">$0</span></h5>
+      <div class="card tx-cash shift-field" data-field="cash"><h5 class="sf-h5"><button type="button" class="sf-grip" aria-label="Drag to reorder" title="Drag to reorder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></button><span class="dot" style="background:var(--levy)"></span>Cash Fares<span class="help" data-help="Cash you collected. It stays in take-home. When Cash &amp; Square tax-free is on, it is not taxable income — left out of G1 and 1A." aria-label="Help">?</span><span class="sub-amt" id="cashSub">$0</span></h5>
         <div id="cashRows"></div><button class="add" id="addCash">+ Add Cash Payer</button></div>
-      <div class="card tx-square shift-field" data-field="square"><h5 class="sf-h5"><button type="button" class="sf-grip" aria-label="Drag to reorder" title="Drag to reorder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></button><span class="dot" style="background:var(--acct)"></span>Square Payments<span class="help" data-help="Taken on your own Square reader. Treated like cash (you hold the money), but tracked separately in reports." aria-label="Help">?</span><span class="sub-amt" id="squareSub">$0</span></h5>
+      <div class="card tx-square shift-field" data-field="square"><h5 class="sf-h5"><button type="button" class="sf-grip" aria-label="Drag to reorder" title="Drag to reorder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></button><span class="dot" style="background:var(--acct)"></span>Square Payments<span class="help" data-help="Taken on your own Square reader. You hold the money, like cash. When Cash &amp; Square tax-free is on, it is not taxable income — left out of G1 and 1A." aria-label="Help">?</span><span class="sub-amt" id="squareSub">$0</span></h5>
         <div id="squareRows"></div><button class="add" id="addSquare">+ Add Square Payer</button></div>
       <div class="card tx-runs shift-field" data-field="runs"><h5 class="sf-h5"><button type="button" class="sf-grip" aria-label="Drag to reorder" title="Drag to reorder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></button><span class="dot" style="background:var(--hail-fill)"></span>Passenger Runs<span class="help" data-help="Short fixed-price passenger runs at $5 each. Enter how many you did." aria-label="Help">?</span><span class="sub-amt" id="runsSub">$0</span></h5>
         <label class="fl">Runs (&#36;5 each)</label><input id="runs" type="number" min="0" inputmode="numeric" placeholder="0"></div>
@@ -1297,7 +1297,7 @@ html.fold-flex .sfoot-gap{width:0}
     <div class="card" id="deadlineCard" style="padding:13px">
       <div class="ph-head">
         <span class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></span>
-        <div class="ph-t"><b>Due dates <span class="help" data-help="GST is 1/11 of the taxable fare, including any levy you passed on (BAS G1 / 1A). Tax-free cash/Square is G3 and is not in 1A. The levy you remit to SRO comes off take-home — no GST credit, not a BAS box." aria-label="Help">?</span></b><p id="dlQLabel">Q1 · Jul – Sep</p></div>
+        <div class="ph-t"><b>Due dates <span class="help" data-help="G1 is taxable sales only. Tax-free cash/Square is not in G1 or 1A. 1A is 1/11 of G1, including any levy passed on in those fares. The levy you remit to SRO comes off take-home — no GST credit, not a BAS box." aria-label="Help">?</span></b><p id="dlQLabel">Q1 · Jul – Sep</p></div>
         <span class="ph-pill" id="dlLodgePill">This quarter</span>
       </div>
       <div class="q-switch" id="qSwitch"></div>
@@ -1320,13 +1320,14 @@ html.fold-flex .sfoot-gap{width:0}
     <div class="card" id="basCopyCard">
       <div class="ph-head">
         <span class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.2L14 21l-2-1.2L10 21l-2-1.2L6 21z"/><path d="M9 8h6M9 12h6"/></svg></span>
-        <div class="ph-t"><b>Copy onto your BAS <span class="help" data-help="Type these whole dollars into myGov. G1 is total sales (includes tax-free cash). G3 is tax-free cash/Square when that setting is on. 1A is 1/11 of G1 minus G3 (levy in the fare). 1B is GST on fuel and costs. 8A is the same as 1A. 8B is the same as 1B. Tap Amend to change this copy only — shifts and income do not change." aria-label="Help">?</span></b><p id="basCopyRange">This range</p></div>
+        <div class="ph-t"><b>Copy onto your BAS <span class="help" data-help="Type these whole dollars into myGov. G1 is taxable sales only (EFTPOS, accounts, runs). Tax-free cash/Square is not in G1 or 1A — you still keep it in take-home. 1A is 1/11 of G1 (levy in those fares). 1B is GST on fuel and costs. 8A is the same as 1A. 8B is the same as 1B. Tap Amend to change this copy only — shifts and income do not change." aria-label="Help">?</span></b><p id="basCopyRange">This range</p></div>
         <button class="ph-pill tap" id="basCopyOpen" type="button" title="Open BAS sheet">Amend</button>
       </div>
-      <p class="bas-copy-note">Whole dollars for myGov. Tax-free cash/Square still counts in G1, is listed at G3, and is not in 1A.</p>
+      <p class="bas-copy-note">Whole dollars for myGov. Tax-free cash/Square is not taxable income — left out of G1 and 1A. Take-home still includes it.</p>
       <button type="button" class="bas-copy-warn" id="basCopyUseQtr">BAS is quarterly (Jul–Sep, Oct–Dec, Jan–Mar, Apr–Jun). Tap to show this quarter.</button>
-      <div class="bas-copy-row"><span class="code">G1</span><span class="lab">Total sales</span><span class="amt" id="basCopyG1">$0</span></div>
-      <div class="bas-copy-row" id="basCopyG3Row"><span class="code">G3</span><span class="lab">Tax-free sales (cash / Square)</span><span class="amt" id="basCopyG3">$0</span></div>
+      <div class="bas-copy-row"><span class="code">G1</span><span class="lab">Total sales (taxable)</span><span class="amt" id="basCopyG1">$0</span></div>
+      <div class="bas-copy-row" id="basCopyFreeRow" style="display:none"><span class="code">—</span><span class="lab">Tax-free cash / Square (not in G1)</span><span class="amt" id="basCopyFree">$0</span></div>
+      <div class="bas-copy-row" id="basCopyG3Row" style="display:none"><span class="code">G3</span><span class="lab">Other GST-free sales</span><span class="amt" id="basCopyG3">$0</span></div>
       <div class="bas-copy-row"><span class="code">1A</span><span class="lab">GST on sales</span><span class="amt" id="tax1A">$0</span></div>
       <div class="bas-copy-row"><span class="code">1B</span><span class="lab">GST on purchases</span><span class="amt" id="tax1Bmini">$0</span></div>
       <div class="bas-copy-row"><span class="code">8A</span><span class="lab">Same as 1A</span><span class="amt" id="basCopy8A">$0</span></div>
@@ -1388,7 +1389,7 @@ html.fold-flex .sfoot-gap{width:0}
       <div class="set hot"><div class="sl"><b>Driver Percentage Share</b><p>Global &middot; flows to every calc</p></div><input id="setPct" type="number" min="0" max="100" inputmode="decimal"></div>
       <div class="set"><div class="sl"><b>Hail Trip Levy <span class="help" data-help="When you add this levy to the passenger fare it becomes part of the taxable supply — GST is 1/11 of the full fare. The amount you remit to SRO Victoria comes off your take-home (no GST credit). Set 0 if your BSP pays it." aria-label="Help">?</span></b><p>From your income in Reports &middot; 0 if BSP pays</p></div><input id="setLevy" type="number" min="0" inputmode="decimal"></div>
       <div class="set"><div class="sl"><b>State Address Focus <span class="help" data-help="Prioritises and predicts addresses in your Australian state (Victoria by default)." aria-label="Help">?</span></b><p>Address search predictions</p></div><select id="setState" style="width:125px"><option value="VIC">VIC (Victoria)</option><option value="NSW">NSW</option><option value="QLD">QLD</option><option value="SA">SA</option><option value="WA">WA</option><option value="TAS">TAS</option><option value="ACT">ACT</option><option value="NT">NT</option><option value="ALL">All Australia</option></select></div>
-      <div class="set"><div class="sl"><b>Cash &amp; Square tax-free <span class="help" data-help="When on, cash and Square fares are tax-free: no GST in 1A. They still count in G1 (total sales) and go in G3. EFTPOS, accounts and runs stay GST. Turn off if you charge GST on cash too." aria-label="Help">?</span></b><p>No GST on cash-type fares · G3 on your BAS</p></div><button class="tgl" id="setCashGst" aria-label="Toggle cash tax-free"></button></div>
+      <div class="set"><div class="sl"><b>Cash &amp; Square tax-free <span class="help" data-help="When on, cash and Square are not taxable income. They are left out of G1 and 1A. You still keep that money in take-home and Weekly. EFTPOS, accounts and runs stay in G1 (GST 1/11). Turn off if GST applies to cash too." aria-label="Help">?</span></b><p>Not in G1 or 1A · you still keep the cash</p></div><button class="tgl" id="setCashGst" aria-label="Toggle cash tax-free"></button></div>
       <div class="set"><div class="sl"><b>Week Cycle</b><p>Which day your week starts</p></div><select id="setWeek"></select></div>
       <div class="set" style="display:block"><div class="sl"><b>Vehicle Regos</b></div>
         <div class="two" style="grid-template-columns:1fr auto"><input id="newRego" placeholder="e.g. 5088M" autocapitalize="characters"><button class="add" id="addRego" style="margin:0;width:auto;padding:10px 14px">Add</button></div>
@@ -1407,7 +1408,7 @@ html.fold-flex .sfoot-gap{width:0}
 
       <p class="grp">Tax model</p>
       <div class="card" style="padding:0">
-        <div class="set"><div class="sl"><b>GST Base <span class="help" data-help="Whether GST (1/11) is set aside on your full gross fares or only your driver share. GST applies to the whole fare, including any levy you passed on. The SRO levy payment is separate (no GST credit). Match this to your bailment agreement \u2014 ask your operator or tax agent which applies." aria-label="Help">?</span></b><p>Amount GST is set aside on</p></div><select id="setGstBase" class="wide"><option value="gross">Full gross</option><option value="share">Driver share</option></select></div>
+        <div class="set"><div class="sl"><b>GST Base <span class="help" data-help="Whether GST (1/11) is set aside on taxable sales (G1) — full fare or only your driver share. Tax-free cash/Square is left out of G1. Levy passed on in taxable fares stays in G1. The SRO levy payment is separate (no GST credit). Match this to your bailment agreement \u2014 ask your operator or tax agent which applies." aria-label="Help">?</span></b><p>Amount GST is set aside on</p></div><select id="setGstBase" class="wide"><option value="gross">Full gross</option><option value="share">Driver share</option></select></div>
       </div>
 
       <p class="grp">Payment Types</p>
@@ -1741,8 +1742,12 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.39';
+var APP_VERSION='8.40';
 var CHANGELOG=[
+  {v:'8.40',date:'October 1, 2026',notes:[
+    ['Tax','Tax-free means cash and Square are not taxable income. They are left out of G1 and 1A. You still keep that money in take-home and Weekly. EFTPOS, accounts and runs stay in G1. 1A is 1/11 of G1.'],
+    ['UI/UX','Copy onto your BAS lists taxable G1, tax-free cash kept out of G1, then 1A, 1B, 8A and 8B for myGov.'],
+  ]},
   {v:'8.39',date:'October 1, 2026',notes:[
     ['Tax','Cash & Square is now Tax-free. Those fares still count in G1, are listed at G3, and 1A is 1/11 of the rest (levy in the taxable fare).'],
     ['UI/UX','Reports shows a Copy onto your BAS card with G1, G3, 1A, 1B, 8A and 8B so you can type them into myGov.'],
@@ -2023,7 +2028,7 @@ function migrateSettings(){
   if(settings.autocomplete==null)settings.autocomplete=true;
   if(settings.fuelMode!=='driver'&&settings.fuelMode!=='reimbursed')settings.fuelMode='reimbursed';
   if(settings.gstBase!=='share'&&settings.gstBase!=='gross')settings.gstBase='gross';
-  /* Cash & Square fares default to tax-free (G3; excluded from 1A). */
+  /* Cash & Square fares default to tax-free (left out of G1 and 1A). */
   if(settings.cashGstFree==null)settings.cashGstFree=true;
   /* State focus for address search (defaults to Victoria) */
   if(!settings.state)settings.state='VIC';
@@ -3106,38 +3111,40 @@ function roundAtoDollar(n){
   if(frac>0.50+1e-9)w+=1;
   return sign*w;
 }
-/* GST-inclusive sales for G1 (gross, or driver share). Includes tax-free cash. */
-function entrySales(e){
-  var g=Number(e.gross)||0;
-  if(settings.gstBase==='share'){
-    var s=entryShare(e);
-    return (isFinite(s)&&s>=0)?s:g*(settings.pct/100);
-  }
-  return g;
+/* Cash/Square dollars on a saved shift. */
+function entryCashSquare(e){
+  var n=(Number(e.cash)||0)+(Number(e.square)||0);
+  return n<0?0:n;
 }
 function cashIsTaxFree(){return !!settings.cashGstFree}
-/* G3 — Cash & Square treated as tax-free when that Essentials toggle is on.
-   Never larger than G1 for this shift. */
-function entryTaxFreeAmt(e){
-  if(!cashIsTaxFree())return 0;
-  var g=Number(e.gross)||0,free=(Number(e.cash)||0)+(Number(e.square)||0);
-  if(free<0)free=0;
-  if(settings.gstBase==='share'){
+function entryShareRatio(e){
+  var g=Number(e.gross)||0;
+  if(g>0){
     var s=entryShare(e);
-    var ratio=g>0?s/g:(settings.pct/100);
-    free=free*ratio;
+    if(isFinite(s)&&s>=0)return s/g;
   }
-  var sales=entrySales(e);
-  if(free>sales)free=sales;
-  return free;
+  return settings.pct/100;
 }
+/* G1 — taxable sales only. Tax-free cash/Square is not included. */
+function entrySales(e){
+  var g=Number(e.gross)||0;
+  var t=cashIsTaxFree()?g-entryCashSquare(e):g;
+  if(t<0)t=0;
+  if(settings.gstBase==='share')return t*entryShareRatio(e);
+  return t;
+}
+/* Cash/Square left out of G1 when tax-free (for the copy card — not a BAS G3 box). */
+function entryTaxFreeCashAmt(e){
+  if(!cashIsTaxFree())return 0;
+  var n=entryCashSquare(e);
+  if(settings.gstBase==='share')n=n*entryShareRatio(e);
+  return n<0?0:n;
+}
+/* G3 is unused: tax-free cash is excluded from taxable sales, not listed as GST-free sales. */
+function entryTaxFreeAmt(e){return 0}
 function entryGstFreeAmt(e){return entryTaxFreeAmt(e)}
-/* Taxable GST-inclusive sales for 1A = G1 minus tax-free (G3). Levy recovery
-   stays in the fare when that fare is not tax-free. Do not add hail×rate again. */
-function entryGstBase(e){
-  var t=entrySales(e)-entryTaxFreeAmt(e);
-  return t<0?0:t;
-}
+/* 1A base = G1 (already excludes tax-free cash). Levy stays in the fare when that fare is taxable. */
+function entryGstBase(e){return entrySales(e)}
 
 function rowInputs(){
   /* Date picker */
@@ -3872,8 +3879,7 @@ function renderDeadlines(){
   var gstPay=dl.netGst>=0;
   var ga=$('#qGstAmt');if(ga){ga.textContent=(gstPay?'Pay ':'Refund ')+money(Math.abs(dl.netGst));ga.style.color=gstPay?'var(--dgr)':'var(--inc)'}
   var gs=$('#qGstSub');if(gs){
-    var g3bit=(dl.showG3||(dl.gstG3>0))?' · G3 '+money(dl.gstG3):'';
-    gs.textContent='G1 '+money(dl.gstG1)+g3bit+' · 1A '+money(dl.gst1A)+' · 1B '+money(dl.gst1B)+' · due '+dl.basDueFmt;
+    gs.textContent='G1 '+money(dl.gstG1)+' · 1A '+money(dl.gst1A)+' · 1B '+money(dl.gst1B)+' · due '+dl.basDueFmt;
   }
   var la=$('#qLevyAmt');if(la)la.textContent=money(dl.levy);
   var ls=$('#qLevySub');if(ls)ls.textContent=dl.qHail+' hail trip'+(dl.qHail!==1?'s':'')+' · from income · '+dl.levyDueFmt;
@@ -3958,9 +3964,8 @@ function rangeAgg(){
   var inc=es.reduce(function(a,b){return a+(Number(b.take)||0)},0);
   var gross=es.reduce(function(a,b){return a+(Number(b.gross)||0)},0);
   var share=es.reduce(function(a,b){return a+entryShare(b)},0);
-  /* Tax-free cash/Square (G3) is removed from the 1A base via entryGstBase.
-     Passed-on levy stays inside logged fares, so G1/1A include it unless that
-     fare is tax-free cash. */
+  /* Tax-free cash/Square is left out of G1 (entrySales / entryGstBase), so 1A
+     is 1/11 of taxable fares only. Passed-on levy stays inside those fares. */
   var gstBaseAmt=es.reduce(function(a,b){return a+entryGstBase(b)},0);
   if(gstBaseAmt<0)gstBaseAmt=0;
   var gst=gstBaseAmt/11;
@@ -4219,7 +4224,9 @@ function renderReports(){
   var g3el=$('#basCopyG3');if(g3el)g3el.textContent=money(lodgement.g3);
   var a8=$('#basCopy8A');if(a8)a8.textContent=money(lodgement.oneA);
   var b8=$('#basCopy8B');if(b8)b8.textContent=money(lodgement.oneB);
-  var g3row=$('#basCopyG3Row');if(g3row)g3row.style.display=(lodgement.showG3||cashIsTaxFree())?'flex':'none';
+  var g3row=$('#basCopyG3Row');if(g3row)g3row.style.display=lodgement.showG3?'flex':'none';
+  var freeEl=$('#basCopyFree');if(freeEl)freeEl.textContent=money(lodgement.taxFree||0);
+  var freeRow=$('#basCopyFreeRow');if(freeRow)freeRow.style.display=(cashIsTaxFree()&&(lodgement.taxFree||0)>0)?'flex':'none';
   var rng=$('#basCopyRange');if(rng)rng.textContent=(repRange.name||'This range')+' · '+fmtDMY(repRange.from)+' – '+fmtDMY(repRange.to);
   var qHint=$('#basCopyUseQtr');if(qHint)qHint.classList.toggle('show',repRange.name!=='Quarter');
   var payBox=$('#taxNetAmt');if(payBox)payBox.style.color=pay?'var(--dgr)':'var(--inc)';
@@ -4438,7 +4445,7 @@ function summaryHTML(light){var a=rangeAgg();
     +r('Gross revenue',money(a.gross))
     +r('Driver share',money(a.share))
     +r('Hail levy (expense from income, '+a.hailN+' trips)',money(a.levy))
-    +r('GST on sales (1/11 of '+(settings.gstBase==='share'?'driver share':'full fare')+', incl. levy in the fare)',money(basValsFromAgg(a).oneA))
+    +r('GST on sales (1/11 of taxable '+(settings.gstBase==='share'?'driver share':'fares')+'; tax-free cash/Square left out)',money(basValsFromAgg(a).oneA))
     +r('Fuel ('+a.fc+' fills): I paid '+money(a.fuelIPaid)+', operator paid '+money(a.fuelOpPaid),money(a.fuel))
     +r('GST credits (1B)',money(basValsFromAgg(a).oneB))+r('Deductible expenses (incl. levy)',money(a.dedTotal))
     +r('Est. net after GST & expenses',money(a.net),true)
@@ -4457,18 +4464,19 @@ function basValsFromAgg(a){
   var es=a.es||[];
   var g1p=es.reduce(function(s,e){return s+entrySales(e)},0);
   var g3p=es.reduce(function(s,e){return s+entryGstFreeAmt(e)},0);
+  var freeP=es.reduce(function(s,e){return s+entryTaxFreeCashAmt(e)},0);
   if(g3p<0)g3p=0;
   if(g3p>g1p)g3p=g1p;
   var g1=roundAtoDollar(g1p),g3=roundAtoDollar(g3p);
   var oneA=basOneAFromSales(g1,g3);
   var oneB=roundAtoDollar(a.oneB);
-  return{g1:g1,g3:g3,oneA:oneA,oneB:oneB,levy:a.levy,showG3:g3>0||cashIsTaxFree(),net:oneA-oneB};
+  return{g1:g1,g3:g3,oneA:oneA,oneB:oneB,levy:a.levy,showG3:g3>0,taxFree:roundAtoDollar(freeP),net:oneA-oneB};
 }
 function basLiveVals(){return basValsFromAgg(rangeAgg())}
 function basShownVals(){
   var live=basLiveVals();
   if(!basDraft)return live;
-  return{g1:basDraft.g1,g3:basDraft.g3,oneA:basDraft.oneA,oneB:basDraft.oneB,levy:live.levy,showG3:live.showG3||(basDraft.g3>0)};
+  return{g1:basDraft.g1,g3:basDraft.g3,oneA:basDraft.oneA,oneB:basDraft.oneB,levy:live.levy,showG3:live.showG3||(basDraft.g3>0),taxFree:live.taxFree};
 }
 function basIsDirty(){
   if(!basDraft)return false;
@@ -4541,16 +4549,18 @@ function basSummaryHTML(light){
   function boxEdit(code,label,val,key,id){
     return '<div class="bas-box"><span class="bas-code">'+code+'</span><span class="bas-lab">'+label+'</span><div class="bas-amt-wrap"><span class="pre">$</span><input class="bas-amt" id="'+id+'" data-bas="'+key+'" type="number" min="0" step="1" inputmode="numeric" autocomplete="off" value="'+String(val)+'" aria-label="'+code+' '+label+'"></div></div>';
   }
-  var titleHelp=light?'':' <span class="help" data-help="Copy these onto your ATO activity statement. Amounts are whole dollars (50c and under down, 51c and over up). G1 is total sales including tax-free cash. G3 is tax-free cash/Square if that toggle is on. 1A is 1/11 of the rest (levy in the fare). 8A equals 1A and 8B equals 1B. Tap a figure to amend this copy only — shifts, Reports and income do not change." aria-label="Help">?</span>';
+  var titleHelp=light?'':' <span class="help" data-help="Copy these onto your ATO activity statement. Amounts are whole dollars (50c and under down, 51c and over up). G1 is taxable sales only. Tax-free cash/Square is not in G1 or 1A — you still keep it in take-home. 1A is 1/11 of G1 (levy in those fares). 8A equals 1A and 8B equals 1B. Tap a figure to amend this copy only — shifts, Reports and income do not change." aria-label="Help">?</span>';
   var reset=light?'':'<button type="button" class="bas-reset'+(basIsDirty()?' on':'')+'" id="basReset">Reset to Fareo figures</button>';
-  var g3Box=showG3?(light?boxStatic('G3','Tax-free sales (cash / Square)',g3):boxEdit('G3','Tax-free sales (cash / Square)',g3,'g3','basG3')):'';
-  var intro='Enter these on your ATO activity statement (whole dollars). Sales base: '+(settings.gstBase==='share'?'driver share':'full fare')+'. G1 is total sales; tax-free cash is G3; 1A is GST on the rest including levy recovery.';
+  var g3Box=showG3?(light?boxStatic('G3','Other GST-free sales',g3):boxEdit('G3','Other GST-free sales',g3,'g3','basG3')):'';
+  var freeBox=(cashIsTaxFree()&&(v.taxFree||0)>0)?boxStatic('\u2014','Tax-free cash / Square (not in G1)',v.taxFree):'';
+  var intro='Enter these on your ATO activity statement (whole dollars). Sales base: '+(settings.gstBase==='share'?'driver share':'full fare')+'. G1 is taxable sales only. Tax-free cash/Square is not in G1 or 1A. 1A is 1/11 of G1, including levy in those fares.';
   var body=
     '<div style="font-family:Inter,system-ui,sans-serif;color:'+c.head+'">'
     +'<h3 style="margin:0 0 2px;font-size:20px;color:'+c.head+'">BAS prep summary'+titleHelp+'</h3>'
     +'<p style="margin:0 0 4px;color:'+c.mut+';font-size:12.5px">'+esc(repRange.name)+' \u00b7 '+fmtDMY(repRange.from)+' \u2013 '+fmtDMY(repRange.to)+' &middot; Goods &amp; services tax (GST)</p>'
     +'<p style="margin:0 0 14px;color:'+c.mut+';font-size:11px">'+intro+'</p>'
-    +(light?boxStatic('G1','Total sales (GST inclusive)',g1):boxEdit('G1','Total sales (GST inclusive)',g1,'g1','basG1'))
+    +(light?boxStatic('G1','Total sales (taxable)',g1):boxEdit('G1','Total sales (taxable)',g1,'g1','basG1'))
+    +freeBox
     +g3Box
     +'<div style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:'+c.mut+';font-weight:700;margin:10px 0 2px">You owe ATO</div>'
     +(light?boxStatic('1A','GST on sales',oneA,true):boxEdit('1A','GST on sales',oneA,'1a','bas1A'))
@@ -4562,17 +4572,17 @@ function basSummaryHTML(light){
       +'<div id="basNetLbl" style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:'+c.mut+';font-weight:700">'+(net>=0?'Amount payable to ATO':'Refund from ATO')+'</div>'
       +'<div id="basNetAmt" style="font-size:30px;font-weight:800;margin-top:4px;color:'+(net>=0?(light?c.red:'var(--dgr)'):(light?c.grn:'var(--inc)'))+'">'+money(Math.abs(net))+'</div></div>'
     +reset
-    +'<p style="margin:12px 0 0;color:'+c.mut+';font-size:10.5px">G1 includes levy recovery in the fare. The SRO remittance ('+money(a.levy)+') comes off income — do not claim 1B on it.</p>'
+    +'<p style="margin:12px 0 0;color:'+c.mut+';font-size:10.5px">G1 is taxable sales (levy in those fares). Tax-free cash/Square is not in G1. The SRO remittance ('+money(a.levy)+') comes off income — do not claim 1B on it.</p>'
     +'<p style="margin:6px 0 0;color:'+c.mut+';font-size:10.5px">Helper only \u2014 check with your tax agent before you lodge. Fareo &middot; '+fmtDayLong(new Date())+'</p></div>';
   return body;
 }
 function basHowHTML(){
   return '<div class="basguide">'
-    +'<p class="bas-note">A BAS is the ATO form you lodge every 3 months. Copy <b>whole dollars</b>. <b>G1</b> is total sales (includes tax-free cash). If Cash &amp; Square tax-free is on, that amount is <b>G3</b> and is not in 1A. <b>1A</b> is 1/11 of the taxable fare, including any levy you passed on. <b>8A</b> equals 1A and <b>8B</b> equals 1B. The hail-trip (CPV) levy remittance is a <b>different</b> SRO form — no GST credit.</p>'
+    +'<p class="bas-note">A BAS is the ATO form you lodge every 3 months. Copy <b>whole dollars</b>. <b>G1</b> is taxable sales only. If Cash &amp; Square tax-free is on, that cash is <b>not</b> in G1 or 1A — you still keep it in take-home. <b>1A</b> is 1/11 of G1, including any levy you passed on in those fares. <b>8A</b> equals 1A and <b>8B</b> equals 1B. The hail-trip (CPV) levy remittance is a <b>different</b> SRO form — no GST credit.</p>'
     +'<div class="bas-step"><span class="bas-n">1</span><p><b>Show this quarter.</b> BAS periods are Jul–Sep, Oct–Dec, Jan–Mar and Apr–Jun. Use the Quarter filter at the top so the numbers match that period.</p></div>'
     +'<div class="bas-step"><span class="bas-n">2</span><p><b>Log every cost.</b> Add fuel and expenses (tolls, wash, repairs). Snap the receipt. Fareo splits GST for you.</p></div>'
-    +'<div class="bas-step"><span class="bas-n">3</span><p><b>Copy the boxes.</b> Reports shows: <b>G1</b> total sales, <b>G3</b> tax-free (if used), <b>1A</b> GST you collected, <b>1B</b> GST you paid on fuel and costs. The big number is 1A minus 1B — pay it if it is positive, or wait for a refund if it is negative. You can amend a box on the BAS sheet only.</p></div>'
-    +'<div class="bas-step"><span class="bas-n">4</span><p><b>Copy into myGov.</b> Log in → BAS / activity statement → type G1, G3 (if any), 1A and 1B as whole dollars. 8A is the same as 1A. 8B is the same as 1B.</p></div>'
+    +'<div class="bas-step"><span class="bas-n">3</span><p><b>Copy the boxes.</b> Reports shows: <b>G1</b> taxable sales, tax-free cash/Square (not in G1), <b>1A</b> GST you collected, <b>1B</b> GST you paid on fuel and costs. The big number is 1A minus 1B — pay it if it is positive, or wait for a refund if it is negative. You can amend a box on the BAS sheet only.</p></div>'
+    +'<div class="bas-step"><span class="bas-n">4</span><p><b>Copy into myGov.</b> Log in → BAS / activity statement → type G1, 1A and 1B as whole dollars. 8A is the same as 1A. 8B is the same as 1B. Do not put tax-free cash in G1.</p></div>'
     +'<div class="bas-step"><span class="bas-n">5</span><p><b>Lodge and pay.</b> Due about 28 days after the quarter ends (late Oct, Feb, Apr, Jul). Confirm with your tax agent first — Fareo is a helper, not advice.</p></div>'
     +'</div>';
 }
@@ -4645,8 +4655,9 @@ function summaryText(mode){
   L.push('');
   if(mode==='bas'){
     var v=basShownVals();
-    L.push('G1 Total sales: '+money(v.g1));
-    if(v.showG3)L.push('G3 Tax-free sales: '+money(v.g3));
+    L.push('G1 Total sales (taxable): '+money(v.g1));
+    if(cashIsTaxFree()&&(v.taxFree||0)>0)L.push('Tax-free cash/Square (not in G1): '+money(v.taxFree));
+    if(v.showG3)L.push('G3 Other GST-free sales: '+money(v.g3));
     L.push('1A GST on sales: '+money(v.oneA));
     L.push('1B GST credits: '+money(v.oneB));
     L.push('8A: '+money(v.oneA)+'  8B: '+money(v.oneB));
@@ -4729,7 +4740,7 @@ $('#setLevy').oninput=function(){var v=parseFloat(this.value);settings.levy=(isF
 $('#setFuel').onchange=function(){settings.fuel=this.value;persist()};
 /* Fuel mode removed — always reimbursed */
 $('#setGstBase').onchange=function(){settings.gstBase=this.value;persist();toast(this.value==='share'?'GST set aside on driver share':'GST set aside on full gross')};
-$('#setCashGst').onclick=function(){settings.cashGstFree=!settings.cashGstFree;persist();this.classList.toggle('on',settings.cashGstFree);renderReports();toast(settings.cashGstFree?'Cash & Square: tax-free':'Cash & Square: GST applies')};
+$('#setCashGst').onclick=function(){settings.cashGstFree=!settings.cashGstFree;persist();this.classList.toggle('on',settings.cashGstFree);renderReports();toast(settings.cashGstFree?'Cash & Square: tax-free — not in G1 or 1A':'Cash & Square: GST applies (in G1)')};
 if($('#setState'))$('#setState').onchange=function(){settings.state=this.value;persist();toast('Address search focused on '+this.value)};
 if($('#advToggle'))$('#advToggle').onclick=function(){var w=$('#advWrap');var open=w.style.display==='none';w.style.display=open?'block':'none';this.classList.toggle('open',open)};
 if($('#archiveLink'))$('#archiveLink').onclick=openArchive;
