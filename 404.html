@@ -1323,7 +1323,7 @@ html.fold-flex .sfoot-gap{width:0}
         <div class="ph-t"><b>Copy onto your BAS <span class="help" data-help="Type these whole dollars into myGov. G1 is taxable sales only (EFTPOS, accounts, runs). Tax-free cash/Square is not in G1 or 1A — you still keep it in take-home. 1A is 1/11 of G1 (levy in those fares). 1B is GST on fuel and costs. 8A is the same as 1A. 8B is the same as 1B. Tap Amend to change this copy only — shifts and income do not change." aria-label="Help">?</span></b><p id="basCopyRange">This range</p></div>
         <button class="ph-pill tap" id="basCopyOpen" type="button" title="Open BAS sheet">Amend</button>
       </div>
-      <p class="bas-copy-note">Whole dollars for myGov. Tax-free cash/Square is not taxable income — left out of G1 and 1A. Take-home still includes it.</p>
+      <p class="bas-copy-note" id="basCopyNote">Whole dollars for myGov. Tax-free cash/Square is not taxable income — left out of G1 and 1A. Take-home still includes it.</p>
       <button type="button" class="bas-copy-warn" id="basCopyUseQtr">BAS is quarterly (Jul–Sep, Oct–Dec, Jan–Mar, Apr–Jun). Tap to show this quarter.</button>
       <div class="bas-copy-row"><span class="code">G1</span><span class="lab">Total sales (taxable)</span><span class="amt" id="basCopyG1">$0</span></div>
       <div class="bas-copy-row" id="basCopyFreeRow" style="display:none"><span class="code">—</span><span class="lab">Tax-free cash / Square (not in G1)</span><span class="amt" id="basCopyFree">$0</span></div>
@@ -4227,6 +4227,10 @@ function renderReports(){
   var g3row=$('#basCopyG3Row');if(g3row)g3row.style.display=lodgement.showG3?'flex':'none';
   var freeEl=$('#basCopyFree');if(freeEl)freeEl.textContent=money(lodgement.taxFree||0);
   var freeRow=$('#basCopyFreeRow');if(freeRow)freeRow.style.display=(cashIsTaxFree()&&(lodgement.taxFree||0)>0)?'flex':'none';
+  var note=$('#basCopyNote');
+  if(note)note.textContent=cashIsTaxFree()
+    ?'Whole dollars for myGov. Tax-free cash/Square is not taxable income — left out of G1 and 1A. Take-home still includes it.'
+    :'Whole dollars for myGov. Cash and Square are in G1 (GST applies). 1A is 1/11 of G1.';
   var rng=$('#basCopyRange');if(rng)rng.textContent=(repRange.name||'This range')+' · '+fmtDMY(repRange.from)+' – '+fmtDMY(repRange.to);
   var qHint=$('#basCopyUseQtr');if(qHint)qHint.classList.toggle('show',repRange.name!=='Quarter');
   var payBox=$('#taxNetAmt');if(payBox)payBox.style.color=pay?'var(--dgr)':'var(--inc)';
