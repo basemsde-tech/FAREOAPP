@@ -527,6 +527,16 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .tax-gstbar b{color:var(--head);font-variant-numeric:tabular-nums}
 .tax-gstbar .pay{color:var(--dgr);font-weight:800}
 .tax-gstbar .ref{color:var(--inc);font-weight:800}
+.bas-copy-note{font-size:12px;color:var(--body);margin:0 0 10px;line-height:1.45}
+.bas-copy-warn{display:none;width:100%;text-align:left;margin:0 0 10px;padding:9px 11px;border-radius:10px;border:1px solid var(--fuel);background:var(--fuel-bg);color:var(--on-fuel);font-size:12px;font-weight:650;cursor:pointer;line-height:1.4}
+.bas-copy-warn.show{display:block}
+.bas-copy-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd)}
+.bas-copy-row .code{min-width:36px;text-align:center;border:1.5px solid var(--acct);color:var(--acct);border-radius:8px;padding:4px 3px;font-weight:800;font-size:12px;flex:0 0 auto}
+.bas-copy-row .lab{flex:1;color:var(--mut);font-size:12.5px;line-height:1.3;min-width:0}
+.bas-copy-row .amt{font-weight:800;font-size:15px;color:var(--head);font-variant-numeric:tabular-nums}
+.bas-copy-pay{background:var(--field);border-radius:12px;padding:12px;margin:12px 0 10px;text-align:center}
+.bas-copy-pay small{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--mut);font-weight:700}
+.bas-copy-pay b{display:block;margin-top:4px;font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}
 .tax-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 4px}
 .tax-add{display:flex;align-items:center;justify-content:center;gap:7px;padding:11px 10px;border-radius:12px;border:1.5px solid var(--inc);background:var(--inc-bg);color:var(--on-inc);font-weight:800;font-size:13px;cursor:pointer}
 .tax-add.fuel{border-color:var(--fuel-fill);background:var(--fuel-bg);color:var(--fuel)}
@@ -1231,7 +1241,7 @@ html.fold-flex .sfoot-gap{width:0}
   </section>
 
   <section class="screen" data-tab="reports">
-    <div class="sub">Reports <small>Cycle · GST · costs</small></div>
+    <div class="sub">Reports <small>Income · copy BAS · costs</small></div>
 
     <div class="filterrow" id="filterRow">
       <button data-k="week" class="filt on">Cycle</button>
@@ -1286,7 +1296,7 @@ html.fold-flex .sfoot-gap{width:0}
     <div class="card" id="deadlineCard" style="padding:13px">
       <div class="ph-head">
         <span class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></span>
-        <div class="ph-t"><b>GST &amp; levy <span class="help" data-help="GST is 1/11 of the full fare, including any levy you passed on to the passenger (BAS G1 / 1A). The levy you remit to SRO is a regulatory fee from your take-home — no GST credit, and not a BAS box." aria-label="Help">?</span></b><p id="dlQLabel">Q1 · Jul – Sep</p></div>
+        <div class="ph-t"><b>Due dates <span class="help" data-help="GST is 1/11 of the taxable fare, including any levy you passed on (BAS G1 / 1A). Tax-free cash/Square is G3 and is not in 1A. The levy you remit to SRO comes off take-home — no GST credit, not a BAS box." aria-label="Help">?</span></b><p id="dlQLabel">Q1 · Jul – Sep</p></div>
         <span class="ph-pill" id="dlLodgePill">This quarter</span>
       </div>
       <div class="q-switch" id="qSwitch"></div>
@@ -1306,10 +1316,28 @@ html.fold-flex .sfoot-gap{width:0}
       </div>
     </div>
 
+    <div class="card" id="basCopyCard">
+      <div class="ph-head">
+        <span class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.2L14 21l-2-1.2L10 21l-2-1.2L6 21z"/><path d="M9 8h6M9 12h6"/></svg></span>
+        <div class="ph-t"><b>Copy onto your BAS <span class="help" data-help="Type these whole dollars into myGov. G1 is total sales (includes tax-free cash). G3 is tax-free cash/Square when that setting is on. 1A is 1/11 of G1 minus G3 (levy in the fare). 1B is GST on fuel and costs. 8A is the same as 1A. 8B is the same as 1B. Tap Amend to change this copy only — shifts and income do not change." aria-label="Help">?</span></b><p id="basCopyRange">This range</p></div>
+        <button class="ph-pill tap" id="basCopyOpen" type="button" title="Open BAS sheet">Amend</button>
+      </div>
+      <p class="bas-copy-note">Whole dollars for myGov. Tax-free cash/Square still counts in G1, is listed at G3, and is not in 1A.</p>
+      <button type="button" class="bas-copy-warn" id="basCopyUseQtr">BAS is quarterly (Jul–Sep, Oct–Dec, Jan–Mar, Apr–Jun). Tap to show this quarter.</button>
+      <div class="bas-copy-row"><span class="code">G1</span><span class="lab">Total sales</span><span class="amt" id="basCopyG1">$0</span></div>
+      <div class="bas-copy-row" id="basCopyG3Row"><span class="code">G3</span><span class="lab">Tax-free sales (cash / Square)</span><span class="amt" id="basCopyG3">$0</span></div>
+      <div class="bas-copy-row"><span class="code">1A</span><span class="lab">GST on sales</span><span class="amt" id="tax1A">$0</span></div>
+      <div class="bas-copy-row"><span class="code">1B</span><span class="lab">GST on purchases</span><span class="amt" id="tax1Bmini">$0</span></div>
+      <div class="bas-copy-row"><span class="code">8A</span><span class="lab">Same as 1A</span><span class="amt" id="basCopy8A">$0</span></div>
+      <div class="bas-copy-row"><span class="code">8B</span><span class="lab">Same as 1B</span><span class="amt" id="basCopy8B">$0</span></div>
+      <div class="bas-copy-pay"><small id="taxNetLabel">Pay ATO</small><b id="taxNetAmt">$0.00</b></div>
+      <button class="btn" id="basCopyOpenBtn" type="button">Open BAS sheet</button>
+    </div>
+
     <div class="card" id="taxCard">
       <div class="ph-head">
         <span class="ph-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.2L14 21l-2-1.2L10 21l-2-1.2L6 21z"/><path d="M9 8h6M9 12h6"/></svg></span>
-        <div class="ph-t"><b>Costs &amp; GST <span class="help" data-help="Fuel and receipts can claim GST (1B). Hail levy remittance has no GST credit — GST on that levy is already in the fare on G1 / 1A." aria-label="Help">?</span></b><p id="taxRangeLbl">0 items</p></div>
+        <div class="ph-t"><b>Costs &amp; credits <span class="help" data-help="Fuel and receipts can claim GST (1B). Hail levy remittance has no GST credit — GST on that levy is already in the fare on G1 / 1A. Levy is tax-free as a cost (SRO, not BAS)." aria-label="Help">?</span></b><p id="taxRangeLbl">0 items</p></div>
         <button class="ph-pill tap" id="taxGstNet" type="button" title="Open BAS figures">Pay $0.00</button>
       </div>
       <div class="two">
@@ -1360,7 +1388,7 @@ html.fold-flex .sfoot-gap{width:0}
       <div class="set hot"><div class="sl"><b>Driver Percentage Share</b><p>Global &middot; flows to every calc</p></div><input id="setPct" type="number" min="0" max="100" inputmode="decimal"></div>
       <div class="set"><div class="sl"><b>Hail Trip Levy <span class="help" data-help="When you add this levy to the passenger fare it becomes part of the taxable supply — GST is 1/11 of the full fare. The amount you remit to SRO Victoria comes off your take-home (no GST credit). Set 0 if your BSP pays it." aria-label="Help">?</span></b><p>From your income in Reports &middot; 0 if BSP pays</p></div><input id="setLevy" type="number" min="0" inputmode="decimal"></div>
       <div class="set"><div class="sl"><b>State Address Focus <span class="help" data-help="Prioritises and predicts addresses in your Australian state (Victoria by default)." aria-label="Help">?</span></b><p>Address search predictions</p></div><select id="setState" style="width:125px"><option value="VIC">VIC (Victoria)</option><option value="NSW">NSW</option><option value="QLD">QLD</option><option value="SA">SA</option><option value="WA">WA</option><option value="TAS">TAS</option><option value="ACT">ACT</option><option value="NT">NT</option><option value="ALL">All Australia</option></select></div>
-      <div class="set"><div class="sl"><b>Cash &amp; Square GST-free <span class="help" data-help="When on, cash and Square fares are excluded from your GST-on-sales calculation (treated as GST-free income). EFTPOS, accounts and runs stay GST-inclusive." aria-label="Help">?</span></b><p>Exclude cash-type fares from GST</p></div><button class="tgl" id="setCashGst" aria-label="Toggle cash GST-free"></button></div>
+      <div class="set"><div class="sl"><b>Cash &amp; Square tax-free <span class="help" data-help="When on, cash and Square fares are tax-free: no GST in 1A. They still count in G1 (total sales) and go in G3. EFTPOS, accounts and runs stay GST. Turn off if you charge GST on cash too." aria-label="Help">?</span></b><p>No GST on cash-type fares · G3 on your BAS</p></div><button class="tgl" id="setCashGst" aria-label="Toggle cash tax-free"></button></div>
       <div class="set"><div class="sl"><b>Week Cycle</b><p>Which day your week starts</p></div><select id="setWeek"></select></div>
       <div class="set" style="display:block"><div class="sl"><b>Vehicle Regos</b></div>
         <div class="two" style="grid-template-columns:1fr auto"><input id="newRego" placeholder="e.g. 5088M" autocapitalize="characters"><button class="add" id="addRego" style="margin:0;width:auto;padding:10px 14px">Add</button></div>
@@ -1713,8 +1741,12 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.38';
+var APP_VERSION='8.39';
 var CHANGELOG=[
+  {v:'8.39',date:'October 1, 2026',notes:[
+    ['Tax','Cash & Square is now Tax-free. Those fares still count in G1, are listed at G3, and 1A is 1/11 of the rest (levy in the taxable fare).'],
+    ['UI/UX','Reports shows a Copy onto your BAS card with G1, G3, 1A, 1B, 8A and 8B so you can type them into myGov.'],
+  ]},
   {v:'8.38',date:'September 28, 2026',notes:[
     ['Bug Fix','Editing a saved shift and changing the date or rego no longer leaves a duplicate in Weekly.'],
     ['Tax','GST 1A follows rounded G1 minus G3 (ATO whole dollars). Reports and BAS deadline tiles match the figures you lodge.'],
@@ -1991,7 +2023,7 @@ function migrateSettings(){
   if(settings.autocomplete==null)settings.autocomplete=true;
   if(settings.fuelMode!=='driver'&&settings.fuelMode!=='reimbursed')settings.fuelMode='reimbursed';
   if(settings.gstBase!=='share'&&settings.gstBase!=='gross')settings.gstBase='gross';
-  /* Cash & Square fares default to GST-free (excluded from GST-on-sales). */
+  /* Cash & Square fares default to tax-free (G3; excluded from 1A). */
   if(settings.cashGstFree==null)settings.cashGstFree=true;
   /* State focus for address search (defaults to Victoria) */
   if(!settings.state)settings.state='VIC';
@@ -3074,7 +3106,7 @@ function roundAtoDollar(n){
   if(frac>0.50+1e-9)w+=1;
   return sign*w;
 }
-/* GST-inclusive sales for G1 (gross, or driver share). Includes GST-free cash. */
+/* GST-inclusive sales for G1 (gross, or driver share). Includes tax-free cash. */
 function entrySales(e){
   var g=Number(e.gross)||0;
   if(settings.gstBase==='share'){
@@ -3083,30 +3115,28 @@ function entrySales(e){
   }
   return g;
 }
-/* G3 — Cash & Square treated as GST-free when that Essentials toggle is on. */
-function entryGstFreeAmt(e){
-  if(!settings.cashGstFree)return 0;
+function cashIsTaxFree(){return !!settings.cashGstFree}
+/* G3 — Cash & Square treated as tax-free when that Essentials toggle is on.
+   Never larger than G1 for this shift. */
+function entryTaxFreeAmt(e){
+  if(!cashIsTaxFree())return 0;
   var g=Number(e.gross)||0,free=(Number(e.cash)||0)+(Number(e.square)||0);
   if(free<0)free=0;
   if(settings.gstBase==='share'){
     var s=entryShare(e);
     var ratio=g>0?s/g:(settings.pct/100);
-    return free*ratio;
+    free=free*ratio;
   }
+  var sales=entrySales(e);
+  if(free>sales)free=sales;
   return free;
 }
-/* Taxable GST-inclusive sales for 1A (G1 minus G3). Levy recovery stays in the fare.
-   Do not add hail×rate again. Scaled to driver share when GST base is share. */
+function entryGstFreeAmt(e){return entryTaxFreeAmt(e)}
+/* Taxable GST-inclusive sales for 1A = G1 minus tax-free (G3). Levy recovery
+   stays in the fare when that fare is not tax-free. Do not add hail×rate again. */
 function entryGstBase(e){
-  var g=Number(e.gross)||0;
-  var free=settings.cashGstFree?((Number(e.cash)||0)+(Number(e.square)||0)):0;
-  var taxable=g-free;if(taxable<0)taxable=0;
-  if(settings.gstBase==='share'){
-    var s=entryShare(e);
-    var ratio=g>0?s/g:(settings.pct/100);
-    return taxable*ratio;
-  }
-  return taxable;
+  var t=entrySales(e)-entryTaxFreeAmt(e);
+  return t<0?0:t;
 }
 
 function rowInputs(){
@@ -3793,7 +3823,7 @@ function currentDeadlines(){
   var dues=dueDatesFor(row.l,row.t);
   var a=aggBetween(iso(row.f),iso(row.t));
   var b=basValsFromAgg(a);
-  return{q:row.l,from:row.f,to:row.t,months:row.m,basDue:dues.bas,levyDue:dues.levy,basDays:daysUntilDate(dues.bas),levyDays:daysUntilDate(dues.levy),basDueFmt:fmtDateShort(dues.bas),levyDueFmt:fmtDateShort(dues.levy),netGst:b.net,gst1A:b.oneA,gst1B:b.oneB,levy:a.levy,qHail:a.hailN,shifts:a.shifts,inc:a.inc};
+  return{q:row.l,from:row.f,to:row.t,months:row.m,basDue:dues.bas,levyDue:dues.levy,basDays:daysUntilDate(dues.bas),levyDays:daysUntilDate(dues.levy),basDueFmt:fmtDateShort(dues.bas),levyDueFmt:fmtDateShort(dues.levy),netGst:b.net,gstG1:b.g1,gstG3:b.g3,showG3:b.showG3,gst1A:b.oneA,gst1B:b.oneB,levy:a.levy,qHail:a.hailN,shifts:a.shifts,inc:a.inc};
 }
 function dlBadgeClass(days){return days<=14?'dl-hot':days<=30?'dl-warn':'dl-safe'}
 function dlUrgencyLabel(days){return days<=14?'Urgent':days<=30?'Soon':'On track'}
@@ -3841,7 +3871,10 @@ function renderDeadlines(){
   }
   var gstPay=dl.netGst>=0;
   var ga=$('#qGstAmt');if(ga){ga.textContent=(gstPay?'Pay ':'Refund ')+money(Math.abs(dl.netGst));ga.style.color=gstPay?'var(--dgr)':'var(--inc)'}
-  var gs=$('#qGstSub');if(gs)gs.textContent='1A '+money(dl.gst1A)+' · 1B '+money(dl.gst1B)+' · due '+dl.basDueFmt;
+  var gs=$('#qGstSub');if(gs){
+    var g3bit=(dl.showG3||(dl.gstG3>0))?' · G3 '+money(dl.gstG3):'';
+    gs.textContent='G1 '+money(dl.gstG1)+g3bit+' · 1A '+money(dl.gst1A)+' · 1B '+money(dl.gst1B)+' · due '+dl.basDueFmt;
+  }
   var la=$('#qLevyAmt');if(la)la.textContent=money(dl.levy);
   var ls=$('#qLevySub');if(ls)ls.textContent=dl.qHail+' hail trip'+(dl.qHail!==1?'s':'')+' · from income · '+dl.levyDueFmt;
   var qs=quartersList(),cur=currentQuarterKey(),key=trackQ||cur;
@@ -3925,10 +3958,9 @@ function rangeAgg(){
   var inc=es.reduce(function(a,b){return a+(Number(b.take)||0)},0);
   var gross=es.reduce(function(a,b){return a+(Number(b.gross)||0)},0);
   var share=es.reduce(function(a,b){return a+entryShare(b)},0);
-  /* Cash & Square treated as GST-free income when the toggle is on. Remove them
-     from gross first; if GST is on driver share, scale the leftover by this
-     shift's share ratio so mixed EFTPOS+cash days don't understate G1.
-     Passed-on levy is already inside logged fares, so G1/1A include it. */
+  /* Tax-free cash/Square (G3) is removed from the 1A base via entryGstBase.
+     Passed-on levy stays inside logged fares, so G1/1A include it unless that
+     fare is tax-free cash. */
   var gstBaseAmt=es.reduce(function(a,b){return a+entryGstBase(b)},0);
   if(gstBaseAmt<0)gstBaseAmt=0;
   var gst=gstBaseAmt/11;
@@ -4182,7 +4214,15 @@ function renderReports(){
   if(pill){pill.textContent=(pay?'Pay ':'Refund ')+money(Math.abs(netGst));pill.style.color=pay?'var(--dgr)':'var(--inc)';pill.style.borderColor=pay?'var(--dgr)':'var(--inc)';pill.style.background=pay?'var(--dgr-bg)':'var(--inc-bg)'}
   var t1=$('#tax1A'),t1b=$('#tax1Bmini'),tn=$('#taxNetAmt'),tl=$('#taxNetLabel');
   if(t1)t1.textContent=money(lodgement.oneA);if(t1b)t1b.textContent=money(lodgement.oneB);if(tn)tn.textContent=money(Math.abs(netGst));
-  if(tl){tl.textContent=pay?'Pay ATO':'Refund';tl.className=pay?'pay':'ref'}
+  if(tl){tl.textContent=pay?'Pay ATO':'Refund from ATO';tl.style.color=pay?'var(--dgr)':'var(--inc)'}
+  var g1el=$('#basCopyG1');if(g1el)g1el.textContent=money(lodgement.g1);
+  var g3el=$('#basCopyG3');if(g3el)g3el.textContent=money(lodgement.g3);
+  var a8=$('#basCopy8A');if(a8)a8.textContent=money(lodgement.oneA);
+  var b8=$('#basCopy8B');if(b8)b8.textContent=money(lodgement.oneB);
+  var g3row=$('#basCopyG3Row');if(g3row)g3row.style.display=(lodgement.showG3||cashIsTaxFree())?'flex':'none';
+  var rng=$('#basCopyRange');if(rng)rng.textContent=(repRange.name||'This range')+' · '+fmtDMY(repRange.from)+' – '+fmtDMY(repRange.to);
+  var qHint=$('#basCopyUseQtr');if(qHint)qHint.classList.toggle('show',repRange.name!=='Quarter');
+  var payBox=$('#taxNetAmt');if(payBox)payBox.style.color=pay?'var(--dgr)':'var(--inc)';
   function gstBit(amt,hasGst,bu){
     amt=nn(amt);
     var share=clampBu(bu==null?100:bu)/100;
@@ -4200,7 +4240,7 @@ function renderReports(){
     grouped[key].amt+=nn(amt);
     grouped[key].count+=(cnt||1);
   }
-  if(a.levy>0)pushG('Levy',dedRow({name:'Hail / CPV levy',meta:(a.hailN||0)+' hail trip'+(a.hailN!==1?'s':'')+' \u00d7 '+money(levyRate())+' \u00b7 SRO',amt:a.levy,sub:'from income \u00b7 no GST credit \u00b7 deduct '+money(a.levy)}),a.levy,1);
+  if(a.levy>0)pushG('Levy',dedRow({name:'Hail / CPV levy',meta:(a.hailN||0)+' hail trip'+(a.hailN!==1?'s':'')+' \u00d7 '+money(levyRate())+' \u00b7 SRO',amt:a.levy,sub:'from income \u00b7 tax-free \u00b7 deduct '+money(a.levy)}),a.levy,1);
   if(a.fuelShift>0)pushG('Fuel',dedRow({fuel:true,name:'Fuel from shifts',meta:'Auto from tracker \u00b7 '+a.fcShift+' fill'+(a.fcShift===1?'':'s'),amt:a.fuelShift,sub:gstBit(a.fuelShift,true)}),a.fuelShift,a.fcShift);
   a.fmList.slice().sort(function(x,y){return x.date<y.date?1:-1}).forEach(function(m){
     pushG('Fuel',dedRow({fuel:true,name:'Fuel ('+esc(m.type)+')',meta:fmtDayDMY(m.date)+(m.receiptId?' \u00b7 receipt':' \u00b7 no receipt'),amt:m.amount,sub:gstBit(m.amount,true),delAttr:'data-delfm="'+esc(m.id)+'"',rid:m.receiptId||''}),m.amount,1);
@@ -4422,7 +4462,7 @@ function basValsFromAgg(a){
   var g1=roundAtoDollar(g1p),g3=roundAtoDollar(g3p);
   var oneA=basOneAFromSales(g1,g3);
   var oneB=roundAtoDollar(a.oneB);
-  return{g1:g1,g3:g3,oneA:oneA,oneB:oneB,levy:a.levy,showG3:g3>0,net:oneA-oneB};
+  return{g1:g1,g3:g3,oneA:oneA,oneB:oneB,levy:a.levy,showG3:g3>0||cashIsTaxFree(),net:oneA-oneB};
 }
 function basLiveVals(){return basValsFromAgg(rangeAgg())}
 function basShownVals(){
@@ -4501,10 +4541,10 @@ function basSummaryHTML(light){
   function boxEdit(code,label,val,key,id){
     return '<div class="bas-box"><span class="bas-code">'+code+'</span><span class="bas-lab">'+label+'</span><div class="bas-amt-wrap"><span class="pre">$</span><input class="bas-amt" id="'+id+'" data-bas="'+key+'" type="number" min="0" step="1" inputmode="numeric" autocomplete="off" value="'+String(val)+'" aria-label="'+code+' '+label+'"></div></div>';
   }
-  var titleHelp=light?'':' <span class="help" data-help="Copy these onto your ATO activity statement. Amounts are whole dollars (50c and under down, 51c and over up). G1 is total sales including GST. G3 is GST-free cash/Square if that toggle is on. 1A is 1/11 of the rest (levy in the fare). 8A equals 1A and 8B equals 1B. Tap a figure to amend this copy only — shifts, Reports and income do not change." aria-label="Help">?</span>';
+  var titleHelp=light?'':' <span class="help" data-help="Copy these onto your ATO activity statement. Amounts are whole dollars (50c and under down, 51c and over up). G1 is total sales including tax-free cash. G3 is tax-free cash/Square if that toggle is on. 1A is 1/11 of the rest (levy in the fare). 8A equals 1A and 8B equals 1B. Tap a figure to amend this copy only — shifts, Reports and income do not change." aria-label="Help">?</span>';
   var reset=light?'':'<button type="button" class="bas-reset'+(basIsDirty()?' on':'')+'" id="basReset">Reset to Fareo figures</button>';
-  var g3Box=showG3?(light?boxStatic('G3','GST-free sales (cash / Square)',g3):boxEdit('G3','GST-free sales (cash / Square)',g3,'g3','basG3')):'';
-  var intro='Enter these on your ATO activity statement (whole dollars). Sales base: '+(settings.gstBase==='share'?'driver share':'full fare')+'. G1 is total sales; 1A is GST on taxable fares including levy recovery.';
+  var g3Box=showG3?(light?boxStatic('G3','Tax-free sales (cash / Square)',g3):boxEdit('G3','Tax-free sales (cash / Square)',g3,'g3','basG3')):'';
+  var intro='Enter these on your ATO activity statement (whole dollars). Sales base: '+(settings.gstBase==='share'?'driver share':'full fare')+'. G1 is total sales; tax-free cash is G3; 1A is GST on the rest including levy recovery.';
   var body=
     '<div style="font-family:Inter,system-ui,sans-serif;color:'+c.head+'">'
     +'<h3 style="margin:0 0 2px;font-size:20px;color:'+c.head+'">BAS prep summary'+titleHelp+'</h3>'
@@ -4528,10 +4568,10 @@ function basSummaryHTML(light){
 }
 function basHowHTML(){
   return '<div class="basguide">'
-    +'<p class="bas-note">A BAS is the ATO form you lodge every 3 months. Copy <b>whole dollars</b>. <b>G1</b> is total sales (GST inclusive). If Cash &amp; Square GST-free is on, that amount is <b>G3</b> and is not in 1A. <b>1A</b> is 1/11 of the taxable fare, including any levy you passed on. <b>8A</b> equals 1A and <b>8B</b> equals 1B. The hail-trip (CPV) levy remittance is a <b>different</b> SRO form — no GST credit.</p>'
+    +'<p class="bas-note">A BAS is the ATO form you lodge every 3 months. Copy <b>whole dollars</b>. <b>G1</b> is total sales (includes tax-free cash). If Cash &amp; Square tax-free is on, that amount is <b>G3</b> and is not in 1A. <b>1A</b> is 1/11 of the taxable fare, including any levy you passed on. <b>8A</b> equals 1A and <b>8B</b> equals 1B. The hail-trip (CPV) levy remittance is a <b>different</b> SRO form — no GST credit.</p>'
     +'<div class="bas-step"><span class="bas-n">1</span><p><b>Show this quarter.</b> BAS periods are Jul–Sep, Oct–Dec, Jan–Mar and Apr–Jun. Use the Quarter filter at the top so the numbers match that period.</p></div>'
     +'<div class="bas-step"><span class="bas-n">2</span><p><b>Log every cost.</b> Add fuel and expenses (tolls, wash, repairs). Snap the receipt. Fareo splits GST for you.</p></div>'
-    +'<div class="bas-step"><span class="bas-n">3</span><p><b>Open BAS figures.</b> You will see: <b>G1</b> total sales, <b>G3</b> GST-free (if used), <b>1A</b> GST you collected, <b>1B</b> GST you paid on fuel and costs. The big number is 1A minus 1B — pay it if it is positive, or wait for a refund if it is negative. You can amend a box on this sheet only.</p></div>'
+    +'<div class="bas-step"><span class="bas-n">3</span><p><b>Copy the boxes.</b> Reports shows: <b>G1</b> total sales, <b>G3</b> tax-free (if used), <b>1A</b> GST you collected, <b>1B</b> GST you paid on fuel and costs. The big number is 1A minus 1B — pay it if it is positive, or wait for a refund if it is negative. You can amend a box on the BAS sheet only.</p></div>'
     +'<div class="bas-step"><span class="bas-n">4</span><p><b>Copy into myGov.</b> Log in → BAS / activity statement → type G1, G3 (if any), 1A and 1B as whole dollars. 8A is the same as 1A. 8B is the same as 1B.</p></div>'
     +'<div class="bas-step"><span class="bas-n">5</span><p><b>Lodge and pay.</b> Due about 28 days after the quarter ends (late Oct, Feb, Apr, Jul). Confirm with your tax agent first — Fareo is a helper, not advice.</p></div>'
     +'</div>';
@@ -4558,6 +4598,9 @@ if($('#basGuideToggle'))$('#basGuideToggle').onclick=function(){
   if(box){if(!on)fillBasGuide();box.style.display=on?'none':'block'}
 };
 if($('#taxGstNet'))$('#taxGstNet').onclick=function(){openSummary('bas')};
+if($('#basCopyOpen'))$('#basCopyOpen').onclick=function(){openSummary('bas')};
+if($('#basCopyOpenBtn'))$('#basCopyOpenBtn').onclick=function(){openSummary('bas')};
+if($('#basCopyUseQtr'))$('#basCopyUseQtr').onclick=function(){showTrackedQuarter();toast('Showing this quarter')};
 function showTrackedQuarter(){
   var row=selectedQuarter();
   repRange.from=iso(row.f);repRange.to=iso(row.t);repRange.name='Quarter';
@@ -4600,7 +4643,7 @@ function summaryText(mode){
   if(mode==='bas'){
     var v=basShownVals();
     L.push('G1 Total sales: '+money(v.g1));
-    if(v.showG3)L.push('G3 GST-free sales: '+money(v.g3));
+    if(v.showG3)L.push('G3 Tax-free sales: '+money(v.g3));
     L.push('1A GST on sales: '+money(v.oneA));
     L.push('1B GST credits: '+money(v.oneB));
     L.push('8A: '+money(v.oneA)+'  8B: '+money(v.oneB));
@@ -4683,7 +4726,7 @@ $('#setLevy').oninput=function(){var v=parseFloat(this.value);settings.levy=(isF
 $('#setFuel').onchange=function(){settings.fuel=this.value;persist()};
 /* Fuel mode removed — always reimbursed */
 $('#setGstBase').onchange=function(){settings.gstBase=this.value;persist();toast(this.value==='share'?'GST set aside on driver share':'GST set aside on full gross')};
-$('#setCashGst').onclick=function(){settings.cashGstFree=!settings.cashGstFree;persist();this.classList.toggle('on',settings.cashGstFree);renderReports();toast(settings.cashGstFree?'Cash & Square: GST-free':'Cash & Square: GST-inclusive')};
+$('#setCashGst').onclick=function(){settings.cashGstFree=!settings.cashGstFree;persist();this.classList.toggle('on',settings.cashGstFree);renderReports();toast(settings.cashGstFree?'Cash & Square: tax-free':'Cash & Square: GST applies')};
 if($('#setState'))$('#setState').onchange=function(){settings.state=this.value;persist();toast('Address search focused on '+this.value)};
 if($('#advToggle'))$('#advToggle').onclick=function(){var w=$('#advWrap');var open=w.style.display==='none';w.style.display=open?'block':'none';this.classList.toggle('open',open)};
 if($('#archiveLink'))$('#archiveLink').onclick=openArchive;
