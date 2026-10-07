@@ -301,7 +301,18 @@ html.kb-open .sfoot{opacity:0;visibility:hidden;pointer-events:none;transform:tr
 .modal.show .sheet{animation:sheetSlideUp .24s cubic-bezier(.16,1,.3,1) both}
 #askModal{z-index:240}
 #noticeModal{z-index:240}
+#cycleShareModal{z-index:240}
 #updModal{z-index:230}
+.cycle-share-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin:0 0 2px}
+.cycle-share-head h3{margin:0;flex:1;min-width:0}
+.cycle-share-x{width:32px;height:32px;border-radius:9px;border:1px solid var(--bd2);background:transparent;color:var(--mut);font-size:18px;font-weight:700;line-height:1;cursor:pointer;flex:0 0 auto}
+.cycle-share-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:4px 0 12px}
+.cycle-share-stats div{background:var(--field);border:1px solid var(--bd);border-radius:12px;padding:12px 10px;text-align:center}
+.cycle-share-stats small{display:block;font-size:10px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--mut)}
+.cycle-share-stats b{display:block;margin-top:4px;font-size:20px;font-weight:800;color:var(--head);font-variant-numeric:tabular-nums}
+.cycle-share-stats .tot b{color:var(--inc)}
+.cycle-share-pay{margin:0 0 14px;font-size:12px;font-weight:600;color:var(--mut)}
+.cycle-share-pay:empty{display:none;margin:0}
 html.modal-open .home-btn,html.modal-open .sfoot{visibility:hidden;pointer-events:none;opacity:0}
 html.modal-open .sfoot{transform:translateX(-50%) translateY(18px)}
 @keyframes sheetSlideUp{0%{transform:translateY(100%)}100%{transform:translateY(0)}}
@@ -1647,6 +1658,24 @@ html.fold-flex .sfoot-gap{width:0}
   <p class="csub" id="noticeBody"></p>
   <button class="btn" id="noticeOk" style="margin-top:14px">OK</button>
 </div></div>
+<div class="modal" id="cycleShareModal">
+  <div class="sheet">
+    <div class="grip"></div>
+    <div class="cycle-share-head">
+      <h3 id="cycleShareTitle">Share this week?</h3>
+      <button type="button" class="cycle-share-x" id="cycleShareX" aria-label="Dismiss">&times;</button>
+    </div>
+    <p class="csub" id="cycleShareSub">Last day of this cycle</p>
+    <div class="cycle-share-stats">
+      <div><small>Shifts</small><b id="cycleShareN">0</b></div>
+      <div class="tot"><small>Take-home</small><b id="cycleShareTot">$0.00</b></div>
+    </div>
+    <p class="csub" id="cycleShareRange" style="margin-bottom:8px"></p>
+    <p class="cycle-share-pay" id="cycleSharePay"></p>
+    <button type="button" class="btn" id="cycleShareGo">Share week</button>
+    <button type="button" class="btn neutral" id="cycleShareLater" style="margin-top:8px">Not now</button>
+  </div>
+</div>
 <div class="modal" id="clientModal"><div class="sheet" style="max-height:92vh;overflow:auto">
   <div class="grip"></div>
   <h3><span id="clTitle">Client &amp; Address</span> <span class="help" data-help="Name the passenger, pick Home / Work / School / Day program / Custom, then type the street. Custom lets you name it (Nanna’s, gym, church). Commas in the name field link extra riders to the same contact." aria-label="Help">?</span></h3>
@@ -1773,8 +1802,11 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.43';
+var APP_VERSION='8.44';
 var CHANGELOG=[
+  {v:'8.44',date:'October 7, 2026',notes:[
+    ['Feature','Saving a shift on the last day of your cycle offers a dismissable prompt to share the week \u2014 shift count, take-home, and payday. Not now skips it for that cycle.'],
+  ]},
   {v:'8.43',date:'October 1, 2026',notes:[
     ['Bug Fix','Last-quarter levy now shows next to the ATO amount on a dismissable payment card, not only the BAS figure.'],
   ]},
@@ -3545,9 +3577,11 @@ function saveShift(shared){
   entries.push(e);save('fareo_entries',entries);
   archiveShiftAttachments(e,eosReceipts.slice(),fuelReceipts.slice());
   toast(shared?'Saved & sharing…':'Saved to Weekly');
+  var savedDate=e.date;
   draft=freshDraft('');
   clearReceiptAttach();
   persist();rowInputs();render();setSub(1);
+  setTimeout(function(){maybeOfferCycleShare(savedDate)},shared?520:280);
 }
 
 /* ---------- weekly ---------- */
@@ -3573,6 +3607,55 @@ function cycleName(){
 function creditOn(end){
   var cd=new Date(end);do{cd.setDate(cd.getDate()+1)}while(cd.getDay()!==settings.creditedDay);
   return cd;
+}
+function cycleForDate(ds){
+  var base=weekStartOf(asDate(ds));
+  var end=new Date(base);end.setDate(base.getDate()+6);
+  return{base:base,end:end,from:iso(base),to:iso(end)};
+}
+function isCycleLastDay(ds){
+  if(!ds)return false;
+  return iso(asDate(ds))===cycleForDate(ds).to;
+}
+function weekOffsetFor(ds){
+  var target=weekStartOf(asDate(ds)).getTime();
+  var cur=weekStartOf(new Date()).getTime();
+  return Math.round((target-cur)/86400000/7);
+}
+function cycleShareSkipId(from){return 'wkshare:'+from}
+var cycleShareFrom=null;
+function skipCycleSharePrompt(){
+  if(!cycleShareFrom)return;
+  var id=cycleShareSkipId(cycleShareFrom);
+  if(!alertDismissed(id)){
+    alertDismissMap()[id]=todayStr();
+    persist();
+  }
+  cycleShareFrom=null;
+}
+function maybeOfferCycleShare(ds){
+  if(!isCycleLastDay(ds))return;
+  var c=cycleForDate(ds);
+  if(alertDismissed(cycleShareSkipId(c.from)))return;
+  if(typeof anyModal==='function'&&anyModal())return;
+  wkOffset=weekOffsetFor(ds);
+  var W=weekData();
+  if(!W.rows.length)return;
+  cycleShareFrom=c.from;
+  var sub=$('#cycleShareSub');
+  if(sub)sub.textContent='Last day of your '+cycleName()+' cycle';
+  var nEl=$('#cycleShareN');if(nEl)nEl.textContent=String(W.rows.length);
+  var tEl=$('#cycleShareTot');if(tEl)tEl.textContent=money(W.tot);
+  var rEl=$('#cycleShareRange');
+  if(rEl)rEl.textContent=W.range+' \u00b7 '+W.rows.length+' shift'+(W.rows.length===1?'':'s');
+  var payEl=$('#cycleSharePay');
+  if(payEl){
+    var pay=creditOn(c.end);
+    var days=typeof daysUntilDate==='function'?daysUntilDate(pay):NaN;
+    if(isFinite(days)&&days>=0&&days<=4)payEl.textContent='Usually credited '+fmtDayDMY(pay);
+    else payEl.textContent='';
+  }
+  showModal('cycleShareModal');
 }
 function renderWeekly(){
   var base=weekStartOf(new Date());base.setDate(base.getDate()+wkOffset*7);
@@ -3666,6 +3749,17 @@ function legacyCopy(text,okMsg){
   try{var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.focus();ta.select();document.execCommand('copy');ta.remove();toast(okMsg||'Copied')}catch(e){toast('Could not share automatically')}
 }
 $('#shareWeek').onclick=shareWeek;
+if($('#cycleShareGo'))$('#cycleShareGo').onclick=function(){
+  var from=cycleShareFrom;
+  closeModal('cycleShareModal');
+  if(!from)return;
+  wkOffset=weekOffsetFor(from);
+  renderWeekly();
+  go('weekly');
+  shareWeek();
+};
+if($('#cycleShareLater'))$('#cycleShareLater').onclick=function(){closeModal('cycleShareModal')};
+if($('#cycleShareX'))$('#cycleShareX').onclick=function(){closeModal('cycleShareModal')};
 
 function entryShareText(e){
   var L=['*Shift '+fmtDayLong(e.date)+'*','Rego: '+(e.rego||'\u2014')];
@@ -3788,7 +3882,7 @@ if($('#enCalc'))$('#enCalc').onclick=function(){var e=entries.filter(function(x)
 /* ---------- reports ---------- */
 function syncModalChrome(){document.documentElement.classList.toggle('modal-open',!!anyModal())}
 function showModal(id){$('#'+id).classList.add('show');syncModalChrome();if(typeof syncTrailBtns==='function')syncTrailBtns()}
-function closeModal(id){$('#'+id).classList.remove('show');if(id==='askModal')askCb=null;if(id==='summaryModal')basDraft=null;syncModalChrome();if(typeof syncTrailBtns==='function')syncTrailBtns()}
+function closeModal(id){$('#'+id).classList.remove('show');if(id==='askModal')askCb=null;if(id==='summaryModal')basDraft=null;if(id==='cycleShareModal')skipCycleSharePrompt();syncModalChrome();if(typeof syncTrailBtns==='function')syncTrailBtns()}
 $$('.modal').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)closeModal(m.id)})});
 var askCb=null;
 function ask(title,body,okLbl,fn,opts){
