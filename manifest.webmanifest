@@ -2,21 +2,21 @@
   "id": "/?source=pwa",
   "name": "Fareo",
   "short_name": "Fareo",
-  "description": "Taxi driver shift calculator, weekly tracker, runs & tax reports",
+  "description": "Premium shift calculator, weekly payout tracker, client runs and ATO-ready tax reports for taxi drivers",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui"],
-  "background_color": "#090A0F",
-  "theme_color": "#090A0F",
+  "background_color": "#09090B",
+  "theme_color": "#09090B",
   "orientation": "any",
   "lang": "en-AU",
   "categories": ["finance", "utilities", "productivity"],
   "icons": [
-    { "src": "icon-192-v52.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icon-512-v52.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "icon-maskable-192-v52.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
-    { "src": "icon-maskable-512-v52.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    { "src": "icon-192-v90.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512-v90.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-192-v90.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icon-maskable-512-v90.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
     {
@@ -24,21 +24,21 @@
       "short_name": "Shift",
       "description": "Log your shift takings, fuel, and hail trips",
       "url": "./#shift",
-      "icons": [{ "src": "icon-192-v52.png", "sizes": "192x192" }]
+      "icons": [{ "src": "icon-192-v90.png", "sizes": "192x192" }]
     },
     {
-      "name": "Run Plan",
-      "short_name": "Runs",
-      "description": "Driving sequence and stop navigation",
+      "name": "Clients",
+      "short_name": "Clients",
+      "description": "Run plan, address book and stop navigation",
       "url": "./#runs",
-      "icons": [{ "src": "icon-192-v52.png", "sizes": "192x192" }]
+      "icons": [{ "src": "icon-192-v90.png", "sizes": "192x192" }]
     },
     {
       "name": "Weekly",
       "short_name": "Weekly",
       "description": "Weekly payout tracker",
       "url": "./#weekly",
-      "icons": [{ "src": "icon-192-v52.png", "sizes": "192x192" }]
+      "icons": [{ "src": "icon-192-v90.png", "sizes": "192x192" }]
     }
   ]
 }

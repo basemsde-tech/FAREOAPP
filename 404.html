@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Fareo v7.1 | Soft-Geometric rebuild | single-file PWA
+<!-- Fareo v9.0 | Noir rebrand | single-file PWA
      Changelog v4.3 -> v4.4 (code review fixes):
      [F1]  Levy rate of $0 no longer silently reverts to $1.20 (levyRate() helper).
      [F2]  currentQuarter() fixed: last day of Q2/Q3/Q4 no longer reports Q1 (ISO string compare).
@@ -27,22 +27,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <meta name="format-detection" content="telephone=no">
-<meta name="theme-color" content="#090A0F">
+<meta name="theme-color" content="#09090B">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Fareo">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="apple-touch-icon-v52.png">
-<link rel="icon" type="image/png" href="icon-192-v52.png">
+<link rel="apple-touch-icon" href="apple-touch-icon-v90.png">
+<link rel="icon" type="image/png" href="favicon-64-v90.png">
 <title>Fareo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--pg:#090A0F;--card:#181E29;--field:#222A38;--bd:rgba(255,255,255,.08);--bd2:#334155;--head:#F8FAFC;--body:#CBD5E1;--mut:#94A3B8;--inc:#34D399;--inc-bg:rgba(16,185,129,.14);--on-inc:#6EE7B7;--fuel:#FBBF24;--fuel-fill:#F59E0B;--fuel-bg:rgba(245,158,11,.14);--on-fuel:#FDE68A;--hail:#818CF8;--hail-fill:#6366F1;--hail-bg:rgba(99,102,241,.16);--levy:#A78BFA;--levy-bg:rgba(167,139,250,.14);--on-levy:#DDD6FE;--dgr:#F87171;--dgr-bg:rgba(239,68,68,.14);--on-dgr:#FECACA;--fink:#FBBF24;--fink-bg:rgba(245,158,11,.12);--on-fink:#FDE68A;--acct:#2DD4BF;--acct-bg:rgba(45,212,191,.12);--on-acct:#99F6E4;--qtext:#93C5FD;--qsub:#94A3B8;--btn-fill:#10B981;--btn-ink:#FFFFFF;--disbg:#111827;--disink:#64748B;--navmut:#94A3B8;--grad-inc:linear-gradient(165deg,rgba(16,185,129,.2) 0%,rgba(15,23,42,.55) 52%,transparent 100%);--shadow:0 1px 0 rgba(255,255,255,.05) inset,0 12px 40px rgba(0,0,0,.45);--shadow-lg:0 10px 32px rgba(16,185,129,.28);--glow:rgba(16,185,129,.42);--radius-sm:10px;--radius:14px;--radius-lg:20px;--dur:.18s;--dur-slow:.32s;--ease:cubic-bezier(.4,0,.2,1);--overlay:rgba(2,6,23,.72);--ring:rgba(255,255,255,.08)}
-@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--pg:#F1F5F9;--card:#FFFFFF;--field:#F8FAFC;--bd:#E2E8F0;--bd2:#CBD5E1;--head:#0F172A;--body:#334155;--mut:#64748B;--inc:#059669;--inc-bg:#D1FAE5;--on-inc:#065F46;--fuel:#D97706;--fuel-fill:#B45309;--fuel-bg:#FFFBEB;--on-fuel:#92400E;--hail:#4F46E5;--hail-fill:#4338CA;--hail-bg:#EEF2FF;--levy:#7C3AED;--levy-bg:#F5F3FF;--on-levy:#5B21B6;--dgr:#EF4444;--dgr-bg:#FEF2F2;--on-dgr:#991B1B;--fink:#EA580C;--fink-bg:#FFF7ED;--on-fink:#9A3412;--acct:#0D9488;--acct-bg:#F0FDFA;--on-acct:#115E59;--qtext:#1E3A8A;--qsub:#64748B;--btn-fill:#059669;--btn-ink:#FFFFFF;--disbg:#E2E8F0;--disink:#94A3B8;--navmut:#64748B;--grad-inc:linear-gradient(165deg,#D1FAE5 0%,#F1F5F9 52%,#FFFFFF 100%);--shadow:0 1px 2px rgba(15,23,42,.05),0 12px 32px rgba(15,23,42,.07);--shadow-lg:0 8px 28px rgba(5,150,105,.2),0 2px 8px rgba(15,23,42,.06);--glow:rgba(5,150,105,.32);--radius-sm:10px;--radius:14px;--radius-lg:20px;--dur:.18s;--dur-slow:.32s;--ease:cubic-bezier(.4,0,.2,1);--overlay:rgba(15,23,42,.5);--ring:rgba(15,23,42,.06)}}
-:root[data-theme="light"]{--pg:#F1F5F9;--card:#FFFFFF;--field:#F8FAFC;--bd:#E2E8F0;--bd2:#CBD5E1;--head:#0F172A;--body:#334155;--mut:#64748B;--inc:#059669;--inc-bg:#D1FAE5;--on-inc:#065F46;--fuel:#D97706;--fuel-fill:#B45309;--fuel-bg:#FFFBEB;--on-fuel:#92400E;--hail:#4F46E5;--hail-fill:#4338CA;--hail-bg:#EEF2FF;--levy:#7C3AED;--levy-bg:#F5F3FF;--on-levy:#5B21B6;--dgr:#EF4444;--dgr-bg:#FEF2F2;--on-dgr:#991B1B;--fink:#EA580C;--fink-bg:#FFF7ED;--on-fink:#9A3412;--acct:#0D9488;--acct-bg:#F0FDFA;--on-acct:#115E59;--qtext:#1E3A8A;--qsub:#64748B;--btn-fill:#059669;--btn-ink:#FFFFFF;--disbg:#E2E8F0;--disink:#94A3B8;--navmut:#64748B;--grad-inc:linear-gradient(165deg,#D1FAE5 0%,#F1F5F9 52%,#FFFFFF 100%);--shadow:0 1px 2px rgba(15,23,42,.05),0 12px 32px rgba(15,23,42,.07);--shadow-lg:0 8px 28px rgba(5,150,105,.2),0 2px 8px rgba(15,23,42,.06);--glow:rgba(5,150,105,.32);--radius-sm:10px;--radius:14px;--radius-lg:20px;--dur:.18s;--dur-slow:.32s;--ease:cubic-bezier(.4,0,.2,1);--overlay:rgba(15,23,42,.5);--ring:rgba(15,23,42,.06)}
+:root{--pg:#09090B;--card:#141417;--card2:#1A1A1E;--field:#1C1C20;--bd:rgba(255,255,255,.07);--bd2:#2B2B31;--head:#F6F1E7;--body:#CFCAC0;--mut:#8E897F;--gold:#D9B872;--gold-hi:#F1DCA3;--gold-grad:linear-gradient(135deg,#F1DCA3 0%,#D4B26A 48%,#A9874A 100%);--inc:#D9B872;--inc-bg:rgba(217,184,114,.11);--on-inc:#EFDDB0;--fuel:#E3946A;--fuel-fill:#C9774E;--fuel-bg:rgba(227,148,106,.11);--on-fuel:#F2C3A8;--hail:#93A6E6;--hail-fill:#7488D6;--hail-bg:rgba(147,166,230,.11);--levy:#B9A1E3;--levy-bg:rgba(185,161,227,.11);--on-levy:#DDD0F3;--dgr:#E8747C;--dgr-bg:rgba(232,116,124,.11);--on-dgr:#F5BDC1;--fink:#D98BA8;--fink-bg:rgba(217,139,168,.11);--on-fink:#F0C5D5;--acct:#7FC4AE;--acct-bg:rgba(127,196,174,.11);--on-acct:#BFE5D8;--qtext:#A9B8E8;--qsub:#8E897F;--btn-fill:#D9B872;--btn-ink:#17130A;--disbg:#111113;--disink:#5E5A53;--navmut:#8E897F;--grad-inc:linear-gradient(160deg,rgba(217,184,114,.15) 0%,rgba(20,20,23,.6) 55%,transparent 100%);--shadow:0 1px 0 rgba(255,255,255,.035) inset,0 18px 40px -20px rgba(0,0,0,.75);--shadow-lg:0 12px 32px -10px rgba(217,184,114,.38);--glow:rgba(217,184,114,.34);--overlay:rgba(0,0,0,.72);--ring:rgba(255,255,255,.035);--radius-sm:12px;--radius:18px;--radius-lg:24px;--dur:.2s;--dur-slow:.42s;--ease:cubic-bezier(.2,.8,.2,1);--spring:cubic-bezier(.34,1.4,.64,1);--serif:'Fraunces','Iowan Old Style','Palatino Linotype',Georgia,serif}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--pg:#F6F3ED;--card:#FFFFFF;--card2:#FBF9F5;--field:#F9F7F2;--bd:#E9E3D7;--bd2:#DAD2C2;--head:#1A1712;--body:#3E3A33;--mut:#7D766A;--gold:#9A7A36;--gold-hi:#C9A45C;--gold-grad:linear-gradient(135deg,#D9BC7E 0%,#B08D48 50%,#86682C 100%);--inc:#9A7A36;--inc-bg:#F4ECDA;--on-inc:#6B531F;--fuel:#B4602F;--fuel-fill:#9C4F22;--fuel-bg:#FBEFE7;--on-fuel:#7A3D18;--hail:#4F62B8;--hail-fill:#3F51A3;--hail-bg:#EEF0FA;--levy:#7656B5;--levy-bg:#F3EFFA;--on-levy:#563C8C;--dgr:#C2414B;--dgr-bg:#FBEDEE;--on-dgr:#8E2A32;--fink:#A84D72;--fink-bg:#FAEEF3;--on-fink:#7A3452;--acct:#2F8A70;--acct-bg:#EAF5F1;--on-acct:#1E604D;--qtext:#2F3F86;--qsub:#7D766A;--btn-fill:#1A1712;--btn-ink:#F3E2B6;--disbg:#EEE9DF;--disink:#A39C8F;--navmut:#7D766A;--grad-inc:linear-gradient(160deg,#F4ECDA 0%,#FBF9F5 55%,#FFFFFF 100%);--shadow:0 1px 2px rgba(26,23,18,.04),0 16px 34px -18px rgba(26,23,18,.2);--shadow-lg:0 12px 28px -12px rgba(26,23,18,.45);--glow:rgba(154,122,54,.28);--overlay:rgba(26,23,18,.45);--ring:rgba(26,23,18,.035);--radius-sm:12px;--radius:18px;--radius-lg:24px;--dur:.2s;--dur-slow:.42s;--ease:cubic-bezier(.2,.8,.2,1);--spring:cubic-bezier(.34,1.4,.64,1);--serif:'Fraunces','Iowan Old Style','Palatino Linotype',Georgia,serif}}
+:root[data-theme="light"]{--pg:#F6F3ED;--card:#FFFFFF;--card2:#FBF9F5;--field:#F9F7F2;--bd:#E9E3D7;--bd2:#DAD2C2;--head:#1A1712;--body:#3E3A33;--mut:#7D766A;--gold:#9A7A36;--gold-hi:#C9A45C;--gold-grad:linear-gradient(135deg,#D9BC7E 0%,#B08D48 50%,#86682C 100%);--inc:#9A7A36;--inc-bg:#F4ECDA;--on-inc:#6B531F;--fuel:#B4602F;--fuel-fill:#9C4F22;--fuel-bg:#FBEFE7;--on-fuel:#7A3D18;--hail:#4F62B8;--hail-fill:#3F51A3;--hail-bg:#EEF0FA;--levy:#7656B5;--levy-bg:#F3EFFA;--on-levy:#563C8C;--dgr:#C2414B;--dgr-bg:#FBEDEE;--on-dgr:#8E2A32;--fink:#A84D72;--fink-bg:#FAEEF3;--on-fink:#7A3452;--acct:#2F8A70;--acct-bg:#EAF5F1;--on-acct:#1E604D;--qtext:#2F3F86;--qsub:#7D766A;--btn-fill:#1A1712;--btn-ink:#F3E2B6;--disbg:#EEE9DF;--disink:#A39C8F;--navmut:#7D766A;--grad-inc:linear-gradient(160deg,#F4ECDA 0%,#FBF9F5 55%,#FFFFFF 100%);--shadow:0 1px 2px rgba(26,23,18,.04),0 16px 34px -18px rgba(26,23,18,.2);--shadow-lg:0 12px 28px -12px rgba(26,23,18,.45);--glow:rgba(154,122,54,.28);--overlay:rgba(26,23,18,.45);--ring:rgba(26,23,18,.035);--radius-sm:12px;--radius:18px;--radius-lg:24px;--dur:.2s;--dur-slow:.42s;--ease:cubic-bezier(.2,.8,.2,1);--spring:cubic-bezier(.34,1.4,.64,1);--serif:'Fraunces','Iowan Old Style','Palatino Linotype',Georgia,serif}
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--pg);overflow-x:hidden;min-height:100%;min-height:100dvh;min-height:-webkit-fill-available}
 html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;color-scheme:dark}
@@ -327,61 +327,31 @@ html.modal-open .sfoot{transform:translateX(-50%) translateY(18px)}
 .preset.on small{color:var(--on-inc)}
 #printRoot{display:none}
 @media print{body{background:#fff;padding:0}.app,.home-btn,.sfoot,.trail,.toast,.modal{display:none!important}#printRoot{display:block!important}}
-.tx-eos{background:var(--inc-bg);border-color:var(--inc);border-width:1.5px}
-.card.tx-eos h5,.tx-eos .add,.tx-eos label.fl{color:var(--on-inc)}
-.tx-eos .sub-amt,.tx-eos input,.tx-eos select{color:var(--inc);-webkit-text-fill-color:var(--inc)}
-.tx-eos .add{border-color:var(--inc)}
-.tx-eos .x{border-color:var(--inc);color:var(--on-inc);-webkit-text-fill-color:var(--on-inc)}
-.tx-eos .help{border-color:var(--inc);color:var(--on-inc)}
-.tx-eos input,.tx-eos select{background:var(--card);border-color:var(--inc)}
-.tx-cash{background:var(--levy-bg);border-color:var(--levy);border-width:1.5px}
-.card.tx-cash h5,.tx-cash .add,.tx-cash label.fl{color:var(--on-levy)}
-.tx-cash .sub-amt,.tx-cash input,.tx-cash select{color:var(--levy);-webkit-text-fill-color:var(--levy)}
-.tx-cash .add{border-color:var(--levy)}
-.tx-cash .x{border-color:var(--levy);color:var(--on-levy);-webkit-text-fill-color:var(--on-levy)}
-.tx-cash .help{border-color:var(--levy);color:var(--on-levy)}
-.tx-cash input,.tx-cash select{background:var(--card);border-color:var(--levy)}
-.tx-square{background:var(--acct-bg);border-color:var(--acct);border-width:1.5px}
-.card.tx-square h5,.tx-square .add,.tx-square label.fl{color:var(--on-acct)}
-.tx-square .sub-amt,.tx-square input,.tx-square select{color:var(--acct);-webkit-text-fill-color:var(--acct)}
-.tx-square .add{border-color:var(--acct)}
-.tx-square .x{border-color:var(--acct);color:var(--on-acct);-webkit-text-fill-color:var(--on-acct)}
-.tx-square .help{border-color:var(--acct);color:var(--on-acct)}
-.tx-square input,.tx-square select{background:var(--card);border-color:var(--acct)}
-.tx-acct{background:var(--acct-bg);border-color:var(--acct);border-width:1.5px}
-.card.tx-acct h5,.tx-acct .add,.tx-acct label.fl{color:var(--on-acct)}
-.tx-acct .sub-amt,.tx-acct input,.tx-acct select{color:var(--acct);-webkit-text-fill-color:var(--acct)}
-.tx-acct .add{border-color:var(--acct)}
-.tx-acct .x{border-color:var(--acct);color:var(--on-acct);-webkit-text-fill-color:var(--on-acct)}
-.tx-acct .help{border-color:var(--acct);color:var(--on-acct)}
-.tx-acct input,.tx-acct select{background:var(--card);border-color:var(--acct)}
-.tx-runs{background:var(--hail-bg);border-color:var(--hail);border-width:1.5px}
-.card.tx-runs h5,.tx-runs .add,.tx-runs label.fl{color:var(--hail)}
-.tx-runs .sub-amt,.tx-runs input,.tx-runs select{color:var(--hail);-webkit-text-fill-color:var(--hail)}
-.tx-runs .add{border-color:var(--hail)}
-.tx-runs .help{border-color:var(--hail);color:var(--hail)}
-.tx-runs input,.tx-runs select{background:var(--card);border-color:var(--hail)}
-.tx-fuel{background:var(--fuel-bg);border-color:var(--fuel);border-width:1.5px}
-.card.tx-fuel h5,.tx-fuel .add,.tx-fuel label.fl{color:var(--on-fuel)}
-.tx-fuel .sub-amt,.tx-fuel input,.tx-fuel select{color:var(--fuel);-webkit-text-fill-color:var(--fuel)}
-.tx-fuel .add{border-color:var(--fuel)}
-.tx-fuel .x{border-color:var(--fuel);color:var(--on-fuel);-webkit-text-fill-color:var(--on-fuel)}
-.tx-fuel .help{border-color:var(--fuel);color:var(--on-fuel)}
-.tx-fuel input,.tx-fuel select{background:var(--card);border-color:var(--fuel)}
-.tx-fuel .fuelblock{background:var(--card);border-color:var(--fuel)}
-.tx-fuel .fuel-op{background:var(--card);border-color:var(--fuel);color:var(--on-fuel)}
-.tx-fuel .fuel-op small{color:var(--fuel)}
-.tx-fuel .fuel-op.on{background:var(--card);border-color:var(--fuel-fill);color:var(--fuel)}
-.tx-hail{background:var(--dgr-bg);border-color:var(--dgr);border-width:1.5px}
-.card.tx-hail h5{color:var(--on-dgr)}
-.tx-hail .sub-amt,.tx-hail input{color:var(--dgr);-webkit-text-fill-color:var(--dgr)}
-.tx-hail .help{border-color:var(--dgr);color:var(--on-dgr)}
-.tx-hail .hailwrap{background:var(--card)}
-.tx-custom{background:var(--fink-bg);border-color:var(--fink);border-width:1.5px}
-.card.tx-custom h5,.tx-custom label.fl{color:var(--on-fink)}
-.tx-custom .sub-amt,.tx-custom input,.tx-custom select{color:var(--fink);-webkit-text-fill-color:var(--fink)}
-.tx-custom .help{border-color:var(--fink);color:var(--on-fink)}
-.tx-custom input,.tx-custom select{background:var(--card);border-color:var(--fink)}
+/* v9 tone system: cards stay neutral; each category shows its colour as an accent only */
+.tx-eos{--tone:var(--inc);--tone-bg:var(--inc-bg)}
+.tx-cash{--tone:var(--levy);--tone-bg:var(--levy-bg)}
+.tx-square,.tx-acct{--tone:var(--acct);--tone-bg:var(--acct-bg)}
+.tx-runs{--tone:var(--hail);--tone-bg:var(--hail-bg)}
+.tx-fuel{--tone:var(--fuel);--tone-bg:var(--fuel-bg)}
+.tx-hail{--tone:var(--dgr);--tone-bg:var(--dgr-bg)}
+.tx-custom{--tone:var(--fink);--tone-bg:var(--fink-bg)}
+.card[class*="tx-"]{background:var(--card);border:1px solid var(--bd);position:relative;overflow:hidden}
+.card[class*="tx-"]::before{content:"";position:absolute;left:0;top:18px;bottom:18px;width:3px;border-radius:0 3px 3px 0;background:var(--tone);opacity:.9}
+.card[class*="tx-"] h5{color:var(--head)}
+.card[class*="tx-"] h5 .dot{background:var(--tone)!important}
+.card[class*="tx-"] label.fl{color:var(--mut)}
+.card[class*="tx-"] .sub-amt{color:var(--tone);-webkit-text-fill-color:var(--tone)}
+.card[class*="tx-"] input,.card[class*="tx-"] select{background:var(--field);border-color:var(--bd2);color:var(--head);-webkit-text-fill-color:var(--head)}
+.card[class*="tx-"] input:focus,.card[class*="tx-"] select:focus{border-color:var(--tone);box-shadow:0 0 0 3px var(--tone-bg)}
+.card[class*="tx-"] .add{border-color:var(--bd2);color:var(--body)}
+.card[class*="tx-"] .add:active{border-color:var(--tone);color:var(--tone)}
+.card[class*="tx-"] .x{border-color:var(--bd2);color:var(--mut);-webkit-text-fill-color:var(--mut)}
+.card[class*="tx-"] .help{border-color:var(--bd2);color:var(--mut)}
+.tx-fuel .fuelblock{background:var(--card2);border-color:var(--bd)}
+.tx-fuel .fuel-op{background:var(--card);border-color:var(--bd2);color:var(--body)}
+.tx-fuel .fuel-op small{color:var(--mut)}
+.tx-fuel .fuel-op.on{border-color:var(--fuel);color:var(--fuel)}
+.tx-hail .hailwrap{background:var(--card2);border-color:var(--bd)}
 .fuel-op{display:flex;align-items:center;gap:8px;margin-top:7px;padding:7px 8px;border:1.5px solid var(--bd2);border-radius:8px;background:var(--card);color:var(--body);font-size:12px;font-weight:700;cursor:pointer;user-select:none}
 .fuel-op small{font-weight:500;color:var(--mut);font-size:10px}
 .fuel-op.on{border-color:var(--fuel-fill);background:var(--fuel-bg);color:var(--fuel)}
@@ -521,27 +491,27 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .dl-box::before{content:'';position:absolute;top:-28px;right:-28px;width:80px;height:80px;border-radius:50%;opacity:.12}
 .dl-safe{background:var(--inc-bg);border-color:var(--inc)}
 .dl-safe::before{background:var(--inc)}
-.dl-warn{background:#FFFBEB;border-color:#D97706}
-.dl-warn::before{background:#D97706}
+.dl-warn{background:var(--fuel-bg);border-color:var(--fuel)}
+.dl-warn::before{background:var(--fuel)}
 .dl-hot{background:var(--dgr-bg);border-color:var(--dgr)}
 .dl-hot::before{background:var(--dgr)}
-@media(prefers-color-scheme:dark){.dl-warn{background:#2A2008;border-color:#D97706}}
-[data-theme="dark"] .dl-warn{background:#2A2008;border-color:#D97706}
+@media(prefers-color-scheme:dark){.dl-warn{background:var(--fuel-bg);border-color:var(--fuel)}}
+[data-theme="dark"] .dl-warn{background:var(--fuel-bg);border-color:var(--fuel)}
 .dl-chip{font-size:9px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;padding:3px 9px;border-radius:999px;margin-bottom:2px}
-.dl-safe .dl-chip{background:var(--inc);color:#fff}
-.dl-warn .dl-chip{background:#D97706;color:#fff}
-.dl-hot .dl-chip{background:var(--dgr);color:#fff}
+.dl-safe .dl-chip{background:var(--inc);color:var(--pg)}
+.dl-warn .dl-chip{background:var(--fuel);color:var(--pg)}
+.dl-hot .dl-chip{background:var(--dgr);color:var(--pg)}
 .dl-days{font-size:38px;font-weight:800;line-height:1;margin:2px 0}
 .dl-safe .dl-days{color:var(--inc)}
-.dl-warn .dl-days{color:#D97706}
+.dl-warn .dl-days{color:var(--fuel)}
 .dl-hot .dl-days{color:var(--dgr)}
 .dl-unit{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;opacity:.6;margin-top:-2px}
 .dl-safe .dl-unit{color:var(--on-inc)}
-.dl-warn .dl-unit{color:#92400E}
+.dl-warn .dl-unit{color:var(--on-fuel)}
 .dl-hot .dl-unit{color:var(--on-dgr)}
 .dl-divider{width:32px;height:1.5px;border-radius:2px;margin:8px 0}
 .dl-safe .dl-divider{background:var(--inc);opacity:.3}
-.dl-warn .dl-divider{background:#D97706;opacity:.3}
+.dl-warn .dl-divider{background:var(--fuel);opacity:.3}
 .dl-hot .dl-divider{background:var(--dgr);opacity:.3}
 .dl-amount{font-size:17px;font-weight:800;line-height:1}
 .dl-safe .dl-amount{color:var(--inc)}
@@ -723,57 +693,48 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
 .help-pop.show{opacity:1;transform:translateY(0)}
 .help-pop b{color:#fff}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.hub{padding:12px 2px 36px;min-height:360px;display:flex;align-items:center;justify-content:center;position:relative;background:radial-gradient(ellipse at 50% 48%,var(--inc-bg) 0%,transparent 62%)}
-.hub-wheel{--orbit:116px;--core:108px;--sat:62px;position:relative;width:calc(var(--orbit) * 2 + var(--sat) + 16px);height:calc(var(--orbit) * 2 + var(--sat) + 16px);max-width:92vw;display:flex;align-items:center;justify-content:center}
-.hub-wheel::before{content:"";position:absolute;left:50%;top:50%;width:calc(var(--orbit) * 2);height:calc(var(--orbit) * 2);margin:calc(var(--orbit) * -1) 0 0 calc(var(--orbit) * -1);border-radius:50%;border:1.5px dashed var(--bd2);opacity:.65;pointer-events:none}
-.hub-wheel .hub-core{position:absolute;left:50%;top:50%;width:var(--core);height:var(--core);margin:calc(var(--core) / -2) 0 0 calc(var(--core) / -2);border-radius:50%;border:0;background:var(--btn-fill);color:var(--btn-ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 10px 28px var(--glow);z-index:4;-webkit-tap-highlight-color:transparent;animation:corePulse 3.4s ease-in-out infinite;transition:transform .18s var(--ease),box-shadow .18s}
-.hub-wheel .hub-core svg{width:30px;height:30px}
-.hub-wheel .hub-core:active{transform:scale(.94);box-shadow:0 4px 14px var(--glow)}
-.hub-wheel .hub-core .hub-live-pip{display:none;position:absolute;top:11px;right:15px;width:9px;height:9px;border-radius:50%;background:#ECFDF5;border:2px solid var(--btn-fill);box-shadow:0 0 0 0 rgba(236,253,245,.8);animation:livePip 1.8s ease-out infinite;pointer-events:none}
+.hub-hello{display:flex;align-items:center;gap:13px;margin:10px 2px 4px}
+.hub-hello .av{width:46px;height:46px;border-radius:50%;flex:0 0 auto;background:var(--card);color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent);box-shadow:none;font-family:var(--serif);font-size:18px;font-weight:500;letter-spacing:0;display:grid;place-items:center}
+.hub-date{margin:0;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+.hub-greet{margin:2px 0 0;font-family:var(--serif);font-weight:500;font-size:29px;line-height:1.08;letter-spacing:-.01em;color:var(--head)}
+.hub{padding:6px 2px 18px;min-height:340px;display:flex;align-items:center;justify-content:center;position:relative}
+.hub::before{content:"";position:absolute;left:50%;top:50%;width:min(330px,88vw);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,var(--inc-bg) 0%,transparent 66%);pointer-events:none}
+.hub-wheel{--orbit:112px;--core:116px;--sat:66px;position:relative;width:calc(var(--orbit) * 2 + var(--sat) + 16px);height:calc(var(--orbit) * 2 + var(--sat) + 16px);max-width:92vw;display:flex;align-items:center;justify-content:center}
+.hub-orbit{position:absolute;left:50%;top:50%;width:calc(var(--orbit) * 2);height:calc(var(--orbit) * 2);margin:calc(var(--orbit) * -1) 0 0 calc(var(--orbit) * -1);border-radius:50%;pointer-events:none;
+  background:conic-gradient(from 0deg,transparent 0deg,color-mix(in srgb,var(--gold) 70%,transparent) 40deg,transparent 110deg,transparent 180deg,color-mix(in srgb,var(--gold) 35%,transparent) 230deg,transparent 300deg);
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 1.5px),#000 calc(100% - 1px));mask:radial-gradient(farthest-side,transparent calc(100% - 1.5px),#000 calc(100% - 1px));animation:orbitSpin 28s linear infinite}
+.hub-orbit::after{content:"";position:absolute;inset:0;border-radius:50%;border:1px solid var(--bd)}
+@keyframes orbitSpin{to{transform:rotate(360deg)}}
+.hub-wheel .hub-core{position:absolute;left:50%;top:50%;width:var(--core);height:var(--core);margin:calc(var(--core) / -2) 0 0 calc(var(--core) / -2);border-radius:50%;border:0;background:var(--gold-grad);color:#17130A;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-size:13px;font-weight:700;letter-spacing:.01em;cursor:pointer;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -8px 18px rgba(80,55,15,.28),0 14px 36px -6px var(--glow),0 0 0 6px color-mix(in srgb,var(--gold) 9%,transparent);z-index:4;-webkit-tap-highlight-color:transparent;animation:corePop .55s var(--spring) both;transition:transform .25s var(--spring),box-shadow .25s var(--ease)}
+.hub-wheel .hub-core svg{width:28px;height:28px}
+.hub-wheel .hub-core:active{transform:scale(.93)}
+.hub-wheel .hub-core .hub-live-pip{display:none;position:absolute;top:14px;right:20px;width:9px;height:9px;border-radius:50%;background:#17130A;box-shadow:0 0 0 0 rgba(23,19,10,.6);animation:livePip 1.8s ease-out infinite;pointer-events:none}
 .hub-wheel .hub-core .hub-core-lbl{line-height:1.1;font-variant-numeric:tabular-nums}
 .hub-wheel .hub-core.live .hub-live-pip{display:block}
-.hub-wheel .hub-core.live .hub-core-lbl{font-size:12px;letter-spacing:-.02em}
-.hub-wheel .hub-core.live.stale .hub-live-pip{background:var(--fuel)}
-.hub-wheel .hub-core.live.edit .hub-live-pip{background:#C7D2FE}
-@keyframes corePulse{0%,100%{box-shadow:0 8px 24px var(--glow)}50%{box-shadow:0 12px 36px var(--glow),0 0 0 5px var(--inc-bg)}}
-.hub-wheel .hub-sat{position:absolute;left:50%;top:50%;width:var(--sat);height:var(--sat);margin:calc(var(--sat) / -2) 0 0 calc(var(--sat) / -2);border-radius:50%;border:1.5px solid var(--bd2);background:var(--card);color:var(--head);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:9px;font-weight:800;cursor:pointer;box-shadow:var(--shadow);transform:rotate(var(--a)) translateY(calc(var(--orbit) * -1)) rotate(calc(var(--a) * -1));-webkit-tap-highlight-color:transparent;transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .15s,border-color .15s,background .15s;z-index:2;animation:orbitPop .45s cubic-bezier(.34,1.56,.64,1) both;animation-delay:calc(var(--i, 0) * .04s)}
-.hub-wheel .hub-sat svg{width:18px;height:18px;pointer-events:none}
-.hub-wheel .hub-sat:active{transform:rotate(var(--a)) translateY(calc(var(--orbit) * -1)) rotate(calc(var(--a) * -1)) scale(.91)}
-@keyframes orbitPop{0%{opacity:0;transform:rotate(var(--a)) translateY(0) rotate(calc(var(--a)*-1)) scale(.2)}100%{opacity:1;transform:rotate(var(--a)) translateY(calc(var(--orbit) * -1)) rotate(calc(var(--a)*-1)) scale(1)}}
-.hub-wheel .hub-sat:nth-child(1){--a:0deg;--i:1}
-.hub-wheel .hub-sat:nth-child(2){--a:60deg;--i:2}
-.hub-wheel .hub-sat:nth-child(3){--a:120deg;--i:3}
-.hub-wheel .hub-sat:nth-child(4){--a:180deg;--i:4}
-.hub-wheel .hub-sat:nth-child(5){--a:240deg;--i:5}
-.hub-wheel .hub-sat:nth-child(6){--a:300deg;--i:6}
-
-/* Individual Color Themes for Every Orbit Node */
-.hub-wheel .hub-sat.sat-runs{border-color:var(--fuel);background:var(--fuel-bg);color:var(--on-fuel);box-shadow:0 4px 16px rgba(180,83,9,.22)}
-.hub-wheel .hub-sat.sat-runs svg{color:var(--fuel)}
-
-.hub-wheel .hub-sat.sat-book{border-color:var(--hail);background:var(--hail-bg);color:var(--hail);box-shadow:0 4px 16px rgba(30,58,138,.22)}
-.hub-wheel .hub-sat.sat-book svg{color:var(--hail-fill)}
-
-.hub-wheel .hub-sat.sat-weekly{border-color:var(--inc);background:var(--inc-bg);color:var(--on-inc);box-shadow:0 4px 16px rgba(4,120,87,.22)}
-.hub-wheel .hub-sat.sat-weekly svg{color:var(--inc)}
-
-.hub-wheel .hub-sat.sat-reports{border-color:var(--levy);background:var(--levy-bg);color:var(--on-levy);box-shadow:0 4px 16px rgba(109,40,217,.22)}
-.hub-wheel .hub-sat.sat-reports svg{color:var(--levy)}
-
-.hub-wheel .hub-sat.sat-settings{border-color:var(--fink);background:var(--fink-bg);color:var(--on-fink);box-shadow:0 4px 16px rgba(194,65,12,.22)}
-.hub-wheel .hub-sat.sat-settings svg{color:var(--fink)}
-
-.hub-wheel .hub-sat.sat-refresh{border-color:var(--acct);background:var(--acct-bg);color:var(--on-acct);box-shadow:0 4px 16px rgba(15,118,110,.22)}
-.hub-wheel .hub-sat.sat-refresh svg{color:var(--acct)}
-.hub-wheel .hub-sat.sat-refresh.spinning svg{animation:refreshSpin .7s linear infinite}
-.hub-wheel .hub-sat.sat-refresh.spinning{pointer-events:none;opacity:.9}
+.hub-wheel .hub-core.live .hub-core-lbl{font-size:13px;letter-spacing:-.01em}
+.hub-wheel .hub-core.live.stale .hub-live-pip{background:#7A3D18}
+.hub-wheel .hub-core.live.edit .hub-live-pip{background:#2F3F86}
+@keyframes corePop{0%{opacity:0;transform:scale(.6)}100%{opacity:1;transform:scale(1)}}
+.hub-wheel .hub-sat{position:absolute;left:50%;top:50%;width:var(--sat);height:var(--sat);margin:calc(var(--sat) / -2) 0 0 calc(var(--sat) / -2);border-radius:50%;border:1px solid var(--bd2);background:linear-gradient(160deg,var(--card2),var(--card));color:var(--body);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:9.5px;font-weight:600;letter-spacing:.02em;cursor:pointer;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 10px 24px -12px rgba(0,0,0,.6);transform:rotate(var(--a)) translateY(calc(var(--orbit) * -1)) rotate(calc(var(--a) * -1));-webkit-tap-highlight-color:transparent;transition:transform .3s var(--spring),border-color .2s,color .2s;z-index:2;animation:orbitPop .6s var(--spring) both;animation-delay:calc(var(--i, 0) * .05s + .05s)}
+.hub-wheel .hub-sat svg{width:20px;height:20px;pointer-events:none;color:var(--gold)}
+.hub-wheel .hub-sat span{pointer-events:none}
+.hub-wheel .hub-sat:active{transform:rotate(var(--a)) translateY(calc(var(--orbit) * -1)) rotate(calc(var(--a) * -1)) scale(.9);border-color:var(--gold);color:var(--head)}
+@keyframes orbitPop{0%{opacity:0;transform:rotate(var(--a)) translateY(calc(var(--orbit) * -.55)) rotate(calc(var(--a)*-1)) scale(.5)}100%{opacity:1;transform:rotate(var(--a)) translateY(calc(var(--orbit) * -1)) rotate(calc(var(--a)*-1)) scale(1)}}
+.hub-wheel .hub-sat:nth-of-type(1){--a:0deg;--i:1}
+.hub-wheel .hub-sat:nth-of-type(2){--a:90deg;--i:2}
+.hub-wheel .hub-sat:nth-of-type(3){--a:180deg;--i:3}
+.hub-wheel .hub-sat:nth-of-type(4){--a:270deg;--i:4}
+.glance{width:100%;display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer;background:var(--card);border:1px solid var(--bd);border-radius:var(--radius-lg);padding:16px 16px 16px 18px;box-shadow:var(--shadow);color:var(--body);transition:transform .25s var(--spring),border-color .2s;animation:screenIn .5s var(--ease) .18s both;-webkit-tap-highlight-color:transparent}
+.glance:active{transform:scale(.98);border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
+.glance-l{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+.glance-l small{font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+.glance-l b{font-size:30px;font-weight:600;letter-spacing:-.035em;color:var(--head);font-variant-numeric:tabular-nums;line-height:1.1}
+.glance-r{display:flex;flex-direction:column;align-items:flex-end;gap:5px;font-size:12px;font-weight:600;color:var(--mut);text-align:right}
+.glance-r #glPay{color:var(--gold)}
+.glance-chev{width:18px;height:18px;color:var(--mut);flex:0 0 auto}
 @keyframes refreshSpin{to{transform:rotate(360deg)}}
-.refresh-stage{display:flex;flex-direction:column;gap:8px;margin:14px 0 4px;text-align:left}
-.refresh-stage .rs{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:10px;border:1px solid var(--bd);background:var(--field);font-size:12px;font-weight:700;color:var(--mut)}
-.refresh-stage .rs.on{border-color:var(--acct);background:var(--acct-bg);color:var(--on-acct)}
-.refresh-stage .rs.done{border-color:var(--inc);background:var(--inc-bg);color:var(--on-inc)}
-.refresh-stage .rs i{width:18px;height:18px;border-radius:50%;border:2px solid currentColor;display:grid;place-items:center;font-style:normal;font-size:10px;flex:0 0 auto}
-.refresh-stage .rs.on i{border-color:transparent;border-top-color:currentColor;animation:refreshSpin .6s linear infinite}
 .refresh-overlay{position:fixed;inset:0;z-index:200;background:rgba(8,10,14,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px}
 .refresh-overlay.show{display:flex}
 .refresh-overlay .ro-card{width:100%;max-width:340px;background:var(--card);border-radius:18px;padding:20px 18px;box-shadow:var(--shadow);text-align:center}
@@ -787,7 +748,7 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
 .run-deck-search:focus{border-color:var(--fuel)}
 .run-deck-filter{display:flex;gap:5px;margin-bottom:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
 .run-deck-filter button{border:1px solid var(--bd2);background:var(--field);color:var(--head);border-radius:8px;padding:4px 9px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;flex:0 0 auto;transition:all .12s}
-.run-deck-filter button.on{background:var(--fuel-bg);color:var(--on-fuel);border-color:var(--fuel)}
+.run-deck-filter button.on{background:var(--inc-bg);color:var(--gold);border-color:color-mix(in srgb,var(--gold) 55%,transparent)}
 .run-client-grid{display:grid;grid-template-columns:repeat(2, 1fr);gap:7px;max-height:220px;overflow-y:auto;padding:2px;-webkit-overflow-scrolling:touch}
 .run-client-chip{background:var(--card);border:1.5px solid var(--bd2);border-radius:12px;padding:8px 9px;display:flex;flex-direction:column;gap:3px;cursor:pointer;position:relative;transition:transform .12s,box-shadow .12s,border-color .12s,background .12s;-webkit-tap-highlight-color:transparent;touch-action:pan-y;user-select:none;-webkit-user-select:none}
 .run-client-chip:active{transform:scale(.96)}
@@ -831,7 +792,7 @@ input::placeholder,textarea::placeholder{color:var(--mut)!important;-webkit-text
 .pie-sw{width:10px;height:10px;border-radius:50%;flex:0 0 auto}
 .book-day{display:flex;gap:5px;margin:0 0 10px;overflow-x:auto}
 .book-day button{flex:1;min-width:40px;border:1px solid var(--bd2);background:var(--card);color:var(--mut);border-radius:10px;padding:8px 4px;font-size:11px;font-weight:800;cursor:pointer}
-.book-day button.on{background:var(--inc);color:var(--btn-ink);border-color:transparent;-webkit-text-fill-color:var(--btn-ink)}
+.book-day button.on{background:var(--inc);color:#17130A;border-color:transparent;-webkit-text-fill-color:#17130A}
 .run-seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
 .run-seg button{border:1px solid var(--bd2);background:var(--card);color:var(--mut);border-radius:10px;padding:9px;font-size:12.5px;font-weight:800;cursor:pointer}
 .run-seg button.on{background:var(--inc-bg);color:var(--on-inc);border-color:var(--inc)}
@@ -1040,18 +1001,117 @@ button,a,.tgl,.chip,.filt,.preset,.sst,.stp,.cli,.tr,.run-client-chip{-webkit-ta
 html.fold-flex .home-btn{width:48px;height:48px}
 html.fold-flex .sfoot-gap{width:0}
 .sch-box{border:1px solid var(--bd);border-radius:12px;padding:10px;margin-top:8px;background:var(--field)}
+/* =====================================================================
+   Fareo 9 · Noir — premium layer (brand, type, surfaces, motion)
+   ===================================================================== */
+:root{--btn-bg:var(--gold-grad);--glass:rgba(9,9,11,.72)}
+:root[data-theme="light"]{--btn-bg:#1A1712;--glass:rgba(246,243,237,.78)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--btn-bg:#1A1712;--glass:rgba(246,243,237,.78)}}
+::selection{background:color-mix(in srgb,var(--gold) 35%,transparent)}
+body{letter-spacing:-.006em}
+/* top bar */
+.top{background:var(--glass);border-bottom:1px solid var(--bd);padding:calc(10px + env(safe-area-inset-top)) 14px 10px}
+.top-l{display:flex;align-items:center;gap:8px;min-width:0}
+.trail button{width:38px;height:38px;min-width:38px;min-height:38px;border-radius:50%;background:transparent;border-color:var(--bd)}
+.trail button:disabled{opacity:0;pointer-events:none;width:0;min-width:0;border:0;margin-right:-8px}
+.trail button{transition:opacity .25s var(--ease),width .25s var(--ease),min-width .25s var(--ease),margin .25s var(--ease)}
+.brand{display:flex;align-items:center;gap:8px;background:none;border:0;padding:0;cursor:pointer;color:var(--head);-webkit-tap-highlight-color:transparent}
+.brand-mark{width:30px;height:30px;flex:0 0 auto;border-radius:9px;background:#0A0A0C;box-shadow:inset 0 0 0 1px rgba(217,184,114,.28)}
+.brand-word{font-family:var(--serif);font-size:21px;font-weight:500;letter-spacing:-.01em}
+.wx:not(.live){display:none}
+.wx.live{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 45%,transparent);background:var(--inc-bg)}
+.theme{background:transparent;border-color:var(--bd);width:38px;height:38px;min-width:38px;min-height:38px}
+/* type */
+.screen > .sub{font-family:var(--serif);font-weight:500;font-size:31px;letter-spacing:-.015em;margin:10px 2px 16px}
+.screen > .sub small{font-family:Inter,system-ui,sans-serif;font-size:12px;letter-spacing:0;margin-top:5px}
+.grp{font-size:10.5px;letter-spacing:.16em;font-weight:600;color:var(--mut);margin:22px 0 8px 4px}
+.lbl{letter-spacing:.14em;font-weight:600}
+.total{font-weight:600;letter-spacing:-.045em}
+.card h5{font-size:13px;font-weight:600;letter-spacing:0}
+/* surfaces */
+.card{border-radius:var(--radius);border-color:var(--bd);box-shadow:var(--shadow)}
+.hero{background:var(--grad-inc);border:1px solid color-mix(in srgb,var(--gold) 30%,transparent)}
+input,select,textarea{border-width:1px;border-radius:12px;font-weight:500}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 18%,transparent)}
+.btn{background:var(--btn-bg);color:var(--btn-ink);border-radius:14px;font-weight:600;letter-spacing:.01em;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),var(--shadow-lg);transition:transform .22s var(--spring),box-shadow .2s var(--ease),opacity .2s}
+.btn.neutral{background:transparent;border:1px solid var(--bd2);color:var(--head);box-shadow:none}
+.add{border-width:1px;border-radius:12px;font-weight:600}
+.tgl{width:48px;height:29px;border-width:1px;background:var(--field)}
+.tgl::after{width:21px;height:21px;top:3px;left:3px;background:var(--mut);box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.tgl.on{background:var(--gold);border-color:var(--gold)}
+.tgl.on::after{left:22px;background:#fff}
+.chip{border-radius:999px;background:var(--field);font-weight:600}
+.home-btn{background:var(--gold-grad);color:#17130A;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 12px 30px -8px var(--glow)}
+.home-btn.on{box-shadow:0 0 0 3px var(--pg),0 0 0 4.5px var(--gold),0 12px 30px -8px var(--glow)}
+.home-btn .live-pip{background:#17130A;border-color:var(--gold)}
+.toast{background:var(--head);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:14px;font-weight:500;box-shadow:0 12px 30px -10px rgba(0,0,0,.5)}
+.sheet{border-radius:26px 26px 0 0}
+.sheet h3{font-family:var(--serif);font-weight:500;font-size:22px}
+.stp.lit i,.stp.on i{background:var(--gold)}
+.stp.on span{color:var(--gold)}
+/* segmented control (Clients) */
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;margin:0 0 14px;background:var(--card);border:1px solid var(--bd);border-radius:14px;position:sticky;top:calc(62px + env(safe-area-inset-top));z-index:5}
+.seg button{border:0;background:transparent;color:var(--mut);border-radius:10px;padding:10px;font-size:13px;font-weight:600;cursor:pointer;transition:background .25s var(--ease),color .25s var(--ease)}
+.seg button.on{background:var(--field);color:var(--head);box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 4px 12px -6px rgba(0,0,0,.5)}
+[data-cpane]:not([hidden]){animation:screenIn .3s var(--ease) both}
+.linkish{background:none;border:0;padding:0;color:var(--gold);font:inherit;font-weight:600;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.run-seg button.on{background:var(--inc-bg);color:var(--gold);border-color:color-mix(in srgb,var(--gold) 50%,transparent)}
+/* settings */
+.set-card{padding:0;overflow:hidden}
+.set{padding:14px 15px;min-height:60px}
+.set .sl{min-width:0}
+.set .sl b{font-size:14px;font-weight:600}
+.set .sl p{font-size:11.5px;margin-top:2px;line-height:1.35}
+.set select{width:auto;min-width:112px;max-width:150px;text-align:left;padding:8px 30px 8px 11px}
+.set input{width:110px}
+.set #setName{width:140px;text-align:right}
+.set.hot{background:transparent}
+.unit-in{position:relative;flex:0 0 auto}
+.unit-in input{width:96px;padding-right:28px}
+.unit-in i{position:absolute;right:11px;top:50%;transform:translateY(-50%);font-style:normal;font-size:13px;color:var(--mut);pointer-events:none}
+.unit-in.pre input{padding-right:10px;padding-left:24px}
+.unit-in.pre i{right:auto;left:11px}
+.rego-add{display:flex;gap:8px;margin-top:10px}
+.rego-add input{flex:1;width:auto;text-align:left}
+.rego-add .add{width:auto;margin:0;padding:10px 18px;border-style:solid}
+.set .add{margin-top:8px}
+.set-more{border-top:1px solid var(--bd)}
+.set-more summary{list-style:none;cursor:pointer;border-bottom:0}
+.set-more summary::-webkit-details-marker{display:none}
+.set-more .chev{transition:transform .25s var(--ease)}
+.set-more[open] .chev{transform:rotate(90deg)}
+.set-more-body{padding:0 15px 15px}
+.set[id]{cursor:pointer;transition:background .2s}
+.set[id]:active{background:var(--field)}
+.about{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:28px 0 10px;cursor:pointer}
+.about .brand-mark{width:44px;height:44px;border-radius:13px}
+.about b{font-family:var(--serif);font-weight:500;font-size:20px;color:var(--head)}
+.about p{margin:0;font-size:11.5px;color:var(--mut)}
+button.x{background:transparent;border:1px solid var(--bd2);border-radius:10px;color:var(--mut);-webkit-text-fill-color:var(--mut);min-height:40px;cursor:pointer;font-weight:600;font-size:16px}
+button.x:disabled{opacity:.3}
+.home-btn{transition:opacity .3s var(--ease),transform .35s var(--spring)}
+.home-btn.on{opacity:0;pointer-events:none;transform:translateX(-50%) translateY(20px) scale(.8)}
+.hail-head .sub-amt,.log-dictate-row .hail-head .sub-amt{color:var(--dgr)}
+/* motion */
+.screen.on{animation:screenIn .42s var(--ease) both}
+@keyframes screenIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.screen.on > .card{animation:cardIn .5s var(--ease) both}
+.screen.on > .card:nth-of-type(2){animation-delay:.03s}.screen.on > .card:nth-of-type(3){animation-delay:.06s}.screen.on > .card:nth-of-type(4){animation-delay:.09s}.screen.on > .card:nth-of-type(n+5){animation-delay:.12s}
+@keyframes cardIn{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+html{scroll-behavior:smooth}
+html.calm *,html.calm *::before,html.calm *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+@media (prefers-reduced-motion:reduce){.hub-orbit{animation:none}.screen.on > .card{animation:none}}
+@media (min-width:700px){.seg{max-width:420px}}
 </style>
 </head>
 <body>
 <main class="app">
   <div class="top">
-    <div style="display:flex;gap:9px;align-items:center;min-width:0">
+    <div class="top-l">
       <div class="trail">
         <button type="button" id="navBack" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
-        <button type="button" id="navFwd" aria-label="Forward"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
       </div>
-      <div class="av">FA</div>
-      <div class="hi"><h4 id="greet">Hey, Driver</h4><p id="today">Today</p></div>
+      <button type="button" class="brand" id="brandHome" aria-label="Fareo home"><svg class="brand-mark" viewBox="0 0 512 512" aria-hidden="true"><defs><linearGradient id="bmG" gradientUnits="userSpaceOnUse" x1="150" y1="130" x2="370" y2="380"><stop offset="0" stop-color="#F3DFA8"/><stop offset=".5" stop-color="#D4B26A"/><stop offset="1" stop-color="#9C7A3C"/></linearGradient></defs><g transform="translate(-14 0)"><path d="M214 352V178a26 26 0 0 1 26-26h88" fill="none" stroke="url(#bmG)" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"/><path d="M214 258h58" fill="none" stroke="url(#bmG)" stroke-width="40" stroke-linecap="round"/><circle cx="322" cy="258" r="23" fill="url(#bmG)"/></g></svg><span class="brand-word">Fareo</span></button>
     </div>
     <div class="tg"><button type="button" class="wx" id="wx" aria-label="Fareo"><span class="wx-pip" aria-hidden="true"></span><span class="wx-txt">Fareo</span></button>
       <button class="theme" id="themeBtn" aria-label="Theme"></button></div>
@@ -1059,19 +1119,25 @@ html.fold-flex .sfoot-gap{width:0}
   <div class="body-p">
 
   <section class="screen on" data-tab="hub">
-    <div class="sub">Home <small>Tap a circle to open that page</small></div>
+    <div class="hub-hello">
+      <div class="av" id="hubAv" aria-hidden="true">F</div>
+      <div><p class="hub-date" id="today">Today</p><h1 class="hub-greet" id="greet">Welcome back</h1></div>
+    </div>
     <div class="hub">
       <div class="hub-wheel">
-        <button type="button" class="hub-sat sat-runs" data-hub="runs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Runs</button>
-        <button type="button" class="hub-sat sat-book" data-hub="book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M8 7h8M8 11h6"/></svg>Book</button>
-        <button type="button" class="hub-sat sat-weekly" data-hub="weekly"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-8M22 19V3"/></svg>Weekly</button>
-        <button type="button" class="hub-sat sat-reports" data-hub="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-7"/></svg>Reports</button>
-        <button type="button" class="hub-sat sat-settings" data-hub="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1-2 3.4-.2-.1a1.7 1.7 0 0 0-1.9-.1 1.7 1.7 0 0 0-.9 1.5V22H9.2v-.3a1.7 1.7 0 0 0-.9-1.5 1.7 1.7 0 0 0-1.9.1l-.2.1-2-3.4.1-.1A1.7 1.7 0 0 0 4.6 15 1.7 1.7 0 0 0 3 14H2v-4h1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1 2-3.4.2.1a1.7 1.7 0 0 0 1.9.1A1.7 1.7 0 0 0 9.2 2V2h5.6v.3a1.7 1.7 0 0 0 .9 1.5 1.7 1.7 0 0 0 1.9-.1l.2-.1 2 3.4-.1.1A1.7 1.7 0 0 0 19.4 9 1.7 1.7 0 0 0 21 10h1v4h-1a1.7 1.7 0 0 0-1.6 1Z"/></svg>Settings</button>
-        <button type="button" class="hub-sat sat-refresh" data-hub="refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/></svg>Refresh</button>
+        <span class="hub-orbit" aria-hidden="true"></span>
+        <button type="button" class="hub-sat" data-hub="runs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg><span>Clients</span></button>
+        <button type="button" class="hub-sat" data-hub="weekly"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-8M22 19V3"/></svg><span>Weekly</span></button>
+        <button type="button" class="hub-sat" data-hub="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-7"/></svg><span>Reports</span></button>
+        <button type="button" class="hub-sat" data-hub="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1-2 3.4-.2-.1a1.7 1.7 0 0 0-1.9-.1 1.7 1.7 0 0 0-.9 1.5V22H9.2v-.3a1.7 1.7 0 0 0-.9-1.5 1.7 1.7 0 0 0-1.9.1l-.2.1-2-3.4.1-.1A1.7 1.7 0 0 0 4.6 15 1.7 1.7 0 0 0 3 14H2v-4h1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1 2-3.4.2.1a1.7 1.7 0 0 0 1.9.1A1.7 1.7 0 0 0 9.2 2V2h5.6v.3a1.7 1.7 0 0 0 .9 1.5 1.7 1.7 0 0 0 1.9-.1l.2-.1 2 3.4-.1.1A1.7 1.7 0 0 0 19.4 9 1.7 1.7 0 0 0 21 10h1v4h-1a1.7 1.7 0 0 0-1.6 1Z"/></svg><span>Settings</span></button>
         <button type="button" class="hub-core" data-hub="shift" id="hubLog" aria-label="Log Shift"><span class="hub-live-pip" aria-hidden="true"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/><path d="M12 3.5v6M4.2 16.5l5.2-3M19.8 16.5l-5.2-3"/></svg><span class="hub-core-lbl" id="hubLogLbl">Log Shift</span></button>
       </div>
     </div>
-
+    <button type="button" class="glance" data-hub="weekly" id="hubGlance">
+      <span class="glance-l"><small id="glLbl">This week</small><b id="glTake">$0.00</b></span>
+      <span class="glance-r"><span id="glShifts">No shifts yet</span><span id="glPay"></span></span>
+      <svg class="glance-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
   </section>
 
   <section class="screen" data-tab="shift">
@@ -1194,7 +1260,12 @@ html.fold-flex .sfoot-gap{width:0}
   </section>
 
   <section class="screen" data-tab="runs">
-    <div class="sub">Runs <small>Ordered run plan &middot; tap or drag clients into sequence &middot; 1-tap Nav</small></div>
+    <div class="sub">Clients <small>Run plan &middot; address book &middot; 1-tap navigation</small></div>
+    <div class="seg" id="cliSeg" role="tablist">
+      <button type="button" role="tab" class="on" data-cpane-go="plan">Run plan</button>
+      <button type="button" role="tab" data-cpane-go="book">Address book</button>
+    </div>
+    <div data-cpane="plan">
 
     <!-- Client Quick-Pick Floating Boxes Deck -->
     <div class="card" style="padding:12px;margin-bottom:10px">
@@ -1218,7 +1289,7 @@ html.fold-flex .sfoot-gap{width:0}
       <div id="runClientGrid" class="run-client-grid"></div>
       <div id="runClientEmpty" class="ded-empty" style="display:none;padding:12px 0">
         <b>No clients found</b>
-        <span>Add clients in the Address Book first.</span>
+        <span>Add clients in the <button type="button" class="linkish" data-cpane-go="book">Address book</button> first.</span>
       </div>
     </div>
 
@@ -1263,16 +1334,8 @@ html.fold-flex .sfoot-gap{width:0}
       </div>
     </div>
 
-  </section>
-
-  <section class="screen" data-tab="book">
-    <div class="sub">Address Book <small>Client directory &middot; addresses &middot; rider notes</small></div>
-    <div class="card" style="background:var(--inc-bg);border:1.5px solid var(--inc);padding:11px;margin-bottom:12px">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-        <div><b style="font-size:13px;color:var(--on-inc);display:block">Active Run Planner</b><span style="font-size:11px;color:var(--mut)">Sequence stops, drag to sort, Nav &amp; Share</span></div>
-        <button type="button" class="btn" onclick="go('runs')" style="width:auto;padding:8px 14px;font-size:12px;margin:0">Go to Runs &rsaquo;</button>
-      </div>
-    </div>
+  </div>
+    <div data-cpane="book" hidden>
     <input class="cl-search" id="bookSearch" placeholder="Search name, nickname, or address" autocomplete="off">
     <div class="card" style="margin-bottom:0">
       <h5><span class="dot" style="background:var(--inc)"></span>Clients<span style="margin-left:auto;font-size:11px;color:var(--mut);font-weight:600" id="cliCount">0</span></h5>
@@ -1280,6 +1343,7 @@ html.fold-flex .sfoot-gap{width:0}
       <div class="ded-empty" id="cliEmpty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><b>No clients yet</b><span>Add a passenger, then save Home, Work, Day program, or a custom address.</span></div>
       <button class="btn" id="addClient" style="margin-top:10px">+ Add client</button>
     </div>
+  </div>
   </section>
 
   <section class="screen" data-tab="reports">
@@ -1408,92 +1472,74 @@ html.fold-flex .sfoot-gap{width:0}
     </div>
   </section>
 
-  <section class="screen" data-tab="refresh">
-    <div class="sub">Refresh <small>Cache &amp; updates</small></div>
-    <div class="card" style="text-align:center;padding:24px 14px">
-      <div id="refreshIconWrap" style="width:54px;height:54px;border-radius:50%;background:var(--inc-bg);color:var(--inc);display:grid;place-items:center;margin:0 auto 12px;border:1px solid var(--inc)"><svg id="refreshIconSvg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/></svg></div>
-      <b style="font-size:15px;color:var(--head)" id="refreshTitle">Clear cache &amp; check for updates</b>
-      <p style="font-size:11.5px;color:var(--mut);margin:6px 0 14px" id="refreshSub">Keeps your saved shifts, EOS archive and receipt jar.</p>
-      <div class="refresh-stage" id="refreshStage" style="display:none">
-        <div class="rs" data-rs="1"><i>1</i><span>Unregister old service worker</span></div>
-        <div class="rs" data-rs="2"><i>2</i><span>Clear cached app files</span></div>
-        <div class="rs" data-rs="3"><i>3</i><span>Reload fresh build</span></div>
-      </div>
-      <button class="btn" id="refreshBtn">Refresh now</button>
-    </div>
-  </section>
-
   <section class="screen" data-tab="settings">
-    <div class="sub">Settings <small>Defaults &amp; data</small></div>
+    <div class="sub">Settings <small>Your profile, pay rules and data</small></div>
 
-    <p class="grp">Essentials</p>
-    <div class="card" style="padding:0">
-      <div class="set hot"><div class="sl"><b>Driver Percentage Share</b><p>Global &middot; flows to every calc</p></div><input id="setPct" type="number" min="0" max="100" inputmode="decimal"></div>
-      <div class="set"><div class="sl"><b>Hail Trip Levy <span class="help" data-help="When you add this levy to the passenger fare it becomes part of the taxable supply — GST is 1/11 of the full fare. The amount you remit to SRO Victoria comes off your take-home (no GST credit). Set 0 if your BSP pays it." aria-label="Help">?</span></b><p>From your income in Reports &middot; 0 if BSP pays</p></div><input id="setLevy" type="number" min="0" inputmode="decimal"></div>
-      <div class="set"><div class="sl"><b>State Address Focus <span class="help" data-help="Prioritises and predicts addresses in your Australian state (Victoria by default)." aria-label="Help">?</span></b><p>Address search predictions</p></div><select id="setState" style="width:125px"><option value="VIC">VIC (Victoria)</option><option value="NSW">NSW</option><option value="QLD">QLD</option><option value="SA">SA</option><option value="WA">WA</option><option value="TAS">TAS</option><option value="ACT">ACT</option><option value="NT">NT</option><option value="ALL">All Australia</option></select></div>
-      <div class="set"><div class="sl"><b>Cash &amp; Square tax-free <span class="help" data-help="When on, cash and Square are not taxable income. They are left out of G1 and 1A. You still keep that money in take-home and Weekly. EFTPOS, accounts and runs stay in G1 (GST 1/11). Turn off if GST applies to cash too." aria-label="Help">?</span></b><p>Not in G1 or 1A · you still keep the cash</p></div><button class="tgl" id="setCashGst" aria-label="Toggle cash tax-free"></button></div>
-      <div class="set"><div class="sl"><b>Week Cycle</b><p>Which day your week starts</p></div><select id="setWeek"></select></div>
-      <div class="set" style="display:block"><div class="sl"><b>Vehicle Regos</b></div>
-        <div class="two" style="grid-template-columns:1fr auto"><input id="newRego" placeholder="e.g. 5088M" autocapitalize="characters"><button class="add" id="addRego" style="margin:0;width:auto;padding:10px 14px">Add</button></div>
+    <p class="grp">Profile</p>
+    <div class="card set-card">
+      <div class="set"><div class="sl"><b>Your name</b><p>Used for your greeting and initials</p></div><input id="setName" type="text" placeholder="Driver" autocomplete="given-name" maxlength="24"></div>
+      <div class="set" style="display:block"><div class="sl"><b>Vehicle regos</b><p>Pick one on each shift</p></div>
+        <div class="rego-add"><input id="newRego" placeholder="e.g. 5088M" autocapitalize="characters"><button class="add" id="addRego">Add</button></div>
         <div class="chips" id="regoChips"></div></div>
     </div>
 
-    <button class="advtoggle" id="advToggle"><span><b>Advanced settings</b><small>Tax model, payment types, appearance, sync, backup</small></span><span class="chev" id="advChev">&rsaquo;</span></button>
-
-    <div id="advWrap" style="display:none">
-      <p class="grp">Shift defaults</p>
-      <div class="card" style="padding:0">
-        <div class="set"><div class="sl"><b>Default Fuel</b><p>New shift forms</p></div><select id="setFuel"><option>Diesel</option><option>Petrol</option><option>LPG</option></select></div>
-        <div class="set"><div class="sl"><b>Credited On</b><p>Payday milestone after week ends</p></div><select id="setCredit"></select></div>
-        <div class="set"><div class="sl"><b>Name Autocomplete</b><p>Suggest past payer &amp; account names</p></div><button class="tgl" id="setAuto" aria-label="Toggle autocomplete"></button></div>
-      </div>
-
-      <p class="grp">Tax model</p>
-      <div class="card" style="padding:0">
-        <div class="set"><div class="sl"><b>GST Base <span class="help" data-help="Whether GST (1/11) is set aside on taxable sales (G1) — full fare or only your driver share. Tax-free cash/Square is left out of G1. Levy passed on in taxable fares stays in G1. The SRO levy payment is separate (no GST credit). Match this to your bailment agreement \u2014 ask your operator or tax agent which applies." aria-label="Help">?</span></b><p>Amount GST is set aside on</p></div><select id="setGstBase" class="wide"><option value="gross">Full gross</option><option value="share">Driver share</option></select></div>
-      </div>
-
-      <p class="grp">Payment Types</p>
-      <div class="card">
-        <div class="sl" style="margin-bottom:10px"><b>Custom income types <span class="help" data-help="Built-ins are EFTPOS, Cash, Square, Runs and Accounts. Add your own types here (e.g. PayPal, vouchers, tips) and they appear as cards in the calculator." aria-label="Help">?</span></b></div>
-        <div id="payTypeChips" class="chips" style="margin-bottom:10px"></div>
-        <button class="btn neutral" id="addPayType">+ Add payment type</button>
-      </div>
-
-      <p class="grp">Appearance</p>
-      <div class="card" style="padding:0">
-        <div class="set"><div class="sl"><b>Theme</b><p>Dark by default, or match the phone</p></div><select id="setTheme" style="width:120px"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></div>
-        <div class="set"><div class="sl"><b>Hail OCR</b><p>Read Rank / Hail trip count from EOS slip photos (loads OCR when needed)</p></div><button class="tgl on" id="setOcrHail" aria-label="Toggle hail OCR"></button></div>
-      </div>
-
-      <p class="grp">Backup</p>
-      <div class="card" style="padding:0">
-        <div class="set" id="exportBtn"><div class="sl"><b>Export backup</b><p>Save all data to a file (Drive / email)</p></div><span class="chev">&darr;</span></div>
-        <div class="set" id="importBtn"><div class="sl"><b>Restore backup</b><p>Load data from a saved file</p></div><span class="chev">&uarr;</span></div>
-      </div>
-
-      <p class="grp">Cloud Sync</p>
-      <div class="card">
-        <div class="sl" style="margin-bottom:8px"><b>Multi-device Sync <span class="help" data-help="Optional. Set up a free Firebase project once and sign in with the same email on each phone to keep them in sync. Data stays on your device until you sign in." aria-label="Help">?</span></b><p id="syncState">Off &middot; local only</p></div>
-        <textarea id="fbConfig" placeholder="Paste your Firebase config here"></textarea>
-        <div class="two"><input id="syncEmail" type="email" placeholder="Email" autocomplete="username"><input id="syncPass" type="password" placeholder="Password" autocomplete="current-password"></div>
-        <div class="two" style="margin-top:8px"><button class="btn neutral" id="syncSignin">Sign in</button><button class="btn" id="syncCreate">Create account</button></div>
-        <button class="btn neutral" id="syncOut" style="display:none;margin-top:8px">Sign out</button>
-      </div>
-
-      <p class="grp">Data &amp; maintenance</p>
-      <div class="card" style="padding:0">
-        <div class="set" id="archiveLink"><div class="sl"><b>Receipt &amp; EOS archive</b><p>Shift receipts + end-of-shift snapshots &middot; <span id="archiveCount">0</span> saved</p></div><span class="chev">&rsaquo;</span></div>
-        <div class="set" id="rollbackUpdate"><div class="sl"><b>Roll back previous update</b><p>Restore the last app version only (one step back) if this build is not working for you</p></div><span class="chev">&larr;</span></div>
-        <div class="set" id="clearCache"><div class="sl"><b>Clear Cache &amp; Refresh</b><p>Checks for updates</p></div><span class="chev">&rsaquo;</span></div>
-        <div class="set" id="newFy"><div class="sl"><b class="danger">Start New Financial Year</b><p>Clear shifts &amp; income &middot; keep settings &amp; address book</p></div><span class="chev danger">&rsaquo;</span></div>
-      </div>
+    <p class="grp">Pay &amp; tax</p>
+    <div class="card set-card">
+      <div class="set hot"><div class="sl"><b>Driver share</b><p>% of takings you keep &middot; used everywhere</p></div><div class="unit-in"><input id="setPct" type="number" min="0" max="100" inputmode="decimal"><i>%</i></div></div>
+      <div class="set"><div class="sl"><b>Hail trip levy <span class="help" data-help="When you add this levy to the passenger fare it becomes part of the taxable supply — GST is 1/11 of the full fare. The amount you remit to SRO Victoria comes off your take-home (no GST credit). Set 0 if your BSP pays it." aria-label="Help">?</span></b><p>Per hail trip &middot; set 0 if your BSP pays</p></div><div class="unit-in pre"><i>$</i><input id="setLevy" type="number" min="0" step="0.01" inputmode="decimal"></div></div>
+      <div class="set"><div class="sl"><b>Cash &amp; Square tax-free <span class="help" data-help="When on, cash and Square are not taxable income. They are left out of G1 and 1A. You still keep that money in take-home and Weekly. EFTPOS, accounts and runs stay in G1 (GST 1/11). Turn off if GST applies to cash too." aria-label="Help">?</span></b><p>Left out of G1 and 1A &middot; still in take-home</p></div><button class="tgl" id="setCashGst" aria-label="Toggle cash tax-free"></button></div>
+      <div class="set"><div class="sl"><b>GST base <span class="help" data-help="Whether GST (1/11) is set aside on taxable sales (G1) — full fare or only your driver share. Tax-free cash/Square is left out of G1. Levy passed on in taxable fares stays in G1. The SRO levy payment is separate (no GST credit). Match this to your bailment agreement \u2014 ask your operator or tax agent which applies." aria-label="Help">?</span></b><p>What GST is set aside on</p></div><select id="setGstBase"><option value="gross">Full gross</option><option value="share">Driver share</option></select></div>
+      <div class="set" style="display:block"><div class="sl"><b>Payment types <span class="help" data-help="Built-ins are EFTPOS, Cash, Square, Runs and Accounts. Add your own types here (e.g. PayPal, vouchers, tips) and they appear as cards in the calculator." aria-label="Help">?</span></b><p>Extra income cards on the shift form</p></div>
+        <div id="payTypeChips" class="chips" style="margin:10px 0 2px"></div>
+        <button class="add" id="addPayType">+ Add payment type</button></div>
     </div>
 
-    <p class="grp">About</p>
-    <div class="card" style="padding:0;margin-bottom:0">
-      <div class="set" id="versionRow"><div class="sl"><b>Version</b><p id="versionLine">Fareo 4.9 &middot; tap for release notes</p></div><span class="badge">PWA</span></div>
+    <p class="grp">Week &amp; payday</p>
+    <div class="card set-card">
+      <div class="set"><div class="sl"><b>Week starts on</b><p>Your settlement cycle</p></div><select id="setWeek"></select></div>
+      <div class="set"><div class="sl"><b>Paid on</b><p>Payday after the week ends</p></div><select id="setCredit"></select></div>
     </div>
+
+    <p class="grp">Shift form</p>
+    <div class="card set-card">
+      <div class="set"><div class="sl"><b>Default fuel</b><p>Pre-filled on new fill-ups</p></div><select id="setFuel"><option>Diesel</option><option>Petrol</option><option>LPG</option></select></div>
+      <div class="set"><div class="sl"><b>Name suggestions</b><p>Suggest past payer &amp; account names</p></div><button class="tgl" id="setAuto" aria-label="Toggle name suggestions"></button></div>
+      <div class="set"><div class="sl"><b>Read hail count from photos</b><p>Scans EOS slips for Rank / Hail trips</p></div><button class="tgl on" id="setOcrHail" aria-label="Toggle hail OCR"></button></div>
+      <div class="set"><div class="sl"><b>Address region <span class="help" data-help="Prioritises and predicts addresses in your Australian state (Victoria by default)." aria-label="Help">?</span></b><p>Focus for address search</p></div><select id="setState"><option value="VIC">VIC (Victoria)</option><option value="NSW">NSW</option><option value="QLD">QLD</option><option value="SA">SA</option><option value="WA">WA</option><option value="TAS">TAS</option><option value="ACT">ACT</option><option value="NT">NT</option><option value="ALL">All Australia</option></select></div>
+    </div>
+
+    <p class="grp">Appearance &amp; feel</p>
+    <div class="card set-card">
+      <div class="set"><div class="sl"><b>Theme</b><p>Dark is the signature look</p></div><select id="setTheme"><option value="dark">Dark</option><option value="light">Light</option><option value="system">Match phone</option></select></div>
+      <div class="set"><div class="sl"><b>Open on</b><p>Screen shown when the app starts</p></div><select id="setStart"><option value="hub">Home</option><option value="shift">Log Shift</option><option value="weekly">Weekly</option></select></div>
+      <div class="set"><div class="sl"><b>Haptics</b><p>Light vibration on taps &amp; saves</p></div><button class="tgl" id="setHaptics" aria-label="Toggle haptics"></button></div>
+      <div class="set"><div class="sl"><b>Reduce motion</b><p>Turn off animations</p></div><button class="tgl" id="setCalm" aria-label="Toggle reduce motion"></button></div>
+    </div>
+
+    <p class="grp">Your data</p>
+    <div class="card set-card">
+      <div class="set" id="archiveLink"><div class="sl"><b>Receipts &amp; EOS archive</b><p><span id="archiveCount">0</span> saved</p></div><span class="chev">&rsaquo;</span></div>
+      <div class="set" id="exportBtn"><div class="sl"><b>Export backup</b><p>Save everything to a file</p></div><span class="chev">&darr;</span></div>
+      <div class="set" id="importBtn"><div class="sl"><b>Restore backup</b><p>Load a saved backup file</p></div><span class="chev">&uarr;</span></div>
+      <details class="set-more">
+        <summary class="set"><div class="sl"><b>Multi-device sync <span class="help" data-help="Optional. Set up a free Firebase project once and sign in with the same email on each phone to keep them in sync. Data stays on your device until you sign in." aria-label="Help">?</span></b><p id="syncState">Off &middot; local only</p></div><span class="chev">&rsaquo;</span></summary>
+        <div class="set-more-body">
+          <textarea id="fbConfig" placeholder="Paste your Firebase config here"></textarea>
+          <div class="two"><input id="syncEmail" type="email" placeholder="Email" autocomplete="username"><input id="syncPass" type="password" placeholder="Password" autocomplete="current-password"></div>
+          <div class="two" style="margin-top:8px"><button class="btn neutral" id="syncSignin">Sign in</button><button class="btn" id="syncCreate">Create account</button></div>
+          <button class="btn neutral" id="syncOut" style="display:none;margin-top:8px">Sign out</button>
+        </div>
+      </details>
+    </div>
+
+    <p class="grp">Troubleshooting</p>
+    <div class="card set-card">
+      <div class="set" id="clearCache"><div class="sl"><b>Check for updates</b><p>Clears the app cache and reloads &middot; data is kept</p></div><span class="chev">&rsaquo;</span></div>
+      <div class="set" id="rollbackUpdate"><div class="sl"><b>Roll back last update</b><p>Go back one version if this one misbehaves</p></div><span class="chev">&larr;</span></div>
+      <div class="set" id="newFy"><div class="sl"><b class="danger">Start new financial year</b><p>Clears shifts &amp; income &middot; keeps settings and clients</p></div><span class="chev danger">&rsaquo;</span></div>
+    </div>
+
+    <div class="about" id="versionRow"><svg class="brand-mark" viewBox="0 0 512 512" aria-hidden="true"><g transform="translate(-14 0)"><path d="M214 352V178a26 26 0 0 1 26-26h88" fill="none" stroke="url(#bmG)" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"/><path d="M214 258h58" fill="none" stroke="url(#bmG)" stroke-width="40" stroke-linecap="round"/><circle cx="322" cy="258" r="23" fill="url(#bmG)"/></g></svg><b>Fareo</b><p id="versionLine">Version &middot; tap for release notes</p></div>
   </section>
 
   </div>
@@ -1802,8 +1848,17 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='8.44';
+var APP_VERSION='9.0';
 var CHANGELOG=[
+  {v:'9.0',date:'November 2, 2026',notes:[
+    ['UI/UX','Fareo Noir: a new look. Deep black with a champagne-gold accent, a new F logo and app icon, refined serif titles and calmer cards that use colour only as an accent.'],
+    ['UI/UX','Home has a restyled wheel with four destinations around Log Shift, a time-of-day greeting and a This week card showing take-home, shifts and payday.'],
+    ['UI/UX','Runs and Address Book are now one Clients page with Run plan and Address book tabs.'],
+    ['UI/UX','The Refresh page is gone. Check for updates lives in Settings \u2192 Troubleshooting.'],
+    ['Feature','Settings are regrouped into Profile, Pay & tax, Week & payday, Shift form, Appearance, Your data and Troubleshooting. No more hidden Advanced section.'],
+    ['Feature','New settings: Your name (greeting and initials), Open on (Home, Log Shift or Weekly), Haptics and Reduce motion.'],
+    ['UI/UX','Smoother motion: spring taps, staggered cards and a slow gold orbit on Home. The top bar is simpler, with one Back button and the Home button hidden when you are already home.'],
+  ]},
   {v:'8.44',date:'October 7, 2026',notes:[
     ['Feature','Saving a shift on the last day of your cycle offers a dismissable prompt to share the week \u2014 shift count, take-home, and payday. Not now skips it for that cycle.'],
   ]},
@@ -2114,7 +2169,14 @@ function migrateSettings(){
   if(!settings.theme)settings.theme='dark';
   if(!settings.claimOff||typeof settings.claimOff!=='object')settings.claimOff={};
   if(!settings.alertDismiss||typeof settings.alertDismiss!=='object')settings.alertDismiss={};
+  /* v9 profile & feel settings */
+  if(typeof settings.driverName!=='string')settings.driverName='';
+  if(settings.haptics==null)settings.haptics=true;
+  if(settings.calm==null)settings.calm=false;
+  if(['hub','shift','weekly'].indexOf(settings.startTab)<0)settings.startTab='hub';
 }
+function buzz(ms){if(settings.haptics===false||!navigator.vibrate)return;try{navigator.vibrate(ms||8)}catch(_){}}
+function applyCalm(){document.documentElement.classList.toggle('calm',!!settings.calm)}
 migrateSettings();
 var SHIFT_FIELD_BUILTINS=['fuel','cash','square','runs','accounts'];
 function shiftFieldKeys(){
@@ -3069,7 +3131,7 @@ function backSolveGross(take,held,fuelIPaid){var p=settings.pct/100;var g=p>0?((
 var sunSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6 19 19M19 5l-1.4 1.4M6.4 17.6 5 19"/></svg>';
 var moonSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>';
 function effectiveDark(){if(settings.theme==='dark')return true;if(settings.theme==='light')return false;return matchMedia('(prefers-color-scheme: dark)').matches}
-function applyTheme(){var r=document.documentElement;if(settings.theme==='system')r.removeAttribute('data-theme');else r.setAttribute('data-theme',settings.theme);$('#themeBtn').innerHTML=effectiveDark()?sunSvg:moonSvg;var m=$('meta[name=theme-color]');if(m)m.content=effectiveDark()?'#090A0F':'#F1F5F9'}
+function applyTheme(){var r=document.documentElement;if(settings.theme==='system')r.removeAttribute('data-theme');else r.setAttribute('data-theme',settings.theme);$('#themeBtn').innerHTML=effectiveDark()?sunSvg:moonSvg;var m=$('meta[name=theme-color]');if(m)m.content=effectiveDark()?'#09090B':'#F6F3ED'}
 
 /* ---------- safe formula evaluator ----------
    Tokenized shunting-yard. Only accepts numbers, the whitelisted variable names
@@ -5039,6 +5101,10 @@ function renderSettings(){
   var sc=$('#setCredit');sc.innerHTML=DAYS.map(function(d,i){return '<option value="'+i+'">'+d+'</option>'}).join('');sc.value=String(settings.creditedDay);
   var sw=$('#setWeek');sw.innerHTML=DAYS.map(function(d,i){return '<option value="'+i+'">'+d+'</option>'}).join('');sw.value=String(settings.weekStart);
   $('#setAuto').classList.toggle('on',!!settings.autocomplete);
+  var sn=$('#setName');if(sn&&document.activeElement!==sn)sn.value=settings.driverName||'';
+  var sst=$('#setStart');if(sst)sst.value=settings.startTab||'hub';
+  var shp=$('#setHaptics');if(shp)shp.classList.toggle('on',settings.haptics!==false);
+  var scm=$('#setCalm');if(scm)scm.classList.toggle('on',!!settings.calm);
   var so=$('#setOcrHail');if(so)so.classList.toggle('on',settings.ocrHail!==false);
   $('#regoChips').innerHTML=settings.regos.map(function(r){return '<span class="chip">'+esc(r)+'<button data-rr="'+esc(r)+'">&times;</button></span>'}).join('');
   $$('#regoChips [data-rr]').forEach(function(b){b.onclick=function(){settings.regos=settings.regos.filter(function(x){return x!==b.dataset.rr});if(!settings.regos.length)settings.regos=['5088M'];persist();renderSettings();rowInputs()}});
@@ -5079,6 +5145,10 @@ $('#setFuel').onchange=function(){settings.fuel=this.value;persist()};
 $('#setGstBase').onchange=function(){settings.gstBase=this.value;persist();toast(this.value==='share'?'GST set aside on driver share':'GST set aside on full gross')};
 $('#setCashGst').onclick=function(){settings.cashGstFree=!settings.cashGstFree;persist();this.classList.toggle('on',settings.cashGstFree);renderReports();toast(settings.cashGstFree?'Cash & Square: tax-free — not in G1 or 1A':'Cash & Square: GST applies (in G1)')};
 if($('#setState'))$('#setState').onchange=function(){settings.state=this.value;persist();toast('Address search focused on '+this.value)};
+if($('#setName'))$('#setName').oninput=function(){settings.driverName=this.value.trim().slice(0,24);persist();renderHub()};
+if($('#setStart'))$('#setStart').onchange=function(){settings.startTab=this.value;persist();toast('Fareo will open on '+this.options[this.selectedIndex].text)};
+if($('#setHaptics'))$('#setHaptics').onclick=function(){settings.haptics=!(settings.haptics!==false);persist();this.classList.toggle('on',settings.haptics);buzz(12)};
+if($('#setCalm'))$('#setCalm').onclick=function(){settings.calm=!settings.calm;persist();this.classList.toggle('on',settings.calm);applyCalm()};
 if($('#advToggle'))$('#advToggle').onclick=function(){var w=$('#advWrap');var open=w.style.display==='none';w.style.display=open?'block':'none';this.classList.toggle('open',open)};
 if($('#archiveLink'))$('#archiveLink').onclick=openArchive;
 if($('#jarOpen'))$('#jarOpen').onclick=openArchive;
@@ -5130,7 +5200,6 @@ async function fullRefresh(){
   setTimeout(function(){location.reload()},400);
 }
 $('#clearCache').onclick=fullRefresh;
-$('#refreshBtn').onclick=fullRefresh;
 
 /* ---------- backup + cloud sync ---------- */
 var SYNC_KEYS=['fareo_settings','fareo_entries','fareo_deductions','fareo_recurring','fareo_fuelManual','fareo_draft','fareo_names','fareo_clients','fareo_run_plan'];
@@ -5541,7 +5610,7 @@ function addClientToRunPlan(cid, optIndex){
   }
   persist();
   renderRuns();
-  if(navigator.vibrate) try{ navigator.vibrate(15); }catch(_){}
+  buzz(15);
   var pos = (optIndex != null && optIndex >= 0) ? (optIndex + 1) : runPlan.length;
   toast('Added ' + clientLabel(c) + ' (Stop ' + pos + ')');
 }
@@ -5553,7 +5622,7 @@ function removeClientFromRunPlan(cid){
   if(runPlan.length !== prevLen){
     persist();
     renderRuns();
-    if(navigator.vibrate) try{ navigator.vibrate(15); }catch(_){}
+    buzz(15);
     toast('Removed ' + (c ? clientLabel(c) : 'stop') + ' from sequence');
   }
 }
@@ -5871,7 +5940,7 @@ function renderRuns(){
             runPlan.splice(targetIdx, 0, item);
             persist();
             renderRuns();
-            if(navigator.vibrate) try{ navigator.vibrate(20); }catch(_){}
+            buzz(20);
           }
           touchSrcIdx = null;
           touchActiveBox = null;
@@ -6555,7 +6624,7 @@ function showUpdatePrompt(later){
     showModal('updModal');
   }
   if(!later&&typeof Notification!=='undefined'&&Notification.permission==='granted'&&!updShown){
-    try{new Notification('Fareo update ready',{body:'Tap Update now in the app to load it. Your data stays.',tag:'fareo-update',icon:'icon-192-v52.png'})}catch(_){}
+    try{new Notification('Fareo update ready',{body:'Tap Update now in the app to load it. Your data stays.',tag:'fareo-update',icon:'icon-192-v90.png'})}catch(_){}
   }
   updShown=true;
 }
@@ -6616,7 +6685,32 @@ function watchForUpdates(){
 }
 
 /* ---------- nav ---------- */
-var TABS=['hub','shift','weekly','reports','runs','book','refresh','settings'];
+var TABS=['hub','shift','weekly','reports','runs','settings'];
+/* v9: Book merged into Clients (runs); Refresh moved into Settings. Old links still work. */
+var clientPane='plan';
+function resolveTab(tab){if(tab==='book'){clientPane='book';return 'runs'}if(tab==='refresh')return 'settings';return tab}
+function setClientPane(p){
+  clientPane=p==='book'?'book':'plan';
+  $$('[data-cpane]').forEach(function(el){el.hidden=el.dataset.cpane!==clientPane});
+  $$('[data-cpane-go]').forEach(function(b){if(b.closest('#cliSeg'))b.classList.toggle('on',b.dataset.cpaneGo===clientPane)});
+  if(clientPane==='book')renderBook();else renderRuns();
+}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-cpane-go]');if(!b)return;e.preventDefault();buzz(6);setClientPane(b.dataset.cpaneGo);window.scrollTo({top:0,behavior:'smooth'})});
+function greetFor(h){return h<5?'Late shift':h<12?'Good morning':h<17?'Good afternoon':'Good evening'}
+function renderHub(){
+  var nm=(settings.driverName||'').trim();
+  var g=$('#greet');if(g)g.textContent=greetFor(new Date().getHours())+(nm?', '+nm.split(/\s+/)[0]:'');
+  var td=$('#today');if(td)td.textContent=new Date().toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long'});
+  var av=$('#hubAv');if(av){var ini=nm?nm.split(/\s+/).map(function(w){return w[0]}).join('').slice(0,2).toUpperCase():'F';av.textContent=ini}
+  var base=weekStartOf(new Date()),end=new Date(base);end.setDate(base.getDate()+6);
+  var bs=iso(base),es=iso(end);
+  var rows=entries.filter(function(e){return e.date>=bs&&e.date<=es});
+  var tot=rows.reduce(function(a,b){return a+(Number(b.take)||0)},0);
+  var gt=$('#glTake');if(gt)gt.textContent=money(tot);
+  var gs=$('#glShifts');if(gs)gs.textContent=rows.length?(rows.length+(rows.length===1?' shift':' shifts')):'No shifts yet';
+  var cd=new Date(end);do{cd.setDate(cd.getDate()+1)}while(cd.getDay()!==settings.creditedDay);
+  var gp=$('#glPay');if(gp)gp.textContent='Paid '+cd.toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'});
+}
 var curTab='shift';
 var histI=0,histLen=0;
 function anyModal(){
@@ -6638,7 +6732,8 @@ function syncTrailBtns(){
   if(f)f.disabled=histI>=histLen;
 }
 function applyTab(tab){
-  if(TABS.indexOf(tab)<0)tab='shift';
+  tab=resolveTab(tab);
+  if(TABS.indexOf(tab)<0)tab='hub';
   curTab=tab;
   $$('.screen').forEach(function(s){s.classList.toggle('on',s.dataset.tab===tab)});
   var home=$('#homeBtn');if(home)home.classList.toggle('on',tab==='hub');
@@ -6646,15 +6741,17 @@ function applyTab(tab){
   if(tab==='weekly')renderWeekly();
   if(tab==='reports')renderReports();
   if(tab==='settings')renderSettings();
-  if(tab==='runs')renderRuns();
-  if(tab==='book')renderBook();
+  if(tab==='runs')setClientPane(clientPane);
+  if(tab==='hub')renderHub();
   window.scrollTo({top:0});
   syncTrailBtns();
   if(typeof updateLogProgress==='function')updateLogProgress();
 }
 function go(tab){
+  var want=tab;tab=resolveTab(tab);
   if(TABS.indexOf(tab)<0)return;
-  if(tab===curTab){if(tab==='hub')window.scrollTo({top:0});return}
+  buzz(6);
+  if(tab===curTab){if(want==='book')setClientPane('book');if(tab==='hub')window.scrollTo({top:0});return}
   applyTab(tab);
   histI++;histLen=histI;
   try{history.pushState({tab:tab,i:histI},'','#'+tab)}catch(_){}
@@ -6679,6 +6776,7 @@ window.addEventListener('popstate',function(e){
   applyTab(tab);
 });
 if($('#homeBtn'))$('#homeBtn').onclick=function(){go('hub')};
+if($('#brandHome'))$('#brandHome').onclick=function(){go('hub')};
 if($('#wx'))$('#wx').onclick=function(){if(this.classList.contains('live'))go('shift')};
 if($('#navBack'))$('#navBack').onclick=smartBack;
 if($('#navFwd'))$('#navFwd').onclick=smartFwd;
@@ -6704,12 +6802,14 @@ $('#themeBtn').onclick=function(){settings.theme=effectiveDark()?'light':'dark';
 
 /* ---------- init ---------- */
 $('#today').textContent=fmtDayLong(new Date());
-var _vl=$('#versionLine');if(_vl)_vl.textContent='Fareo '+APP_VERSION+' \u00b7 tap for release notes';
+var _vl=$('#versionLine');if(_vl)_vl.textContent='Version '+APP_VERSION+' \u00b7 tap for release notes';
+applyCalm();
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(){if(settings.theme==='system')applyTheme()});
 applyTheme();renderNames();rowInputs();render();setSub(1);renderDeadlines();updateReceiptUI();
 (function(){
   var h=(location.hash||'').replace(/^#/,'');
-  if(TABS.indexOf(h)<0)h='hub';
+  if(h==='book'||h==='refresh'){applyTab(h);h=curTab}
+  if(TABS.indexOf(h)<0)h=settings.startTab||'hub';
   applyTab(h);
   try{history.replaceState({tab:h,i:0},'','#'+h)}catch(_){}
 })();
