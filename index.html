@@ -1473,6 +1473,94 @@ html.calm .tally{transition:none}
 #hmGo:disabled{opacity:.4;filter:saturate(.4);box-shadow:none}
 #hmGo.ready{animation:readyPulse 1.6s var(--ease) .2s}
 @keyframes readyPulse{0%{box-shadow:0 0 0 0 var(--glow)}50%{box-shadow:0 0 0 8px transparent}100%{box-shadow:0 0 0 0 transparent}}
+/* ---------- Fareo 13 · date strip, weather, undo ---------- */
+.date-card{padding:13px 13px 12px;transition:border-color .3s,box-shadow .3s}
+.date-card.need{border-color:color-mix(in srgb,var(--fuel) 45%,transparent)}
+.date-card.shake{animation:hmShake .45s var(--ease);border-color:var(--dgr);box-shadow:0 0 0 3px var(--dgr-bg)}
+.date-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px}
+.date-kicker{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin:0}
+.date-kicker .req{font-size:9px;letter-spacing:.06em;padding:2px 6px;border-radius:5px;background:var(--fuel);color:#1F1200;font-weight:700}
+.date-card.done .date-kicker .req{background:var(--accent);color:var(--accent-ink)}
+.date-month{font-family:var(--mono);font-size:10.5px;color:var(--mut)}
+.day-strip{display:flex;gap:6px;overflow-x:auto;scroll-snap-type:x proximity;overscroll-behavior-x:contain;padding:4px 2px 6px;margin:0 -4px;scrollbar-width:none;-webkit-mask:linear-gradient(90deg,transparent 0,#000 18px,#000 calc(100% - 6px),transparent);mask:linear-gradient(90deg,transparent 0,#000 18px,#000 calc(100% - 6px),transparent)}
+.day-strip::-webkit-scrollbar{display:none}
+.dp{position:relative;flex:0 0 auto;width:52px;height:70px;scroll-snap-align:end;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;border-radius:15px;border:1px solid var(--bd2);background:var(--card2);color:var(--body);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .25s var(--spring),background .25s,border-color .25s,color .25s;animation:chipIn .35s var(--ease) both;animation-delay:calc(min(var(--i,0),20)*14ms)}
+.dp small{font-family:var(--mono);font-size:9px;letter-spacing:.08em;color:var(--mut)}
+.dp b{font-family:var(--mono);font-size:20px;font-weight:600;line-height:1.1;color:var(--head)}
+.dp em{font-style:normal;font-family:var(--mono);font-size:9px;color:var(--mut);height:11px}
+.dp.m1::before{content:"";position:absolute;left:-4px;top:12px;bottom:12px;width:1px;background:var(--bd2)}
+.dp.today{border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
+.dp.today em{color:var(--accent)}
+.dp.logged .dp-dot{position:absolute;top:6px;right:6px;width:6px;height:6px;border-radius:50%;background:var(--acct)}
+.dp.logged em{color:var(--acct)}
+.dp.sug{border-color:var(--accent);box-shadow:0 0 0 0 var(--glow);animation:chipIn .35s var(--ease) both,sugPulse 1.8s var(--ease) .5s infinite}
+@keyframes sugPulse{0%{box-shadow:0 0 0 0 var(--glow)}70%{box-shadow:0 0 0 7px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.dp.on{background:var(--accent);border-color:var(--accent);transform:translateY(-2px)}
+.dp.on small,.dp.on b,.dp.on em{color:var(--accent-ink)}
+.dp.on .dp-dot{background:var(--accent-ink)}
+.dp.pick{animation:dpPick .45s var(--spring)}
+@keyframes dpPick{0%{transform:translateY(-2px) scale(.88)}55%{transform:translateY(-4px) scale(1.08)}100%{transform:translateY(-2px)}}
+.dp:active{transform:scale(.92)}
+.dp.far{border-style:dashed}
+.dp-gap{flex:0 0 1px;background:var(--bd2);margin:10px 2px}
+.date-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:6px}
+.date-label{margin:0;font-size:14px;font-weight:700;letter-spacing:-.02em;color:var(--head)}
+.date-card.need .date-label{color:var(--mut);font-weight:500;font-size:13px}
+.date-other{position:relative;display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;padding:7px 10px;border-radius:10px;border:1px solid var(--bd2);background:transparent;color:var(--body);font-size:12px;font-weight:600;cursor:pointer;overflow:hidden}
+.date-other svg{width:15px;height:15px;color:var(--mut)}
+.date-other input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;border:0;padding:0}
+.date-other input::-webkit-calendar-picker-indicator{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+.date-hint{display:none;align-items:center;gap:9px;margin-top:10px;padding:9px 10px;border-radius:11px;background:var(--accent-dim);border:1px solid var(--accent-line);font-size:12px;line-height:1.4;color:var(--body);animation:riseIn .3s var(--ease)}
+.date-hint.show{display:flex}
+.date-hint.warn{background:var(--fuel-bg);border-color:color-mix(in srgb,var(--fuel) 45%,transparent)}
+.date-hint b{color:var(--head)}
+.dh-ico{flex:0 0 auto;width:22px;height:22px;border-radius:7px;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink);font-size:12px;font-weight:700}
+.dh-ico.warn{background:var(--fuel);color:#1F1200}
+.dh-btn{margin-left:auto;flex:0 0 auto;border:0;border-radius:9px;padding:7px 10px;background:var(--accent);color:var(--accent-ink);font-size:12px;font-weight:700;cursor:pointer}
+.dh-btn:active{transform:scale(.95)}
+/* undo toast */
+.toast.has-undo{pointer-events:auto;padding-right:8px;overflow:hidden}
+.toast-undo{margin-left:6px;border:0;border-radius:8px;padding:6px 11px;background:var(--accent);color:var(--accent-ink);font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.04em;cursor:pointer}
+.toast-undo:active{transform:scale(.94)}
+.toast-timer{position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--accent);transform-origin:left;animation:undoTimer 6s linear forwards}
+@keyframes undoTimer{to{transform:scaleX(0)}}
+/* weather card */
+.wx-card{margin-top:12px;border-radius:var(--radius-lg);border:1px solid var(--bd);background:var(--card);padding:14px;position:relative;overflow:hidden;animation:riseIn .5s var(--ease) .25s both}
+.wx-card::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.55;background:radial-gradient(120% 80% at 100% 0%,var(--wxglow,transparent),transparent 60%)}
+.wx-card.k-sun{--wxglow:rgba(255,181,71,.16)}.wx-card.k-rain,.wx-card.k-storm{--wxglow:rgba(92,200,255,.16)}.wx-card.k-moon{--wxglow:rgba(167,149,255,.14)}.wx-card.k-part,.wx-card.k-cloud,.wx-card.k-fog{--wxglow:rgba(255,255,255,.06)}
+.wx-card.off,.wx-card.load{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}
+.wx-card.off b,.wx-card.load b{display:block;font-size:13.5px;color:var(--head)}
+.wx-card.off small,.wx-card.load small{display:block;font-size:11.5px;color:var(--mut);margin-top:2px}
+.wx-ico{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--field);color:var(--fuel)}
+.wx-ico svg{width:22px;height:22px}
+.wx-ico.spin svg{animation:spin 2.4s linear infinite}
+.wx-on{border:0;border-radius:10px;padding:9px 13px;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:12.5px;cursor:pointer}
+.wx-top{position:relative;display:grid;grid-template-columns:auto auto 1fr;gap:12px;align-items:center}
+.wx-ico.big{width:52px;height:52px;border-radius:16px}
+.wx-ico.big svg{width:30px;height:30px}
+.k-rain .wx-ico,.k-storm .wx-ico{color:var(--hail)}.k-moon .wx-ico{color:var(--levy)}.k-cloud .wx-ico,.k-fog .wx-ico,.k-part .wx-ico{color:var(--body)}
+.wx-now{display:flex;flex-direction:column}
+.wx-temp{font-family:var(--mono);font-size:34px;font-weight:600;letter-spacing:-.05em;color:var(--head);line-height:1}
+.wx-now span{font-size:12px;color:var(--body);margin-top:3px}
+.wx-meta{display:flex;flex-direction:column;align-items:flex-end;gap:3px;text-align:right;font-family:var(--mono);font-size:10.5px;color:var(--mut);min-width:0}
+.wx-place{font-family:Inter,system-ui,sans-serif;font-size:13px;font-weight:700;color:var(--head);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.wx-ref{border:1px solid var(--bd2);background:transparent;color:var(--mut);border-radius:8px;padding:3px 7px;font-family:var(--mono);font-size:10px;cursor:pointer;margin-top:2px}
+.wx-ref.spin{animation:pulseText 1s ease-in-out infinite}
+@keyframes pulseText{50%{opacity:.4}}
+.wx-hours{position:relative;display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin:14px 0 4px;padding:9px 4px;border-radius:12px;background:var(--card2);border:1px solid var(--bd)}
+.wh{display:flex;flex-direction:column;align-items:center;gap:3px;animation:riseIn .4s var(--ease) both;animation-delay:calc(var(--i)*40ms + 300ms)}
+.wh small{font-family:var(--mono);font-size:9px;color:var(--mut);text-transform:uppercase}
+.wh-ico svg{width:18px;height:18px;color:var(--body)}
+.wh b{font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--head)}
+.wh em{font-style:normal;font-family:var(--mono);font-size:9.5px;color:var(--mut)}
+.wh em.wet{color:var(--hail);font-weight:700}
+.wx-tips{position:relative;display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.wt{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;padding:9px 10px;border-radius:11px;background:var(--card2);border:1px solid var(--bd);animation:riseIn .4s var(--ease) both;animation-delay:calc(var(--i)*70ms + 450ms)}
+.wt > i{width:8px;height:8px;margin-top:5px;border-radius:50%;background:var(--accent)}
+.wt.rain > i{background:var(--hail)}.wt.warn > i{background:var(--dgr);animation:livePip 1.8s ease-out infinite;color:var(--dgr)}.wt.heat > i,.wt.sun > i{background:var(--fuel)}.wt.cold > i{background:var(--acct)}.wt.fog > i{background:var(--mut)}
+.wt b{display:block;font-size:12.5px;color:var(--head)}
+.wt small{display:block;font-size:11.5px;line-height:1.4;color:var(--mut);margin-top:2px}
+@media (min-width:1024px){.screen[data-tab="hub"] .wx-card{grid-column:2;align-self:start}}
 </style>
 </head>
 <body>
@@ -1509,6 +1597,7 @@ html.calm .tally{transition:none}
       <span class="glance-r"><span id="glShifts">No shifts yet</span><span class="delta" id="glDelta"></span><span id="glPay"></span></span>
       <svg class="glance-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
     </button>
+    <div class="wx-card" id="wxCard" hidden></div>
   </section>
 
   <section class="screen" data-tab="shift">
@@ -1518,17 +1607,14 @@ html.calm .tally{transition:none}
     </div>
     <div class="msg" id="msg"></div>
     <div data-pane="1">
-      <div class="card date-card">
-        <div class="date-kicker">Shift date</div>
-        <div class="date-row">
-          <button class="date-quick" id="todayBtn">Today</button>
-          <button class="date-quick" id="yesterBtn">Yesterday</button>
-          <div class="date-native-wrap">
-            <svg class="date-cal-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-            <input type="date" id="shiftDate" aria-label="Shift date">
-          </div>
+      <div class="card date-card" id="dateCard">
+        <div class="date-head"><span class="date-kicker">Shift date <span class="req" id="dateReq">Required</span></span><span class="date-month" id="dateMonth"></span></div>
+        <div class="day-strip" id="dayStrip" role="listbox" aria-label="Choose the shift date"></div>
+        <div class="date-foot">
+          <div class="date-label" id="dateLabel">Tap the day this shift started</div>
+          <label class="date-other"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span>Other date</span><input type="date" id="shiftDate" aria-label="Pick another date"></label>
         </div>
-        <div class="date-label" id="dateLabel">Today</div>
+        <div class="date-hint" id="dateHint"></div>
       </div>
 
       <div class="card" style="margin-bottom:10px">
@@ -1906,6 +1992,13 @@ html.calm .tally{transition:none}
         <button type="button" class="linkish" id="acctImport" hidden>Add names from past shifts</button></div>
       <div class="set" style="display:block"><div class="sl"><b>Quick amounts</b><p>One-tap amounts under each account</p></div>
         <div class="qa-edit" id="qaEdit"></div></div>
+    </div>
+    </div>
+    <div class="set-group">
+    <p class="grp">Weather</p>
+    <div class="card set-card">
+      <div class="set"><div class="sl"><b>Weather &amp; driving tips <span class="help" data-help="Uses your phone’s precise location to show the weather where you are, the next few hours and tips for the road. Your location is only sent to the free Open-Meteo weather service and a suburb lookup, never stored on a server." aria-label="Help">?</span></b><p id="wxSetSub">Rain alerts and tips for where you are</p></div><button class="tgl" id="setWx" aria-label="Toggle weather tips"></button></div>
+      <div class="set" id="wxRefreshRow" hidden><div class="sl"><b>Update location</b><p id="wxPlaceSub">Uses your precise location</p></div><span class="chev">&#8635;</span></div>
     </div>
     </div>
     <div class="set-group">
@@ -2316,8 +2409,14 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='12.2';
+var APP_VERSION='13.0';
 var CHANGELOG=[
+  {v:'13.0',date:'November 2, 2026',notes:[
+    ['UI/UX','New shift date picker: a swipeable strip of the last three weeks. Days you have already logged show a dot and the payout, and today is highlighted.'],
+    ['Feature','The shift date is now required. Fareo suggests the likely day (yesterday after a late finish past midnight) and you tap to confirm before Next. It warns if that day and rego is already logged, and won\u2019t accept a future date.'],
+    ['Feature','Weather and driving tips on Home, using your phone\u2019s precise location: current conditions, the next six hours with rain chances, and tips for rain, storms, wind, fog, heat, cold, UV and sunset glare. Turn it on from Home or in Settings \u2192 Weather.'],
+    ['Feature','Undo: clearing the shift form, removing a filled line, deleting shifts, costs, receipts, clients or payment types, resetting adjustments, starting a new financial year and similar actions now show an Undo button for 6 seconds.'],
+  ]},
   {v:'12.2',date:'November 2, 2026',notes:[
     ['UI/UX','Hail is now its own step. Tapping Next on Log opens an animated pop-up with a big counter, quick numbers (0\u201312) and the levy worked out live. You must enter a number (0 is fine) before Continue unlocks, and Back returns you to the form.'],
     ['UI/UX','Log shows a compact hail summary instead of the inline counter. Tap it any time to change the count.'],
@@ -2675,6 +2774,7 @@ function migrateSettings(){
   if(['auto','fixed','off'].indexOf(settings.taxMode)<0)settings.taxMode='auto';
   if(settings.taxPct==null||!isFinite(Number(settings.taxPct)))settings.taxPct=20;
   if(settings.sounds==null)settings.sounds=true;
+  if(settings.weather==null)settings.weather=false;
   /* v11: temporary cost adjustments (reset to original any time) and opt-in claims */
   if(!settings.costEdits||typeof settings.costEdits!=='object')settings.costEdits={};
   if(!settings.claimOn||typeof settings.claimOn!=='object')settings.claimOn={};
@@ -2796,6 +2896,7 @@ function normalizeDraft(d){
   if(!Array.isArray(d.accounts))d.accounts=[];
   if(!d.custom||typeof d.custom!=='object')d.custom={};
   if(!Array.isArray(d.eos)||!d.eos.length)d.eos=[''];
+  if(d._edit)d.dateSet=true;
   if((d.hail==null||String(d.hail).trim()==='')&&Array.isArray(d.hails)){
     var hailSum=0,hailAny=false;
     d.hails.forEach(function(v){if(String(v==null?'':v).trim()!==''){hailAny=true;hailSum+=nn(v)}});
@@ -2904,7 +3005,7 @@ function updateLogProgress(){
 }
 draft=normalizeDraft(draft);
 /* Empty drafts roll to today; any entered shift data resumes exactly as saved. */
-if(!draftHasWork(draft)){draft.date=todayStr();draft.rego='';}
+if(!draftHasWork(draft)){draft.date=suggestShiftDate();draft.rego='';draft.dateSet=false;}
 draft.receipt=false;draft.receiptName='';
 /* In-memory attachments. EOS optional (confirm if skipped); fuel optional but locks fuel amount if present. */
 var eosReceipts=[]; /* [{id,file,name,type,url,ocrHail,ocrDone}] */
@@ -3573,11 +3674,44 @@ var TOAST_RULES=[
 ];
 function toastKind(t){for(var i=0;i<TOAST_RULES.length;i++)if(TOAST_RULES[i][1].test(t))return TOAST_RULES[i][0];return 'info'}
 function toast(t,kind){var e=$('#toast');kind=kind||toastKind(String(t));
-  e.className='toast k-'+kind;e.innerHTML='<i aria-hidden="true"></i><span></span>';e.lastChild.textContent=t;
+  e.className='toast k-'+kind;undoSnap=null;e.innerHTML='<i aria-hidden="true"></i><span></span>';e.lastChild.textContent=t;
   void e.offsetWidth;e.classList.add('show');
   if(kind==='success'||kind==='warn'||kind==='error')sfx(kind);
   if(kind==='error'||kind==='warn')buzz(kind==='error'?[18,40,18]:14);
   clearTimeout(toast._t);toast._t=setTimeout(function(){e.classList.remove('show')},kind==='error'?2600:1900)}
+/* ---------- undo: snapshot → act → offer Undo on the toast ---------- */
+var UNDO_KEYS=['settings','entries','deductions','recurring','fuelManual','draft','clients','runPlan'];
+function snapState(){var o={};UNDO_KEYS.forEach(function(k){try{o[k]=JSON.stringify(window[k]!==undefined?window[k]:eval(k))}catch(_){}});o.receipts=(typeof receipts!=='undefined'?receipts.slice():null);o.names=(typeof names!=='undefined'?names.slice():null);return o}
+function restoreState(o){
+  if(!o)return;
+  try{settings=JSON.parse(o.settings)}catch(_){}
+  try{entries=JSON.parse(o.entries)}catch(_){}
+  try{deductions=JSON.parse(o.deductions)}catch(_){}
+  try{recurring=JSON.parse(o.recurring)}catch(_){}
+  try{fuelManual=JSON.parse(o.fuelManual)}catch(_){}
+  try{draft=normalizeDraft(JSON.parse(o.draft))}catch(_){}
+  try{clients=JSON.parse(o.clients)}catch(_){}
+  try{runPlan=JSON.parse(o.runPlan)}catch(_){}
+  if(o.receipts){receipts=o.receipts;try{saveReceipts()}catch(_){}}
+  if(o.names){names=o.names;save('fareo_names',names);renderNames()}
+  persist();
+  try{rowInputs();render()}catch(_){}
+  try{applyTab(curTab)}catch(_){}
+}
+var undoSnap=null;
+/* Call after a destructive action already ran with a snapshot taken before it. */
+function offerUndo(snap,msg){
+  var e=$('#toast');
+  if(msg||!e.classList.contains('show'))toast(msg||'Done','info');
+  undoSnap=snap;
+  var btn=document.createElement('button');btn.type='button';btn.className='toast-undo';btn.textContent='Undo';
+  btn.onclick=function(ev){ev.stopPropagation();var s2=undoSnap;undoSnap=null;restoreState(s2);sfx('pop');buzz([6,30,6]);toast('Restored');};
+  var old=e.querySelector('.toast-undo');if(old)old.remove();
+  e.appendChild(btn);e.classList.add('has-undo');
+  var bar=document.createElement('span');bar.className='toast-timer';e.appendChild(bar);
+  clearTimeout(toast._t);toast._t=setTimeout(function(){e.classList.remove('show','has-undo');undoSnap=null},6000);
+}
+function withUndo(fn,msg){var snap=snapState();fn();offerUndo(snap,msg)}
 /* ---------- motion helpers ---------- */
 function motionOff(){return !!settings.calm||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)}
 /* Ticking number roll-up. Reads the last shown value from data-v so repeated
@@ -3910,9 +4044,7 @@ function entryGstBase(e){return entrySales(e)}
 
 function rowInputs(){
   /* Date picker */
-  var sd=$('#shiftDate'),dl=$('#dateLabel');
-  if(sd){sd.value=draft.date||todayStr();}
-  if(dl){dl.textContent=friendlyDate(draft.date||todayStr());}
+  renderDatePicker();
   var isToday=(draft.date||todayStr())===todayStr();
   var isYest=(draft.date||todayStr())===yesterdayStr();
   if($('#todayBtn'))$('#todayBtn').classList.toggle('on',isToday);
@@ -4098,7 +4230,7 @@ function renderAcctSettings(){
 }
 document.addEventListener('click',function(e){
   var d=e.target.closest&&e.target.closest('[data-delacct]');
-  if(d){var n=d.dataset.delacct;settings.accountNames=acctNames().filter(function(x){return x!==n});persist();renderAcctSettings();renderAcctQuick();sfx('tap');toast('Removed '+n);return}
+  if(d){var n=d.dataset.delacct,snap=snapState();settings.accountNames=acctNames().filter(function(x){return x!==n});persist();renderAcctSettings();renderAcctQuick();sfx('tap');offerUndo(snap,'Removed '+n);return}
   if(e.target.id==='addAcctName'){var inp=$('#newAcctName'),n=inp.value.trim();if(!n){toast('Enter an account name');return}if(!addAcctName(n)){toast('Already saved','warn');return}inp.value='';renderAcctSettings();renderAcctQuick();var ch=$('#acctNameChips .acct-chip:last-child');if(ch)ch.classList.add('new');toast('Account added');return}
   if(e.target.id==='acctImport'){var add=acctHistory().map(function(h){return h.name}),c=0;add.forEach(function(n){if(addAcctName(n))c++});renderAcctSettings();renderAcctQuick();toast(c+' account'+(c===1?'':'s')+' added');return}
   if(e.target.id==='qaReset'){settings.quickAmts=[5,10,15,25,60];persist();renderAcctSettings();if($('#acctRows'))renderAcctRows();toast('Quick amounts reset');return}
@@ -4141,6 +4273,9 @@ document.addEventListener('click',function(e){
     }else{draft.fuel[i].opPaid=false;}
     rowInputs();render();return;}
   if(t.closest&&t.closest('.x')){var b=t.closest('.x');d=b.dataset;
+    var rowHas=function(r){return !!r&&(nn(r.amount)>0||String(r.name||'').trim()!=='')};
+    var had=(d.deos!=null&&nn(draft.eos[d.deos])>0)||(d.dc!=null&&rowHas(draft.cash[d.dc]))||(d.ds!=null&&rowHas(draft.square[d.ds]))||(d.da!=null&&rowHas(draft.accounts[d.da]))||(d.df!=null&&rowHas(draft.fuel[d.df]));
+    if(had){var xSnap=snapState();setTimeout(function(){offerUndo(xSnap,'Line removed')},0)}
     if(d.deos!=null){draft.eos.splice(d.deos,1);if(!draft.eos.length)draft.eos=['']}
     if(d.dc!=null){draft.cash.splice(d.dc,1);if(!draft.cash.length)draft.cash=[{name:'',amount:0}]}
     if(d.ds!=null){draft.square.splice(d.ds,1);if(!draft.square.length)draft.square=[{name:'',amount:0}]}
@@ -4148,11 +4283,9 @@ document.addEventListener('click',function(e){
     if(d.df!=null){draft.fuel.splice(d.df,1);if(!draft.fuel.length)draft.fuel=[{amount:0,type:settings.fuel,opPaid:false}]}
     rowInputs();render();return;}
 });
-function freshDraft(keepRego){return {date:todayStr(),eos:[''],cash:[{name:'',amount:0}],square:[{name:'',amount:0}],runs:0,accounts:[],fuel:[{amount:0,type:settings.fuel,opPaid:false}],hail:'',rego:keepRego||'',receipt:false,receiptName:'',custom:{}}}
+function freshDraft(keepRego){return {dateSet:false,date:suggestShiftDate(),eos:[''],cash:[{name:'',amount:0}],square:[{name:'',amount:0}],runs:0,accounts:[],fuel:[{amount:0,type:settings.fuel,opPaid:false}],hail:'',rego:keepRego||'',receipt:false,receiptName:'',custom:{}}}
 /* Date picker handlers */
-function setDraftDate(d){draft.date=d;persist();rowInputs();buildPreview();if(typeof updateReviewSum==='function')updateReviewSum();if(typeof updateLogProgress==='function')updateLogProgress();}
-$('#todayBtn').onclick=function(){setDraftDate(todayStr())};
-$('#yesterBtn').onclick=function(){setDraftDate(yesterdayStr())};
+function setDraftDate(d){if(typeof updateFooter==='function')setTimeout(updateFooter,0);if(d>todayStr()){toast('Shift date can\u2019t be in the future','warn');rowInputs();return}var first=!draft.dateSet;draft.date=d;draft.dateSet=true;sfx(first?'pop':'tap');buzz(6);persist();rowInputs();buildPreview();if(typeof updateReviewSum==='function')updateReviewSum();if(typeof updateLogProgress==='function')updateLogProgress();}
 $('#shiftDate').oninput=function(){if(this.value)setDraftDate(this.value)};
 $('#shiftDate').onchange=function(){if(this.value)setDraftDate(this.value)};
 
@@ -4190,22 +4323,24 @@ if($('#fuelRcptFile'))$('#fuelRcptFile').onchange=function(e){
   persist();
 };
 $('#clearShift').onclick=function(){
+  var snap=snapState();
   draft=freshDraft('');
   clearReceiptAttach();
-  persist();rowInputs();render();setSub(1);toast('Cleared');
+  persist();rowInputs();render();setSub(1);offerUndo(snap,'Shift form cleared');
 };
 
 /* sub-tabs — Log (date + amounts) → Share (compact slips + rego + preview).
    Gates: hail before leaving Log; fuel amount if a fuel receipt is attached; confirm if no EOS photo on share; rego on share. */
 var curSub=1;
 function gateFailMsg(){
+  if(!draft.dateSet)return{text:'Pick the shift date.',toast:'Shift date required',pane:1};
   if(!hailEnteredOk())return{text:'Enter hail / rank trips (required for levy).',toast:'Hail required',pane:1};
   if(!fuelReceiptRequiredOk())return{text:'Fuel receipt attached — enter the fuel amount on Log.',toast:'Fuel amount required',pane:1};
   return null;
 }
 function confirmNoEosThen(fn){
   if(eosReceipts.length){fn();return}
-  ask('Are you sure?','You have not attached an End of Shift photo. Continue without a slip?','Continue',fn,{danger:false,noLbl:'Go back'});
+  ask('Are you sure?','You have not attached an End of Shift photo. Continue without a slip?','Continue',fn,{danger:false,noLbl:'Go back',noUndo:true});
 }
 function ensureShiftRego(){
   if(!draft.rego&&settings.regos&&settings.regos.length===1){
@@ -4256,7 +4391,7 @@ function updateFooter(){
   next.classList.toggle('share',share);
   next.setAttribute('aria-label',share?'Share End of Shift':'Next: Attach & share');
   next.setAttribute('title',share?'Share End of Shift':'Next: Attach & share');
-  var blocked=(curSub===1&&!fuelReceiptRequiredOk())||(curSub===2&&(!docsOk()||!draft.rego));
+  var blocked=(curSub===1&&(!draft.dateSet||!fuelReceiptRequiredOk()))||(curSub===2&&(!docsOk()||!draft.rego));
   next.classList.toggle('faded',blocked);
 }
 function syncShiftDock(){
@@ -4311,6 +4446,7 @@ function renderHailSum(){
 }
 function nextStep(){
   if(curSub===1){
+    if(dateGateFail())return;
     if(!fuelReceiptRequiredOk()){var m=$('#msg');m.textContent='Fuel receipt attached — enter the fuel amount on Log.';m.className='msg err';toast('Fuel amount required');window.scrollTo({top:0,behavior:'smooth'});return}
     $('#msg').className='msg';openHailStep();return;
   }
@@ -4744,7 +4880,7 @@ function ask(title,body,okLbl,fn,opts){
     yes.style.background=opts.danger===false?'var(--btn-fill)':'var(--dgr)';
   }
   if(no)no.textContent=opts.noLbl||'Keep';
-  askCb=fn;
+  askCb=(opts.noUndo||!fn)?fn:function(){var snap=snapState();fn();offerUndo(snap)};
   showModal('askModal');
   sfx('warn');
 }
@@ -4763,6 +4899,45 @@ function fyStart(d){var y=d.getFullYear(),m=d.getMonth()+1;return m>=7?y:y-1}
 function iso(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function todayStr(){return iso(new Date())}
 function yesterdayStr(){var d=new Date();d.setDate(d.getDate()-1);return iso(d)}
+/* ---------- smart date picker ---------- */
+/* Late finish (before 5am) usually belongs to the shift that started yesterday. */
+function suggestShiftDate(){var h=new Date().getHours();return h<5?yesterdayStr():todayStr()}
+function dayLogged(ds){return entries.filter(function(e){return e.date===ds})}
+function renderDatePicker(){
+  var strip=$('#dayStrip');if(!strip)return;
+  var sel=draft.date||suggestShiftDate(),set=!!draft.dateSet,sug=suggestShiftDate();
+  var today=new Date();today.setHours(0,0,0,0);
+  var days=[];for(var k=20;k>=0;k--){var d=new Date(today);d.setDate(d.getDate()-k);days.push(d)}
+  var selInStrip=days.some(function(d){return iso(d)===sel});
+  var DOW=['SUN','MON','TUE','WED','THU','FRI','SAT'];
+  strip.innerHTML=(set&&!selInStrip?'<button type="button" role="option" class="dp on far" data-d="'+sel+'"><small>'+DOW[asDate(sel).getDay()]+'</small><b>'+asDate(sel).getDate()+'</b><em>'+asDate(sel).toLocaleDateString('en-AU',{month:'short'})+'</em></button><span class="dp-gap"></span>':'')
+   +days.map(function(d,i){var ds=iso(d),lg=dayLogged(ds),isT=ds===iso(today),isY=ds===yesterdayStr();
+    var cls='dp'+(set&&ds===sel?' on':'')+(!set&&ds===sug?' sug':'')+(isT?' today':'')+(lg.length?' logged':'')+(d.getDate()===1?' m1':'');
+    var tag=isT?'Today':isY?'Yest':(lg.length?'$'+Math.round(lg.reduce(function(s,e){return s+(Number(e.take)||0)},0)).toLocaleString('en-AU'):'');
+    return '<button type="button" role="option" aria-selected="'+(set&&ds===sel)+'" class="'+cls+'" data-d="'+ds+'" style="--i:'+i+'"><small>'+DOW[d.getDay()]+'</small><b>'+d.getDate()+'</b><em>'+tag+'</em>'+(lg.length?'<i class="dp-dot"></i>':'')+'</button>'}).join('');
+  var sd=$('#shiftDate');if(sd){sd.value=sel;sd.max=todayStr()}
+  var mo=$('#dateMonth');if(mo)mo.textContent=asDate(sel).toLocaleDateString('en-AU',{month:'long',year:'numeric'});
+  var dl=$('#dateLabel');if(dl)dl.innerHTML=set?esc(friendlyDate(sel)):'Tap the day this shift started';
+  var card=$('#dateCard');if(card){card.classList.toggle('need',!set);card.classList.toggle('done',set)}
+  var rq=$('#dateReq');if(rq){rq.textContent=set?'✓ Set':'Required'}
+  var hint=$('#dateHint');
+  if(hint){var lg=set?dayLogged(sel):[],h='';
+    if(!set){var late=sug!==todayStr();h='<span class="dh-ico">✦</span><span>'+(late?'Late finish? This shift probably started <b>yesterday</b>.':'Looks like a shift for <b>today</b>.')+'</span><button type="button" class="dh-btn" data-d="'+sug+'">Use '+(late?'Yesterday':'Today')+'</button>'}
+    else if(lg.length){var same=lg.filter(function(e){return e.rego&&e.rego===draft.rego&&String(e.id)!==String(draft._sourceEntryId)});
+      h='<span class="dh-ico warn">!</span><span>Already logged '+esc(fmtDayLong(sel))+': '+lg.map(function(e){return esc(e.rego||'no rego')+' '+money(e.take)}).join(', ')+(same.length?'. Saving with <b>'+esc(draft.rego)+'</b> replaces it.':'.')+'</span>'}
+    hint.innerHTML=h;hint.className='date-hint'+(h?' show':'')+(lg.length?' warn':'');}
+  /* keep the chosen day in view */
+  requestAnimationFrame(function(){var on=strip.querySelector('.dp.on')||strip.querySelector('.dp.sug')||strip.lastElementChild;if(on&&strip.scrollWidth>strip.clientWidth){var x=on.offsetLeft-strip.clientWidth+on.offsetWidth+40;if(Math.abs(strip.scrollLeft-x)>4)strip.scrollTo({left:Math.max(0,x),behavior:strip.dataset.ready?'smooth':'auto'})}strip.dataset.ready='1'});
+}
+document.addEventListener('click',function(e){
+  var b=e.target.closest&&e.target.closest('#dayStrip .dp,.dh-btn');if(!b)return;
+  setDraftDate(b.dataset.d);var on=$('#dayStrip .dp.on');if(on){on.classList.add('pick');setTimeout(function(){on.classList.remove('pick')},450)}
+});
+function dateGateFail(){
+  if(draft.dateSet)return false;
+  var c=$('#dateCard');if(c){c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake');setTimeout(function(){c.classList.remove('shake')},500)}
+  window.scrollTo({top:0,behavior:motionOff()?'auto':'smooth'});toast('Pick the shift date first','warn');return true;
+}
 function friendlyDate(s){
   if(!s)return '';
   var core=fmtDayLong(s);
@@ -6183,7 +6358,7 @@ function renderSettings(){
   var sn=$('#setName');if(sn&&document.activeElement!==sn)sn.value=settings.driverName||'';
   var sst=$('#setStart');if(sst)sst.value=settings.startTab||'hub';
   var shp=$('#setHaptics');if(shp)shp.classList.toggle('on',settings.haptics!==false);
-  renderAcctSettings();
+  renderAcctSettings();syncWxSettings();
   var sso=$('#setSounds');if(sso)sso.classList.toggle('on',settings.sounds!==false);
   var stm=$('#setTaxMode');if(stm)stm.value=settings.taxMode||'auto';
   var stp=$('#setTaxPct');if(stp&&document.activeElement!==stp)stp.value=settings.taxPct;
@@ -6191,7 +6366,7 @@ function renderSettings(){
   var scm=$('#setCalm');if(scm)scm.classList.toggle('on',!!settings.calm);
   var so=$('#setOcrHail');if(so)so.classList.toggle('on',settings.ocrHail!==false);
   $('#regoChips').innerHTML=settings.regos.map(function(r){return '<span class="chip">'+esc(r)+'<button data-rr="'+esc(r)+'">&times;</button></span>'}).join('');
-  $$('#regoChips [data-rr]').forEach(function(b){b.onclick=function(){settings.regos=settings.regos.filter(function(x){return x!==b.dataset.rr});if(!settings.regos.length)settings.regos=['5088M'];persist();renderSettings();rowInputs()}});
+  $$('#regoChips [data-rr]').forEach(function(b){b.onclick=function(){var snap=snapState();setTimeout(function(){offerUndo(snap,'Rego removed')},0);settings.regos=settings.regos.filter(function(x){return x!==b.dataset.rr});if(!settings.regos.length)settings.regos=['5088M'];persist();renderSettings();rowInputs()}});
   /* Payment type chips */
   var ptc=$('#payTypeChips');
   if(ptc){ptc.innerHTML=settings.payTypes.length?settings.payTypes.map(function(pt){var tag=pt.formula?'ƒx':(pt.collector==='driver'?'you':'op')+(pt.rate?' ·$'+pt.rate:'');return '<span class="chip">'+esc(pt.name)+' <span class="rg" style="font-size:10px;color:var(--mut)">'+esc(tag)+'</span><button data-delpt="'+esc(pt.id)+'">&times;</button></span>'}).join(''):'<span style="font-size:11.5px;color:var(--mut)">No custom types yet.</span>';
@@ -7769,7 +7944,7 @@ async function refreshRollbackRow(){
 }
 if($('#rollbackUpdate'))$('#rollbackUpdate').onclick=function(){
   if($('#rollbackUpdate').dataset.ready!=='1'){toast('No previous version saved yet');return}
-  ask('Roll back previous update?','Loads the last Fareo version only. Your shifts and address book stay on this phone.','Roll back',function(){
+  ask('Roll back previous update?','Loads the last Fareo version only. Your shifts and address book stay on this phone.','Roll back',function(){/*noUndo*/
     if(!navigator.serviceWorker||!navigator.serviceWorker.controller){toast('Rollback needs the installed app');return}
     var ch=new MessageChannel();
     ch.port1.onmessage=function(ev){
@@ -7821,6 +7996,90 @@ function setClientPane(p){
 }
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-cpane-go]');if(!b)return;e.preventDefault();buzz(6);setClientPane(b.dataset.cpaneGo);window.scrollTo({top:0,behavior:'smooth'})});
 var hubTallyDelay=0;
+/* ---------- weather & driving tips (Open-Meteo, precise location) ---------- */
+var WX_TTL=20*60*1000,wxBusy=false;
+var WX_ICON={
+  sun:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg>',
+  moon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a7 7 0 1 0 10.5 10.5Z"/></svg>',
+  cloud:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18h10a4 4 0 0 0 .5-8 5.5 5.5 0 0 0-10.6 1.5A3.3 3.3 0 0 0 7 18Z"/></svg>',
+  part:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3.5v1.5M3.5 8H5M4.8 4.8l1 1M11.2 4.8l-1 1"/><path d="M5.6 10.4A3 3 0 0 1 10.8 8"/><path d="M9 20h9a3.5 3.5 0 0 0 .4-7 4.8 4.8 0 0 0-9.2 1.2A2.9 2.9 0 0 0 9 20Z"/></svg>',
+  rain:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15h10a4 4 0 0 0 .5-8 5.5 5.5 0 0 0-10.6 1.5A3.3 3.3 0 0 0 7 15Z"/><path d="M8 18l-1 2.5M12 18l-1 2.5M16 18l-1 2.5"/></svg>',
+  storm:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 14h10a4 4 0 0 0 .5-8 5.5 5.5 0 0 0-10.6 1.5A3.3 3.3 0 0 0 7 14Z"/><path d="M12.5 15.5 10.5 19h3l-2 3.5"/></svg>',
+  fog:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 9h16M3 13h18M5 17h14"/></svg>'
+};
+function wxKind(code,isDay){if(code>=95)return 'storm';if(code>=51||code===80||code===81||code===82)return 'rain';if(code===45||code===48)return 'fog';if(code===3)return 'cloud';if(code===1||code===2)return isDay?'part':'cloud';return isDay?'sun':'moon'}
+function wxLabel(code){var m={0:'Clear',1:'Mostly clear',2:'Partly cloudy',3:'Overcast',45:'Fog',48:'Fog',51:'Light drizzle',53:'Drizzle',55:'Heavy drizzle',61:'Light rain',63:'Rain',65:'Heavy rain',66:'Freezing rain',67:'Freezing rain',71:'Snow',73:'Snow',75:'Heavy snow',80:'Showers',81:'Showers',82:'Heavy showers',95:'Thunderstorm',96:'Storm with hail',99:'Storm with hail'};return m[code]||'Mixed'}
+function wxLoad(){try{return JSON.parse(localStorage.getItem('fareo_wx')||'null')}catch(_){return null}}
+function wxSave(o){try{localStorage.setItem('fareo_wx',JSON.stringify(o))}catch(_){}}
+function wxTimeLbl(t){var d=new Date(t);var h=d.getHours(),ap=h<12?'am':'pm';h=h%12||12;return h+ap}
+function wxClock(t){var d=new Date(t);return d.toLocaleTimeString('en-AU',{hour:'numeric',minute:'2-digit'})}
+/* Driving tips from the next hours of forecast — most useful first. */
+function wxTips(w){
+  var c=w.current,H=w.next||[],tips=[];
+  var rainNow=(c.precipitation>0.1)||wxKind(c.weather_code,1)==='rain';
+  var soon=H.slice(1,4).filter(function(h){return h.p>=60})[0];
+  if(H.some(function(h){return h.c>=95})||c.weather_code>=95)tips.push(['warn','Storms around','Thunderstorms forecast. Never drive through floodwater, and give extra room to buses and trucks.']);
+  if(rainNow)tips.push(['rain','Raining now','Ranks usually get busy fast. Leave extra braking distance and keep headlights on.']);
+  else if(soon)tips.push(['rain','Rain from about '+wxTimeLbl(soon.t),soon.p+'% chance. Demand usually picks up when it rains; plan to be near a busy rank.']);
+  if(c.wind_gusts_10m>=60)tips.push(['warn','Strong gusts '+Math.round(c.wind_gusts_10m)+' km/h','Watch for debris and keep both hands on the wheel on bridges and open roads.']);
+  if(wxKind(c.weather_code,1)==='fog')tips.push(['fog','Fog','Low beams on and slow down; fog lights only if visibility is really poor.']);
+  if(c.temperature_2m>=32)tips.push(['heat','Hot out — '+Math.round(c.temperature_2m)+'°','Pre-cool the cab before pick-ups and keep water handy.']);
+  else if(c.temperature_2m<=6)tips.push(['cold','Cold — '+Math.round(c.temperature_2m)+'°','Clear the windscreen fully before you head off; watch for slippery shaded patches.']);
+  if(c.is_day&&w.uvMax>=8)tips.push(['sun','UV very high ('+Math.round(w.uvMax)+')','Sunnies and sunscreen on breaks.']);
+  if(w.sunset){var ms=new Date(w.sunset)-Date.now();if(ms>0&&ms<90*60000)tips.push(['sun','Sunset '+wxClock(w.sunset),'Low sun glare on westbound roads for the next hour.'])}
+  if(!tips.length)tips.push(['ok','Good driving conditions',H.length&&Math.max.apply(null,H.map(function(h){return h.p}))<20?'Dry for the next few hours.':'Nothing to worry about right now.']);
+  return tips.slice(0,3);
+}
+function renderWx(){
+  var box=$('#wxCard');if(!box)return;
+  if(!settings.weather){box.hidden=false;box.className='wx-card off';box.innerHTML='<span class="wx-ico">'+WX_ICON.part+'</span><div><b>Weather &amp; driving tips</b><small>Rain alerts and tips for where you are</small></div><button type="button" class="wx-on" id="wxEnable">Turn on</button>';return}
+  var w=wxLoad();box.hidden=false;
+  if(!w||!w.current){box.className='wx-card load';box.innerHTML='<span class="wx-ico spin">'+WX_ICON.sun+'</span><div><b>Finding your weather…</b><small>Allow location when your phone asks</small></div>';return}
+  var c=w.current,k=wxKind(c.weather_code,c.is_day),tips=wxTips(w);
+  box.className='wx-card k-'+k;
+  box.innerHTML='<div class="wx-top"><span class="wx-ico big">'+WX_ICON[k]+'</span><div class="wx-now"><b class="wx-temp">'+Math.round(c.temperature_2m)+'°</b><span>'+esc(wxLabel(c.weather_code))+'</span></div>'
+    +'<div class="wx-meta"><span class="wx-place">'+esc(w.place||'Your location')+'</span><span>Feels '+Math.round(c.apparent_temperature)+'° · wind '+Math.round(c.wind_speed_10m)+' km/h</span><button type="button" class="wx-ref" id="wxRefresh" aria-label="Refresh weather">↻ '+wxClock(w.at)+'</button></div></div>'
+    +'<div class="wx-hours">'+(w.next||[]).slice(0,6).map(function(h,i){return '<div class="wh" style="--i:'+i+'"><small>'+(i?wxTimeLbl(h.t):'Now')+'</small><span class="wh-ico">'+WX_ICON[wxKind(h.c,h.d)]+'</span><b>'+Math.round(h.temp)+'°</b><em class="'+(h.p>=50?'wet':'')+'">'+h.p+'%</em></div>'}).join('')+'</div>'
+    +'<div class="wx-tips">'+tips.map(function(t,i){return '<div class="wt '+t[0]+'" style="--i:'+i+'"><i></i><div><b>'+esc(t[1])+'</b><small>'+esc(t[2])+'</small></div></div>'}).join('')+'</div>';
+}
+function wxFetch(force){
+  if(!settings.weather||wxBusy)return;
+  var w=wxLoad();if(!force&&w&&w.at&&Date.now()-w.at<WX_TTL){renderWx();return}
+  if(!('geolocation' in navigator)){toast('Location isn’t available on this device','error');return}
+  wxBusy=true;if(!w)renderWx();var r=$('#wxRefresh');if(r)r.classList.add('spin');
+  navigator.geolocation.getCurrentPosition(function(pos){
+    var lat=pos.coords.latitude,lon=pos.coords.longitude;
+    var q='https://api.open-meteo.com/v1/forecast?latitude='+lat.toFixed(4)+'&longitude='+lon.toFixed(4)+'&current=temperature_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,wind_gusts_10m,is_day&hourly=temperature_2m,precipitation_probability,weather_code,is_day&daily=sunset,uv_index_max&timezone=auto&forecast_days=2';
+    var g='https://api.bigdatacloud.net/data/reverse-geocode-client?latitude='+lat.toFixed(4)+'&longitude='+lon.toFixed(4)+'&localityLanguage=en';
+    Promise.all([fetch(q).then(function(x){if(!x.ok)throw 0;return x.json()}),fetch(g).then(function(x){return x.ok?x.json():null}).catch(function(){return null})]).then(function(res){
+      var d=res[0],geo=res[1],hr=d.hourly||{},now=(d.current&&d.current.time)||'',start=0;
+      for(var i=0;i<(hr.time||[]).length;i++){if(hr.time[i]<=now)start=i}
+      var next=[];for(var j=start;j<Math.min(start+8,(hr.time||[]).length);j++)next.push({t:hr.time[j],temp:hr.temperature_2m[j],p:hr.precipitation_probability[j]||0,c:hr.weather_code[j],d:hr.is_day?hr.is_day[j]:1});
+      var place=geo?(geo.locality||geo.city||geo.principalSubdivision||''):'';
+      var today=(d.daily&&d.daily.time||[]).indexOf(now.slice(0,10));if(today<0)today=0;
+      wxSave({at:Date.now(),lat:lat,lon:lon,place:place,current:d.current,next:next,sunset:d.daily&&d.daily.sunset?d.daily.sunset[today]:null,uvMax:d.daily&&d.daily.uv_index_max?d.daily.uv_index_max[today]:0});
+      wxBusy=false;renderWx();syncWxSettings();
+      var tips=wxTips(wxLoad());if(tips[0][0]==='warn'||tips[0][0]==='rain')sfx('warn');else if(force)sfx('success');
+    }).catch(function(){wxBusy=false;renderWx();toast('Couldn’t load the weather — check your connection','error')});
+  },function(err){
+    wxBusy=false;
+    if(err&&err.code===1){settings.weather=false;persist();syncWxSettings();renderWx();toast('Location permission was declined','warn')}
+    else{renderWx();toast('Couldn’t get your location','error')}
+  },{enableHighAccuracy:true,timeout:15000,maximumAge:5*60000});
+}
+function syncWxSettings(){
+  var t=$('#setWx');if(t)t.classList.toggle('on',!!settings.weather);
+  var row=$('#wxRefreshRow');if(row)row.hidden=!settings.weather;
+  var w=wxLoad(),ps=$('#wxPlaceSub');if(ps)ps.textContent=w&&w.place?'Last: '+w.place+' · '+wxClock(w.at):'Uses your precise location';
+  var sub=$('#wxSetSub');if(sub)sub.textContent=settings.weather?'On · updates every 20 minutes':'Rain alerts and tips for where you are';
+}
+function wxEnable(){settings.weather=true;persist();syncWxSettings();renderWx();wxFetch(true)}
+document.addEventListener('click',function(e){
+  if(e.target.closest&&e.target.closest('#wxEnable')){wxEnable();return}
+  if(e.target.closest&&e.target.closest('#wxRefresh')){wxFetch(true);return}
+  if(e.target.closest&&e.target.closest('#wxRefreshRow')){wxFetch(true);return}
+  if(e.target.closest&&e.target.closest('#setWx')){if(settings.weather){settings.weather=false;persist();syncWxSettings();renderWx();toast('Weather tips off')}else wxEnable()}
+});
 function greetFor(h){return h<5?'Late shift':h<12?'Good morning':h<17?'Good afternoon':'Good evening'}
 function renderHub(){
   var nm=(settings.driverName||'').trim();
@@ -7871,7 +8130,7 @@ function applyTab(tab){
   if(tab==='reports'){repTallyDelay=calcIn(_sec);renderReports();repTallyDelay=0}
   if(tab==='settings')renderSettings();
   if(tab==='runs')setClientPane(clientPane);
-  if(tab==='hub'){hubTallyDelay=calcIn(_sec);renderHub()}
+  if(tab==='hub'){hubTallyDelay=calcIn(_sec);renderHub();renderWx();wxFetch(false)}
   window.scrollTo({top:0});
   syncTrailBtns();
   if(typeof updateLogProgress==='function')updateLogProgress();
