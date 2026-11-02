@@ -1,10 +1,11 @@
 # Fareo
 
 A single-file Progressive Web App (PWA) for taxi drivers — shift calculator,
+client run planner,
 weekly payout tracker, and ATO-ready tax/BAS reports. Works offline, installs
 to your home screen. All data is stored locally in your browser.
 
-**Current version:** 5.2
+**Current version:** 9.0 (Noir)
 
 ---
 
@@ -32,12 +33,13 @@ That URL is what you install as a PWA.
 
 ## Updating the app
 When you push changes, bump these together so returning users get the update:
-- `CACHE_NAME` in `sw.js` (e.g. `fareo-v5.2` → `fareo-v5.3`)
+- `CACHE_NAME` in `sw.js` (e.g. `fareo-v9.0` → `fareo-v9.1`)
 - `APP_VERSION` in `index.html`
 - add a `CHANGELOG` entry in `index.html`
+- copy `index.html` over `404.html`
 
 If you change the **app icon**, also give the icon files new names (the current
-ones are stamped `-v52`; use `-v53`, etc.) and update those names in
+ones are stamped `-v90`; use `-v91`, etc.) and update those names in
 `manifest.webmanifest`, the `<head>` of `index.html`, and the `ASSETS` list in
 `sw.js`. Renaming is what forces phones to fetch the new icon instead of a
 cached copy.
@@ -52,9 +54,9 @@ cached copy.
 | `manifest.webmanifest` | PWA install metadata |
 | `404.html` | SPA fallback (copy of index.html) |
 | `.nojekyll` | Tells GitHub Pages to skip Jekyll |
-| `icon-*-v52.png` | App icons (standard + maskable) |
-| `apple-touch-icon-v52.png` | iOS home-screen icon |
-| `favicon-64-v52.png` | Browser tab icon |
+| `icon-*-v90.png` | App icons (standard + maskable) |
+| `apple-touch-icon-v90.png` | iOS home-screen icon |
+| `favicon-64-v90.png` | Browser tab icon |
 
 ---
 

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fareo-v8.44';
+const CACHE_NAME = 'fareo-v9.0';
 const ROLLBACK_CACHE = 'fareo-rollback';
 const META_CACHE = 'fareo-meta';
 
@@ -10,12 +10,12 @@ const ASSETS = [
   './index.html',
   './404.html',
   './manifest.webmanifest',
-  './icon-192-v52.png',
-  './icon-512-v52.png',
-  './icon-maskable-192-v52.png',
-  './icon-maskable-512-v52.png',
-  './favicon-64-v52.png',
-  './apple-touch-icon-v52.png'
+  './icon-192-v90.png',
+  './icon-512-v90.png',
+  './icon-maskable-192-v90.png',
+  './icon-maskable-512-v90.png',
+  './favicon-64-v90.png',
+  './apple-touch-icon-v90.png'
 ];
 
 async function copyCache(fromName, toName) {
