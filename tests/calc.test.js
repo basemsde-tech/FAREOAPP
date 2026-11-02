@@ -46,8 +46,8 @@ function eq(name,got,want,tol=0.005){const ok=typeof want==='number'?Math.abs(go
   eq('saved settlement',bas.take,260.5);
   eq('G1 = 510 − 80 tax-free cash, whole dollars',bas.g1,430);
   eq('1A = 430/11 = 39.09 → round down',bas.oneA,39);
-  eq('1B = all claimed fuel 100/11 = 9.09 → round down',bas.oneB,9);
-  eq('net GST payable',bas.net,30);
+  eq('1B = fuel you paid 60/11 = 5.45 → 5 (operator-card fuel opt-in)',bas.oneB,5);
+  eq('net GST payable',bas.net,34);
   eq('levy in range',bas.levy,3.6);
 
   console.log('ATO whole-dollar rounding (round down, no cents)');
@@ -66,7 +66,7 @@ function eq(name,got,want,tol=0.005){const ok=typeof want==='number'?Math.abs(go
   });
   eq('GST credit = 110/11 × 50%',ex.cred,5);
   eq('deduction = 110×10/11×50% + 40',ex.ded,90);
-  eq('1B = 5 + 9.09 = 14.09 → 14',ex.oneB,14);
+  eq('1B = 5 + 5.45 = 10.45 → 10',ex.oneB,10);
 
   console.log('Income tax (ATO 2026–27 resident rates)');
   const tx=await pg.evaluate(()=>typeof incomeTaxFor==='function'?[incomeTaxFor(18200,2026),incomeTaxFor(45000,2026),incomeTaxFor(60000,2026),incomeTaxFor(135000,2026),incomeTaxFor(200000,2026)]:null);
@@ -91,11 +91,11 @@ function eq(name,got,want,tol=0.005){const ok=typeof want==='number'?Math.abs(go
     deductions=[];settings.taxMode='fixed';settings.taxPct=20;
     const x=execFigures(rangeAgg());settings.taxMode='auto';return x});
   eq('operator = 510 − 280.50',ef.operator,229.5);
-  eq('GST net = 430/11 − 100/11',ef.gstNet,30);
+  eq('GST net = 430/11 − 60/11',ef.gstNet,33.6364,0.001);
   eq('costs = 0 (shift fuel excluded)',ef.costs,0);
   eq('taxable = 280.50 − 39.0909 − 3.60',ef.taxable,237.8091,0.001);
   eq('tax = 20% of taxable',ef.tax,47.5618,0.001);
-  eq('kept = 280.50 − 3.60 − 30 − 47.5618',ef.kept,199.3382,0.001);
+  eq('kept = 280.50 − 3.60 − 33.6364 − 47.5618',ef.kept,195.7018,0.001);
   eq('identity: gross = operator+levy+GST+costs+tax+kept',ef.operator+ef.levy+ef.gstNet+ef.costs+ef.tax+ef.kept,510,0.0001);
   const ef2=await pg.evaluate(()=>{deductions=[{id:'d1',date:'2026-11-01',amount:110,gst:true,bu:100,cat:'Car'}];settings.taxMode='fixed';settings.taxPct=20;const x=execFigures(rangeAgg());settings.taxMode='auto';deductions=[];return x});
   eq('costs with $110 expense = 110',ef2.costs,110);
@@ -103,6 +103,38 @@ function eq(name,got,want,tol=0.005){const ok=typeof want==='number'?Math.abs(go
   eq('identity holds with costs',ef2.operator+ef2.levy+ef2.gstNet+ef2.costs+ef2.tax+ef2.kept,510,0.0001);
   const off=await pg.evaluate(()=>{settings.taxMode='off';const x=execFigures(rangeAgg()).tax;settings.taxMode='auto';return x});
   eq('set-aside off → $0 tax',off,0);
+  console.log('Operator-card fuel (ATO: only claim what you paid)');
+  const op=await pg.evaluate(()=>{deductions=[];const k=rangeAgg().sfItems.filter(i=>i.opPaid)[0].key;
+    const before=basValsFromAgg(rangeAgg()).oneB;setCostClaim(k,true);const after=basValsFromAgg(rangeAgg()).oneB;setCostClaim(k,false);
+    return {k,before,after,claimedNow:costClaimed(k)}});
+  eq('operator-card fill is opt-in',op.before,5);
+  eq('ticking it adds 40/11 → 1B 9',op.after,9);
+  eq('unticked again',op.claimedNow,false);
+
+  console.log('Temporary adjustments and reset to original');
+  const adj=await pg.evaluate(()=>{
+    deductions=[{id:'d1',date:'2026-11-01',amount:110,gst:true,bu:50,cat:'Car'}];
+    const base=rangeAgg();
+    setCostEdit('d:d1',{amount:220,gst:true,bu:50});const up=rangeAgg();
+    setCostEdit('d:d1',{amount:110,gst:false,bu:50});const nogst=rangeAgg();
+    const sk=up.sfItems.filter(i=>!i.opPaid)[0].key;
+    setCostEdit(sk,{amount:30,gst:true,bu:100});const fuel=rangeAgg();
+    const n=fuel.editsN;
+    resetCostEdit('d:d1');const r1=rangeAgg();
+    resetAllCostEdits();const r2=rangeAgg();
+    const same=effCost('d:d1',{amount:110,gst:true,bu:50});setCostEdit('d:d1',{amount:110,gst:true,bu:50});const noop=rangeAgg().editsN;resetAllCostEdits();
+    deductions=[];
+    return {base:[base.expCred,base.expDed],up:[up.expCred,up.expDed],nogst:[nogst.expCred,nogst.expDed],fuelCred:fuel.fuelShiftCred,n,r1:[r1.expCred,r1.editsN],r2:[r2.fuelShiftCred,r2.editsN],noop,orig:same.orig.amount};
+  });
+  eq('original: credit 5, deduction 50',adj.base,[5,50]);
+  eq('adjusted to $220: credit 10, deduction 100',adj.up,[10,100]);
+  eq('adjusted to no GST: credit 0, deduction 55',adj.nogst,[0,55]);
+  eq('shift fuel adjusted $60 → $30: credit 2.73',adj.fuelCred,30/11,0.001);
+  eq('two adjustments active',adj.n,2);
+  eq('reset one: expense back to credit 5, one edit left',adj.r1,[5,1]);
+  eq('reset all: fuel credit back to 60/11, no edits',adj.r2,[60/11,0],0.001);
+  eq('an edit equal to the original is not counted',adj.noop,0);
+  eq('original value is kept',adj.orig,110);
   eq('no page errors',errs,[]);
   console.log(`\n${pass} passed, ${fail} failed`);
   await b.close();srv.close();process.exit(fail?1:0);

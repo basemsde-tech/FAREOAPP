@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Fareo v10.0 | Signal fintech redesign | single-file PWA
+<!-- Fareo v11.0 | Costs & credits tax assistant | single-file PWA
      Changelog v4.3 -> v4.4 (code review fixes):
      [F1]  Levy rate of $0 no longer silently reverts to $1.20 (levyRate() helper).
      [F2]  currentQuarter() fixed: last day of Q2/Q3/Q4 no longer reports Q1 (ISO string compare).
@@ -660,7 +660,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .exprow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 0;border-bottom:1px solid var(--bd)}
 .exprow label{font-size:14px;color:var(--mut);flex:0 0 auto}
 .er-r{display:flex;align-items:center;gap:5px;flex:1;justify-content:flex-end}
-.er-r input{width:100%;text-align:right;border:0;background:transparent;padding:0;font-size:16px;font-weight:700;color:var(--fink);-webkit-text-fill-color:var(--fink)}
+.er-r input{width:100%;text-align:right;border:0;background:transparent;padding:0;font-size:16px;font-weight:700;color:var(--head);-webkit-text-fill-color:var(--head)}
 .er-r .pre{color:var(--mut);font-size:15px;flex:0 0 auto}
 .explabel{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--mut);font-weight:700;margin:14px 0 8px}
 .pickopt{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card);border:1.5px solid var(--bd2);border-radius:13px;padding:14px;margin-bottom:9px;cursor:pointer;text-align:left}
@@ -1276,6 +1276,84 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;bac
   .home-btn.on{transform:translateY(20px) scale(.8)}
 }
 html.calm .tally{transition:none}
+/* ---------- Fareo 11 · Costs & credits tax assistant ---------- */
+[hidden]{display:none!important}
+.tax-kpis{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:2px 0 12px}
+.tk{position:relative;background:var(--card2);border:1px solid var(--bd);border-radius:12px;padding:11px 12px;display:flex;flex-direction:column;gap:4px;min-width:0;overflow:hidden;animation:riseIn .45s var(--ease) both}
+.tk:nth-child(2){animation-delay:.04s}.tk:nth-child(3){animation-delay:.08s}.tk:nth-child(4){animation-delay:.12s}
+.tk small{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.tk b{font-family:var(--mono);font-size:19px;font-weight:600;letter-spacing:-.03em;color:var(--head);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tk span{font-family:var(--mono);font-size:10px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tk.hero{background:var(--accent-dim);border-color:var(--accent-line)}.tk.hero b{color:var(--accent)}
+.tk-meter{position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--field)}
+.tk-meter i{display:block;height:100%;width:0;background:var(--accent);transition:width .8s var(--ease)}
+.tk.warn .tk-meter i{background:var(--fuel)}.tk.warn b{color:var(--fuel)}
+.adj-banner{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:11px 12px;margin:0 0 12px;border-radius:12px;border:1px solid color-mix(in srgb,var(--hail) 45%,transparent);background:var(--hail-bg);animation:riseIn .35s var(--ease) both}
+.adj-banner .adj-ico{width:30px;height:30px;border-radius:9px;background:var(--hail);color:#04131C;display:grid;place-items:center}
+.adj-banner .adj-ico svg{width:15px;height:15px}
+.adj-banner b{display:block;font-size:13px;color:var(--head)}
+.adj-banner small{display:block;font-size:11px;color:var(--body);margin-top:2px;line-height:1.35}
+.adj-reset-all{border:1px solid var(--hail);background:transparent;color:var(--hail);border-radius:9px;padding:8px 11px;font-family:var(--mono);font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap}
+.tax-check{display:flex;flex-direction:column;gap:6px;margin:0 0 12px}
+.tax-check:empty{display:none}
+.tc-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px}
+.tcx{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:10px 11px;border:1px solid var(--bd);border-radius:11px;background:var(--card2);animation:riseIn .4s var(--ease) both;animation-delay:calc(var(--i)*60ms)}
+.tcx > i{width:9px;height:9px;border-radius:50%;background:var(--mut);box-shadow:0 0 0 4px color-mix(in srgb,var(--mut) 18%,transparent)}
+.tcx.warn{border-color:color-mix(in srgb,var(--fuel) 40%,transparent)}.tcx.warn > i{background:var(--fuel);box-shadow:0 0 0 4px var(--fuel-bg);animation:livePip 2s ease-out infinite;color:var(--fuel)}
+.tcx.ok{border-color:var(--accent-line);background:var(--accent-dim)}.tcx.ok > i{background:var(--accent);box-shadow:0 0 0 4px var(--accent-dim)}
+.tcx.info > i{background:var(--hail);box-shadow:0 0 0 4px var(--hail-bg)}
+.tcx b{display:block;font-size:12.5px;color:var(--head)}
+.tcx small{display:block;font-size:11px;color:var(--mut);margin-top:2px;line-height:1.4}
+.tcx button{border:1px solid var(--bd2);background:var(--card);color:var(--head);border-radius:9px;padding:7px 10px;font-family:var(--mono);font-size:10.5px;font-weight:600;cursor:pointer;white-space:nowrap}
+.tcx.warn button{border-color:var(--fuel);color:var(--fuel)}
+.cat-tip{margin:8px 4px 4px;padding:8px 10px;border-radius:9px;background:var(--field);font-size:11px;line-height:1.4;color:var(--body);border-left:2px solid var(--accent)}
+.ded-row{grid-template-columns:26px minmax(0,1fr) auto auto;transition:background .3s}
+.ded-main{min-width:0}
+.ded-row .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ded-row .am b{font-family:var(--mono);font-weight:600;color:var(--head)}
+.ded-row.fuel .nm,.ded-row.fuel .am b{color:var(--head)}
+.ded-row .am s{display:block;font-family:var(--mono);font-size:10px;color:var(--mut);margin-top:1px}
+.ded-row.edited .am b{color:var(--hail)}
+.ded-row .am small{font-family:var(--mono);font-weight:500}
+.ded-acts{display:flex;gap:5px;align-items:center}
+.ded-adj{width:28px;height:28px;border-radius:8px;border:1px solid var(--bd2);background:transparent;color:var(--mut);display:grid;place-items:center;cursor:pointer;padding:0}
+.ded-adj svg{width:13px;height:13px}
+.ded-adj.on{border-color:var(--hail);color:var(--hail);background:var(--hail-bg)}
+.ded-x.kill{border-color:var(--bd2);color:var(--mut)}
+.ded-chk{border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}
+.ded-chk.off{border-color:var(--bd2);background:transparent;color:transparent}
+.cbs{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.cb{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:2px 6px;border-radius:5px;background:var(--field);color:var(--mut)}
+.cb.adj{background:var(--hail);color:#04131C}
+.cb.op{background:var(--levy-bg);color:var(--levy)}
+.cb.warn{background:var(--fuel);color:#1F1200}
+.ded-row.flag-inv{background:linear-gradient(90deg,var(--fuel-bg),transparent 70%)}
+.ded-row.pulse-hl{animation:rowPulse 1.4s var(--ease)}
+@keyframes rowPulse{0%,100%{background:transparent}25%{background:var(--accent-dim)}}
+.cat-sum b{font-family:var(--mono)}
+.cat-all{font-family:var(--mono)}
+/* adjust sheet */
+.adj-eyebrow{color:var(--hail)!important;margin-bottom:4px}
+.adj-cmp{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:stretch;margin:4px 0 12px}
+.adj-col{border:1px solid var(--bd);border-radius:12px;padding:10px 11px;background:var(--card2);display:flex;flex-direction:column;gap:3px;transition:border-color .25s,background .25s}
+.adj-col small{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.adj-col b{font-family:var(--mono);font-size:19px;font-weight:600;color:var(--head)}
+.adj-col span{font-family:var(--mono);font-size:10px;line-height:1.5;color:var(--mut)}
+.adj-col.now.changed{border-color:color-mix(in srgb,var(--hail) 55%,transparent);background:var(--hail-bg)}
+.adj-col.now.changed b{color:var(--hail)}
+.adj-arrow{width:18px;height:18px;align-self:center;color:var(--mut)}
+.adj-delta{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:11.5px;color:var(--body);padding:10px 2px 0;min-height:26px}
+.adj-delta b.up{color:var(--accent)}.adj-delta b.down{color:var(--dgr)}
+.adj-warn{margin:10px 0 0;padding:9px 11px;border-radius:10px;background:var(--fuel-bg);color:var(--on-fuel);font-size:11.5px;line-height:1.4;border:1px solid color-mix(in srgb,var(--fuel) 40%,transparent)}
+.adj-perm{display:block;margin:12px auto 0;font-size:12px}
+#adjReset:disabled{opacity:.35}
+.ded-sub{display:block;font-family:var(--mono);font-size:10px;color:var(--mut);margin-top:4px}
+.ded-row.edited .ded-sub{color:var(--hail)}
+.ded-row .meta{line-height:1.35}
+#adjModal .exprow input{color:var(--head);-webkit-text-fill-color:var(--head)}
+#adjModal .exprow input:focus{border-color:var(--hail)}
+@media (max-width:420px){.ded-row{grid-template-columns:24px minmax(0,1fr) auto;row-gap:6px}.ded-acts{grid-column:2/-1;justify-content:flex-end;margin-top:-2px}}
+@media (min-width:700px){.tax-kpis{grid-template-columns:repeat(4,1fr)}}
 </style>
 </head>
 <body>
@@ -1637,11 +1715,19 @@ html.calm .tally{transition:none}
         <div class="ph-t"><b>Costs &amp; credits <span class="help" data-help="Tick a cost to claim it on tax (deduction and GST 1B). Untick keeps the entry but leaves it off 1B and deductions. Use All on a category to claim or skip the whole group. Fuel and receipts can claim GST (1B). Hail levy remittance has no GST credit — GST on that levy is already in the fare on G1 / 1A. Levy is tax-free as a cost (SRO, not BAS)." aria-label="Help">?</span></b><p id="taxRangeLbl">0 items</p></div>
         <button class="ph-pill tap" id="taxGstNet" type="button" title="Open BAS figures">Pay $0.00</button>
       </div>
-      <div class="two">
-        <div class="tri-p accent-inc"><small>GST you can claim · 1B</small><b id="repGstCred" style="color:var(--inc)">$0.00</b></div>
-        <div class="tri-p"><small>Costs you can deduct</small><b id="repDeduct">$0.00</b></div>
+      <div class="tax-kpis">
+        <div class="tk hero"><small>GST credits &middot; 1B</small><b class="tally" id="repGstCred">$0.00</b><span id="tkCredSub">claim on your BAS</span></div>
+        <div class="tk"><small>Deductions</small><b class="tally" id="repDeduct">$0.00</b><span id="tkDedSub">for your tax return</span></div>
+        <div class="tk"><small>Claimed</small><b id="tkClaimed">0 / 0</b><span id="tkClaimedSub">items this range</span></div>
+        <div class="tk" id="tkRecWrap"><small>Records</small><b id="tkRecords">&mdash;</b><span id="tkRecordsSub">receipts attached</span><i class="tk-meter"><i id="tkRecFill"></i></i></div>
       </div>
-      <p class="ded-claim-hint" id="dedClaimHint">Tick what to claim. Untick keeps the cost, off 1B and deductions.</p>
+      <div class="adj-banner" id="adjBanner" hidden>
+        <span class="adj-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span>
+        <div><b id="adjBannerT">Adjustments active</b><small id="adjBannerS">Reports use your adjusted figures. Your records are unchanged.</small></div>
+        <button type="button" class="adj-reset-all" id="adjResetAll">Reset all</button>
+      </div>
+      <div class="tax-check" id="taxCheck"></div>
+      <p class="ded-claim-hint" id="dedClaimHint">Tick to claim &middot; tap <b>Adjust</b> to try a different amount, GST or business use &mdash; you can always reset to the original.</p>
       <div class="tax-actions">
         <button class="tax-add fuel" id="addFuelExp" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg>+ Fuel</button>
         <button class="tax-add" id="addExp" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>+ Expense</button>
@@ -1658,7 +1744,8 @@ html.calm .tally{transition:none}
     </div>
 
     <div class="rep-actions">
-      <button class="btn neutral" id="csvBtn">Export CSV</button>
+      <button class="btn neutral" id="csvBtn">Shifts CSV</button>
+      <button class="btn neutral" id="costCsvBtn">Costs CSV</button>
       <button class="btn neutral" id="summaryBtn"><span class="summ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.7 4.3L18 9l-4.3 1.7L12 15l-1.7-4.3L6 9l4.3-1.7z"/></svg>Summary</span></button>
     </div>
   </section>
@@ -1791,6 +1878,25 @@ html.calm .tally{transition:none}
   <div class="explabel">Receipt photo (smart to keep)</div>
   <button class="att" id="expRcpt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.2L14 21l-2-1.2L10 21l-2-1.2L6 21z"/><path d="M9 8h6M9 12h6"/></svg><span id="expRcptTxt">Attach receipt</span></button>
   <div class="two" style="margin-top:14px"><button class="btn neutral" id="expCancel">Cancel</button><button class="btn" id="expSave">Save cost</button></div>
+</div></div>
+<div class="modal" id="adjModal"><div class="sheet">
+  <div class="grip"></div>
+  <span class="eyebrow adj-eyebrow">Adjust for tax &middot; your record stays as is</span>
+  <h3 id="adjTitle">Adjust cost</h3>
+  <p class="csub" id="adjMeta"></p>
+  <div class="adj-cmp">
+    <div class="adj-col"><small>Original record</small><b id="adjOrigAmt">$0.00</b><span id="adjOrigBits"></span></div>
+    <svg class="adj-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    <div class="adj-col now"><small>Used in reports</small><b id="adjNowAmt">$0.00</b><span id="adjNowBits"></span></div>
+  </div>
+  <div class="exprow"><label>Amount</label><div class="er-r"><span class="pre">$</span><input id="adjAmt" type="number" min="0" step="0.01" inputmode="decimal"></div></div>
+  <div class="exprow"><label>Price includes GST</label><div class="er-r"><button class="tgl" id="adjGst" type="button" aria-label="Price includes GST"></button></div></div>
+  <div class="exprow"><label>Business use % <span class="help" data-help="Only the share used for your taxi work can be claimed. Personal use is left out of both the GST credit and the deduction." aria-label="Help">?</span></label><div class="er-r"><input id="adjBu" type="number" min="0" max="100" step="1" inputmode="decimal"></div></div>
+  <div class="exprow"><label>Why (optional)</label><div class="er-r"><input id="adjNote" maxlength="80" placeholder="e.g. tax invoice says $48.20"></div></div>
+  <div class="adj-delta" id="adjDelta"></div>
+  <p class="adj-warn" id="adjWarn" hidden></p>
+  <div class="two" style="margin-top:12px"><button class="btn neutral" id="adjReset" type="button">Reset to original</button><button class="btn" id="adjApply" type="button">Apply adjustment</button></div>
+  <button class="linkish adj-perm" id="adjPermanent" type="button">Save into the record permanently</button>
 </div></div>
 <div class="modal" id="quarterModal"><div class="sheet">
   <div class="grip"></div><h3>Choose quarter</h3><p class="csub" id="qFy">Financial year</p>
@@ -2064,8 +2170,16 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='10.0';
+var APP_VERSION='11.0';
 var CHANGELOG=[
+  {v:'11.0',date:'November 2, 2026',notes:[
+    ['Feature','Costs & credits is now a tax assistant: GST credits (1B), deductions, items claimed and a records score at the top, plus a Tax check that flags what needs attention before you lodge.'],
+    ['Feature','Adjust any cost for tax (amount, GST or business use %) without touching the original record. Adjusted rows show the old value, a banner shows the effect on 1B, and Reset to original or Reset all puts every figure back.'],
+    ['Tax','Fuel paid on the operator\u2019s card is no longer claimed by default. The ATO only allows a GST credit when you paid. Tick it if you did pay.'],
+    ['Tax','Purchases over $82.50 with GST and no receipt are flagged \u201cTax invoice needed\u201d, as the ATO requires a tax invoice to claim the credit.'],
+    ['UI/UX','Each cost category has a short tip on what you can claim. Every row shows its GST credit and deduction, and badges show adjusted, no receipt, operator-paid and business-use costs.'],
+    ['Feature','New Costs CSV for your accountant: every cost with the recorded amount, the amount used, GST, business %, credit, deduction, receipt status and any adjustment note.'],
+  ]},
   {v:'10.0',date:'November 2, 2026',notes:[
     ['UI/UX','Fareo Signal: a sharper fintech look. Graphite and electric lime, crisp sans and monospace figures, high-contrast badges, a faint tech grid and a new lime F icon.'],
     ['Feature','Reports opens with an executive summary: gross, your share, kept after tax and set-aside, where each fare dollar goes, an 8-week trend and key averages.'],
@@ -2402,6 +2516,9 @@ function migrateSettings(){
   if(['auto','fixed','off'].indexOf(settings.taxMode)<0)settings.taxMode='auto';
   if(settings.taxPct==null||!isFinite(Number(settings.taxPct)))settings.taxPct=20;
   if(settings.sounds==null)settings.sounds=true;
+  /* v11: temporary cost adjustments (reset to original any time) and opt-in claims */
+  if(!settings.costEdits||typeof settings.costEdits!=='object')settings.costEdits={};
+  if(!settings.claimOn||typeof settings.claimOn!=='object')settings.claimOn={};
 }
 function buzz(ms){if(settings.haptics===false||!navigator.vibrate)return;try{navigator.vibrate(ms||8)}catch(_){}}
 function applyCalm(){document.documentElement.classList.toggle('calm',!!settings.calm)}
@@ -4553,12 +4670,46 @@ function claimOffMap(){
   if(!settings.claimOff||typeof settings.claimOff!=='object')settings.claimOff={};
   return settings.claimOff;
 }
-function costClaimed(key){return !claimOffMap()[String(key)]}
+/* ATO: you can only claim a GST credit (and deduction) for purchases you paid
+   for. Fuel put on the operator's card is therefore opt-in: claimed only when
+   the driver ticks it (claimOn). Everything else is claimed unless unticked. */
+var OPT_IN_KEYS={};
+function claimOnMap(){if(!settings.claimOn||typeof settings.claimOn!=='object')settings.claimOn={};return settings.claimOn}
+function costClaimed(key){key=String(key);if(OPT_IN_KEYS[key])return !!claimOnMap()[key];return !claimOffMap()[key]}
 function setCostClaim(key,on){
+  key=String(key);
+  if(OPT_IN_KEYS[key]){var o=claimOnMap();if(on)o[key]=1;else delete o[key];return}
   var m=claimOffMap();
-  if(on)delete m[String(key)];
-  else m[String(key)]=1;
+  if(on)delete m[key];
+  else m[key]=1;
 }
+/* ---------- temporary cost adjustments ----------
+   settings.costEdits[key] = {amount?,gst?,bu?,note?,at}. The stored record is
+   never changed, so "Reset to original" just deletes the edit. Every report
+   figure (1B, deductions, set-aside) reads costs through effCost(). */
+function costEditsMap(){if(!settings.costEdits||typeof settings.costEdits!=='object')settings.costEdits={};return settings.costEdits}
+function costEdit(key){var e=costEditsMap()[String(key)];return e&&typeof e==='object'?e:null}
+function effCost(key,base){
+  var o={amount:nn(base.amount),gst:base.gst!==false,bu:clampBu(base.bu==null?100:base.bu)};
+  var e=costEdit(key),c={amount:o.amount,gst:o.gst,bu:o.bu,edited:false,orig:o,note:''};
+  if(e){
+    if(e.amount!=null&&isFinite(Number(e.amount)))c.amount=Math.max(0,Number(e.amount));
+    if(e.gst!=null)c.gst=!!e.gst;
+    if(e.bu!=null)c.bu=clampBu(e.bu);
+    c.note=e.note||'';
+    c.edited=Math.abs(c.amount-o.amount)>0.004||c.gst!==o.gst||Math.abs(c.bu-o.bu)>0.004;
+  }
+  return c;
+}
+/* Tax maths for one cost line: GST credit, deduction (ex-GST when a credit is
+   claimed, so no double dip) and the business-use dollars claimed. */
+function costMath(c){var b=c.bu/100,a=c.amount;return{cred:c.gst?a/11*b:0,ded:c.gst?a*10/11*b:a*b,claim:a*b}}
+function setCostEdit(key,vals,note){
+  var m=costEditsMap();key=String(key);
+  m[key]={amount:vals.amount,gst:vals.gst,bu:vals.bu,note:note||'',at:todayStr()};
+}
+function resetCostEdit(key){delete costEditsMap()[String(key)]}
+function resetAllCostEdits(keys){var m=costEditsMap();if(keys)keys.forEach(function(k){delete m[String(k)]});else settings.costEdits={}}
 function setCostClaims(keys,on){
   (keys||[]).forEach(function(k){setCostClaim(k,on)});
   persist();
@@ -4582,13 +4733,18 @@ function shiftFuelCostItems(es){
         var amt=nn(f&&f.amount);
         if(amt<=0)return;
         used=true;
-        out.push({key:'sf:'+e.id+':'+i,amount:amt,date:e.date,type:(f.type||'Diesel'),rego:e.rego||''});
+        out.push({key:'sf:'+e.id+':'+i,amount:amt,date:e.date,type:(f.type||'Diesel'),rego:e.rego||'',opPaid:f.opPaid===true});
       });
     }
     if(!used&&nn(e.fuel)>0){
-      out.push({key:'sf:'+e.id,amount:nn(e.fuel),date:e.date,type:'Fuel',rego:e.rego||''});
+      var op=nn(e.fuelOpPaid),mine=nn(e.fuel)-op;
+      if(op>0&&mine>0.004){
+        out.push({key:'sf:'+e.id,amount:mine,date:e.date,type:'Fuel',rego:e.rego||'',opPaid:false});
+        out.push({key:'sf:'+e.id+':op',amount:op,date:e.date,type:'Fuel',rego:e.rego||'',opPaid:true});
+      }else out.push({key:'sf:'+e.id,amount:nn(e.fuel),date:e.date,type:'Fuel',rego:e.rego||'',opPaid:op>0.004});
     }
   });
+  out.forEach(function(it){if(it.opPaid)OPT_IN_KEYS[it.key]=1});
   return out;
 }
 /* single source of truth for all report figures */
@@ -4634,20 +4790,33 @@ function rangeAgg(){
   /* Combine one-off deductions + expanded recurring instances */
   var allDed=deductions.filter(function(d){return inRange(d.date)});
   if(repRange.from&&repRange.to)allDed=allDed.concat(expandRecurring(repRange.from,repRange.to));
-  var expCred=0,expDed=0,dn=0,dnClaim=0;
+  var expCred=0,expDed=0,dn=0,dnClaim=0,editsN=0,editKeys=[];
   allDed.forEach(function(d){
     dn++;
-    if(!costClaimed(recCostKey(d)))return;
+    var k=recCostKey(d),c=effCost(k,{amount:d.amount,gst:d.gst,bu:d.bu});
+    if(c.edited){editsN++;editKeys.push(k)}
+    if(!costClaimed(k))return;
     dnClaim++;
-    var bu=clampBu(d.bu==null?100:d.bu)/100;var amt=nn(d.amount);var hasGst=d.gst!==false;
-    if(hasGst){expCred+=amt/11*bu;expDed+=amt*10/11*bu}else{expDed+=amt*bu}
+    var m=costMath(c);expCred+=m.cred;expDed+=m.ded;
   });
-  /* Claimed fuel only (shift-logged + manual) is deductible + GST-creditable. */
+  /* Claimed fuel only (shift-logged + manual) is deductible + GST-creditable.
+     Each line goes through effCost so temporary adjustments apply. */
   var sfItems=shiftFuelCostItems(es);
-  var fuelShiftClaim=sfItems.reduce(function(s,it){return s+(costClaimed(it.key)?it.amount:0)},0);
-  var fuelManualClaim=fmList.reduce(function(s,m){return s+(costClaimed('fm:'+m.id)?nn(m.amount):0)},0);
+  var fuelShiftClaim=0,fuelShiftCred=0,fuelShiftDed=0,fuelManualClaim=0,fuelManualCred=0,fuelManualDed=0;
+  sfItems.forEach(function(it){
+    var c=effCost(it.key,{amount:it.amount,gst:true,bu:100});it.eff=c;
+    if(c.edited){editsN++;editKeys.push(it.key)}
+    if(!costClaimed(it.key))return;
+    var m=costMath(c);fuelShiftClaim+=m.claim;fuelShiftCred+=m.cred;fuelShiftDed+=m.ded;
+  });
+  fmList.forEach(function(fm){
+    var k='fm:'+fm.id,c=effCost(k,{amount:fm.amount,gst:true,bu:100});
+    if(c.edited){editsN++;editKeys.push(k)}
+    if(!costClaimed(k))return;
+    var m=costMath(c);fuelManualClaim+=m.claim;fuelManualCred+=m.cred;fuelManualDed+=m.ded;
+  });
   var fuelClaimAll=fuelShiftClaim+fuelManualClaim;
-  var fuelCred=fuelClaimAll/11,fuelDed=fuelClaimAll*10/11;
+  var fuelCred=fuelShiftCred+fuelManualCred,fuelDed=fuelShiftDed+fuelManualDed;
   var oneB=expCred+fuelCred;
   /* SRO remittance is a regulatory fee: full amount comes off income, no 1B.
      GST on the passed-on levy sits in G1/1A (logged fares), not in this line.
@@ -4656,7 +4825,7 @@ function rangeAgg(){
   var dedTotal=expDed+fuelDed+levyDed;
   var pocket=inc-levy;
   var net=inc-(gst-oneB)-dedTotal;
-  return{fuelManualClaim:fuelManualClaim,fuelShiftClaim:fuelShiftClaim,es:es,inc:inc,pocket:pocket,gross:gross,share:share,gstBaseAmt:gstBaseAmt,gst:gst,hailN:hailN,levy:levy,fD:fD,fP:fP,fL:fL,fuel:fuelAll,fuelShift:fuel,fuelManual:fuelManualTotal,fmCount:fmCount,fmList:fmList,fuelIPaid:fuelIPaid,fuelOpPaid:fuelOpPaid,fc:fc+fmCount,fcShift:fc,expCred:expCred,expDed:expDed,fuelCred:fuelCred,fuelDed:fuelDed,oneB:oneB,dedTotal:dedTotal,dn:dn,dnClaim:dnClaim,net:net,shifts:es.length,allDed:allDed,sfItems:sfItems,fuelClaimAll:fuelClaimAll,levyDed:levyDed,mixEftpos:mixEftpos,mixCash:mixCash,mixSquare:mixSquare,mixRuns:mixRuns,mixCustom:mixCustom,mixAcct:mixAcct}}
+  return{fuelManualClaim:fuelManualClaim,fuelManualCred:fuelManualCred,fuelManualDed:fuelManualDed,fuelShiftClaim:fuelShiftClaim,fuelShiftCred:fuelShiftCred,fuelShiftDed:fuelShiftDed,editsN:editsN,editKeys:editKeys,es:es,inc:inc,pocket:pocket,gross:gross,share:share,gstBaseAmt:gstBaseAmt,gst:gst,hailN:hailN,levy:levy,fD:fD,fP:fP,fL:fL,fuel:fuelAll,fuelShift:fuel,fuelManual:fuelManualTotal,fmCount:fmCount,fmList:fmList,fuelIPaid:fuelIPaid,fuelOpPaid:fuelOpPaid,fc:fc+fmCount,fcShift:fc,expCred:expCred,expDed:expDed,fuelCred:fuelCred,fuelDed:fuelDed,oneB:oneB,dedTotal:dedTotal,dn:dn,dnClaim:dnClaim,net:net,shifts:es.length,allDed:allDed,sfItems:sfItems,fuelClaimAll:fuelClaimAll,levyDed:levyDed,mixEftpos:mixEftpos,mixCash:mixCash,mixSquare:mixSquare,mixRuns:mixRuns,mixCustom:mixCustom,mixAcct:mixAcct}}
 /* ---------- executive figures (single source for the dashboard) ----------
    Cash view of a range, from gross fares down to what you keep:
      operator  = gross − driver share
@@ -4673,8 +4842,8 @@ function execFigures(a){
   var gross=a.gross||0,share=a.share||0,levy=a.levy||0;
   var operator=Math.max(0,gross-share);
   var gstNet=(a.gst||0)-(a.oneB||0);
-  var costsEx=(a.expDed||0)+(a.fuelManualClaim||0)*10/11;
-  var costs=(a.expDed||0)+(a.expCred||0)+(a.fuelManualClaim||0);
+  var costsEx=(a.expDed||0)+(a.fuelManualDed||0);
+  var costs=(a.expDed||0)+(a.expCred||0)+(a.fuelManualDed||0)+(a.fuelManualCred||0);
   var taxable=share-(a.gst||0)-(a.levyDed||0)-costsEx;
   var rate=taxSetAsideRate();
   var tax=Math.max(0,taxable)*rate.rate;
@@ -4703,6 +4872,136 @@ function taxSetAsideRate(){
   return {rate:t.rate,mode:mode,annual:annual,label:Math.round(t.rate*1000)/10+'% est. \u00b7 ATO '+t.label,table:t.label};
 }
 var repTallyDelay=0;
+/* ---------- Costs & credits tax assistant ---------- */
+var INVOICE_MIN=82.50; /* ATO: tax invoice needed for GST credits on purchases over $82.50 incl. GST */
+var CAT_TIPS={
+  Levy:'SRO hail levy is deductible. There is no GST credit on the levy itself.',
+  Fuel:'Claim GST only on fuel you paid for. A fuel docket over $82.50 must be a tax invoice.',
+  Tolls:'Your e-tag statement is the record. Only trips for taxi work count.',
+  Maintenance:'Servicing and repairs for the taxi you drive. Keep the invoice.',
+  Cleaning:'Car washes and cleaning products used for the taxi.',
+  Insurance:'Only cover for your driving work. Keep the policy schedule.',
+  Phone:'Claim only the work-use share. Set business use % to match.',
+  Other:'Make sure it is for your taxi work and keep the receipt.'
+};
+function costLine(key,kind,cat,name,date,c,claimed,receipt,paidBy){
+  return {key:key,kind:kind,cat:cat,name:name,date:date,c:c,claimed:claimed,receipt:receipt,paidBy:paidBy,
+    needsInvoice:claimed&&c.gst&&c.amount>INVOICE_MIN&&!receipt};
+}
+function renderTaxAssist(a,lines){
+  lastCostLines=lines;
+  var claimable=lines.filter(function(l){return l.kind!=='levy'});
+  var claimed=lines.filter(function(l){return l.claimed});
+  $('#tkClaimed').textContent=claimed.length+' / '+lines.length;
+  $('#tkClaimedSub').textContent=lines.length?(lines.length-claimed.length?(lines.length-claimed.length)+' left off':'all claimed'):'nothing logged';
+  var cl=claimable.filter(function(l){return l.claimed}),tot=0,withR=0,missing=0;
+  cl.forEach(function(l){var v=costMath(l.c).claim;tot+=v;if(l.receipt)withR+=v;else missing++});
+  var pct=tot>0?withR/tot:1;
+  $('#tkRecords').textContent=cl.length?Math.round(pct*100)+'%':'—';
+  $('#tkRecordsSub').textContent=cl.length?(missing?missing+' without a receipt':'all have receipts'):'receipts attached';
+  $('#tkRecFill').style.width=(cl.length?pct*100:0).toFixed(1)+'%';
+  $('#tkRecWrap').classList.toggle('warn',pct<0.8&&cl.length>0);
+  $('#tkCredSub').textContent='BAS 1B · '+(repRange.name||'this range');
+  $('#tkDedSub').textContent=a.levyDed>0?'incl. levy '+money(a.levyDed):'for your tax return';
+  /* adjustments banner */
+  var ban=$('#adjBanner'),n=a.editsN||0;
+  ban.hidden=!n;
+  if(n){
+    var d=0;lines.forEach(function(l){if(l.c.edited&&l.claimed){var o=effCostOrig(l);d+=costMath(l.c).cred-costMath(o).cred}});
+    $('#adjBannerT').textContent=n+(n===1?' adjustment':' adjustments')+' active';
+    $('#adjBannerS').textContent='Reports use your adjusted figures'+(Math.abs(d)>0.004?' (1B '+(d>0?'+':'−')+money(Math.abs(d))+')':'')+'. Your records are unchanged.';
+    $('#adjResetAll').onclick=function(){ask('Reset all adjustments?','Every cost in this range goes back to its original recorded amount, GST and business use.','Reset all',function(){resetAllCostEdits(a.editKeys);persist();renderReports();toast('Reset to original values')},{danger:false,noLbl:'Keep'})};
+  }
+  /* checks */
+  var checks=[];
+  var inv=lines.filter(function(l){return l.needsInvoice});
+  if(inv.length){var risk=inv.reduce(function(s,l){return s+costMath(l.c).cred},0);
+    checks.push({k:'warn',t:inv.length+(inv.length===1?' purchase needs':' purchases need')+' a tax invoice',s:'Over $82.50 with GST and no receipt attached · '+money(risk)+' of credits at risk. Attach the invoice, or leave it off until you have it.',act:'Show',fn:function(){focusCostRow(inv[0].key)}})}
+  var opOn=lines.filter(function(l){return l.opPaid&&l.claimed});
+  if(opOn.length)checks.push({k:'warn',t:'Claiming fuel the operator paid for',s:'The ATO only allows a GST credit when you paid. '+opOn.length+' fill'+(opOn.length===1?' is':'s are')+' ticked.',act:'Leave off',fn:function(){setCostClaims(opOn.map(function(l){return l.key}),false);renderReports();toast('Operator-paid fuel left off')}});
+  var opOff=lines.filter(function(l){return l.opPaid&&!l.claimed});
+  if(opOff.length)checks.push({k:'info',t:opOff.length+' operator-paid fill'+(opOff.length===1?'':'s')+' left off',s:'Fuel on the operator’s card isn’t your purchase, so Fareo doesn’t claim it. Tick it only if you paid.'});
+  var ph=lines.filter(function(l){return l.claimed&&/phone|internet|mobile/i.test(l.cat+' '+l.name)&&l.c.bu>=100});
+  if(ph.length)checks.push({k:'info',t:'Phone claimed at 100% business use',s:'Most drivers also use their phone privately. Claim only the work share.',act:'Adjust',fn:function(){openAdjust(ph[0].key)}});
+  var box=$('#taxCheck');
+  if(!lines.length){box.innerHTML='';return}
+  if(!checks.length)checks.push({k:'ok',t:'Ready for your BAS',s:'Every claimed cost has the records the ATO asks for. Keep them for 5 years.'});
+  box.innerHTML='<div class="tc-head"><span class="eyebrow">Tax check</span><span class="mono-mut">'+checks.filter(function(c){return c.k==='warn'}).length+' to review</span></div>'
+    +checks.map(function(c,i){return '<div class="tcx '+c.k+'" style="--i:'+i+'"><i aria-hidden="true"></i><div><b>'+esc(c.t)+'</b><small>'+esc(c.s)+'</small></div>'+(c.act?'<button type="button" data-tcx="'+i+'">'+esc(c.act)+'</button>':'')+'</div>'}).join('');
+  $$('#taxCheck [data-tcx]').forEach(function(b){b.onclick=function(){checks[Number(b.dataset.tcx)].fn()}});
+}
+var lastCostLines=[];
+function effCostOrig(l){return {amount:l.c.orig.amount,gst:l.c.orig.gst,bu:l.c.orig.bu}}
+function focusCostRow(key){
+  var row=$('#dedRows [data-row="'+CSS.escape(key)+'"]');if(!row)return;
+  var g=row.closest('.cat-group');if(g&&!g.classList.contains('open')){g.classList.add('open');if(window.dedCollapsedState)window.dedCollapsedState[g.dataset.cat]=false}
+  row.scrollIntoView({behavior:motionOff()?'auto':'smooth',block:'center'});
+  row.classList.remove('pulse-hl');void row.offsetWidth;row.classList.add('pulse-hl');
+}
+/* ---------- adjust sheet ---------- */
+var adjKey=null,adjGstOn=true;
+function findCostLine(key){for(var i=0;i<lastCostLines.length;i++)if(lastCostLines[i].key===key)return lastCostLines[i];return null}
+function costBits(c){var m=costMath(c);return (c.gst?'GST incl.':'No GST')+' · '+Math.round(c.bu)+'% business<br>credit '+money(m.cred)+' · deduct '+money(m.ded)}
+function adjVals(){return {amount:Math.max(0,Number($('#adjAmt').value)||0),gst:adjGstOn,bu:clampBu($('#adjBu').value)}}
+function adjPreview(){
+  var L=findCostLine(adjKey);if(!L)return;
+  var v=adjVals(),o=effCostOrig(L),mo=costMath(o),mv=costMath(v);
+  $('#adjNowAmt').textContent=money(v.amount);$('#adjNowBits').innerHTML=costBits(v);
+  var dc=mv.cred-mo.cred,dd=mv.ded-mo.ded,same=Math.abs(v.amount-o.amount)<0.005&&v.gst===o.gst&&Math.abs(v.bu-o.bu)<0.005;
+  function sg(x){return (x>=0?'+':'−')+money(Math.abs(x))}
+  $('#adjDelta').innerHTML=same?'<span class="mono-mut">Same as the original record</span>':'<span>1B credit <b class="'+(dc>=0?'up':'down')+'">'+sg(dc)+'</b></span><span>Deduction <b class="'+(dd>=0?'up':'down')+'">'+sg(dd)+'</b></span>';
+  var w=$('#adjWarn'),msg='';
+  if(v.gst&&v.amount>INVOICE_MIN&&!L.receipt)msg='Over $82.50 with GST: you need a tax invoice to claim the credit.';
+  else if(L.opPaid)msg='This fill was on the operator’s card. Only claim it if you actually paid.';
+  else if(v.amount>o.amount*1.5&&o.amount>0)msg='That is well above the recorded amount. Make sure your receipt supports it.';
+  w.hidden=!msg;w.textContent=msg;
+  $('#adjNowAmt').closest('.adj-col').classList.toggle('changed',!same);
+}
+function openAdjust(key){
+  var L=findCostLine(key);if(!L||L.kind==='levy')return;
+  adjKey=key;var c=L.c,o=c.orig;
+  $('#adjTitle').textContent=L.name;
+  $('#adjMeta').textContent=catLabel(L.cat)+' · '+fmtDayDMY(L.date)+' · paid by '+L.paidBy;
+  $('#adjOrigAmt').textContent=money(o.amount);$('#adjOrigBits').innerHTML=costBits(o);
+  $('#adjAmt').value=(Math.round(c.amount*100)/100).toFixed(2);$('#adjBu').value=Math.round(c.bu);
+  adjGstOn=c.gst;$('#adjGst').classList.toggle('on',adjGstOn);
+  $('#adjNote').value=c.note||'';
+  $('#adjReset').disabled=!c.edited;
+  $('#adjPermanent').hidden=!(L.kind==='exp'||L.kind==='fm');
+  adjPreview();showModal('adjModal');
+}
+if($('#adjAmt'))$('#adjAmt').oninput=adjPreview;
+if($('#adjBu'))$('#adjBu').oninput=adjPreview;
+if($('#adjGst'))$('#adjGst').onclick=function(){adjGstOn=!adjGstOn;this.classList.toggle('on',adjGstOn);adjPreview()};
+if($('#adjApply'))$('#adjApply').onclick=function(){
+  var L=findCostLine(adjKey);if(!L)return;var v=adjVals(),o=effCostOrig(L);
+  if(!isFinite(Number($('#adjAmt').value))||$('#adjAmt').value===''){toast('Enter a valid amount','error');return}
+  if(Math.abs(v.amount-o.amount)<0.005&&v.gst===o.gst&&Math.abs(v.bu-o.bu)<0.005){resetCostEdit(adjKey);persist();closeModal('adjModal');renderReports();toast('Matches the original — no adjustment kept');return}
+  setCostEdit(adjKey,v,$('#adjNote').value.trim());persist();closeModal('adjModal');renderReports();
+  setTimeout(function(){focusCostRow(adjKey)},60);toast('Adjustment applied · reset any time','success');
+};
+if($('#adjReset'))$('#adjReset').onclick=function(){if(!adjKey)return;resetCostEdit(adjKey);persist();closeModal('adjModal');renderReports();setTimeout(function(){focusCostRow(adjKey)},60);toast('Reset to original values')};
+if($('#adjPermanent'))$('#adjPermanent').onclick=function(){
+  var L=findCostLine(adjKey);if(!L)return;var v=adjVals(),key=adjKey;
+  ask('Save into the record?','The '+money(v.amount)+' amount, GST and business use replace the original record. You won’t be able to reset back.','Save permanently',function(){
+    if(L.kind==='exp'){var id=key.slice(2);deductions.forEach(function(d){if(String(d.id)===id){d.amount=v.amount;d.gst=v.gst;d.bu=v.bu}})}
+    else if(L.kind==='fm'){var fid=key.slice(3);fuelManual.forEach(function(m){if(String(m.id)===fid){m.amount=v.amount}})}
+    resetCostEdit(key);persist();closeModal('adjModal');renderReports();toast('Record saved');
+  },{danger:false,noLbl:'Cancel'});
+};
+/* ---------- costs CSV for an accountant ---------- */
+if($('#costCsvBtn'))$('#costCsvBtn').onclick=function(){
+  renderReports();var lines=lastCostLines;
+  if(!lines.length){toast('Nothing to export');return}
+  var rows=[['Date','Category','Description','Paid by','Recorded amount','Amount used','GST included','Business use %','GST credit (1B)','Deduction','Claimed','Receipt','Adjusted','Adjustment note']];
+  var tc=0,td=0;
+  lines.slice().sort(function(x,y){return x.date<y.date?-1:1}).forEach(function(l){var m=costMath(l.c);if(l.claimed){tc+=m.cred;td+=m.ded}
+    rows.push([l.date,catLabel(l.cat),l.name,l.paidBy,l.c.orig.amount.toFixed(2),l.c.amount.toFixed(2),l.c.gst?'Yes':'No',Math.round(l.c.bu),l.claimed?m.cred.toFixed(2):'0.00',l.claimed?m.ded.toFixed(2):'0.00',l.claimed?'Yes':'No',l.kind==='levy'?'SRO':(l.receipt?'Yes':'No'),l.c.edited?'Yes':'No',l.c.note||''])});
+  rows.push([]);rows.push(['Totals (claimed)','','','','','','','',tc.toFixed(2),td.toFixed(2)]);
+  rows.push(['Range',repRange.from+' to '+repRange.to]);
+  var csv=rows.map(function(r){return r.map(csvCell).join(',')}).join('\r\n');
+  var bl=new Blob([csv],{type:'text/csv'}),u=URL.createObjectURL(bl),an=document.createElement('a');an.href=u;an.download='fareo-costs-'+repRange.from+'-to-'+repRange.to+'.csv';an.click();setTimeout(function(){URL.revokeObjectURL(u)},1000);toast('Costs CSV exported');
+};
 function prevRangeOf(from,to){if(!from||!to)return null;var f=asDate(from),t=asDate(to),n=Math.round((t-f)/86400000)+1;var pt=new Date(f);pt.setDate(pt.getDate()-1);var pf=new Date(pt);pf.setDate(pf.getDate()-n+1);return[iso(pf),iso(pt)]}
 function pctTxt(x){return (Math.round(x*1000)/10).toFixed(1)+'%'}
 function deltaHTML(cur,prev,lbl){if(!(prev>0))return '<span class="delta">'+(lbl||'No prior period')+'</span>';var d=(cur-prev)/prev;return '<span class="delta '+(d>=0?'up':'down')+'">'+(d>=0?'▲ ':'▼ ')+Math.abs(Math.round(d*100))+'%</span> <span class="mono-mut">vs prev</span>'}
@@ -4968,7 +5267,7 @@ function renderReports(){
   renderExec(a);
   renderJarMeta();
   var lodgement=basValsFromAgg(a);
-  $('#repGstCred').textContent=money(lodgement.oneB);$('#repDeduct').textContent=money(a.dedTotal);
+  tally($('#repGstCred'),lodgement.oneB,{delay:repTallyDelay});tally($('#repDeduct'),a.dedTotal,{delay:repTallyDelay+60});
   var netGst=lodgement.net;
   var pay=netGst>=0;
   var pill=$('#taxGstNet');
@@ -4987,6 +5286,7 @@ function renderReports(){
   if(note)note.textContent=cashIsTaxFree()
     ?'Whole dollars for myGov. Tax-free cash/Square is not taxable income — left out of G1 and 1A. Take-home still includes it.'
     :'Whole dollars for myGov. Cash and Square are in G1 (GST applies). 1A is 1/11 of G1.';
+  if(note&&a.editsN)note.textContent+=' Includes '+a.editsN+' cost adjustment'+(a.editsN===1?'':'s')+' \u2014 reset them in Costs & credits.';
   var rng=$('#basCopyRange');if(rng)rng.textContent=(repRange.name||'This range')+' · '+fmtDMY(repRange.from)+' – '+fmtDMY(repRange.to);
   var qHint=$('#basCopyUseQtr');if(qHint)qHint.classList.toggle('show',repRange.name!=='Quarter');
   var payBox=$('#taxNetAmt');if(payBox)payBox.style.color=pay?'var(--dgr)':'var(--inc)';
@@ -4997,16 +5297,34 @@ function renderReports(){
     return 'claim '+money(amt/11*share);
   }
   var CHK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>';
+  var ADJ_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
+  var costLines=[];
   function dedRow(opts){
     var on=opts.claimed!==false;
     var kill=opts.delAttr?'<button class="ded-x kill" '+opts.delAttr+' aria-label="Remove">&times;</button>':'<span></span>';
+    if(opts.line){var L=opts.line,c=L.c,mm=costMath(c);
+      costLines.push(L);
+      var badges=[];
+      if(c.edited)badges.push('<span class="cb adj">Adjusted</span>');
+      if(L.opPaid)badges.push('<span class="cb op">Operator paid</span>');
+      if(L.needsInvoice)badges.push('<span class="cb warn">Tax invoice needed</span>');
+      else if(!L.receipt&&L.kind!=='levy')badges.push('<span class="cb mut">No receipt</span>');
+      if(c.bu<100)badges.push('<span class="cb mut">'+Math.round(c.bu)+'% business</span>');
+      opts.meta+=badges.length?'<span class="cbs">'+badges.join('')+'</span>':'';
+      opts.amt=c.amount;
+      opts.sub=c.gst?'credit '+money(mm.cred)+' \u00b7 deduct '+money(mm.ded):'no GST \u00b7 deduct '+money(mm.ded);
+      if(c.edited)opts.was=c.orig.amount;
+      if(L.kind!=='levy')opts.adj=L.key;
+      opts.flag=L.needsInvoice?' flag-inv':'';
+    }
+    var adjB=opts.adj?'<button type="button" class="ded-adj'+(opts.was!=null?' on':'')+'" data-adj="'+esc(opts.adj)+'" aria-label="Adjust">'+ADJ_SVG+'</button>':'';
     var chk='<button type="button" class="ded-chk'+(on?'':' off')+'" data-claim="'+esc(opts.key)+'" aria-pressed="'+(on?'true':'false')+'" aria-label="'+(on?'Claimed — tap to leave off deductions':'Not deducted — tap to claim')+'">'+CHK+'</button>';
     var sub=on?opts.sub:'kept \u00b7 not deducted';
-    return '<div class="ded-row'+(opts.fuel?' fuel':'')+(on?'':' off')+'">'
+    return '<div class="ded-row'+(opts.fuel?' fuel':'')+(on?'':' off')+(opts.was!=null?' edited':'')+(opts.flag||'')+'" data-row="'+esc(opts.key)+'">'
       +chk
-      +'<div'+(opts.rid?' data-rid="'+esc(opts.rid)+'" style="cursor:pointer"':'')+'><span class="nm">'+opts.name+'</span><span class="meta">'+opts.meta+'</span></div>'
-      +'<div class="am"><b>'+money(opts.amt)+'</b><small>'+sub+'</small></div>'
-      +kill+'</div>';
+      +'<div class="ded-main"'+(opts.rid?' data-rid="'+esc(opts.rid)+'" style="cursor:pointer"':'')+'><span class="nm">'+opts.name+'</span><span class="meta">'+opts.meta+'</span><span class="ded-sub">'+sub+'</span></div>'
+      +'<div class="am"><b>'+money(opts.amt)+'</b>'+(opts.was!=null?'<s>'+money(opts.was)+'</s>':'')+'</div>'
+      +'<div class="ded-acts">'+adjB+kill+'</div></div>';
   }
   var grouped={},order=['Levy','Fuel','Tolls','Maintenance','Cleaning','Insurance','Phone','Other'];
   function pushG(key,html,amt,cnt,claimedAmt,claimKey){
@@ -5021,22 +5339,27 @@ function renderReports(){
   if(a.levy>0){
     var levyOn=costClaimed('levy');
     pushG('Levy',dedRow({key:'levy',name:'Hail / CPV levy',meta:(a.hailN||0)+' hail trip'+(a.hailN!==1?'s':'')+' \u00d7 '+money(levyRate())+' \u00b7 SRO',amt:a.levy,claimed:levyOn,sub:'from income \u00b7 tax-free \u00b7 deduct '+money(a.levy)}),a.levy,1,levyOn?a.levy:0,'levy');
+    costLines.push({key:'levy',kind:'levy',cat:'Levy',name:'Hail / CPV levy',date:repRange.to,c:{amount:a.levy,gst:false,bu:100,edited:false,orig:{amount:a.levy,gst:false,bu:100}},claimed:levyOn,receipt:true,paidBy:'You (SRO)'});
   }
   (a.sfItems||[]).forEach(function(it){
-    var on=costClaimed(it.key);
-    pushG('Fuel',dedRow({key:it.key,fuel:true,name:'Fuel ('+esc(it.type)+')',meta:fmtDayDMY(it.date)+(it.rego?' \u00b7 '+esc(it.rego):'')+' \u00b7 shift',amt:it.amount,claimed:on,sub:gstBit(it.amount,true)}),it.amount,1,on?it.amount:0,it.key);
+    var on=costClaimed(it.key),c=it.eff||effCost(it.key,{amount:it.amount,gst:true,bu:100});
+    var rc=receipts.some(function(r){return r.kind==='fuel'&&r.date===it.date});
+    var L=costLine(it.key,'sf','Fuel','Fuel ('+it.type+')',it.date,c,on,rc,it.opPaid?'Operator card':'You');L.opPaid=!!it.opPaid;
+    pushG('Fuel',dedRow({key:it.key,fuel:true,name:'Fuel ('+esc(it.type)+')',meta:fmtDayDMY(it.date)+(it.rego?' \u00b7 '+esc(it.rego):'')+' \u00b7 shift',claimed:on,line:L}),c.amount,1,on?costMath(c).claim:0,it.key);
   });
   a.fmList.slice().sort(function(x,y){return x.date<y.date?1:-1}).forEach(function(m){
-    var k='fm:'+m.id,on=costClaimed(k);
-    pushG('Fuel',dedRow({key:k,fuel:true,name:'Fuel ('+esc(m.type)+')',meta:fmtDayDMY(m.date)+(m.receiptId?' \u00b7 receipt':' \u00b7 no receipt'),amt:m.amount,claimed:on,sub:gstBit(m.amount,true),delAttr:'data-delfm="'+esc(m.id)+'"',rid:m.receiptId||''}),m.amount,1,on?m.amount:0,k);
+    var k='fm:'+m.id,on=costClaimed(k),c=effCost(k,{amount:m.amount,gst:true,bu:100});
+    var L=costLine(k,'fm','Fuel','Fuel ('+(m.type||'Fuel')+')',m.date,c,on,!!m.receiptId,'You');
+    pushG('Fuel',dedRow({key:k,fuel:true,name:'Fuel ('+esc(m.type)+')',meta:fmtDayDMY(m.date)+' \u00b7 added in Reports',claimed:on,line:L,delAttr:'data-delfm="'+esc(m.id)+'"',rid:m.receiptId||''}),c.amount,1,on?costMath(c).claim:0,k);
   });
   var ds=a.allDed.sort(function(x,y){return x.date<y.date?1:-1});
   ds.forEach(function(d){
     var key=d.category||'Other';
     if(order.indexOf(key)<0&&!grouped[key])order.push(key);
-    var ck=recCostKey(d),on=costClaimed(ck);
+    var ck=recCostKey(d),on=costClaimed(ck),c=effCost(ck,{amount:d.amount,gst:d.gst,bu:d.bu});
     var del=d._recurring?'':(d.id!=null?'data-deld="'+esc(d.id)+'"':'');
-    pushG(key,dedRow({key:ck,name:esc(d.name),meta:fmtDayDMY(d.date)+(d._recurring?' \u00b7 repeats':'')+(d.receiptId?' \u00b7 receipt':''),amt:d.amount,claimed:on,sub:gstBit(d.amount,d.gst!==false,d.bu),delAttr:del,rid:d.receiptId||'',fuel:false}),d.amount,1,on?d.amount:0,ck);
+    var L=costLine(ck,d._recurring?'rec':'exp',key,d.name||catLabel(key),d.date,c,on,!!d.receiptId,'You');
+    pushG(key,dedRow({key:ck,name:esc(d.name),meta:fmtDayDMY(d.date)+(d._recurring?' \u00b7 repeats':''),claimed:on,line:L,delAttr:del,rid:d.receiptId||'',fuel:false}),c.amount,1,on?costMath(c).claim:0,ck);
   });
   var keys=order.filter(function(k){return grouped[k]&&grouped[k].count>0});
   Object.keys(grouped).forEach(function(k){if(keys.indexOf(k)<0&&grouped[k]&&grouped[k].count>0)keys.push(k)});
@@ -5072,7 +5395,7 @@ function renderReports(){
             +'<span class="cat-chev">&rsaquo;</span>'
           +'</div>'
         +'</div>'
-        +'<div class="cat-body">'+g.html+'</div>'
+        +'<div class="cat-body">'+(CAT_TIPS[k]?'<p class="cat-tip">'+esc(CAT_TIPS[k])+'</p>':'')+g.html+'</div>'
       +'</div>';
     }).join('');
   }
@@ -5124,6 +5447,8 @@ function renderReports(){
   $$('#dedRows [data-delfm]').forEach(function(b){b.onclick=function(e){e.stopPropagation();var id=Number(b.dataset.delfm);var m=fuelManual.filter(function(x){return x.id===id})[0];ask('Remove this fuel?',(m?fmtDayDMY(m.date)+' \u00b7 '+money(m.amount)+'. ':'')+'The receipt snap stays in the jar unless you delete it there.','Remove',function(){fuelManual=fuelManual.filter(function(x){return x.id!==id});save('fareo_fuelManual',fuelManual);renderReports();toast('Fuel expense removed')})}});
   $$('#dedRows [data-deld]').forEach(function(b){b.onclick=function(e){e.stopPropagation();var id=Number(b.dataset.deld);var d=deductions.filter(function(x){return x.id===id})[0];ask('Remove this expense?',(d?(d.name||'')+' \u00b7 '+fmtDayDMY(d.date)+' \u00b7 '+money(d.amount)+'. ':'')+'The receipt snap stays in the jar unless you delete it there.','Remove',function(){deductions=deductions.filter(function(x){return x.id!==id});save('fareo_deductions',deductions);renderReports();toast('Expense removed')})}});
   $$('#dedRows [data-rid]').forEach(function(row){row.onclick=function(){if(row.dataset.rid)viewReceipt(row.dataset.rid)}});
+  $$('#dedRows [data-adj]').forEach(function(b){b.onclick=function(e){e.stopPropagation();openAdjust(b.dataset.adj)}});
+  renderTaxAssist(a,costLines);
   $('#dedEmpty').style.display=(totalDedCount>0)?'none':'block';
   var hint=$('#dedClaimHint');if(hint)hint.style.display=totalDedCount?'block':'none';
   /* Recurring templates list with delete */
