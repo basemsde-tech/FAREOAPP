@@ -135,6 +135,15 @@ function eq(name,got,want,tol=0.005){const ok=typeof want==='number'?Math.abs(go
   eq('reset all: fuel credit back to 60/11, no edits',adj.r2,[60/11,0],0.001);
   eq('an edit equal to the original is not counted',adj.noop,0);
   eq('original value is kept',adj.orig,110);
+  console.log('Shifts CSV totals match Reports');
+  const cx=await pg.evaluate(()=>{entries=[];deductions=[];settings.claimOn={};settings.costEdits={};
+    draft=freshDraft('5088M');draft.date='2026-10-29';draft.dateSet=true;draft.eos=['400'];draft.cash=[{name:'A',amount:'50'}];draft.square=[{name:'B',amount:'30'}];draft.runs='2';draft.accounts=[{name:'C',amount:'20'}];draft.fuel=[{type:'Diesel',amount:'60'}];draft.hail='3';saveShift(false);
+    draft=freshDraft('5088M');draft.date='2026-10-30';draft.dateSet=true;draft.eos=['250.55'];draft.hail='1';saveShift(false);
+    repRange.from='2026-10-01';repRange.to='2026-12-31';
+    const rows=shiftsCsvRows(),tot=rows.find(r=>r[0]==='Totals'),a=rangeAgg();
+    return {gross:[+tot[3],a.gross],share:[+tot[10],a.share],payout:[+tot[14],a.inc],levy:[+tot[16],a.levy],n:rows.filter(r=>/^20/.test(r[0])).length};
+  });
+  eq('CSV gross total',cx.gross[0],cx.gross[1]);eq('CSV share total',cx.share[0],cx.share[1]);eq('CSV payout total',cx.payout[0],cx.payout[1]);eq('CSV levy total',cx.levy[0],cx.levy[1]);eq('CSV shift rows',cx.n,2);
   eq('no page errors',errs,[]);
   console.log(`\n${pass} passed, ${fail} failed`);
   await b.close();srv.close();process.exit(fail?1:0);

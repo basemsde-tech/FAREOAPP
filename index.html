@@ -1016,7 +1016,7 @@ body{letter-spacing:-.006em}
 .trail button:disabled{opacity:0;pointer-events:none;width:0;min-width:0;border:0;margin-right:-8px}
 .trail button{transition:opacity .25s var(--ease),width .25s var(--ease),min-width .25s var(--ease),margin .25s var(--ease)}
 .brand{display:flex;align-items:center;gap:8px;background:none;border:0;padding:0;cursor:pointer;color:var(--head);-webkit-tap-highlight-color:transparent}
-.brand-mark{width:30px;height:30px;flex:0 0 auto;border-radius:8px;background:#0A0C0F;box-shadow:inset 0 0 0 1px rgba(184,242,63,.3)}
+.brand-mark{width:30px;height:30px;flex:0 0 auto;border-radius:8px;background:#0A0C0F;box-shadow:inset 0 0 0 1px var(--accent-line)}
 .brand-word{font-size:19px;font-weight:700;letter-spacing:-.035em}
 .wx:not(.live){display:none}
 .wx.live{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 45%,transparent);background:var(--inc-bg)}
@@ -1670,6 +1670,82 @@ html.calm .tally{transition:none}
   .set-pane[data-spane="shifts"] .sp-secs,.set-pane[data-spane="data"]{}
   .set-pane.on{columns:auto}
 }
+/* ---------- Fareo 14.2 · colour themes ---------- */
+:root[data-accent]{--accent-dim:color-mix(in srgb,var(--accent) 12%,transparent);--accent-line:color-mix(in srgb,var(--accent) 38%,transparent);--gold:var(--accent);--inc:var(--accent);--inc-bg:var(--accent-dim);--on-inc:var(--gold-hi);--btn-fill:var(--accent);--btn-ink:var(--accent-ink);--btn-bg:var(--accent);--glow:color-mix(in srgb,var(--accent) 34%,transparent);--shadow-lg:0 10px 30px -10px var(--glow);--gold-grad:linear-gradient(135deg,var(--gold-hi),var(--accent));--grad-inc:linear-gradient(160deg,var(--accent-dim) 0%,transparent 70%)}
+:root[data-accent][data-theme="light"]{--btn-fill:#0B0D10;--btn-bg:#0B0D10;--on-inc:color-mix(in srgb,var(--accent) 78%,#000);--accent-dim:color-mix(in srgb,var(--accent) 11%,#fff);--grad-inc:linear-gradient(160deg,var(--accent-dim) 0%,#fff 70%)}
+@media (prefers-color-scheme:light){:root[data-accent]:not([data-theme="dark"]){--btn-fill:#0B0D10;--btn-bg:#0B0D10;--on-inc:color-mix(in srgb,var(--accent) 78%,#000);--accent-dim:color-mix(in srgb,var(--accent) 11%,#fff);--grad-inc:linear-gradient(160deg,var(--accent-dim) 0%,#fff 70%)}}
+:root[data-accent="signal"]{--accent:#B8F23F;--accent-ink:#0A0D04;--gold-hi:#D9FF85}
+:root[data-accent="signal"][data-theme="light"]{--accent:#4E8A00;--accent-ink:#D9FF85;--gold-hi:#4E8A00}
+@media (prefers-color-scheme:light){:root[data-accent="signal"]:not([data-theme="dark"]){--accent:#4E8A00;--accent-ink:#D9FF85;--gold-hi:#4E8A00}}
+:root[data-accent="ocean"]{--accent:#3DD6FF;--accent-ink:#021018;--gold-hi:#9BEBFF}
+:root[data-accent="ocean"][data-theme="light"]{--accent:#0070AD;--accent-ink:#CDEFFF;--gold-hi:#0070AD}
+@media (prefers-color-scheme:light){:root[data-accent="ocean"]:not([data-theme="dark"]){--accent:#0070AD;--accent-ink:#CDEFFF;--gold-hi:#0070AD}}
+:root[data-accent="ocean"][data-theme="dark"]{--pg:#05080D;--card:#0B1018;--card2:#10161F;--field:#121A24;--bd2:#1F2A38;--glass:color-mix(in srgb,#05080D 80%,transparent)}
+@media (prefers-color-scheme:dark){:root[data-accent="ocean"]:not([data-theme="light"]){--pg:#05080D;--card:#0B1018;--card2:#10161F;--field:#121A24;--bd2:#1F2A38;--glass:color-mix(in srgb,#05080D 80%,transparent)}}
+:root[data-accent="ember"]{--accent:#FF8A3D;--accent-ink:#1A0A00;--gold-hi:#FFC08F}
+:root[data-accent="ember"][data-theme="light"]{--accent:#B9480A;--accent-ink:#FFE0CC;--gold-hi:#B9480A}
+@media (prefers-color-scheme:light){:root[data-accent="ember"]:not([data-theme="dark"]){--accent:#B9480A;--accent-ink:#FFE0CC;--gold-hi:#B9480A}}
+:root[data-accent="ember"][data-theme="dark"]{--pg:#0A0806;--card:#12100D;--card2:#18140F;--field:#1B1611;--bd2:#2E261D;--glass:color-mix(in srgb,#0A0806 80%,transparent)}
+@media (prefers-color-scheme:dark){:root[data-accent="ember"]:not([data-theme="light"]){--pg:#0A0806;--card:#12100D;--card2:#18140F;--field:#1B1611;--bd2:#2E261D;--glass:color-mix(in srgb,#0A0806 80%,transparent)}}
+:root[data-accent="violet"]{--accent:#A78BFA;--accent-ink:#0F0A1F;--gold-hi:#D4C6FF}
+:root[data-accent="violet"][data-theme="light"]{--accent:#6247CF;--accent-ink:#E7DFFF;--gold-hi:#6247CF}
+@media (prefers-color-scheme:light){:root[data-accent="violet"]:not([data-theme="dark"]){--accent:#6247CF;--accent-ink:#E7DFFF;--gold-hi:#6247CF}}
+:root[data-accent="violet"][data-theme="dark"]{--pg:#08070D;--card:#0F0D17;--card2:#15121F;--field:#181424;--bd2:#2A2438;--glass:color-mix(in srgb,#08070D 80%,transparent)}
+@media (prefers-color-scheme:dark){:root[data-accent="violet"]:not([data-theme="light"]){--pg:#08070D;--card:#0F0D17;--card2:#15121F;--field:#181424;--bd2:#2A2438;--glass:color-mix(in srgb,#08070D 80%,transparent)}}
+:root[data-accent="rose"]{--accent:#FF6B9A;--accent-ink:#1F0510;--gold-hi:#FFB3CB}
+:root[data-accent="rose"][data-theme="light"]{--accent:#C0235A;--accent-ink:#FFD9E5;--gold-hi:#C0235A}
+@media (prefers-color-scheme:light){:root[data-accent="rose"]:not([data-theme="dark"]){--accent:#C0235A;--accent-ink:#FFD9E5;--gold-hi:#C0235A}}
+:root[data-accent="rose"][data-theme="dark"]{--pg:#0A0608;--card:#120D10;--card2:#181115;--field:#1C1418;--bd2:#30222A;--glass:color-mix(in srgb,#0A0608 80%,transparent)}
+@media (prefers-color-scheme:dark){:root[data-accent="rose"]:not([data-theme="light"]){--pg:#0A0608;--card:#120D10;--card2:#181115;--field:#1C1418;--bd2:#30222A;--glass:color-mix(in srgb,#0A0608 80%,transparent)}}
+:root[data-accent="gold"]{--accent:#D9B872;--accent-ink:#17130A;--gold-hi:#F1DCA3}
+:root[data-accent="gold"][data-theme="light"]{--accent:#8F6F2C;--accent-ink:#F3E2B6;--gold-hi:#8F6F2C}
+@media (prefers-color-scheme:light){:root[data-accent="gold"]:not([data-theme="dark"]){--accent:#8F6F2C;--accent-ink:#F3E2B6;--gold-hi:#8F6F2C}}
+:root[data-accent="gold"][data-theme="dark"]{--pg:#09090B;--card:#141417;--card2:#1A1A1E;--field:#1C1C20;--bd2:#2B2B31;--glass:color-mix(in srgb,#09090B 80%,transparent)}
+@media (prefers-color-scheme:dark){:root[data-accent="gold"]:not([data-theme="light"]){--pg:#09090B;--card:#141417;--card2:#1A1A1E;--field:#1C1C20;--bd2:#2B2B31;--glass:color-mix(in srgb,#09090B 80%,transparent)}}
+:root[data-accent="mint"]{--accent:#34E3A4;--accent-ink:#02140D;--gold-hi:#9AF5D2}
+:root[data-accent="mint"][data-theme="light"]{--accent:#0B8459;--accent-ink:#C9F7E5;--gold-hi:#0B8459}
+@media (prefers-color-scheme:light){:root[data-accent="mint"]:not([data-theme="dark"]){--accent:#0B8459;--accent-ink:#C9F7E5;--gold-hi:#0B8459}}
+:root[data-accent="mint"][data-theme="dark"]{--pg:#05090A;--card:#0C1213;--card2:#111819;--field:#141C1D;--bd2:#223032;--glass:color-mix(in srgb,#05090A 80%,transparent)}
+@media (prefers-color-scheme:dark){:root[data-accent="mint"]:not([data-theme="light"]){--pg:#05090A;--card:#0C1213;--card2:#111819;--field:#141C1D;--bd2:#223032;--glass:color-mix(in srgb,#05090A 80%,transparent)}}
+:root[data-accent="mono"]{--accent:#E8EAED;--accent-ink:#0A0B0D;--gold-hi:#FFFFFF}
+:root[data-accent="mono"][data-theme="light"]{--accent:#1F2329;--accent-ink:#FFFFFF;--gold-hi:#1F2329}
+@media (prefers-color-scheme:light){:root[data-accent="mono"]:not([data-theme="dark"]){--accent:#1F2329;--accent-ink:#FFFFFF;--gold-hi:#1F2329}}
+:root[data-accent="mono"][data-theme="dark"]{--pg:#08080A;--card:#111214;--card2:#17181B;--field:#1A1C1F;--bd2:#2A2D31;--glass:color-mix(in srgb,#08080A 80%,transparent)}
+@media (prefers-color-scheme:dark){:root[data-accent="mono"]:not([data-theme="light"]){--pg:#08080A;--card:#111214;--card2:#17181B;--field:#1A1C1F;--bd2:#2A2D31;--glass:color-mix(in srgb,#08080A 80%,transparent)}}
+.theme-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.tsw{position:relative;display:flex;flex-direction:column;gap:6px;padding:6px 6px 8px;border-radius:14px;border:1px solid var(--bd2);background:transparent;color:var(--head);cursor:pointer;text-align:left;transition:transform .22s var(--spring),border-color .2s;animation:chipIn .35s var(--spring) both;animation-delay:calc(var(--k)*30ms)}
+.tsw:active{transform:scale(.94)}
+.tsw .tp{position:relative;height:56px;border-radius:9px;background:var(--tbg);overflow:hidden;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+.tsw .tp i{position:absolute;left:8px;right:22px;height:5px;border-radius:3px;background:var(--tline)}
+.tsw .tp i:nth-child(1){top:10px;right:34px}.tsw .tp i:nth-child(2){top:20px;right:44px;opacity:.6}
+.tsw .tp b{position:absolute;left:8px;bottom:8px;width:30px;height:12px;border-radius:5px;background:var(--tacc)}
+.tsw .tp em{position:absolute;right:8px;bottom:8px;width:16px;height:16px;border-radius:50%;background:var(--tacc);box-shadow:0 0 12px var(--tacc)}
+.tsw span{font-size:11.5px;font-weight:600;padding:0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tsw.on{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
+.tsw.on::after{content:"\2713";position:absolute;top:10px;right:10px;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink);font-size:11px;font-weight:700}
+.tsw.on{animation:qaPop .4s var(--spring)}
+html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:background-color .45s var(--ease),color .45s var(--ease),border-color .45s var(--ease),fill .45s,stroke .45s!important}
+@media (max-width:380px){.theme-grid{grid-template-columns:repeat(3,1fr)}}
+@media (min-width:740px){.theme-grid{grid-template-columns:repeat(4,minmax(0,140px))}}
+/* ---------- Fareo 14.3 · export card ---------- */
+.export-card{padding:15px}
+.ex-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:12px}
+.ex-head b{display:block;margin-top:4px;font-size:14px;color:var(--head);letter-spacing:-.02em}
+.ex-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ex{position:relative;display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;padding:12px;border-radius:13px;border:1px solid var(--bd2);background:var(--card2);color:var(--head);text-align:left;cursor:pointer;transition:transform .2s var(--spring),border-color .2s;overflow:hidden}
+.ex:active{transform:scale(.97)}
+.ex svg{width:22px;height:22px;color:var(--accent)}
+.ex b{display:block;font-size:13.5px}
+.ex small{display:block;font-size:10.5px;color:var(--mut);margin-top:2px;line-height:1.3}
+.ex.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.ex.primary svg,.ex.primary small{color:var(--accent-ink)}
+.ex.primary small{opacity:.75}
+:root[data-theme="light"] .ex.primary{background:#0B0D10;border-color:#0B0D10;color:#fff}
+:root[data-theme="light"] .ex.primary svg{color:var(--accent-ink)}:root[data-theme="light"] .ex.primary small{color:#fff}
+.ex.busy{pointer-events:none}
+.ex.busy::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,color-mix(in srgb,currentColor 18%,transparent),transparent);background-size:50% 100%;background-repeat:no-repeat;animation:scan .9s var(--ease) infinite}
+.ex-summ{margin-top:10px}
+@media (min-width:1024px){.ex-grid{grid-template-columns:repeat(4,1fr)}.screen[data-tab="reports"] > .export-card{grid-column:1/-1}}
 </style>
 </head>
 <body>
@@ -1679,7 +1755,7 @@ html.calm .tally{transition:none}
       <div class="trail">
         <button type="button" id="navBack" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
       </div>
-      <button type="button" class="brand" id="brandHome" aria-label="Fareo home"><svg class="brand-mark" viewBox="0 0 512 512" aria-hidden="true"><defs><linearGradient id="bmG" gradientUnits="userSpaceOnUse" x1="150" y1="130" x2="370" y2="380"><stop offset="0" stop-color="#E8FF9C"/><stop offset=".5" stop-color="#B8F23F"/><stop offset="1" stop-color="#6FBF12"/></linearGradient></defs><g transform="translate(-14 0)"><path d="M214 352V178a26 26 0 0 1 26-26h88" fill="none" stroke="url(#bmG)" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"/><path d="M214 258h58" fill="none" stroke="url(#bmG)" stroke-width="40" stroke-linecap="round"/><circle cx="322" cy="258" r="23" fill="url(#bmG)"/></g></svg><span class="brand-word">Fareo</span></button>
+      <button type="button" class="brand" id="brandHome" aria-label="Fareo home"><svg class="brand-mark" viewBox="0 0 512 512" aria-hidden="true"><defs><linearGradient id="bmG" gradientUnits="userSpaceOnUse" x1="150" y1="130" x2="370" y2="380"><stop offset="0" style="stop-color:var(--gold-hi)"/><stop offset=".55" style="stop-color:var(--accent)"/><stop offset="1" style="stop-color:color-mix(in srgb,var(--accent) 70%,#000)"/></linearGradient></defs><g transform="translate(-14 0)"><path d="M214 352V178a26 26 0 0 1 26-26h88" fill="none" stroke="url(#bmG)" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"/><path d="M214 258h58" fill="none" stroke="url(#bmG)" stroke-width="40" stroke-linecap="round"/><circle cx="322" cy="258" r="23" fill="url(#bmG)"/></g></svg><span class="brand-word">Fareo</span></button>
     </div>
     <div class="tg"><button type="button" class="wx" id="wx" aria-label="Fareo"><span class="wx-pip" aria-hidden="true"></span><span class="wx-txt">Fareo</span></button>
       <button class="theme" id="themeBtn" aria-label="Theme"></button></div>
@@ -2058,10 +2134,15 @@ html.calm .tally{transition:none}
       <div id="basGuide" style="display:none"></div>
     </div>
 
-    <div class="rep-actions">
-      <button class="btn neutral" id="csvBtn">Shifts CSV</button>
-      <button class="btn neutral" id="costCsvBtn">Costs CSV</button>
-      <button class="btn neutral" id="summaryBtn"><span class="summ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.7 4.3L18 9l-4.3 1.7L12 15l-1.7-4.3L6 9l4.3-1.7z"/></svg>Summary</span></button>
+    <div class="card export-card" id="exportCard">
+      <div class="ex-head"><div><span class="eyebrow">Export &amp; print</span><b id="exRangeLbl">This range</b></div><span class="tag" id="exCount">0 shifts</span></div>
+      <div class="ex-grid">
+        <button type="button" class="ex primary" id="pdfReportBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg><span><b>PDF report</b><small>Designed A4 &middot; save or share</small></span></button>
+        <button type="button" class="ex" id="printReportBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg><span><b>Print</b><small>Same report, ready to print</small></span></button>
+        <button type="button" class="ex" id="csvBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/></svg><span><b>Shifts CSV</b><small>Every shift with totals</small></span></button>
+        <button type="button" class="ex" id="costCsvBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-2-1.2L14 21l-2-1.2L10 21l-2-1.2L6 21z"/><path d="M9 8h6M9 12h6"/></svg><span><b>Costs CSV</b><small>For your accountant</small></span></button>
+      </div>
+      <button class="btn neutral ex-summ" id="summaryBtn"><span class="summ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.7 4.3L18 9l-4.3 1.7L12 15l-1.7-4.3L6 9l4.3-1.7z"/></svg>Summary</span></button>
     </div>
   </section>
 
@@ -2144,7 +2225,9 @@ html.calm .tally{transition:none}
         <header class="sp-head"><button type="button" class="sp-back" aria-label="All settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><span class="sp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18Z" fill="currentColor"/></svg></span><h2>Appearance &amp; sound</h2></header>
         <div class="sp-sec">
         <div class="card set-card">
-      <div class="set"><div class="sl"><b>Theme</b><p>Dark is the signature look</p></div><select id="setTheme"><option value="dark">Dark</option><option value="light">Light</option><option value="system">Match device</option></select></div>
+      <div class="set" style="display:block"><div class="sl"><b>Colour theme</b><p id="accentSub">Signal &middot; lime on graphite</p></div><div class="theme-grid" id="themeGrid" role="radiogroup" aria-label="Colour theme"></div></div>
+      <div class="set"><div class="sl"><b>New theme every day</b><p>Rotates through all themes at midnight</p></div><button class="tgl" id="setAccentDaily" aria-label="Rotate theme daily"></button></div>
+      <div class="set"><div class="sl"><b>Mode</b><p>Dark, light or follow your device</p></div><select id="setTheme"><option value="dark">Dark</option><option value="light">Light</option><option value="system">Match device</option></select></div>
       <div class="set"><div class="sl"><b>Open on</b><p>Screen shown when the app starts</p></div><select id="setStart"><option value="hub">Home</option><option value="shift">Log Shift</option><option value="weekly">Weekly</option></select></div>
       <div class="set"><div class="sl"><b>Sound effects</b><p>Soft tones for taps, saves and alerts</p></div><button class="tgl" id="setSounds" aria-label="Toggle sound effects"></button></div>
       <div class="set"><div class="sl"><b>Haptics</b><p>Light vibration on taps &amp; saves</p></div><button class="tgl" id="setHaptics" aria-label="Toggle haptics"></button></div>
@@ -2575,8 +2658,17 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='14.1';
+var APP_VERSION='14.3';
 var CHANGELOG=[
+  {v:'14.3',date:'November 2, 2026',notes:[
+    ['Feature','Colour themes: choose Signal, Ocean, Ember, Violet, Rose, Noir Gold, Mint or Mono in Settings \u2192 Appearance & sound. Each recolours the whole app in dark and light mode.'],
+    ['Feature','New theme every day: Fareo rotates through the themes at midnight.'],
+    ['Bug Fix','Continue with Google now works on iPad and iPhone. Sign-in loads ahead of time so Safari doesn\u2019t block the Google window, with a page redirect only as a fallback.'],
+    ['UI/UX','Sign-in problems now show a clear reason (blocked window, Private Browsing, method switched off) instead of \u201cSync failed\u201d.'],
+    ['Feature','New designed PDF report for any range: branded header, key figures, where each fare dollar goes, the BAS worksheet, weekly totals, every shift, and costs & credits, with page numbers. Save or share it on phones and tablets, download it on computers, or print it straight away.'],
+    ['Feature','Exports rebuilt: Shifts CSV has clearer columns (operator share, taxable sales, GST), a totals row, your pay settings and the date range in the filename. Costs CSV and backups open correctly in Excel, and phones get the share sheet (Save to Files, Drive, email).'],
+    ['Feature','Backups now record the version and what\u2019s inside, and restoring shows the date and counts before anything is replaced.'],
+  ]},
   {v:'14.1',date:'November 2, 2026',notes:[
     ['Feature','Your Fareo Firebase project is now built in, so every device only needs to sign in: Settings \u2192 Sync & backup \u2192 Continue with Google (or an email link, or your password), then Merge both.'],
   ]},
@@ -2951,6 +3043,8 @@ function migrateSettings(){
   if(settings.calm==null)settings.calm=false;
   if(['hub','shift','weekly'].indexOf(settings.startTab)<0)settings.startTab='hub';
   if(['auto','fixed','off'].indexOf(settings.taxMode)<0)settings.taxMode='auto';
+  if(!settings.accent)settings.accent='signal';
+  if(settings.accentDaily==null)settings.accentDaily=false;
   if(settings.taxPct==null||!isFinite(Number(settings.taxPct)))settings.taxPct=20;
   if(settings.sounds==null)settings.sounds=true;
   if(settings.weather==null)settings.weather=false;
@@ -4042,8 +4136,27 @@ function backSolveGross(take,held,fuelIPaid){var p=settings.pct/100;var g=p>0?((
 /* ---------- theme ---------- */
 var sunSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6 19 19M19 5l-1.4 1.4M6.4 17.6 5 19"/></svg>';
 var moonSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>';
+var THEMES=[{k:'signal',n:'Signal',t:'Lime on graphite',d:'#B8F23F',l:'#4E8A00',bg:'#07080A'},{k:'ocean',n:'Ocean',t:'Electric blue on navy',d:'#3DD6FF',l:'#0070AD',bg:'#05080D'},{k:'ember',n:'Ember',t:'Amber on warm black',d:'#FF8A3D',l:'#B9480A',bg:'#0A0806'},{k:'violet',n:'Violet',t:'Neon purple',d:'#A78BFA',l:'#6247CF',bg:'#08070D'},{k:'rose',n:'Rose',t:'Pink on plum',d:'#FF6B9A',l:'#C0235A',bg:'#0A0608'},{k:'gold',n:'Noir Gold',t:'Champagne on black',d:'#D9B872',l:'#8F6F2C',bg:'#09090B'},{k:'mint',n:'Mint',t:'Fresh green',d:'#34E3A4',l:'#0B8459',bg:'#05090A'},{k:'mono',n:'Mono',t:'Silver minimal',d:'#E8EAED',l:'#1F2329',bg:'#08080A'}];
+function currentAccent(){
+  if(settings.accentDaily){var d=new Date(),n=Math.floor((d-new Date(d.getFullYear(),0,0))/86400000);return THEMES[n%THEMES.length].k}
+  return THEMES.some(function(t){return t.k===settings.accent})?settings.accent:'signal';
+}
+function themeInfo(k){for(var i=0;i<THEMES.length;i++)if(THEMES[i].k===k)return THEMES[i];return THEMES[0]}
+function renderThemeGrid(){
+  var g=$('#themeGrid');if(!g)return;var cur=currentAccent(),dark=effectiveDark();
+  g.innerHTML=THEMES.map(function(t,i){var acc=dark?t.d:t.l,bg=dark?t.bg:'#FFFFFF',line=dark?'rgba(255,255,255,.18)':'rgba(11,13,16,.14)';
+    return '<button type="button" role="radio" aria-checked="'+(t.k===cur)+'" class="tsw'+(t.k===cur?' on':'')+'" data-accent="'+t.k+'" style="--k:'+i+';--tacc:'+acc+';--tbg:'+bg+';--tline:'+line+'"><span class="tp"><i></i><i></i><b></b><em></em></span><span>'+t.n+'</span></button>'}).join('');
+  var ti=themeInfo(cur),sub=$('#accentSub');if(sub)sub.textContent=ti.n+' · '+ti.t+(settings.accentDaily?' · changes daily':'');
+  var dl=$('#setAccentDaily');if(dl)dl.classList.toggle('on',!!settings.accentDaily);
+}
+function themeFlash(){var r=document.documentElement;r.classList.add('theme-anim');clearTimeout(themeFlash._t);themeFlash._t=setTimeout(function(){r.classList.remove('theme-anim')},600)}
+document.addEventListener('click',function(e){
+  var b=e.target.closest&&e.target.closest('#themeGrid .tsw');
+  if(b){settings.accent=b.dataset.accent;if(settings.accentDaily){settings.accentDaily=false}themeFlash();persist();applyTheme();renderThemeGrid();if(typeof renderSettingsNav==='function')renderSettingsNav();sfx('pop');buzz(8);toast(themeInfo(settings.accent).n+' theme');return}
+  if(e.target.id==='setAccentDaily'){settings.accentDaily=!settings.accentDaily;themeFlash();persist();applyTheme();renderThemeGrid();if(typeof renderSettingsNav==='function')renderSettingsNav();sfx('tap');toast(settings.accentDaily?'A new theme every day — today: '+themeInfo(currentAccent()).n:'Daily theme off')}
+});
 function effectiveDark(){if(settings.theme==='dark')return true;if(settings.theme==='light')return false;return matchMedia('(prefers-color-scheme: dark)').matches}
-function applyTheme(){var r=document.documentElement;if(settings.theme==='system')r.removeAttribute('data-theme');else r.setAttribute('data-theme',settings.theme);$('#themeBtn').innerHTML=effectiveDark()?sunSvg:moonSvg;var m=$('meta[name=theme-color]');if(m)m.content=effectiveDark()?'#07080A':'#F3F4F6'}
+function applyTheme(){var r=document.documentElement;if(settings.theme==='system')r.removeAttribute('data-theme');else r.setAttribute('data-theme',settings.theme);r.setAttribute('data-accent',currentAccent());$('#themeBtn').innerHTML=effectiveDark()?sunSvg:moonSvg;var m=$('meta[name=theme-color]');if(m)m.content=(getComputedStyle(r).getPropertyValue('--pg').trim()||(effectiveDark()?'#07080A':'#F3F4F6'));if($('#themeGrid'))renderThemeGrid()}
 
 /* ---------- safe formula evaluator ----------
    Tokenized shunting-yard. Only accepts numbers, the whitelisted variable names
@@ -5564,6 +5677,125 @@ function taxSetAsideRate(){
   return {rate:t.rate,mode:mode,annual:annual,label:Math.round(t.rate*1000)/10+'% est. \u00b7 ATO '+t.label,table:t.label};
 }
 var repTallyDelay=0;
+/* ---------- PDF report (jsPDF + AutoTable, vector text) ---------- */
+var PDF_LIBS=[['https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js','https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'],['https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js','https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js']];
+function loadScriptAny(urls){return new Promise(function(res,rej){var i=0;(function next(){if(i>=urls.length){rej(new Error('pdf-lib'));return}var sc=document.createElement('script');sc.src=urls[i++];sc.async=true;sc.onload=function(){res()};sc.onerror=function(){sc.remove();next()};document.head.appendChild(sc)})()})}
+function pdfLibReady(){return !!(window.jspdf&&window.jspdf.jsPDF&&window.jspdf.jsPDF.API&&window.jspdf.jsPDF.API.autoTable)}
+function pdfReady(){if(pdfLibReady())return Promise.resolve();if(pdfReady._p)return pdfReady._p;pdfReady._p=loadScriptAny(PDF_LIBS[0]).then(function(){return loadScriptAny(PDF_LIBS[1])}).then(function(){if(!pdfLibReady())throw new Error('pdf-lib')}).catch(function(e){pdfReady._p=null;throw e});return pdfReady._p}
+function hexRgb(h){h=String(h||'#000').replace('#','');if(h.length===3)h=h.split('').map(function(c){return c+c}).join('');var n=parseInt(h,16);return [(n>>16)&255,(n>>8)&255,n&255]}
+function pdfTxt(v){return String(v==null?'':v).replace(/[–—−]/g,'-').replace(/[‘’]/g,"'").replace(/[“”]/g,'"').replace(/…/g,'...').replace(/→/g,'->').replace(/[^\x00-\xFF]/g,'')}
+function pm(v){var n=Number(v)||0;return (n<0?'-$':'$')+Math.abs(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')}
+function pw(v){var n=Number(v)||0;return (n<0?'-$':'$')+Math.abs(Math.round(n)).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',')}
+function buildReportPdf(kind){
+  renderReports();
+  var J=window.jspdf.jsPDF,doc=new J({unit:'mm',format:'a4',compress:true});
+  var W=210,H=297,M=14,y=0;
+  var th=themeInfo(currentAccent()),ACC=hexRgb(th.l),ACCB=hexRgb(th.d),INK=[17,20,26],MUT=[107,115,128],LINE=[226,229,234],SOFT=[246,247,249];
+  var a=rangeAgg(),x=execFigures(a),bas=basValsFromAgg(a),X=shiftExport(),lines=(lastCostLines||[]).slice();
+  var title=kind==='bas'?'BAS worksheet':'Earnings & tax report';
+  var rangeTxt=(repRange.name||'Range')+' · '+fmtDMY(repRange.from)+' - '+fmtDMY(repRange.to);
+  var who=(settings.driverName||'').trim();
+  /* header band */
+  doc.setFillColor(11,13,16);doc.rect(0,0,W,36,'F');
+  doc.setFillColor(ACCB[0],ACCB[1],ACCB[2]);doc.rect(0,36,W,1.4,'F');
+  doc.setFillColor(22,26,32);doc.roundedRect(M,10,16,16,3,3,'F');
+  doc.setTextColor(ACCB[0],ACCB[1],ACCB[2]);doc.setFont('helvetica','bold');doc.setFontSize(15);doc.text('F',M+5.1,21.4);
+  doc.circle(M+11.4,18.2,1.1,'F');
+  doc.setTextColor(255,255,255);doc.setFontSize(17);doc.text('Fareo',M+21,17.6);
+  doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(170,176,186);doc.text('Taxi shift & tax records',M+21,23.2);
+  doc.setFont('helvetica','bold');doc.setFontSize(12.5);doc.setTextColor(255,255,255);doc.text(pdfTxt(title),W-M,16.5,{align:'right'});
+  doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(170,176,186);doc.text(pdfTxt(rangeTxt),W-M,22.5,{align:'right'});
+  y=45;
+  doc.setFontSize(8.5);doc.setTextColor(MUT[0],MUT[1],MUT[2]);
+  doc.text(pdfTxt((who?'Prepared for '+who+'  ·  ':'')+X.count+' shift'+(X.count===1?'':'s')+'  ·  Driver share '+settings.pct+'%  ·  Generated '+new Date().toLocaleString('en-AU',{day:'numeric',month:'short',year:'numeric',hour:'numeric',minute:'2-digit'})),M,y);
+  y+=7;
+  function section(t,sub){y+=4;if(y>H-40){doc.addPage();y=22}doc.setFillColor(ACC[0],ACC[1],ACC[2]);doc.rect(M,y-3.6,1.2,4.8,'F');doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(INK[0],INK[1],INK[2]);doc.text(pdfTxt(t),M+3.6,y);if(sub){doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(MUT[0],MUT[1],MUT[2]);doc.text(pdfTxt(sub),W-M,y,{align:'right'})}y+=4.5}
+  function tiles(list){var gap=3,w=(W-2*M-gap*(list.length-1))/list.length,h=19;
+    list.forEach(function(t,i){var x0=M+i*(w+gap);if(t.hero){doc.setFillColor(ACC[0],ACC[1],ACC[2]);}else doc.setFillColor(SOFT[0],SOFT[1],SOFT[2]);doc.roundedRect(x0,y,w,h,2.4,2.4,'F');
+      doc.setFont('helvetica','bold');doc.setFontSize(6.6);var lc=t.hero?[255,255,255]:MUT;doc.setTextColor(lc[0],lc[1],lc[2]);doc.text(pdfTxt(t.l.toUpperCase()),x0+3.4,y+5.6);
+      doc.setFontSize(12.5);var vc=t.hero?[255,255,255]:INK;doc.setTextColor(vc[0],vc[1],vc[2]);doc.text(pdfTxt(t.v),x0+3.4,y+12.3);
+      doc.setFont('helvetica','normal');doc.setFontSize(6.8);var sc=t.hero?[235,240,245]:MUT;doc.setTextColor(sc[0],sc[1],sc[2]);doc.text(pdfTxt(t.s||''),x0+3.4,y+16.4)});
+    y+=h+4}
+  var tbl={theme:'plain',margin:{left:M,right:M,top:22,bottom:18},styles:{font:'helvetica',fontSize:7.6,cellPadding:{top:1.7,bottom:1.7,left:1.8,right:1.8},textColor:INK,lineColor:LINE,lineWidth:0},
+    headStyles:{fillColor:SOFT,textColor:MUT,fontStyle:'bold',fontSize:6.9},footStyles:{fillColor:[255,255,255],textColor:INK,fontStyle:'bold'},alternateRowStyles:{fillColor:[251,251,252]},
+    didDrawCell:function(d){if(d.section==='foot'&&d.row.index===0){doc.setDrawColor(INK[0],INK[1],INK[2]);doc.setLineWidth(.3);doc.line(d.cell.x,d.cell.y,d.cell.x+d.cell.width,d.cell.y)}}};
+  function table(head,body,foot,colStyles,extra){var o=Object.assign({},tbl,{startY:y,head:[head.map(pdfTxt)],body:body.map(function(r){return r.map(pdfTxt)}),columnStyles:colStyles||{}},extra||{});if(foot)o.foot=[foot.map(pdfTxt)];o.showFoot='lastPage';doc.autoTable(o);y=doc.lastAutoTable.finalY+8}
+  function right(idx){var c={};idx.forEach(function(i){c[i]={halign:'right'}});return c}
+
+  if(kind!=='bas'){
+    tiles([{l:'Gross fares',v:pm(x.gross),s:X.count?pm(x.gross/X.count)+' per shift':'No shifts'},{l:'Your share',v:pm(x.share),s:Math.round(x.pctShare*1000)/10+'% of gross'},{l:'Payout',v:pm(x.payout),s:'Settlement from operator'},{l:'Kept after tax',v:pm(x.kept),s:'Estimate',hero:true}]);
+    tiles([{l:'Hail levy',v:pm(x.levy),s:(a.hailN||0)+' hail trips'},{l:'GST net',v:pm(x.gstNet),s:'1A minus 1B'},{l:'Claimed costs',v:pm(x.costs),s:'You paid (GST incl.)'},{l:'Tax set-aside',v:pm(x.tax),s:x.taxRate.mode==='off'?'Off':(Math.round(x.taxRate.rate*1000)/10)+'% '+(x.taxRate.mode==='auto'?'ATO estimate':'fixed')}]);
+    section('Where each fare dollar goes','of '+pm(x.gross)+' gross');
+    var segs=[['Operator share',x.operator,[156,163,175]],['Hail levy',x.levy,hexRgb('#7656B5')],['GST net',Math.max(0,x.gstNet),hexRgb('#0A7CC2')],['Claimed costs',x.costs,hexRgb('#B86A00')],['Income tax set-aside',x.tax,hexRgb('#D92D48')],['Kept',Math.max(0,x.kept),ACC]];
+    var tot=segs.reduce(function(s2,g){return s2+g[1]},0),bx=M,bw=W-2*M;
+    if(tot>0){segs.forEach(function(g){var w2=g[1]/tot*bw;if(w2<=0)return;doc.setFillColor(g[2][0],g[2][1],g[2][2]);doc.rect(bx,y,w2,4.2,'F');bx+=w2})}else{doc.setFillColor(SOFT[0],SOFT[1],SOFT[2]);doc.rect(M,y,bw,4.2,'F')}
+    y+=7;
+    table(['','Item','Amount','Share'],segs.map(function(g){return ['',g[0],pm(g[1]),tot>0?(Math.round(g[1]/tot*1000)/10).toFixed(1)+'%':'-']}),null,Object.assign({0:{cellWidth:5}},right([2,3])),{didParseCell:function(d){if(d.section==='body'&&d.column.index===0){d.cell.styles.fillColor=segs[d.row.index][2]}}});
+  }else{
+    tiles([{l:'G1 total sales',v:pw(bas.g1),s:'Taxable sales'},{l:'1A GST on sales',v:pw(bas.oneA),s:'You collected'},{l:'1B GST credits',v:pw(bas.oneB),s:'You can claim'},{l:bas.net>=0?'Net payable':'Net refund',v:pw(Math.abs(bas.net)),s:'1A minus 1B',hero:true}]);
+  }
+  section('BAS worksheet','Whole dollars, rounded down as the ATO asks');
+  var bRows=[['G1','Total sales (taxable)',pw(bas.g1)]];
+  if(cashIsTaxFree()&&(bas.taxFree||0)>0)bRows.push(['-','Tax-free cash / Square kept out of G1',pw(bas.taxFree)]);
+  if(bas.showG3)bRows.push(['G3','Other GST-free sales',pw(bas.g3)]);
+  bRows.push(['1A','GST on sales',pw(bas.oneA)],['1B','GST on purchases (credits)',pw(bas.oneB)],['8A','Same as 1A',pw(bas.oneA)],['8B','Same as 1B',pw(bas.oneB)]);
+  table(['Label','Description','Amount'],bRows,[bas.net>=0?'Pay':'Refund',bas.net>=0?'Net amount to pay the ATO':'Net refund from the ATO',pw(Math.abs(bas.net))],Object.assign({0:{cellWidth:16,fontStyle:'bold'}},right([2])));
+  if(a.editsN){doc.setFont('helvetica','italic');doc.setFontSize(7.5);doc.setTextColor(MUT[0],MUT[1],MUT[2]);doc.text(pdfTxt('Includes '+a.editsN+' temporary cost adjustment'+(a.editsN===1?'':'s')+' made in Fareo (see Adjusted column).'),M,y-4);y+=2}
+
+  if(kind!=='bas'){
+    /* weekly totals by settlement cycle */
+    var wk={};X.rows.forEach(function(r){var c=cycleForDate(r.e.date),k=c.from;if(!wk[k])wk[k]={c:c,n:0,g:0,s:0,t:0,l:0};var o=wk[k];o.n++;o.g+=r.v.gross;o.s+=r.v.share;o.t+=r.v.take;o.l+=r.v.levy});
+    var wkeys=Object.keys(wk).sort();
+    if(wkeys.length>1){section('Weekly totals',cycleName()+' cycle');
+      table(['Week','Shifts','Gross','Your share','Payout','Levy','Paid on'],wkeys.map(function(k){var o=wk[k];return [fmtDMY(o.c.from)+' - '+fmtDMY(o.c.to),o.n,pm(o.g),pm(o.s),pm(o.t),pm(o.l),fmtDMY(creditOn(o.c.end))]}),null,right([1,2,3,4,5]))}
+  }
+  section('Shifts',X.count+' in this range');
+  var T=X.T;
+  if(X.count)table(['Date','Rego','Gross','Your share','Cash/Sq','Fuel paid','Payout','Hail','Levy','G1 basis'],X.rows.map(function(r){var v=r.v;return [fmtDayDMY(r.e.date),r.e.rego||'',pm(v.gross),pm(v.share),pm(v.cash+v.square),pm(v.fi),pm(v.take),v.hail,pm(v.levy),pm(v.g1)]}),['Totals','',pm(T.gross),pm(T.share),pm((T.cash||0)+(T.square||0)),pm(T.fi),pm(T.take),T.hail||0,pm(T.levy),pm(T.g1)],right([2,3,4,5,6,7,8,9]));
+  else{doc.setFontSize(9);doc.setTextColor(MUT[0],MUT[1],MUT[2]);doc.text('No shifts in this range.',M,y+2);y+=10}
+  section('Costs & credits',lines.length?lines.filter(function(l){return l.claimed}).length+' of '+lines.length+' claimed':'');
+  if(lines.length){var tc=0,td=0;
+    var body=lines.slice().sort(function(p,q){return p.date<q.date?-1:1}).map(function(l){var m2=costMath(l.c);if(l.claimed){tc+=m2.cred;td+=m2.ded}return [fmtDMY(l.date),catLabel(l.cat),l.name+(l.c.edited?' (adjusted)':''),pm(l.c.amount),l.c.gst?'Yes':'No',Math.round(l.c.bu)+'%',l.claimed?pm(m2.cred):'-',l.claimed?pm(m2.ded):'-',l.kind==='levy'?'SRO':(l.receipt?'Yes':'No'),l.claimed?'Yes':'No']});
+    table(['Date','Category','Description','Amount','GST','Bus.','Credit','Deduction','Receipt','Claimed'],body,['Totals','','','','','',pm(tc),pm(td),'',''],Object.assign({2:{cellWidth:38}},right([3,5,6,7])),{didParseCell:function(d){if(d.section==='body'&&d.column.index===8&&d.cell.raw==='No'){d.cell.styles.textColor=[192,65,75]}}});
+  }else{doc.setFontSize(9);doc.setTextColor(MUT[0],MUT[1],MUT[2]);doc.text('No costs logged in this range.',M,y+2);y+=10}
+  /* notes */
+  if(y>H-40){doc.addPage();y=22}
+  doc.setFont('helvetica','normal');doc.setFontSize(7.2);doc.setTextColor(MUT[0],MUT[1],MUT[2]);
+  var note='Figures come from the shifts and costs recorded in Fareo. BAS amounts are whole dollars rounded down. Kept after tax and the income tax set-aside are estimates'+(x.taxRate.mode==='auto'?' using ATO '+(x.taxRate.table||'')+' resident rates, LITO and the Medicare levy':'')+', not tax advice. GST credits need a tax invoice for purchases over $82.50. Keep records for 5 years.';
+  doc.text(doc.splitTextToSize(pdfTxt(note),W-2*M),M,y);
+  /* running header + footer on every page */
+  var n=doc.internal.getNumberOfPages();
+  for(var i=1;i<=n;i++){doc.setPage(i);
+    if(i>1){doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(INK[0],INK[1],INK[2]);doc.text('Fareo',M,12);doc.setFont('helvetica','normal');doc.setTextColor(MUT[0],MUT[1],MUT[2]);doc.text(pdfTxt(title+'  ·  '+rangeTxt),W-M,12,{align:'right'});doc.setDrawColor(LINE[0],LINE[1],LINE[2]);doc.setLineWidth(.2);doc.line(M,14.5,W-M,14.5)}
+    doc.setDrawColor(LINE[0],LINE[1],LINE[2]);doc.setLineWidth(.2);doc.line(M,H-12,W-M,H-12);
+    doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(MUT[0],MUT[1],MUT[2]);
+    doc.text(pdfTxt('Fareo '+APP_VERSION+'  ·  '+rangeTxt),M,H-7.5);doc.text('Page '+i+' of '+n,W-M,H-7.5,{align:'right'})}
+  doc.setProperties({title:'Fareo '+title+' '+fileStamp(),subject:rangeTxt,author:who||'Fareo',creator:'Fareo '+APP_VERSION});
+  return {blob:doc.output('blob'),name:'Fareo-'+(kind==='bas'?'BAS':'report')+'_'+fileStamp()+'.pdf'};
+}
+function printPdfBlob(blob,name){
+  if(touchDevice()){return deliverFile(blob,name,'Print Fareo report','Choose Print in the share sheet')}
+  var u=URL.createObjectURL(blob),f=document.createElement('iframe');
+  f.style.cssText='position:fixed;right:0;bottom:0;width:1px;height:1px;border:0;opacity:0';f.src=u;document.body.appendChild(f);
+  f.onload=function(){setTimeout(function(){try{f.contentWindow.focus();f.contentWindow.print()}catch(_){window.open(u,'_blank')}},250)};
+  setTimeout(function(){try{f.remove()}catch(_){}URL.revokeObjectURL(u)},120000);
+}
+function exportPdf(kind,mode,btn){
+  if(btn){if(btn.classList.contains('busy'))return;btn.classList.add('busy')}
+  function done(){if(btn)btn.classList.remove('busy')}
+  function run(){try{var r=buildReportPdf(kind);if(mode==='print')printPdfBlob(r.blob,r.name);else deliverFile(r.blob,r.name,'Fareo report','PDF ready · '+r.name)}catch(e){toast('Couldn’t build the PDF','error');try{console.error(e)}catch(_){}}done()}
+  if(pdfLibReady()){run();return}
+  toast('Preparing PDF…');
+  pdfReady().then(run).catch(function(){done();toast('PDF tools need a connection the first time','error')});
+}
+function renderExportCard(a){
+  var l=$('#exRangeLbl');if(l)l.textContent=(repRange.name||'This range')+' · '+fmtDMY(repRange.from)+' - '+fmtDMY(repRange.to);
+  var c=$('#exCount');if(c){var n=(a&&a.es?a.es.length:0);c.textContent=n+(n===1?' shift':' shifts')}
+}
+document.addEventListener('click',function(e){
+  var b=e.target.closest&&e.target.closest('#pdfReportBtn');if(b){exportPdf('full','save',b);return}
+  var p=e.target.closest&&e.target.closest('#printReportBtn');if(p){exportPdf('full','print',p);return}
+});
 /* ---------- Costs & credits tax assistant ---------- */
 var INVOICE_MIN=82.50; /* ATO: tax invoice needed for GST credits on purchases over $82.50 incl. GST */
 var CAT_TIPS={
@@ -5691,8 +5923,8 @@ if($('#costCsvBtn'))$('#costCsvBtn').onclick=function(){
     rows.push([l.date,catLabel(l.cat),l.name,l.paidBy,l.c.orig.amount.toFixed(2),l.c.amount.toFixed(2),l.c.gst?'Yes':'No',Math.round(l.c.bu),l.claimed?m.cred.toFixed(2):'0.00',l.claimed?m.ded.toFixed(2):'0.00',l.claimed?'Yes':'No',l.kind==='levy'?'SRO':(l.receipt?'Yes':'No'),l.c.edited?'Yes':'No',l.c.note||''])});
   rows.push([]);rows.push(['Totals (claimed)','','','','','','','',tc.toFixed(2),td.toFixed(2)]);
   rows.push(['Range',repRange.from+' to '+repRange.to]);
-  var csv=rows.map(function(r){return r.map(csvCell).join(',')}).join('\r\n');
-  var bl=new Blob([csv],{type:'text/csv'}),u=URL.createObjectURL(bl),an=document.createElement('a');an.href=u;an.download='fareo-costs-'+repRange.from+'-to-'+repRange.to+'.csv';an.click();setTimeout(function(){URL.revokeObjectURL(u)},1000);toast('Costs CSV exported');
+  rows.push(['Exported',new Date().toLocaleString('en-AU')+' \u00b7 Fareo '+APP_VERSION]);
+  deliverFile(csvBlob(rows),'Fareo-costs_'+fileStamp()+'.csv','Fareo costs','Costs CSV ready');
 };
 function prevRangeOf(from,to){if(!from||!to)return null;var f=asDate(from),t=asDate(to),n=Math.round((t-f)/86400000)+1;var pt=new Date(f);pt.setDate(pt.getDate()-1);var pf=new Date(pt);pf.setDate(pf.getDate()-n+1);return[iso(pf),iso(pt)]}
 function pctTxt(x){return (Math.round(x*1000)/10).toFixed(1)+'%'}
@@ -5957,6 +6189,7 @@ function renderReports(){
   renderCyclePulse(a);
   renderChart(a);
   renderExec(a);
+  renderExportCard(a);
   renderJarMeta();
   var lodgement=basValsFromAgg(a);
   tally($('#repGstCred'),lodgement.oneB,{delay:repTallyDelay});tally($('#repDeduct'),a.dedTotal,{delay:repTallyDelay+60});
@@ -6515,15 +6748,55 @@ async function shareSummary(){
   copyToClipboard(txt,'Summary copied to clipboard');
 }
 if($('#shareSummary'))$('#shareSummary').onclick=shareSummary;
-$('#pdfBtn').onclick=function(){$('#printRoot').innerHTML='<div style="padding:26px;max-width:520px;margin:0 auto">'+(curSummaryMode==='bas'?basSummaryHTML(true):summaryHTML(true))+'</div>';setTimeout(function(){window.print()},60)};
+$('#pdfBtn').onclick=function(){exportPdf(curSummaryMode==='bas'?'bas':'full','save',this)};
 $('#expRcptFile')&&($('#expRcptFile').onchange=function(e){expRcptFile=e.target.files[0]||null;$('#expRcptTxt').textContent=expRcptFile?'Receipt attached':'Attach Receipt';$('#expRcpt').classList.toggle('done',!!expRcptFile)});
 /* [F9] CSV: quote fields, escape quotes, guard non-numeric values that start
    with a formula trigger so Excel/Sheets can't execute them */
 function csvCell(v){v=String(v==null?'':v);if(!/^-?\d+(\.\d+)?$/.test(v)&&/^[=+\-@\t]/.test(v))v="'"+v;if(/[",\n\r]/.test(v))v='"'+v.replace(/"/g,'""')+'"';return v}
-$('#csvBtn').onclick=function(){var rows=[['Date','Rego','TakeHome','AfterLevy','Gross','DriverShare','EFTPOS','Cash','Square','Accounts','Runs','FuelTotal','FuelIPaid','FuelOpPaid','HailTrips','Levy']];
-  entries.filter(function(e){return inRange(e.date)}).forEach(function(e){var fi=(e.fuelIPaid!=null?Number(e.fuelIPaid):(e.fuelPocket!=null?Number(e.fuelPocket):Number(e.fuel)||0));var fo=(e.fuelOpPaid!=null?Number(e.fuelOpPaid):(e.fuelCompany!=null?Number(e.fuelCompany):0));var hail=Number(e.hail)||0;var take=Number(e.take)||0;var lev=hail*levyRate();rows.push([e.date,e.rego,take.toFixed(2),(take-lev).toFixed(2),(Number(e.gross)||0).toFixed(2),entryShare(e).toFixed(2),(Number(e.eos)||0).toFixed(2),(Number(e.cash)||0).toFixed(2),(Number(e.square)||0).toFixed(2),entryAccounts(e).toFixed(2),((Number(e.runs)||0)*RUN).toFixed(2),(Number(e.fuel)||0).toFixed(2),fi.toFixed(2),fo.toFixed(2),hail,lev.toFixed(2)])});
-  var csv=rows.map(function(r){return r.map(csvCell).join(',')}).join('\r\n');
-  var bl=new Blob([csv],{type:'text/csv'}),u=URL.createObjectURL(bl),an=document.createElement('a');an.href=u;an.download='fareo-report.csv';an.click();setTimeout(function(){URL.revokeObjectURL(u)},1000);toast('CSV exported')};
+/* ---------- exports: file delivery, CSVs, backup, PDF ---------- */
+function fileStamp(){return (repRange.from||'start')+'_to_'+(repRange.to||todayStr())}
+function touchDevice(){return (navigator.maxTouchPoints||0)>1||/Android|iPhone|iPad|iPod/.test(navigator.userAgent)}
+function downloadBlob(blob,name){
+  var u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;a.rel='noopener';
+  document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},8000);
+}
+/* Phones and tablets get the share sheet (Save to Files, Drive, Print, mail);
+   computers get a normal download. Falls back to download if sharing fails. */
+function deliverFile(blob,name,title,doneMsg){
+  var file=null;try{file=new File([blob],name,{type:blob.type})}catch(_){}
+  if(file&&touchDevice()&&navigator.canShare&&navigator.canShare({files:[file]})){
+    return navigator.share({files:[file],title:title||name}).then(function(){toast(doneMsg||'Shared','success')}).catch(function(e){if(e&&e.name==='AbortError')return;downloadBlob(blob,name);toast(doneMsg||'Saved','success')});
+  }
+  downloadBlob(blob,name);toast(doneMsg||'Saved','success');return Promise.resolve();
+}
+function csvBlob(rows){return new Blob(['﻿'+rows.map(function(r){return r.map(csvCell).join(',')}).join('\r\n')],{type:'text/csv;charset=utf-8'})}
+function n2(v){var x=Math.round((Number(v)||0)*100)/100;return (x===0?0:x).toFixed(2)}
+function fuelYouPaid(e){return e.fuelIPaid!=null?Number(e.fuelIPaid)||0:(e.fuelPocket!=null?Number(e.fuelPocket)||0:Number(e.fuel)||0)}
+function fuelOpPaid(e){return e.fuelOpPaid!=null?Number(e.fuelOpPaid)||0:(e.fuelCompany!=null?Number(e.fuelCompany)||0:0)}
+function customSum(e){var t=0;if(e.custom)Object.keys(e.custom).forEach(function(k){t+=Number(e.custom[k])||0});return t}
+/* One row per shift in the report range, plus numeric totals. Same helpers as Reports. */
+function shiftExport(){
+  var es=entries.filter(function(e){return inRange(e.date)}).sort(function(x,y){return x.date<y.date?-1:x.date>y.date?1:0});
+  var cols=['Date','Day','Rego','Gross fares','EOS / EFTPOS','Cash','Square','Accounts','Runs','Other income','Driver share','Operator share','Fuel you paid','Fuel operator paid','Payout from operator','Hail trips','Levy','Taxable sales (G1 basis)','GST on sales (1/11)'];
+  var T={};var rows=es.map(function(e){
+    var g=Number(e.gross)||0,sh=entryShare(e),hail=Number(e.hail)||0,lev=entryLevy(e),g1=entrySales(e),gst=entryGstBase(e)/11;
+    var v={gross:g,eos:Number(e.eos)||0,cash:Number(e.cash)||0,square:Number(e.square)||0,acct:entryAccounts(e),runs:(Number(e.runs)||0)*RUN,other:customSum(e),share:sh,op:Math.max(0,g-sh),fi:fuelYouPaid(e),fo:fuelOpPaid(e),take:Number(e.take)||0,hail:hail,levy:lev,g1:g1,gst:gst};
+    Object.keys(v).forEach(function(k){T[k]=(T[k]||0)+v[k]});
+    return {e:e,v:v};
+  });
+  return {cols:cols,rows:rows,T:T,count:es.length};
+}
+function shiftsCsvRows(){
+  var X=shiftExport(),out=[X.cols];
+  X.rows.forEach(function(r){var e=r.e,v=r.v;out.push([e.date,DAYS[asDate(e.date).getDay()].slice(0,3),e.rego||'',n2(v.gross),n2(v.eos),n2(v.cash),n2(v.square),n2(v.acct),n2(v.runs),n2(v.other),n2(v.share),n2(v.op),n2(v.fi),n2(v.fo),n2(v.take),v.hail,n2(v.levy),n2(v.g1),n2(v.gst)])});
+  var T=X.T;if(X.count)out.push(['Totals','',X.count+' shifts',n2(T.gross),n2(T.eos),n2(T.cash),n2(T.square),n2(T.acct),n2(T.runs),n2(T.other),n2(T.share),n2(T.op),n2(T.fi),n2(T.fo),n2(T.take),T.hail,n2(T.levy),n2(T.g1),n2(T.gst)]);
+  out.push([]);out.push(['Range',repRange.from+' to '+repRange.to]);out.push(['Driver share %',settings.pct]);out.push(['Levy per hail trip',n2(levyRate())]);out.push(['Cash & Square tax-free',cashIsTaxFree()?'Yes':'No']);out.push(['GST base',settings.gstBase==='share'?'Driver share':'Full gross']);out.push(['Exported',new Date().toLocaleString('en-AU')+' · Fareo '+APP_VERSION]);
+  return out;
+}
+$('#csvBtn').onclick=function(){
+  if(!entries.some(function(e){return inRange(e.date)})){toast('No shifts in this range');return}
+  deliverFile(csvBlob(shiftsCsvRows()),'Fareo-shifts_'+fileStamp()+'.csv','Fareo shifts','Shifts CSV ready');
+};
 /* ---------- settings ---------- */
 function renderSettings(){
   $('#setPct').value=settings.pct;$('#setLevy').value=settings.levy;$('#setFuel').value=settings.fuel;$('#setTheme').value=settings.theme;
@@ -6537,7 +6810,7 @@ function renderSettings(){
   var sn=$('#setName');if(sn&&document.activeElement!==sn)sn.value=settings.driverName||'';
   var sst=$('#setStart');if(sst)sst.value=settings.startTab||'hub';
   var shp=$('#setHaptics');if(shp)shp.classList.toggle('on',settings.haptics!==false);
-  renderAcctSettings();syncWxSettings();renderSettingsNav();
+  renderAcctSettings();syncWxSettings();renderSettingsNav();renderThemeGrid();
   var sso=$('#setSounds');if(sso)sso.classList.toggle('on',settings.sounds!==false);
   var stm=$('#setTaxMode');if(stm)stm.value=settings.taxMode||'auto';
   var stp=$('#setTaxPct');if(stp&&document.activeElement!==stp)stp.value=settings.taxPct;
@@ -6649,9 +6922,15 @@ function allData(){var o={};SYNC_KEYS.forEach(function(k){var v=localStorage.get
 /* Backup includes receipts (for a full audit-safe export); cloud sync does not. */
 function allDataFull(){var o=allData();var r=localStorage.getItem('fareo_receipts');if(r!=null)o['fareo_receipts']=r;return o}
 function applyData(d){Object.keys(d||{}).forEach(function(k){if(k.indexOf('fareo_')===0){var v=d[k];try{localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v))}catch(_){}}})}
-$('#exportBtn').onclick=function(){var dump={app:'fareo',ver:APP_VERSION,exported:new Date().toISOString(),data:allDataFull()};var b=new Blob([JSON.stringify(dump,null,2)],{type:'application/json'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download='fareo-backup-'+todayStr()+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},1200);toast('Backup saved')};
+function backupCounts(d){function L(k){try{var v=d[k];v=typeof v==='string'?JSON.parse(v):v;return Array.isArray(v)?v.length:0}catch(_){return 0}}return {shifts:L('fareo_entries'),costs:L('fareo_deductions')+L('fareo_fuelManual')+L('fareo_recurring'),clients:L('fareo_clients'),receipts:L('fareo_receipts')}}
+$('#exportBtn').onclick=function(){
+  var data=allDataFull(),c=backupCounts(data),d=new Date();
+  var dump={app:'fareo',schema:2,ver:APP_VERSION,exported:d.toISOString(),counts:c,data:data};
+  var hm=('0'+d.getHours()).slice(-2)+('0'+d.getMinutes()).slice(-2);
+  deliverFile(new Blob([JSON.stringify(dump)],{type:'application/json'}),'Fareo-backup_'+todayStr()+'_'+hm+'.json','Fareo backup','Backup ready · '+c.shifts+' shifts');
+};
 $('#importBtn').onclick=function(){$('#importFile').click()};
-$('#importFile').onchange=function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var obj=JSON.parse(r.result);var d=obj.data||obj;if(!d||typeof d!=='object')throw 0;ask('Restore this backup?','It replaces the data on this device. Receipts in the backup come with it.','Restore',function(){applyData(d);toast('Restored - reloading');setTimeout(function(){location.reload()},700)})}catch(_){toast('Invalid backup file')}};r.readAsText(f);e.target.value=''};
+$('#importFile').onchange=function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var obj=JSON.parse(r.result);var d=obj.data||obj;if(!d||typeof d!=='object'||!Object.keys(d).some(function(k){return k.indexOf('fareo_')===0}))throw 0;var c=backupCounts(d),when=obj.exported?new Date(obj.exported).toLocaleString('en-AU',{day:'numeric',month:'short',year:'numeric',hour:'numeric',minute:'2-digit'}):'an unknown date';ask('Restore this backup?','From '+when+(obj.ver?' (Fareo '+obj.ver+')':'')+': '+c.shifts+' shifts, '+c.costs+' costs, '+c.clients+' clients, '+c.receipts+' receipts. It replaces the data on this device.','Restore',function(){try{localStorage.setItem('fareo_prerestore',JSON.stringify({at:Date.now(),data:allData()}))}catch(_){}applyData(d);toast('Restored - reloading');setTimeout(function(){location.reload()},700)})}catch(_){toast('Invalid backup file')}};r.readAsText(f);e.target.value=''};
 function deviceId(){var id=localStorage.getItem('fareo_device');if(!id){id='d'+Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('fareo_device',id)}return id}
 function parseCfg(t){if(!t)return null;t=String(t).trim().replace(/^(export\s+)?(const|let|var)\s+[\w$]+\s*=\s*/,'').replace(/;\s*$/,'');var m=t.match(/\{[\s\S]*\}/);if(m)t=m[0];try{return JSON.parse(t)}catch(e){try{return (new Function('return ('+t+')'))()}catch(e2){return null}}}
 var fb={app:null,auth:null,db:null,authM:null,fsM:null,uid:null,email:''},syncOn=false,syncTimer=null,applyingRemote=false;
@@ -6695,21 +6974,33 @@ document.addEventListener('click',function(e){
 });
 function fbCfg(){var t=($('#fbConfig')&&$('#fbConfig').value.trim())||'';var c=t?parseCfg(t):null;if(c&&c.apiKey)return c;try{var st=JSON.parse(localStorage.getItem('fareo_fbcfg')||'null');if(st&&st.apiKey)return st}catch(_){}return FAREO_FB}
 async function fbReady(){var cfg=fbCfg();if(!cfg||!cfg.apiKey){var adv=$('#syncAdv');if(adv)adv.open=true;revealSetting('#syncAdv');toast('Paste your Firebase config first','warn');throw new Error('no-config')}localStorage.setItem('fareo_fbcfg',JSON.stringify(cfg));await fbInit(cfg);return cfg}
-function syncErr(e){var c=(e&&e.code)||'';var m={'auth/popup-closed-by-user':'Sign-in cancelled','auth/cancelled-popup-request':'Sign-in cancelled','auth/unauthorized-domain':'This web address isn’t allowed in Firebase yet','auth/operation-not-allowed':'That sign-in method is off in Firebase','auth/wrong-password':'Wrong password','auth/invalid-credential':'Email or password doesn’t match','auth/user-not-found':'No account for that email','auth/email-already-in-use':'That email already has an account — sign in instead','auth/weak-password':'Use at least 6 characters','auth/network-request-failed':'No connection'}[c];
-  if(e&&e.message==='no-config')return;setSyncState(m?m:('Error: '+(c||'failed')));toast(m||'Sync failed','error')}
+function syncErr(e){var c=(e&&e.code)||'';var m={'auth/popup-blocked':'Your browser blocked the Google window \u2014 tap Continue with Google again','auth/web-storage-unsupported':'This browser is blocking sign-in storage \u2014 turn off Private Browsing','auth/internal-error':'Google sign-in didn\u2019t finish \u2014 try again, or use email','auth/popup-closed-by-user':'Sign-in cancelled','auth/cancelled-popup-request':'Sign-in cancelled','auth/unauthorized-domain':'This web address isn’t allowed in Firebase yet','auth/operation-not-allowed':'That sign-in method is off in Firebase','auth/wrong-password':'Wrong password','auth/invalid-credential':'Email or password doesn’t match','auth/user-not-found':'No account for that email','auth/email-already-in-use':'That email already has an account — sign in instead','auth/weak-password':'Use at least 6 characters','auth/network-request-failed':'No connection'}[c];
+  if(e&&e.message==='no-config')return;setSyncState(m?m:('Error: '+(c||(e&&e.message)||'failed')));toast(m||('Sign-in failed: '+(c||'unknown error')),'error')}
 async function syncConnect(create){try{
   var email=$('#syncEmail').value.trim(),pass=$('#syncPass').value;if(!email||!pass){toast('Enter email and password');return}
   setSyncState('Connecting...');await fbReady();
   if(create)await fb.authM.createUserWithEmailAndPassword(fb.auth,email,pass);else await fb.authM.signInWithEmailAndPassword(fb.auth,email,pass);
   afterAuth(fb.auth.currentUser,true);
 }catch(e){syncErr(e)}}
-async function syncGoogle(){try{
-  setSyncState('Opening Google…');await fbReady();
-  var prov=new fb.authM.GoogleAuthProvider();prov.setCustomParameters({prompt:'select_account'});
-  var standalone=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone;
-  if(standalone&&isAppleTouch()){localStorage.setItem('fareo_sync_pending','1');await fb.authM.signInWithRedirect(fb.auth,prov);return}
-  var r=await fb.authM.signInWithPopup(fb.auth,prov);afterAuth(r.user,true);
-}catch(e){syncErr(e)}}
+/* Safari (iPad/iPhone) only allows the Google pop-up if it opens in the same
+   tap, so the SDK is preloaded and signInWithPopup is called with no await
+   before it. Redirect is only a fallback, because Safari's tracking
+   protection often breaks redirect sign-in on a different auth domain. */
+function fbPreload(){var c=fbCfg();if(!c||!c.apiKey||fb.app||fbPreload._p)return fbPreload._p;fbPreload._p=fbInit(c).catch(function(){fbPreload._p=null});return fbPreload._p}
+function googleProvider(){var prov=new fb.authM.GoogleAuthProvider();prov.setCustomParameters({prompt:'select_account'});return prov}
+function syncGoogle(){
+  setSyncState('Opening Google…');
+  function viaRedirect(){try{localStorage.setItem('fareo_sync_pending','1');setSyncState('Redirecting to Google…');return fb.authM.signInWithRedirect(fb.auth,googleProvider())}catch(e){syncErr(e)}}
+  function popup(){
+    return fb.authM.signInWithPopup(fb.auth,googleProvider()).then(function(r){afterAuth(r.user,true)}).catch(function(e){
+      var c=e&&e.code;
+      if(c==='auth/popup-blocked'||c==='auth/operation-not-supported-in-this-environment'||c==='auth/web-storage-unsupported')return viaRedirect();
+      syncErr(e);
+    });
+  }
+  if(fb.app&&fb.authM){popup();return}
+  fbReady().then(popup).catch(syncErr);
+}
 async function syncEmailLink(){try{
   var email=$('#syncEmail').value.trim();if(!/^\S+@\S+\.\S+$/.test(email)){toast('Enter your email','warn');return}
   await fbReady();
@@ -6815,6 +7106,7 @@ if($('#syncOut'))$('#syncOut').onclick=syncSignOut;
   if(/[?&](mode=signIn|oobCode=)/.test(location.href)){finishEmailLink();return}
   var cfg=fbCfg();if(!cfg||!cfg.apiKey)return;
   if(localStorage.getItem('fareo_sync_pending')){localStorage.removeItem('fareo_sync_pending');fbInit(cfg).then(function(){return fb.authM.getRedirectResult(fb.auth)}).then(function(r){if(r&&r.user)afterAuth(r.user,true)}).catch(syncErr);return}
+  if(!localStorage.getItem('fareo_sync_on'))setTimeout(function(){try{fbPreload()}catch(_){}},2500);
   if(localStorage.getItem('fareo_sync_on')){fbInit(cfg).then(function(){fb.authM.onAuthStateChanged(fb.auth,function(u){afterAuth(u)})}).catch(function(){setSyncState('Off - local only')})}
 }catch(_){}})();
 
@@ -8184,7 +8476,7 @@ function updFlowStart(steps,title){
 function updFlowFinish(t0,cb){var wait=Math.max(0,UF_MIN-(Date.now()-t0));setTimeout(function(){updFlowStart._done=true;ufSet(1);var s=$('#ufSub');if(s)s.textContent='Restarting\u2026';setTimeout(cb,320)},wait)}
 function confetti(cv){
   if(!cv||motionOff())return;var c=cv.getContext('2d'),W=cv.width=cv.offsetWidth*devicePixelRatio,H=cv.height=cv.offsetHeight*devicePixelRatio;
-  var col=['#B8F23F','#5CC8FF','#A795FF','#3EE6C1','#FFB547','#F2F4F7'],P=[];
+  var col=[getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#B8F23F','#5CC8FF','#A795FF','#3EE6C1','#FFB547','#F2F4F7'],P=[];
   for(var i=0;i<130;i++)P.push({x:W/2,y:H*0.32,vx:(Math.random()-0.5)*W*0.022,vy:-Math.random()*H*0.03-H*0.006,r:(Math.random()*5+3)*devicePixelRatio,c:col[i%col.length],a:Math.random()*6,s:Math.random()*0.3-0.15,sq:Math.random()<0.5});
   var t0=performance.now();
   (function step(now){var k=(now-t0)/1900;c.clearRect(0,0,W,H);
@@ -8304,6 +8596,7 @@ var hubTallyDelay=0;
 function setNarrow(){return window.matchMedia?!matchMedia('(min-width: 740px)').matches:innerWidth<740}
 var setPaneCur=(function(){try{return localStorage.getItem('fareo_setpane')||'profile'}catch(_){return 'profile'}})();
 function openSetPane(cat,quiet){
+  if(cat==='data')try{fbPreload()}catch(_){}
   var sh=$('#setShell');if(!sh)return;var pane=$('.set-pane[data-spane="'+cat+'"]');if(!pane)return;
   setPaneCur=cat;try{localStorage.setItem('fareo_setpane',cat)}catch(_){}
   $$('.set-pane').forEach(function(p){p.classList.toggle('on',p===pane)});
@@ -8319,7 +8612,7 @@ function renderSettingsNav(){
   S.profile=((settings.driverName||'').trim()||'Add your name')+' · '+settings.regos.length+' rego'+(settings.regos.length===1?'':'s');
   S.pay=settings.pct+'% share · levy '+money(levyRate())+' · GST on '+(settings.gstBase==='share'?'share':'gross');
   S.shifts='Week starts '+DAYS[settings.weekStart].slice(0,3)+' · paid '+DAYS[settings.creditedDay].slice(0,3)+' · '+acctNames().length+' account'+(acctNames().length===1?'':'s');
-  S.look={dark:'Dark',light:'Light',system:'Match device'}[settings.theme]+' · sounds '+(settings.sounds!==false?'on':'off')+(settings.calm?' · calm':'');
+  S.look=themeInfo(currentAccent()).n+' · '+{dark:'Dark',light:'Light',system:'Match device'}[settings.theme]+' · sounds '+(settings.sounds!==false?'on':'off')+(settings.calm?' · calm':'');
   var w=wxLoad();S.weather=settings.weather?('On'+(w&&w.place?' · '+w.place:'')):'Off';
   S.data=(syncOn?'Sync on':'Sync off')+' · '+receipts.length+' receipt'+(receipts.length===1?'':'s');
   S.help='Version '+APP_VERSION+' · updates & reset';
@@ -8494,7 +8787,7 @@ function applyTab(tab){
   var sf=$('#sfoot');if(sf)sf.classList.toggle('show',tab==='shift');
   var _sec=$('.screen[data-tab="'+tab+'"]');
   if(tab==='weekly'){wkTallyDelay=calcIn(_sec);renderWeekly()}
-  if(tab==='reports'){repTallyDelay=calcIn(_sec);renderReports();repTallyDelay=0}
+  if(tab==='reports'){repTallyDelay=calcIn(_sec);renderReports();repTallyDelay=0;setTimeout(function(){pdfReady().catch(function(){})},1200)}
   if(tab==='settings')renderSettings();
   if(tab==='runs')setClientPane(clientPane);
   if(tab==='hub'){hubTallyDelay=calcIn(_sec);renderHub();renderWx();wxFetch(false)}
