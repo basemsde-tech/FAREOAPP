@@ -5,7 +5,7 @@ client run planner,
 weekly payout tracker, and ATO-ready tax/BAS reports. Works offline, installs
 to your home screen. All data is stored locally in your browser.
 
-**Current version:** 13.0
+**Current version:** 13.1
 
 ---
 

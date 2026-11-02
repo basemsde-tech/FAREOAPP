@@ -1561,6 +1561,27 @@ html.calm .tally{transition:none}
 .wt b{display:block;font-size:12.5px;color:var(--head)}
 .wt small{display:block;font-size:11.5px;line-height:1.4;color:var(--mut);margin-top:2px}
 @media (min-width:1024px){.screen[data-tab="hub"] .wx-card{grid-column:2;align-self:start}}
+/* ---------- Fareo 13.1 · safe sync ---------- */
+.sync-safe{display:flex;gap:9px;align-items:flex-start;padding:9px 10px;margin:4px 0 10px;border-radius:10px;background:var(--accent-dim);border:1px solid var(--accent-line);font-size:11.5px;line-height:1.4;color:var(--body)}
+.sync-safe i{font-style:normal;flex:0 0 auto;width:18px;height:18px;border-radius:6px;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink);font-size:11px;font-weight:700}
+.btn.sync-google{display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;color:#1f1f1f;box-shadow:0 0 0 1px rgba(0,0,0,.15) inset}
+.btn.sync-google svg{width:18px;height:18px}
+.sync-or{display:flex;align-items:center;gap:10px;margin:12px 0 8px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.sync-or::before,.sync-or::after{content:"";flex:1;height:1px;background:var(--bd)}
+.sync-adv{margin-top:12px}
+.sync-adv summary{font-family:var(--mono);font-size:10.5px;color:var(--mut);cursor:pointer;margin-bottom:8px}
+#syncRestore{width:100%;border:0;border-top:1px solid var(--bd);background:transparent;color:var(--hail);font:inherit;font-size:13px;font-weight:600;text-align:left;cursor:pointer}
+.sm-cmp{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:4px 0 12px}
+.sm-col{border:1px solid var(--bd);border-radius:12px;padding:10px 11px;background:var(--card2);display:flex;flex-direction:column;gap:3px;min-width:0}
+.sm-col small{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sm-col b{font-family:var(--mono);font-size:18px;color:var(--head)}
+.sm-col span{font-size:11px;color:var(--mut)}
+.sm-opt{display:block;width:100%;text-align:left;margin-top:8px;padding:11px 12px;border-radius:12px;border:1px solid var(--bd2);background:transparent;color:var(--head);cursor:pointer;transition:border-color .2s,transform .2s var(--spring)}
+.sm-opt:active{transform:scale(.98)}
+.sm-opt b{display:flex;align-items:center;gap:8px;font-size:14px}
+.sm-opt em{font-style:normal;font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:5px;background:var(--accent);color:var(--accent-ink)}
+.sm-opt small{display:block;font-size:11.5px;color:var(--mut);margin-top:3px;line-height:1.4}
+.sm-opt.rec{border-color:var(--accent-line);background:var(--accent-dim)}
 </style>
 </head>
 <body>
@@ -2036,12 +2057,20 @@ html.calm .tally{transition:none}
       <details class="set-more">
         <summary class="set"><div class="sl"><b>Multi-device sync <span class="help" data-help="Optional. Set up a free Firebase project once and sign in with the same email on each phone to keep them in sync. Data stays on your device until you sign in." aria-label="Help">?</span></b><p id="syncState">Off &middot; local only</p></div><span class="chev">&rsaquo;</span></summary>
         <div class="set-more-body">
-          <textarea id="fbConfig" placeholder="Paste your Firebase config here"></textarea>
-          <div class="two"><input id="syncEmail" type="email" placeholder="Email" autocomplete="username"><input id="syncPass" type="password" placeholder="Password" autocomplete="current-password"></div>
-          <div class="two" style="margin-top:8px"><button class="btn neutral" id="syncSignin">Sign in</button><button class="btn" id="syncCreate">Create account</button></div>
+          <div class="sync-safe"><i aria-hidden="true">✓</i><span>Safe sign-in: Fareo keeps a copy of this phone’s data and asks before anything is replaced.</span></div>
+          <button class="btn sync-google" id="syncGoogle" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#EA4335" d="M12 10.2v3.9h5.5c-.2 1.3-1.6 3.8-5.5 3.8-3.3 0-6-2.7-6-6.1s2.7-6.1 6-6.1c1.9 0 3.1.8 3.8 1.5l2.6-2.5C16.8 3.2 14.6 2.2 12 2.2 6.6 2.2 2.2 6.6 2.2 12s4.4 9.8 9.8 9.8c5.7 0 9.4-4 9.4-9.6 0-.6-.1-1.1-.2-1.6H12Z"/></svg>Continue with Google</button>
+          <div class="sync-or"><span>or use your email</span></div>
+          <input id="syncEmail" type="email" placeholder="you@example.com" autocomplete="username" inputmode="email">
+          <div class="two" style="margin-top:8px"><button class="btn neutral" id="syncLink" type="button">Email me a sign-in link</button><button class="btn neutral" id="syncPwToggle" type="button">Use password</button></div>
+          <div id="syncPwWrap" hidden>
+            <input id="syncPass" type="password" placeholder="Password" autocomplete="current-password" style="margin-top:8px">
+            <div class="two" style="margin-top:8px"><button class="btn neutral" id="syncSignin">Sign in</button><button class="btn neutral" id="syncCreate">Create account</button></div>
+          </div>
+          <details class="sync-adv" id="syncAdv"><summary>Firebase project</summary><textarea id="fbConfig" placeholder="Paste your Firebase config here"></textarea><p class="mono-mut" id="fbCfgNote"></p></details>
           <button class="btn neutral" id="syncOut" style="display:none;margin-top:8px">Sign out</button>
         </div>
       </details>
+      <button type="button" class="set sync-restore" id="syncRestore" hidden>Restore data from before sync</button>
     </div>
     </div>
     <div class="set-group">
@@ -2102,6 +2131,17 @@ html.calm .tally{transition:none}
   <div class="explabel">Receipt photo (smart to keep)</div>
   <button class="att" id="expRcpt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.2L14 21l-2-1.2L10 21l-2-1.2L6 21z"/><path d="M9 8h6M9 12h6"/></svg><span id="expRcptTxt">Attach receipt</span></button>
   <div class="two" style="margin-top:14px"><button class="btn neutral" id="expCancel">Cancel</button><button class="btn" id="expSave">Save cost</button></div>
+</div></div>
+<div class="modal" id="syncMergeModal"><div class="sheet">
+  <div class="grip"></div>
+  <span class="eyebrow" style="color:var(--hail)">Your data is safe &middot; a copy is saved</span>
+  <h3>This phone and your cloud both have data</h3>
+  <p class="csub">Choose how to combine them. You can undo with &ldquo;Restore data from before sync&rdquo; in Settings.</p>
+  <div class="sm-cmp"><div class="sm-col" id="smLocal"></div><div class="sm-col" id="smCloud"></div></div>
+  <button type="button" class="sm-opt rec" data-sm="merge"><b>Merge both <em>Recommended</em></b><small>Keeps every shift, cost, client and fuel entry from both. Duplicates are matched and kept once.</small></button>
+  <button type="button" class="sm-opt" data-sm="local"><b>Keep this phone</b><small>Uploads this phone&rsquo;s data and replaces the cloud copy.</small></button>
+  <button type="button" class="sm-opt" data-sm="cloud"><b>Use cloud</b><small>Replaces this phone&rsquo;s data with the cloud copy.</small></button>
+  <button type="button" class="btn neutral" id="smCancel" style="margin-top:10px">Not now &mdash; stay signed out</button>
 </div></div>
 <div class="modal hail-modal" id="hailModal"><div class="sheet">
   <div class="grip"></div>
@@ -2403,14 +2443,19 @@ function fmtDMY(ds){var d=asDate(ds);if(isNaN(d.getTime()))return '';return pad2
 function fmtDayDMY(ds){var d=asDate(ds);if(isNaN(d.getTime()))return '';return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]+' '+fmtDMY(d)}
 function fmtDayLong(ds){var d=asDate(ds);if(isNaN(d.getTime()))return '';return ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][d.getDay()]+' '+fmtDMY(d)}
 var load=function(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}};
-var save=function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){} if(typeof scheduleSync==='function')scheduleSync();};
+var save=function(k,v){try{localStorage.setItem(k,JSON.stringify(v));if(k!=='fareo_draft'&&!(typeof applyingRemote!=='undefined'&&applyingRemote))localStorage.setItem('fareo_localEditAt',String(Date.now()))}catch(e){} if(typeof scheduleSync==='function')scheduleSync();};
 var RUN=5, RATE=1.20;
 /* ---------- version & release notes ----------
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='13.0';
+var APP_VERSION='13.1';
 var CHANGELOG=[
+  {v:'13.1',date:'November 2, 2026',notes:[
+    ['Bug Fix','Signing in to sync can no longer overwrite newer data on this phone with an older cloud copy. Fareo now tracks every local edit, not only edits made while sync was on.'],
+    ['Feature','Safe first sync: Fareo saves a full copy of this phone\u2019s data, then shows both sides (shifts, latest date, costs, clients) and lets you Merge both, Keep this phone or Use cloud. Settings has Restore data from before sync.'],
+    ['Feature','Sign in with Continue with Google or an email sign-in link. Password sign-in is still there, and the Firebase project setup moves under Firebase project.'],
+  ]},
   {v:'13.0',date:'November 2, 2026',notes:[
     ['UI/UX','New shift date picker: a swipeable strip of the last three weeks. Days you have already logged show a dot and the payout, and today is highlighted.'],
     ['Feature','The shift date is now required. Fareo suggests the likely day (yesterday after a late finish past midnight) and you tap to confirm before Next. It warns if that day and rego is already logged, and won\u2019t accept a future date.'],
@@ -6487,32 +6532,133 @@ function applyRemoteData(data,updatedAt){
     reloadAll();
   }finally{applyingRemote=false}
 }
+/* Built-in project config so devices only need to sign in. Fill FAREO_FB
+   with the web config from Firebase > Project settings > Your apps. */
+var FAREO_FB=null;
+function fbCfg(){var t=($('#fbConfig')&&$('#fbConfig').value.trim())||'';var c=t?parseCfg(t):null;if(c&&c.apiKey)return c;try{var st=JSON.parse(localStorage.getItem('fareo_fbcfg')||'null');if(st&&st.apiKey)return st}catch(_){}return FAREO_FB}
+async function fbReady(){var cfg=fbCfg();if(!cfg||!cfg.apiKey){var adv=$('#syncAdv');if(adv)adv.open=true;toast('Paste your Firebase config first','warn');throw new Error('no-config')}localStorage.setItem('fareo_fbcfg',JSON.stringify(cfg));await fbInit(cfg);return cfg}
+function syncErr(e){var c=(e&&e.code)||'';var m={'auth/popup-closed-by-user':'Sign-in cancelled','auth/cancelled-popup-request':'Sign-in cancelled','auth/unauthorized-domain':'This web address isn’t allowed in Firebase yet','auth/operation-not-allowed':'That sign-in method is off in Firebase','auth/wrong-password':'Wrong password','auth/invalid-credential':'Email or password doesn’t match','auth/user-not-found':'No account for that email','auth/email-already-in-use':'That email already has an account — sign in instead','auth/weak-password':'Use at least 6 characters','auth/network-request-failed':'No connection'}[c];
+  if(e&&e.message==='no-config')return;setSyncState(m?m:('Error: '+(c||'failed')));toast(m||'Sync failed','error')}
 async function syncConnect(create){try{
-  var cfg=parseCfg($('#fbConfig').value.trim());if(!cfg||!cfg.apiKey){toast('Invalid Firebase config');return}
   var email=$('#syncEmail').value.trim(),pass=$('#syncPass').value;if(!email||!pass){toast('Enter email and password');return}
-  setSyncState('Connecting...');localStorage.setItem('fareo_fbcfg',JSON.stringify(cfg));
-  await fbInit(cfg);
+  setSyncState('Connecting...');await fbReady();
   if(create)await fb.authM.createUserWithEmailAndPassword(fb.auth,email,pass);else await fb.authM.signInWithEmailAndPassword(fb.auth,email,pass);
-  localStorage.setItem('fareo_sync_on','1');afterAuth(fb.auth.currentUser);
-}catch(e){setSyncState('Error: '+((e&&e.code)||(e&&e.message)||'failed'));toast('Sync failed')}}
-async function afterAuth(user){
+  afterAuth(fb.auth.currentUser,true);
+}catch(e){syncErr(e)}}
+async function syncGoogle(){try{
+  setSyncState('Opening Google…');await fbReady();
+  var prov=new fb.authM.GoogleAuthProvider();prov.setCustomParameters({prompt:'select_account'});
+  var standalone=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone;
+  if(standalone&&isAppleTouch()){localStorage.setItem('fareo_sync_pending','1');await fb.authM.signInWithRedirect(fb.auth,prov);return}
+  var r=await fb.authM.signInWithPopup(fb.auth,prov);afterAuth(r.user,true);
+}catch(e){syncErr(e)}}
+async function syncEmailLink(){try{
+  var email=$('#syncEmail').value.trim();if(!/^\S+@\S+\.\S+$/.test(email)){toast('Enter your email','warn');return}
+  await fbReady();
+  await fb.authM.sendSignInLinkToEmail(fb.auth,email,{url:location.origin+location.pathname+'#settings',handleCodeInApp:true});
+  localStorage.setItem('fareo_link_email',email);setSyncState('Link sent to '+email);toast('Sign-in link sent — open it on this device','success');
+}catch(e){syncErr(e)}}
+async function finishEmailLink(){try{
+  var cfg=fbCfg();if(!cfg||!cfg.apiKey)return;await fbInit(cfg);
+  if(!fb.authM.isSignInWithEmailLink(fb.auth,location.href))return;
+  var email=localStorage.getItem('fareo_link_email')||prompt('Confirm your email to finish signing in');if(!email)return;
+  var r=await fb.authM.signInWithEmailLink(fb.auth,email,location.href);localStorage.removeItem('fareo_link_email');
+  try{history.replaceState(history.state,'',location.pathname+'#settings')}catch(_){}
+  afterAuth(r.user,true);
+}catch(e){syncErr(e)}}
+/* ---------- safe first sync: snapshot, compare, merge ---------- */
+function dataSummary(d){
+  function arr(k){try{var v=d[k];v=typeof v==='string'?JSON.parse(v):v;return Array.isArray(v)?v:[]}catch(_){return []}}
+  var es=arr('fareo_entries'),last=es.reduce(function(m,e){return e.date>m?e.date:m},'');
+  return {shifts:es.length,last:last,costs:arr('fareo_deductions').length+arr('fareo_fuelManual').length,clients:arr('fareo_clients').length,take:es.reduce(function(s,e){return s+(Number(e.take)||0)},0)};
+}
+function hasLocalData(){var s=dataSummary(allData());return s.shifts+s.costs+s.clients>0}
+function savePresync(){try{localStorage.setItem('fareo_presync',JSON.stringify({at:Date.now(),data:allData()}))}catch(_){}syncRestoreUI()}
+function syncRestoreUI(){var b=$('#syncRestore');if(!b)return;var p=null;try{p=JSON.parse(localStorage.getItem('fareo_presync')||'null')}catch(_){}b.hidden=!p;if(p)b.textContent='Restore data from before sync ('+new Date(p.at).toLocaleDateString('en-AU',{day:'numeric',month:'short'})+')'}
+function mergeById(a,b,keyFn){var out=[],seen={};function k(x){return keyFn?keyFn(x):String(x&&x.id)}(a||[]).forEach(function(x){var kk=k(x);if(seen[kk])return;seen[kk]=1;out.push(x)});(b||[]).forEach(function(x){var kk=k(x);if(seen[kk])return;seen[kk]=1;out.push(x)});return out}
+function mergeData(local,remote){
+  function J(d,k,def){try{var v=d[k];if(v==null)return def;return typeof v==='string'?JSON.parse(v):v}catch(_){return def}}
+  var out={};Object.keys(remote||{}).forEach(function(k){out[k]=remote[k]});Object.keys(local||{}).forEach(function(k){out[k]=local[k]});
+  /* shifts: same id, or same date + rego, is one shift (this phone wins) */
+  var le=J(local,'fareo_entries',[]),re=J(remote,'fareo_entries',[]);
+  var ids={},dr={};le.forEach(function(e){ids[String(e.id)]=1;dr[e.date+'|'+(e.rego||'')]=1});
+  out.fareo_entries=JSON.stringify(le.concat(re.filter(function(e){return !ids[String(e.id)]&&!dr[e.date+'|'+(e.rego||'')]})).sort(function(x,y){return x.date<y.date?-1:1}));
+  ['fareo_deductions','fareo_recurring','fareo_fuelManual','fareo_clients'].forEach(function(k){out[k]=JSON.stringify(mergeById(J(local,k,[]),J(remote,k,[])))});
+  out.fareo_names=JSON.stringify(mergeById(J(local,'fareo_names',[]),J(remote,'fareo_names',[]),function(n){return String(n).toLowerCase()}));
+  var ls=J(local,'fareo_settings',{}),rs=J(remote,'fareo_settings',{});
+  ls.regos=mergeById(ls.regos||[],rs.regos||[],function(x){return String(x).toUpperCase()});
+  if(Array.isArray(rs.accountNames)||Array.isArray(ls.accountNames))ls.accountNames=mergeById(ls.accountNames||[],rs.accountNames||[],function(x){return String(x).toLowerCase()});
+  ls.payTypes=mergeById(ls.payTypes||[],rs.payTypes||[]);
+  ls.claimOff=Object.assign({},rs.claimOff||{},ls.claimOff||{});ls.claimOn=Object.assign({},rs.claimOn||{},ls.claimOn||{});
+  ls.costEdits=Object.assign({},rs.costEdits||{},ls.costEdits||{});
+  out.fareo_settings=JSON.stringify(ls);
+  return out;
+}
+var smPending=null;
+function showMergeChoice(rem){
+  var L=dataSummary(allData()),C=dataSummary(rem.data||{});
+  function col(t,x){return '<small>'+t+'</small><b>'+x.shifts+' shifts</b><span>'+(x.last?'Latest '+fmtDayDMY(x.last):'No shifts')+'</span><span>'+x.costs+' costs · '+x.clients+' clients</span>'}
+  $('#smLocal').innerHTML=col('This phone',L);$('#smCloud').innerHTML=col('Cloud ('+fb.email+')',C);
+  smPending=rem;showModal('syncMergeModal');sfx('warn');
+}
+document.addEventListener('click',function(e){
+  var b=e.target.closest&&e.target.closest('[data-sm]');
+  if(b&&smPending){var mode=b.dataset.sm,rem=smPending;smPending=null;closeModal('syncMergeModal');syncOn=true;
+    if(mode==='cloud')applyRemoteData(rem.data,rem.updatedAt);
+    else if(mode==='merge')applyRemoteData(mergeData(allData(),rem.data||{}),Date.now());
+    localStorage.setItem('fareo_synced_uid',fb.uid);startLive();pushNow();
+    toast(mode==='merge'?'Merged and synced':mode==='local'?'This phone’s data uploaded':'Cloud data loaded','success');return}
+  if(e.target.id==='smCancel'){smPending=null;closeModal('syncMergeModal');syncSignOut()}
+  if(e.target.id==='syncGoogle'||e.target.closest&&e.target.closest('#syncGoogle'))syncGoogle();
+  if(e.target.id==='syncLink')syncEmailLink();
+  if(e.target.id==='syncPwToggle'){var w=$('#syncPwWrap');w.hidden=!w.hidden;e.target.textContent=w.hidden?'Use password':'Hide password'}
+  if(e.target.id==='syncRestore'){ask('Restore data from before sync?','This phone goes back to exactly how it was before you signed in. Sync is turned off.','Restore',function(){var p=JSON.parse(localStorage.getItem('fareo_presync')||'null');if(!p)return;syncSignOut();applyRemoteData(p.data,Date.now());toast('Restored data from before sync')},{danger:false,noLbl:'Cancel',noUndo:true})}
+});
+var liveUnsub=null;
+function startLive(){
+  if(liveUnsub)return;
+  liveUnsub=fb.fsM.onSnapshot(docRef(),function(sn){if(!sn.exists())return;var r2=sn.data();if(r2._device===deviceId())return;if((r2.updatedAt||0)>Number(localStorage.getItem('fareo_updatedAt')||0)){applyRemoteData(r2.data,r2.updatedAt);toast('Synced from another device')}});
+  setSyncState('On - '+fb.email);
+}
+async function afterAuth(user,interactive){
   if(!user){syncOn=false;setSyncState('Off - local only');return}
-  fb.uid=user.uid;fb.email=user.email;syncOn=true;setSyncState('Connecting...');
+  fb.uid=user.uid;fb.email=user.email||'';setSyncState('Checking your cloud data…');
   try{
-    var snap=await fb.fsM.getDoc(docRef());var localTs=Number(localStorage.getItem('fareo_updatedAt')||0);
-    if(snap.exists()){var rem=snap.data();if((rem.updatedAt||0)>=localTs){applyRemoteData(rem.data,rem.updatedAt)}else{pushNow()}}else{pushNow()}
-    fb.fsM.onSnapshot(docRef(),function(sn){if(!sn.exists())return;var r2=sn.data();if(r2._device===deviceId())return;if((r2.updatedAt||0)>Number(localStorage.getItem('fareo_updatedAt')||0)){applyRemoteData(r2.data,r2.updatedAt);toast('Synced from another device')}});
-    setSyncState('On - '+fb.email);
+    var snap=await fb.fsM.getDoc(docRef());
+    var known=localStorage.getItem('fareo_synced_uid')===fb.uid;
+    localStorage.setItem('fareo_sync_on','1');
+    if(!known){
+      savePresync();
+      var rem=snap.exists()?snap.data():null;
+      var remHas=rem&&rem.data&&(function(s){return s.shifts+s.costs+s.clients>0})(dataSummary(rem.data));
+      if(remHas&&hasLocalData()){syncOn=false;setSyncState('Waiting for your choice\u2026');showMergeChoice(rem);return}
+      syncOn=true;
+      if(remHas)applyRemoteData(rem.data,rem.updatedAt);else pushNow();
+      localStorage.setItem('fareo_synced_uid',fb.uid);startLive();return;
+    }
+    syncOn=true;
+    /* already-synced device: newest edit wins, using the real local edit time */
+    var localTs=Math.max(Number(localStorage.getItem('fareo_updatedAt')||0),Number(localStorage.getItem('fareo_localEditAt')||0));
+    if(snap.exists()){var r=snap.data();if((r.updatedAt||0)>localTs)applyRemoteData(r.data,r.updatedAt);else pushNow()}else pushNow();
+    startLive();
   }catch(e){setSyncState('Sync error - check Firestore rules')}
 }
 function pushNow(){if(!syncOn||!fb.uid||!fb.fsM)return;var ts=Date.now();localStorage.setItem('fareo_updatedAt',String(ts));fb.fsM.setDoc(docRef(),{data:allData(),updatedAt:ts,_device:deviceId()}).then(function(){setSyncState('On - saved')}).catch(function(){setSyncState('Offline - will retry')})}
 function scheduleSync(){if(!syncOn||applyingRemote)return;clearTimeout(syncTimer);syncTimer=setTimeout(pushNow,900)}
-async function syncSignOut(){try{if(fb.auth)await fb.authM.signOut(fb.auth)}catch(_){}syncOn=false;localStorage.removeItem('fareo_sync_on');setSyncState('Off - local only');toast('Signed out (data kept on device)')}
+async function syncSignOut(){try{if(liveUnsub){liveUnsub();liveUnsub=null}}catch(_){}try{if(fb.auth)await fb.authM.signOut(fb.auth)}catch(_){}syncOn=false;localStorage.removeItem('fareo_sync_on');setSyncState('Off - local only');toast('Signed out (data kept on device)')}
 function reloadAll(){settings=load('fareo_settings',settings)||settings;migrateSettings();entries=load('fareo_entries',[])||[];deductions=load('fareo_deductions',[])||[];recurring=load('fareo_recurring',[])||[];fuelManual=load('fareo_fuelManual',[])||[];receipts=load('fareo_receipts',[])||[];names=load('fareo_names',[])||[];clients=load('fareo_clients',[])||[];if(!Array.isArray(clients))clients=[];runPlan=load('fareo_run_plan',[])||[];if(!Array.isArray(runPlan))runPlan=[];draft=normalizeDraft(load('fareo_draft',draft));if(typeof draftHasWork==='function'&&!draftHasWork(draft)){draft.date=todayStr();draft.rego=''}clearReceiptAttach();try{renderNames();rowInputs();render();var a=document.querySelector('.screen.on');if(a){var t=a.dataset.tab;if(t==='weekly')renderWeekly();if(t==='reports')renderReports();if(t==='settings')renderSettings();if(t==='runs')renderRuns();if(t==='book')renderBook()}}catch(_){}}
 if($('#syncSignin'))$('#syncSignin').onclick=function(){syncConnect(false)};
 if($('#syncCreate'))$('#syncCreate').onclick=function(){syncConnect(true)};
 if($('#syncOut'))$('#syncOut').onclick=syncSignOut;
-(function autoConnect(){try{var cfg=localStorage.getItem('fareo_fbcfg');if(cfg&&localStorage.getItem('fareo_sync_on')){var pre=$('#fbConfig');if(pre)pre.value=cfg;fbInit(JSON.parse(cfg)).then(function(){fb.authM.onAuthStateChanged(fb.auth,function(u){afterAuth(u)})}).catch(function(){setSyncState('Off - local only')})}}catch(_){}})();
+(function autoConnect(){try{
+  var stored=localStorage.getItem('fareo_fbcfg'),pre=$('#fbConfig');if(pre&&stored)pre.value=stored;
+  var note=$('#fbCfgNote');if(note)note.textContent=(FAREO_FB||stored)?'Connected to project '+((FAREO_FB||JSON.parse(stored)).projectId||''):'No project yet';
+  syncRestoreUI();
+  if(/[?&](mode=signIn|oobCode=)/.test(location.href)){finishEmailLink();return}
+  var cfg=fbCfg();if(!cfg||!cfg.apiKey)return;
+  if(localStorage.getItem('fareo_sync_pending')){localStorage.removeItem('fareo_sync_pending');fbInit(cfg).then(function(){return fb.authM.getRedirectResult(fb.auth)}).then(function(r){if(r&&r.user)afterAuth(r.user,true)}).catch(syncErr);return}
+  if(localStorage.getItem('fareo_sync_on')){fbInit(cfg).then(function(){fb.authM.onAuthStateChanged(fb.auth,function(u){afterAuth(u)})}).catch(function(){setSyncState('Off - local only')})}
+}catch(_){}})();
 
 /* ---------- address book ---------- */
 function uid(p){return (p||'id')+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
