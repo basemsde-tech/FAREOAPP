@@ -1428,6 +1428,51 @@ html.calm .tally{transition:none}
 .set .qa-in input{width:66px;padding:8px 8px 8px 20px;text-align:left;font-family:var(--mono);font-size:13px}
 #qaReset{font-size:12px;margin-left:4px}
 @media (max-width:360px){.qa{font-size:11px}.acct-top{grid-template-columns:minmax(0,1fr) 92px 38px}}
+/* ---------- Fareo 12.2 · Hail step pop-up ---------- */
+.log-dictate-row{grid-template-columns:1fr!important}
+.log-hail-dictate{display:none!important}
+.hail-sum{display:grid;grid-template-columns:auto 1fr auto;gap:11px;align-items:center;width:100%;margin-top:12px;padding:11px 12px;border-radius:12px;border:1px dashed color-mix(in srgb,var(--dgr) 55%,transparent);background:var(--dgr-bg);color:var(--head);text-align:left;cursor:pointer;transition:border-color .25s,background .25s,transform .2s var(--spring)}
+.hail-sum:active{transform:scale(.98)}
+.hail-sum .hs-ico{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-family:var(--mono);font-weight:700;font-size:13px;background:var(--dgr);color:#fff}
+.hail-sum b{display:block;font-size:13.5px}
+.hail-sum small{display:block;font-size:11px;color:var(--mut);margin-top:2px}
+.hail-sum .hs-amt{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--accent)}
+.hail-sum.set{border-style:solid;border-color:var(--bd);background:var(--card2)}
+.hail-sum.set .hs-ico{background:var(--accent);color:var(--accent-ink)}
+.hail-modal .sheet{padding-bottom:calc(20px + env(safe-area-inset-bottom))}
+.hail-modal.show .sheet{animation:hailIn .5s var(--spring) both}
+@keyframes hailIn{0%{transform:translateY(100%)}70%{transform:translateY(-6px)}100%{transform:none}}
+.hm-eyebrow{color:var(--dgr)!important;margin-bottom:4px}
+.hm-eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--dgr);box-shadow:0 0 0 0 var(--dgr);animation:livePip 1.8s ease-out infinite;color:var(--dgr)}
+.hm-counter{display:grid;grid-template-columns:64px 1fr 64px;gap:12px;align-items:center;margin:14px 0 12px}
+.hm-step{height:64px;border-radius:18px;border:1px solid var(--bd2);background:var(--card2);color:var(--head);font-size:28px;font-weight:500;cursor:pointer;transition:transform .2s var(--spring),border-color .2s,opacity .2s}
+.hm-step:active{transform:scale(.9);border-color:var(--accent)}
+.hm-step:disabled{opacity:.35}
+.hm-num{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;border-radius:18px;background:var(--field);border:1px solid var(--bd)}
+.hm-num input{width:100%;border:0!important;background:transparent!important;box-shadow:none!important;text-align:center;font-family:var(--mono);font-size:46px;font-weight:600;letter-spacing:-.04em;padding:0;height:58px;color:var(--head);-webkit-text-fill-color:var(--head)}
+.hm-num input::placeholder{color:var(--mut);-webkit-text-fill-color:var(--mut)}
+.hm-num span{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);padding-bottom:4px}
+.hm-num.bump{animation:hmBump .35s var(--spring)}
+@keyframes hmBump{0%{transform:scale(.94)}60%{transform:scale(1.05)}100%{transform:none}}
+.hm-num.shake{animation:hmShake .4s var(--ease);border-color:var(--dgr)}
+.toast{z-index:600}
+@keyframes hmShake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.hm-picks{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.hm-picks button{height:40px;border-radius:11px;border:1px solid var(--bd2);background:transparent;color:var(--body);font-family:var(--mono);font-size:14px;font-weight:600;cursor:pointer;animation:chipIn .35s var(--spring) both;animation-delay:calc(var(--k)*25ms + 120ms);transition:background .2s,border-color .2s,color .2s,transform .2s var(--spring)}
+.hm-picks button:active{transform:scale(.9)}
+.hm-picks button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.hm-picks button.pop{animation:qaPop .4s var(--spring)}
+.hm-levy{display:flex;align-items:baseline;gap:8px;margin:14px 2px 0;padding:11px 12px;border-radius:12px;background:var(--card2);border:1px solid var(--bd)}
+.hm-levy span{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.hm-levy b{font-family:var(--mono);font-size:18px;font-weight:600;color:var(--levy)}
+.hm-levy small{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--mut)}
+.hm-ocr{margin:8px 2px 0;font-size:11.5px;color:var(--hail)}
+.hm-acts{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;margin-top:16px}
+.hm-acts .btn{display:flex;align-items:center;justify-content:center;gap:6px}
+.hm-acts .btn svg{width:18px;height:18px}
+#hmGo:disabled{opacity:.4;filter:saturate(.4);box-shadow:none}
+#hmGo.ready{animation:readyPulse 1.6s var(--ease) .2s}
+@keyframes readyPulse{0%{box-shadow:0 0 0 0 var(--glow)}50%{box-shadow:0 0 0 8px transparent}100%{box-shadow:0 0 0 0 transparent}}
 </style>
 </head>
 <body>
@@ -1503,6 +1548,7 @@ html.calm .tally{transition:none}
             <p id="hailOcrHint" style="display:none;margin:6px 0 0;font-size:10.5px;color:var(--on-dgr);line-height:1.35"></p>
           </div>
         </div>
+        <button type="button" class="hail-sum" id="hailSum"><span class="hs-ico" aria-hidden="true">H</span><span class="hs-t"><b id="hailSumT">Hail trips</b><small id="hailSumS">You&rsquo;ll enter these when you tap Next</small></span><span class="hs-amt" id="hailSumA"></span></button>
       </div>
       <div class="shift-fields" id="shiftFields">
       <div class="card tx-fuel shift-field" data-field="fuel"><h5 class="sf-h5"><button type="button" class="sf-grip" aria-label="Drag to reorder" title="Drag to reorder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></button><span class="dot" style="background:var(--fuel-fill)"></span>Fuel <span id="fuelReqBadge" class="danger" style="font-size:10px;margin-left:auto;display:none">required</span><span class="help" data-help="Required when a fuel receipt is attached. Tick Paid by operator for operator card fuel." aria-label="Help">?</span><span class="sub-amt" id="fuelSub">$0</span></h5>
@@ -1964,6 +2010,21 @@ html.calm .tally{transition:none}
   <button class="att" id="expRcpt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.2L14 21l-2-1.2L10 21l-2-1.2L6 21z"/><path d="M9 8h6M9 12h6"/></svg><span id="expRcptTxt">Attach receipt</span></button>
   <div class="two" style="margin-top:14px"><button class="btn neutral" id="expCancel">Cancel</button><button class="btn" id="expSave">Save cost</button></div>
 </div></div>
+<div class="modal hail-modal" id="hailModal"><div class="sheet">
+  <div class="grip"></div>
+  <span class="eyebrow hm-eyebrow"><i></i>Required before you continue</span>
+  <h3>How many hail trips?</h3>
+  <p class="csub">Rank and street-hail trips this shift, for the CPV levy.</p>
+  <div class="hm-counter">
+    <button type="button" class="hm-step" id="hmMinus" aria-label="One less">&minus;</button>
+    <div class="hm-num"><input id="hmInput" type="number" min="0" max="199" inputmode="numeric" placeholder="&ndash;" autocomplete="off" aria-label="Hail trips"><span id="hmUnit">trips</span></div>
+    <button type="button" class="hm-step" id="hmPlus" aria-label="One more">+</button>
+  </div>
+  <div class="hm-picks" id="hmPicks"></div>
+  <div class="hm-levy"><span>Levy</span><b class="tally" id="hmLevy">$0.00</b><small id="hmRate">$1.20 / trip</small></div>
+  <p class="hm-ocr" id="hmOcr" hidden></p>
+  <div class="hm-acts"><button type="button" class="btn neutral" id="hmBack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg>Back</button><button type="button" class="btn" id="hmGo" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button></div>
+</div></div>
 <div class="modal" id="adjModal"><div class="sheet">
   <div class="grip"></div>
   <span class="eyebrow adj-eyebrow">Adjust for tax &middot; your record stays as is</span>
@@ -2255,8 +2316,12 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='12.1';
+var APP_VERSION='12.2';
 var CHANGELOG=[
+  {v:'12.2',date:'November 2, 2026',notes:[
+    ['UI/UX','Hail is now its own step. Tapping Next on Log opens an animated pop-up with a big counter, quick numbers (0\u201312) and the levy worked out live. You must enter a number (0 is fine) before Continue unlocks, and Back returns you to the form.'],
+    ['UI/UX','Log shows a compact hail summary instead of the inline counter. Tap it any time to change the count.'],
+  ]},
   {v:'12.1',date:'November 2, 2026',notes:[
     ['UI/UX','Account suggestions are now a slim row of chips right under the name field, so nothing covers the screen. They filter as you type, saved accounts are marked \u2605, and one tap fills the name and moves to the amount.'],
   ]},
@@ -3913,6 +3978,7 @@ function render(){
   $('#levyTag').textContent=money(levyT())+' levy';
   $('#levyRate').textContent=money(levyRate())+' / trip';
   var la=$('#levyAmt');if(la)la.textContent=money(levyT());
+  renderHailSum();
   updateFooter();
   if(typeof updateReviewSum==='function')updateReviewSum();
   if(typeof updateLogProgress==='function')updateLogProgress();
@@ -4190,7 +4256,7 @@ function updateFooter(){
   next.classList.toggle('share',share);
   next.setAttribute('aria-label',share?'Share End of Shift':'Next: Attach & share');
   next.setAttribute('title',share?'Share End of Shift':'Next: Attach & share');
-  var blocked=(curSub===1&&!hailEnteredOk())||(curSub===2&&(!docsOk()||!draft.rego));
+  var blocked=(curSub===1&&!fuelReceiptRequiredOk())||(curSub===2&&(!docsOk()||!draft.rego));
   next.classList.toggle('faded',blocked);
 }
 function syncShiftDock(){
@@ -4198,11 +4264,55 @@ function syncShiftDock(){
   if(window.visualViewport)kb=(window.innerHeight-window.visualViewport.height)>120;
   document.documentElement.classList.toggle('kb-open',kb);
 }
+/* ---------- hail pop-up: mandatory step between Log and Share ---------- */
+var hmVal=null;
+function hmRender(bump){
+  var inp=$('#hmInput'),has=hmVal!=null&&hmVal!=='';
+  if(inp&&document.activeElement!==inp)inp.value=has?hmVal:'';
+  var n=has?Number(hmVal):0;
+  $('#hmUnit').textContent=has?(n===1?'trip':'trips'):'enter a number';
+  tally($('#hmLevy'),n*levyRate(),{dur:260});
+  $('#hmRate').textContent=money(levyRate())+' / trip';
+  $$('#hmPicks button').forEach(function(b){b.classList.toggle('on',has&&Number(b.dataset.hp)===n)});
+  var go=$('#hmGo');go.disabled=!has;go.classList.toggle('ready',has);
+  $('#hmMinus').disabled=!has||n<=0;
+  if(bump){var w=$('.hm-num');w.classList.remove('bump');void w.offsetWidth;w.classList.add('bump')}
+}
+function hmSet(v,bump){var w0=$('.hm-num');if(w0)w0.classList.remove('shake');v=v===''||v==null?null:Math.max(0,Math.min(199,Math.round(Number(v))));if(v!=null&&!isFinite(v))v=null;hmVal=v;hmRender(bump)}
+function openHailStep(){
+  hmVal=hailEnteredOk()?nn(draft.hail):null;
+  var picks=[0,1,2,3,4,5,6,8,10,12];
+  $('#hmPicks').innerHTML=picks.map(function(n,k){return '<button type="button" data-hp="'+n+'" style="--k:'+k+'">'+n+'</button>'}).join('');
+  var ocr=$('#hmOcr'),fromOcr=eosReceipts.some(function(r){return r&&r.ocrHail!=null});
+  ocr.hidden=!(fromOcr&&hmVal!=null);ocr.textContent='Read from your EOS slip'+(eosReceipts.length>1?'s':'')+' — check it matches.';
+  hmRender(false);showModal('hailModal');
+  setTimeout(function(){var i=$('#hmInput');if(i&&hmVal==null)i.focus()},280);
+}
+function hmContinue(){
+  if(hmVal==null){var w=$('.hm-num');w.classList.remove('shake');void w.offsetWidth;w.classList.add('shake');setTimeout(function(){w.classList.remove('shake')},450);toast('Hail required','warn');return}
+  draft.hail=hmVal;var h=$('#hail');if(h)h.value=hmVal;persist();render();
+  closeModal('hailModal');sfx('success');buzz([8,30,8]);
+  setTimeout(function(){setSub(2)},180);
+}
+if($('#hmInput'))$('#hmInput').oninput=function(){hmSet(this.value,false)};
+if($('#hmInput'))$('#hmInput').onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();hmContinue()}};
+if($('#hmMinus'))$('#hmMinus').onclick=function(){hmSet(Math.max(0,(hmVal||0)-1),true);sfx('tap')};
+if($('#hmPlus'))$('#hmPlus').onclick=function(){hmSet((hmVal==null?0:hmVal)+1,true);sfx('tap')};
+if($('#hmPicks'))$('#hmPicks').onclick=function(e){var b=e.target.closest('[data-hp]');if(!b)return;hmSet(b.dataset.hp,true);sfx('pop');buzz(6);b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop')};
+if($('#hmBack'))$('#hmBack').onclick=function(){closeModal('hailModal')};
+if($('#hmGo'))$('#hmGo').onclick=hmContinue;
+if($('#hailSum'))$('#hailSum').onclick=function(){openHailStep()};
+function renderHailSum(){
+  var b=$('#hailSum');if(!b)return;var ok=hailEnteredOk(),n=nn(draft.hail);
+  b.classList.toggle('set',ok);
+  $('#hailSumT').textContent=ok?(n+(n===1?' hail trip':' hail trips')):'Hail trips';
+  $('#hailSumS').textContent=ok?'Levy '+money(levyT())+' · tap to change':'Required · you’ll enter these when you tap Next';
+  $('#hailSumA').textContent=ok?'Edit':'';
+}
 function nextStep(){
   if(curSub===1){
-    var g=gateFailMsg();
-    if(g){var m=$('#msg');m.textContent=g.text;m.className='msg err';toast(g.toast);window.scrollTo({top:0,behavior:'smooth'});return}
-    setSub(2);return;
+    if(!fuelReceiptRequiredOk()){var m=$('#msg');m.textContent='Fuel receipt attached — enter the fuel amount on Log.';m.className='msg err';toast('Fuel amount required');window.scrollTo({top:0,behavior:'smooth'});return}
+    $('#msg').className='msg';openHailStep();return;
   }
   if(curSub===2){
     var g2=gateFailMsg();
@@ -4213,7 +4323,7 @@ function nextStep(){
 }
 $('#snext').onclick=nextStep;
 $('#sback').onclick=function(){if(curSub>1)setSub(curSub-1)};
-$$('.stp').forEach(function(b){b.onclick=function(){setSub(+b.dataset.sub)}});
+$$('.stp').forEach(function(b){b.onclick=function(){var n=+b.dataset.sub;if(n===2&&curSub===1){nextStep();return}setSub(n)}});
 
 function downloadShareFile(file){
   if(!file)return;
