@@ -1404,6 +1404,19 @@ html.calm .tally{transition:none}
 .ac-empty{padding:12px;text-align:center;font-size:12px;color:var(--mut)}
 .ac-empty b{display:block;color:var(--head);margin-bottom:6px}
 .ac-empty button{border:1px solid var(--acct);background:transparent;color:var(--acct);border-radius:9px;padding:7px 11px;font-size:12px;font-weight:600;cursor:pointer}
+.ac-strip{display:flex;gap:6px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;padding:7px 1px 2px;margin:0 -2px;scrollbar-width:none;-webkit-mask:linear-gradient(90deg,#000 88%,transparent);mask:linear-gradient(90deg,#000 88%,transparent);animation:stripIn .25s var(--ease)}
+.ac-strip::-webkit-scrollbar{display:none}
+@keyframes stripIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.acs{flex:0 0 auto;scroll-snap-align:start;display:inline-flex;align-items:center;gap:6px;max-width:72%;height:32px;padding:0 12px;border-radius:999px;border:1px solid var(--bd2);background:var(--card2);color:var(--body);font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;animation:chipIn .3s var(--spring) both;animation-delay:calc(var(--k,0)*28ms);transition:transform .18s var(--spring),border-color .2s,background .2s,color .2s}
+.acs span{overflow:hidden;text-overflow:ellipsis}
+.acs i{font-style:normal;font-size:11px;color:var(--acct)}
+.acs mark{background:transparent;color:var(--acct);font-weight:700}
+.acs.saved{border-color:color-mix(in srgb,var(--acct) 40%,transparent)}
+.acs.on{background:var(--acct-bg);border-color:var(--acct);color:var(--head)}
+.acs:active{transform:scale(.93)}
+.acs.add{border-style:dashed;color:var(--acct);background:transparent}
+.acs.hint{border-style:dashed;color:var(--mut);background:transparent}
+.ac-menu{display:none!important}
 /* settings */
 .acct-chips{margin-top:10px}
 .acct-chip{animation:chipIn .35s var(--spring) both;animation-delay:calc(var(--k)*25ms)}
@@ -2242,8 +2255,11 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='12.0';
+var APP_VERSION='12.1';
 var CHANGELOG=[
+  {v:'12.1',date:'November 2, 2026',notes:[
+    ['UI/UX','Account suggestions are now a slim row of chips right under the name field, so nothing covers the screen. They filter as you type, saved accounts are marked \u2605, and one tap fills the name and moves to the amount.'],
+  ]},
   {v:'12.0',date:'November 2, 2026',notes:[
     ['Feature','Save your regular account names in Settings \u2192 Accounts. Fareo starts the list from names on your past shifts, and you can add, remove or import more.'],
     ['Feature','The Accounts name field has a smart dropdown: saved accounts first, then names you have used before, ranked by how often, with the match highlighted. Arrow keys and Enter work too, and a new name can be saved in one tap.'],
@@ -3915,9 +3931,10 @@ function renderAcctRows(){
   var host=$('#acctRows');if(!host)return;
   host.innerHTML=draft.accounts.map(function(r,i){
     return '<div class="acct-row" data-ai="'+i+'">'
-      +'<div class="acct-top"><div class="ac-wrap"><input class="ac-input" data-an="'+i+'" value="'+esc(r.name||'')+'" placeholder="Account" autocomplete="off" autocapitalize="words" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="acMenu">'+AC_CHEV+'</div>'
+      +'<div class="acct-top"><div class="ac-wrap"><input class="ac-input" data-an="'+i+'" value="'+esc(r.name||'')+'" placeholder="Account" autocomplete="off" autocapitalize="words" role="combobox" aria-autocomplete="list" aria-expanded="false">'+AC_CHEV+'</div>'
       +'<div class="amt-wrap"><span>$</span><input type="number" min="0" step="0.01" inputmode="decimal" data-aa="'+i+'" value="'+esc(r.amount||'')+'" placeholder="0.00"></div>'
       +'<button class="x" data-da="'+i+'" aria-label="Remove account">&times;</button></div>'
+      +'<div class="ac-strip" data-acc="'+i+'" role="listbox" aria-label="Account suggestions" hidden></div>'
       +qaChips(i,r.amount)+'</div>';
   }).join('');
   renderAcctQuick();
@@ -3946,45 +3963,48 @@ function acSuggest(q){
 }
 function acMark(n,q){q=String(q||'').trim();if(!q)return esc(n);var i=n.toLowerCase().indexOf(q.toLowerCase());if(i<0)return esc(n);return esc(n.slice(0,i))+'<mark>'+esc(n.slice(i,i+q.length))+'</mark>'+esc(n.slice(i+q.length))}
 var acState={input:null,items:[],idx:-1,typed:''};
-function acMenu(){var m=$('#acMenu');if(!m){m=document.createElement('div');m.id='acMenu';m.className='ac-menu';m.setAttribute('role','listbox');document.body.appendChild(m);
-  m.addEventListener('pointerdown',function(e){e.preventDefault()});
-  m.addEventListener('click',function(e){var b=e.target.closest('[data-aci]');if(b){acPick(Number(b.dataset.aci));return}var sv=e.target.closest('[data-acsave]');if(sv){var n=acState.input&&acState.input.value.trim();if(n&&addAcctName(n)){sfx('success');toast('“'+n+'” saved to accounts')}acOpen(acState.input)}var st=e.target.closest('[data-go-acct-settings]');if(st){acClose();go('settings');setTimeout(function(){var el=$('#newAcctName');if(el){el.scrollIntoView({block:'center'});el.focus()}},350)}})}
-  return m}
-function acPlace(){var inp=acState.input,m=$('#acMenu');if(!inp||!m)return;var r=inp.getBoundingClientRect(),vh=window.visualViewport?visualViewport.height:innerHeight;
-  var below=vh-r.bottom,h=Math.min(m.scrollHeight,300),up=below<h+16&&r.top>below;
-  m.style.left=Math.max(8,r.left)+'px';m.style.width=Math.max(220,Math.min(r.width+60,innerWidth-16-Math.max(8,r.left)))+'px';
-  m.style.top=(up?Math.max(8,r.top-h-6):r.bottom+6)+'px';m.classList.toggle('up',up)}
+/* Inline suggestion strip under the focused name field: a single scrollable
+   row of chips, so nothing floats over the screen. */
+function acStrip(inp){return inp?$('#acctRows [data-acc="'+inp.dataset.an+'"]'):null}
 function acOpen(inp){
-  if(!inp)return;acState.input=inp;var q=inp.value;acState.typed=q;
-  var items=acSuggest(q);acState.items=items;acState.idx=items.length&&q?0:-1;
-  var m=acMenu(),qt=q.trim(),exact=items.some(function(o){return o.name.toLowerCase()===qt.toLowerCase()});
-  var savedHit=acctNames().some(function(n){return n.toLowerCase()===qt.toLowerCase()});
-  var html=items.map(function(o,k){return '<button type="button" role="option" class="ac-item'+(k===acState.idx?' on':'')+'" data-aci="'+k+'" style="--k:'+k+'"><span class="ac-ico'+(o.saved?' saved':'')+'">'+(o.saved?'★':o.name.charAt(0).toUpperCase())+'</span><span class="ac-name">'+acMark(o.name,q)+'</span><span class="ac-meta">'+(o.saved?'Saved':o.n?o.n+'×':'Payer')+'</span></button>'}).join('');
-  if(qt.length>=3&&!savedHit)html+='<button type="button" class="ac-save" data-acsave><i>+</i>Save “'+esc(qt)+'” to accounts</button>';
-  if(!items.length&&!qt)html='<div class="ac-empty"><b>No saved accounts yet</b><button type="button" data-go-acct-settings>Add them in Settings</button></div>';
-  m.innerHTML=html;
+  if(!inp)return;
+  if(acState.input&&acState.input!==inp)acClose();
+  acState.input=inp;var q=inp.value,qt=q.trim();acState.typed=q;
+  var items=acSuggest(q).slice(0,6);acState.items=items;acState.idx=items.length&&qt?0:-1;
+  var st=acStrip(inp);if(!st)return;
+  var exact=acctNames().some(function(n){return n.toLowerCase()===qt.toLowerCase()});
+  if(items.length===1&&items[0].name.toLowerCase()===qt.toLowerCase()&&exact){acClose();return}
+  var html=items.map(function(o,k){return '<button type="button" role="option" class="acs'+(o.saved?' saved':'')+(k===acState.idx?' on':'')+'" data-aci="'+k+'" style="--k:'+k+'">'+(o.saved?'<i>★</i>':'')+'<span>'+acMark(o.name,q)+'</span></button>'}).join('');
+  if(qt.length>=3&&!exact)html+='<button type="button" class="acs add" data-acsave><i>+</i><span>Save “'+esc(qt)+'”</span></button>';
+  if(!items.length&&!qt&&!acctNames().length)html='<button type="button" class="acs hint" data-go-acct-settings><span>Add your accounts in Settings</span></button>';
   if(!html){acClose();return}
-  m.classList.add('show');inp.setAttribute('aria-expanded','true');acPlace();
+  st.innerHTML=html;st.hidden=false;st.scrollLeft=0;inp.setAttribute('aria-expanded','true');
 }
-function acClose(){var m=$('#acMenu');if(m)m.classList.remove('show');if(acState.input)acState.input.setAttribute('aria-expanded','false');acState.idx=-1}
+function acClose(){var inp=acState.input;var st=acStrip(inp);if(st){st.hidden=true;st.innerHTML=''}if(inp)inp.setAttribute('aria-expanded','false');acState.idx=-1}
+function acHighlight(){var st=acStrip(acState.input);if(!st)return;$$('.acs[data-aci]',st).forEach(function(b,k){b.classList.toggle('on',k===acState.idx);if(k===acState.idx)b.scrollIntoView({block:'nearest',inline:'nearest'})})}
+document.addEventListener('pointerdown',function(e){if(e.target.closest&&e.target.closest('.ac-strip'))e.preventDefault()});
+document.addEventListener('click',function(e){
+  var st=e.target.closest&&e.target.closest('.ac-strip');if(!st)return;
+  var b=e.target.closest('[data-aci]');if(b){acPick(Number(b.dataset.aci));return}
+  if(e.target.closest('[data-acsave]')){var n=acState.input&&acState.input.value.trim();if(n&&addAcctName(n)){sfx('success');toast('“'+n+'” saved to accounts');renderAcctQuick()}acOpen(acState.input);return}
+  if(e.target.closest('[data-go-acct-settings]')){acClose();go('settings');setTimeout(function(){var el=$('#newAcctName');if(el){el.scrollIntoView({block:'center'});el.focus()}},350)}
+});
 function acPick(k){
   var o=acState.items[k],inp=acState.input;if(!o||!inp)return;
   var i=Number(inp.dataset.an);inp.value=o.name;if(draft.accounts[i])draft.accounts[i].name=o.name;addName(o.name);persist();
-  acClose();sfx('tap');buzz(6);flashEl(inp.closest('.ac-wrap'));renderAcctQuick();buildPreview&&buildPreview();
+  acClose();sfx('pop');buzz(6);flashEl(inp.closest('.ac-wrap'));renderAcctQuick();buildPreview&&buildPreview();
   var amt=$('#acctRows [data-aa="'+i+'"]');if(amt&&!nn(amt.value))setTimeout(function(){amt.focus()},40);
 }
 document.addEventListener('focusin',function(e){if(e.target.classList&&e.target.classList.contains('ac-input'))acOpen(e.target)});
 document.addEventListener('focusout',function(e){if(e.target===acState.input)setTimeout(function(){if(document.activeElement!==acState.input)acClose()},120)});
 document.addEventListener('keydown',function(e){
-  if(!acState.input||e.target!==acState.input)return;var m=$('#acMenu');if(!m||!m.classList.contains('show')){if(e.key==='ArrowDown'){acOpen(e.target);e.preventDefault()}return}
+  if(!acState.input||e.target!==acState.input)return;var st=acStrip(e.target);if(!st||st.hidden){if(e.key==='ArrowDown'){acOpen(e.target);e.preventDefault()}return}
   var n=acState.items.length;
-  if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();if(!n)return;acState.idx=(acState.idx+(e.key==='ArrowDown'?1:-1)+n)%n;$$('#acMenu .ac-item').forEach(function(b,k){b.classList.toggle('on',k===acState.idx);if(k===acState.idx)b.scrollIntoView({block:'nearest'})});sfx('tap')}
+  if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();if(!n)return;acState.idx=(acState.idx+(e.key==='ArrowDown'?1:-1)+n)%n;acHighlight();sfx('tap')}
   else if(e.key==='Enter'){if(acState.idx>=0){e.preventDefault();acPick(acState.idx)}else acClose()}
   else if(e.key==='Escape'){acClose()}
   else if(e.key==='Tab'){if(acState.idx>=0&&acState.typed.trim())acPick(acState.idx);acClose()}
 });
-window.addEventListener('resize',function(){if($('#acMenu')&&$('#acMenu').classList.contains('show'))acPlace()});
-window.addEventListener('scroll',function(){if($('#acMenu')&&$('#acMenu').classList.contains('show'))acPlace()},{passive:true});
 /* quick amount + quick add taps */
 document.addEventListener('click',function(e){
   var qa=e.target.closest&&e.target.closest('[data-qa]');
