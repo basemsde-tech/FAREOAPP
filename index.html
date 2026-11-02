@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Fareo v11.0 | Costs & credits tax assistant | single-file PWA
+<!-- Fareo v12.0 | Smart accounts | single-file PWA
      Changelog v4.3 -> v4.4 (code review fixes):
      [F1]  Levy rate of $0 no longer silently reverts to $1.20 (levyRate() helper).
      [F2]  currentQuarter() fixed: last day of Q2/Q3/Q4 no longer reports Q1 (ISO string compare).
@@ -1354,6 +1354,67 @@ html.calm .tally{transition:none}
 #adjModal .exprow input:focus{border-color:var(--hail)}
 @media (max-width:420px){.ded-row{grid-template-columns:24px minmax(0,1fr) auto;row-gap:6px}.ded-acts{grid-column:2/-1;justify-content:flex-end;margin-top:-2px}}
 @media (min-width:700px){.tax-kpis{grid-template-columns:repeat(4,1fr)}}
+/* ---------- Fareo 12 · Accounts: smart dropdown + quick amounts ---------- */
+.acct-quick{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:2px 0 10px}
+.acct-quick:empty{display:none}
+.aq-lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin-right:2px}
+.aq{display:inline-flex;align-items:center;gap:6px;padding:7px 11px 7px 8px;border-radius:999px;border:1px solid var(--bd2);background:var(--card2);color:var(--head);font-size:12.5px;font-weight:600;cursor:pointer;animation:chipIn .4s var(--spring) both;animation-delay:calc(var(--k)*35ms);transition:transform .2s var(--spring),border-color .2s}
+.aq i{font-style:normal;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;background:var(--acct-bg);color:var(--acct);font-weight:700;font-size:13px;line-height:1}
+.aq:active{transform:scale(.94);border-color:var(--acct)}
+.aq-hint{border:1px dashed var(--bd2);background:transparent;color:var(--mut);border-radius:10px;padding:9px 11px;font-size:11.5px;cursor:pointer;width:100%;text-align:left}
+@keyframes chipIn{from{opacity:0;transform:translateY(6px) scale(.9)}to{opacity:1;transform:none}}
+.acct-row{padding:8px 0 10px;border-bottom:1px dashed var(--bd)}
+.acct-row:last-child{border-bottom:0}
+.acct-row.enter{animation:rowIn .45s var(--spring)}
+@keyframes rowIn{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}
+.acct-top{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) 40px;gap:6px;align-items:center}
+.ac-wrap{position:relative;border-radius:12px}
+.ac-wrap .ac-input{padding-right:32px}
+.ac-chev{position:absolute;right:10px;top:50%;width:16px;height:16px;transform:translateY(-50%);color:var(--mut);pointer-events:none;transition:transform .25s var(--ease),color .2s}
+.ac-wrap:focus-within .ac-chev{transform:translateY(-50%) rotate(180deg);color:var(--acct)}
+.amt-wrap{position:relative}
+.amt-wrap span{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:14px;color:var(--mut);pointer-events:none}
+.card[class*="tx-"] .amt-wrap input{padding-left:26px;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.acct-top .x{height:44px}
+.flash{animation:flash .6s var(--ease)}
+@keyframes flash{0%{box-shadow:0 0 0 0 var(--acct-bg)}30%{box-shadow:0 0 0 4px color-mix(in srgb,var(--acct) 40%,transparent)}100%{box-shadow:0 0 0 0 transparent}}
+.qa-row{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:7px}
+.qa{height:34px;border-radius:9px;border:1px solid var(--bd2);background:transparent;color:var(--body);font-family:var(--mono);font-size:12px;font-weight:600;cursor:pointer;transition:background .2s,border-color .2s,color .2s,transform .2s var(--spring);animation:chipIn .35s var(--ease) both;animation-delay:calc(var(--k)*30ms)}
+.qa:active{transform:scale(.92)}
+.qa.on{background:var(--acct);border-color:var(--acct);color:#032019}
+:root[data-theme="light"] .qa.on{color:#fff}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .qa.on{color:#fff}}
+.qa.pop{animation:qaPop .4s var(--spring)}
+@keyframes qaPop{0%{transform:scale(.88)}55%{transform:scale(1.1)}100%{transform:none}}
+@media (hover:hover){.qa:hover{border-color:var(--acct);color:var(--head)}}
+/* dropdown */
+.ac-menu{position:fixed;z-index:300;max-height:300px;overflow:auto;padding:6px;border-radius:14px;background:var(--card2);border:1px solid var(--bd2);box-shadow:0 24px 50px -18px rgba(0,0,0,.75),0 0 0 1px var(--ring);opacity:0;transform:translateY(-6px) scale(.98);transform-origin:top center;pointer-events:none;transition:opacity .18s var(--ease),transform .22s var(--spring)}
+.ac-menu.up{transform-origin:bottom center;transform:translateY(6px) scale(.98)}
+.ac-menu.show{opacity:1;transform:none;pointer-events:auto}
+.ac-item{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;width:100%;padding:8px;border:0;border-radius:10px;background:transparent;color:var(--head);font-size:14px;text-align:left;cursor:pointer;animation:chipIn .3s var(--ease) both;animation-delay:calc(var(--k)*22ms)}
+.ac-item.on,.ac-item:hover{background:var(--field)}
+.ac-item.on{box-shadow:inset 2px 0 0 var(--acct)}
+.ac-ico{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:var(--field);color:var(--mut);font-family:var(--mono);font-size:12px;font-weight:700}
+.ac-ico.saved{background:var(--acct-bg);color:var(--acct)}
+.ac-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.ac-name mark{background:transparent;color:var(--acct);font-weight:700}
+.ac-meta{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.ac-save{display:flex;align-items:center;gap:8px;width:100%;margin-top:4px;padding:9px 8px;border:1px dashed var(--bd2);border-radius:10px;background:transparent;color:var(--acct);font-size:13px;font-weight:600;cursor:pointer;text-align:left}
+.ac-save i{font-style:normal;width:20px;height:20px;border-radius:6px;display:grid;place-items:center;background:var(--acct-bg)}
+.ac-empty{padding:12px;text-align:center;font-size:12px;color:var(--mut)}
+.ac-empty b{display:block;color:var(--head);margin-bottom:6px}
+.ac-empty button{border:1px solid var(--acct);background:transparent;color:var(--acct);border-radius:9px;padding:7px 11px;font-size:12px;font-weight:600;cursor:pointer}
+/* settings */
+.acct-chips{margin-top:10px}
+.acct-chip{animation:chipIn .35s var(--spring) both;animation-delay:calc(var(--k)*25ms)}
+.acct-chip.new{animation:qaPop .45s var(--spring);border-color:var(--acct)}
+#acctImport{margin-top:10px;font-size:12px}
+.qa-edit{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px}
+.qa-in{position:relative;display:block}
+.qa-in span{position:absolute;left:9px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:12px;color:var(--mut);pointer-events:none}
+.set .qa-in input{width:66px;padding:8px 8px 8px 20px;text-align:left;font-family:var(--mono);font-size:13px}
+#qaReset{font-size:12px;margin-left:4px}
+@media (max-width:360px){.qa{font-size:11px}.acct-top{grid-template-columns:minmax(0,1fr) 92px 38px}}
 </style>
 </head>
 <body>
@@ -1440,7 +1501,7 @@ html.calm .tally{transition:none}
       <div class="card tx-runs shift-field" data-field="runs"><h5 class="sf-h5"><button type="button" class="sf-grip" aria-label="Drag to reorder" title="Drag to reorder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></button><span class="dot" style="background:var(--hail-fill)"></span>Passenger Runs<span class="help" data-help="Short fixed-price passenger runs at $5 each. Enter how many you did." aria-label="Help">?</span><span class="sub-amt" id="runsSub">$0</span></h5>
         <label class="fl">Runs (&#36;5 each)</label><input id="runs" type="number" min="0" inputmode="numeric" placeholder="0"></div>
       <div class="card tx-acct shift-field" data-field="accounts"><h5 class="sf-h5"><button type="button" class="sf-grip" aria-label="Drag to reorder" title="Drag to reorder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></button><span class="dot" style="background:var(--acct)"></span>Accounts<span class="help" data-help="Invoiced or account jobs billed through the operator. Counted in gross; operator pays your share." aria-label="Help">?</span><span class="sub-amt" id="acctSub">$0</span></h5>
-        <div id="acctRows"></div><button class="add" id="addAcct">+ Add Account</button></div>
+        <div id="acctQuick" class="acct-quick"></div><div id="acctRows"></div><button class="add" id="addAcct">+ Add Account</button></div>
       </div>
       <div class="card hero shift-net">
         <div class="lbl">Net take-home</div>
@@ -1775,6 +1836,17 @@ html.calm .tally{transition:none}
       <div class="set" style="display:block"><div class="sl"><b>Payment types <span class="help" data-help="Built-ins are EFTPOS, Cash, Square, Runs and Accounts. Add your own types here (e.g. PayPal, vouchers, tips) and they appear as cards in the calculator." aria-label="Help">?</span></b><p>Extra income cards on the shift form</p></div>
         <div id="payTypeChips" class="chips" style="margin:10px 0 2px"></div>
         <button class="add" id="addPayType">+ Add payment type</button></div>
+    </div>
+    </div>
+    <div class="set-group">
+    <p class="grp">Accounts</p>
+    <div class="card set-card">
+      <div class="set" style="display:block"><div class="sl"><b>Account names <span class="help" data-help="Clients or companies you bill on account. They appear first in the Accounts dropdown on Log Shift, and as one-tap chips when you add an account." aria-label="Help">?</span></b><p id="acctNamesSub">Shown first when you log an account</p></div>
+        <div class="rego-add"><input id="newAcctName" placeholder="e.g. NDIS, City Council" autocomplete="off" maxlength="40"><button class="add" id="addAcctName">Add</button></div>
+        <div class="chips acct-chips" id="acctNameChips"></div>
+        <button type="button" class="linkish" id="acctImport" hidden>Add names from past shifts</button></div>
+      <div class="set" style="display:block"><div class="sl"><b>Quick amounts</b><p>One-tap amounts under each account</p></div>
+        <div class="qa-edit" id="qaEdit"></div></div>
     </div>
     </div>
     <div class="set-group">
@@ -2170,8 +2242,14 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='11.0';
+var APP_VERSION='12.0';
 var CHANGELOG=[
+  {v:'12.0',date:'November 2, 2026',notes:[
+    ['Feature','Save your regular account names in Settings \u2192 Accounts. Fareo starts the list from names on your past shifts, and you can add, remove or import more.'],
+    ['Feature','The Accounts name field has a smart dropdown: saved accounts first, then names you have used before, ranked by how often, with the match highlighted. Arrow keys and Enter work too, and a new name can be saved in one tap.'],
+    ['Feature','Quick amounts under every account: tap $5, $10, $15, $25 or $60 to fill the amount. Change the five amounts in Settings.'],
+    ['UI/UX','Quick add chips put a saved account on the shift in one tap and jump straight to the amount. New coin and pop sounds, chip animations and a highlight when a field fills.'],
+  ]},
   {v:'11.0',date:'November 2, 2026',notes:[
     ['Feature','Costs & credits is now a tax assistant: GST credits (1B), deductions, items claimed and a records score at the top, plus a Tax check that flags what needs attention before you lodge.'],
     ['Feature','Adjust any cost for tax (amount, GST or business use %) without touching the original record. Adjusted rows show the old value, a banner shows the effect on 1B, and Reset to original or Reset all puts every figure back.'],
@@ -2519,7 +2597,21 @@ function migrateSettings(){
   /* v11: temporary cost adjustments (reset to original any time) and opt-in claims */
   if(!settings.costEdits||typeof settings.costEdits!=='object')settings.costEdits={};
   if(!settings.claimOn||typeof settings.claimOn!=='object')settings.claimOn={};
+  /* v12: saved account names (seeded once from past shifts) and quick amounts */
+  if(!Array.isArray(settings.accountNames)){settings.accountNames=null}
+  if(!Array.isArray(settings.quickAmts)||!settings.quickAmts.length)settings.quickAmts=[5,10,15,25,60];
 }
+/* Account names used on past shifts, most used first. */
+function acctHistory(){
+  var c={},cap={};
+  (typeof entries!=='undefined'?entries:[]).forEach(function(e){
+    var list=e&&e.snap&&Array.isArray(e.snap.accounts)?e.snap.accounts:[];
+    list.forEach(function(a){var n=String(a&&a.name||'').trim();if(!n)return;var k=n.toLowerCase();c[k]=(c[k]||0)+1;if(!cap[k])cap[k]=n});
+  });
+  return Object.keys(c).sort(function(a,b){return c[b]-c[a]}).map(function(k){return {name:cap[k],n:c[k]}});
+}
+function acctNames(){if(!Array.isArray(settings.accountNames))settings.accountNames=acctHistory().slice(0,12).map(function(h){return h.name});return settings.accountNames}
+function addAcctName(n){n=String(n||'').trim().slice(0,40);if(!n)return false;var L=acctNames();if(L.some(function(x){return x.toLowerCase()===n.toLowerCase()}))return false;L.push(n);persist();return true}
 function buzz(ms){if(settings.haptics===false||!navigator.vibrate)return;try{navigator.vibrate(ms||8)}catch(_){}}
 function applyCalm(){document.documentElement.classList.toggle('calm',!!settings.calm)}
 migrateSettings();
@@ -3454,6 +3546,8 @@ var SFX=(function(){
     success:function(){[1046.5,1318.5,1568].forEach(function(f,i){tone(f,f,0.2,'triangle',0.065,i*0.065)});tone(2093,2093,0.32,'sine',0.028,0.2)},
     warn:function(){tone(698,659,0.1,'square',0.03,0,1600);tone(523,494,0.16,'square',0.03,0.12,1600)},
     error:function(){tone(233,185,0.16,'sawtooth',0.05,0,900);tone(175,131,0.24,'sawtooth',0.05,0.14,900)},
+    coin:function(){tone(1975,1975,0.05,'square',0.022,0,3200);tone(2637,2637,0.16,'triangle',0.05,0.045)},
+    pop:function(){tone(520,980,0.07,'sine',0.07);tone(1320,1320,0.06,'triangle',0.035,0.05)},
     celebrate:function(){[784,1046.5,1318.5,1568,2093].forEach(function(f,i){tone(f,f,0.26,'triangle',0.055,i*0.06)});tone(3136,3136,0.5,'sine',0.02,0.32)}
   };
   return{
@@ -3467,6 +3561,7 @@ document.addEventListener('pointerdown',function once(){SFX.unlock()},{passive:t
 document.addEventListener('click',function(e){
   var el=e.target.closest&&e.target.closest('button,.set[id],summary,[role="button"],label.fuel-op,.glance');
   if(!el||el.disabled)return;
+  if(el.matches('[data-qa],[data-aq],[data-aci],[data-acsave]'))return;
   if(el.matches('.btn:not(.neutral),#askYes,.hub-core'))sfx('confirm');else sfx('tap');
 },true);
 window.addEventListener('offline',function(){toast('You’re offline — changes stay on this phone','warn')});
@@ -3746,7 +3841,7 @@ function rowInputs(){
   var hailEl=$('#hail');if(hailEl)hailEl.value=draft.hail==null||draft.hail===''?'':draft.hail;
   $('#cashRows').innerHTML=draft.cash.map(function(r,i){return '<div class="mini"><input data-cn="'+i+'"'+LA+' value="'+esc(r.name||'')+'" placeholder="Payer"><input type="number" min="0" inputmode="decimal" data-ca="'+i+'" value="'+esc(r.amount||'')+'" placeholder="Amount"><button class="x" data-dc="'+i+'">&times;</button></div>'}).join('');
   $('#squareRows').innerHTML=draft.square.map(function(r,i){return '<div class="mini"><input data-sn="'+i+'"'+LA+' value="'+esc(r.name||'')+'" placeholder="Payer"><input type="number" min="0" inputmode="decimal" data-sa="'+i+'" value="'+esc(r.amount||'')+'" placeholder="Amount"><button class="x" data-ds="'+i+'">&times;</button></div>'}).join('');
-  $('#acctRows').innerHTML=draft.accounts.map(function(r,i){return '<div class="mini"><input data-an="'+i+'"'+LA+' value="'+esc(r.name||'')+'" placeholder="Account"><input type="number" min="0" inputmode="decimal" data-aa="'+i+'" value="'+esc(r.amount||'')+'" placeholder="Amount"><button class="x" data-da="'+i+'">&times;</button></div>'}).join('');
+  renderAcctRows();
   /* Custom pay-type cards — each is its own reorderable field (order only; maths unchanged) */
   var host=$('#shiftFields');
   if(host){
@@ -3813,6 +3908,118 @@ function buildPreview(){
   var p=$('#prev');if(p)p.textContent=txt;
 }
 
+/* ---------- Accounts: smart dropdown, quick add, quick amounts ---------- */
+var AC_CHEV='<svg class="ac-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+function qaChips(i,cur){var v=nn(cur);return '<div class="qa-row" role="group" aria-label="Quick amounts">'+settings.quickAmts.map(function(a,k){return '<button type="button" class="qa'+(v===a?' on':'')+'" data-qa="'+i+'" data-v="'+a+'" style="--k:'+k+'">$'+a+'</button>'}).join('')+'</div>'}
+function renderAcctRows(){
+  var host=$('#acctRows');if(!host)return;
+  host.innerHTML=draft.accounts.map(function(r,i){
+    return '<div class="acct-row" data-ai="'+i+'">'
+      +'<div class="acct-top"><div class="ac-wrap"><input class="ac-input" data-an="'+i+'" value="'+esc(r.name||'')+'" placeholder="Account" autocomplete="off" autocapitalize="words" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="acMenu">'+AC_CHEV+'</div>'
+      +'<div class="amt-wrap"><span>$</span><input type="number" min="0" step="0.01" inputmode="decimal" data-aa="'+i+'" value="'+esc(r.amount||'')+'" placeholder="0.00"></div>'
+      +'<button class="x" data-da="'+i+'" aria-label="Remove account">&times;</button></div>'
+      +qaChips(i,r.amount)+'</div>';
+  }).join('');
+  renderAcctQuick();
+}
+/* One-tap chips for saved accounts not already on this shift. */
+function renderAcctQuick(){
+  var q=$('#acctQuick');if(!q)return;
+  var used={};draft.accounts.forEach(function(a){if(a.name)used[String(a.name).toLowerCase()]=1});
+  var L=acctNames().filter(function(n){return !used[n.toLowerCase()]}).slice(0,8);
+  if(!L.length){q.innerHTML=acctNames().length?'':'<button type="button" class="aq-hint" data-go-acct-settings>Save your regular accounts in Settings for one-tap entry</button>';return}
+  q.innerHTML='<span class="aq-lbl">Quick add</span>'+L.map(function(n,k){return '<button type="button" class="aq" data-aq="'+esc(n)+'" style="--k:'+k+'"><i>+</i>'+esc(n)+'</button>'}).join('');
+}
+function focusAcct(i,which){setTimeout(function(){var el=$('#acctRows [data-'+(which==='name'?'an':'aa')+'="'+i+'"]');if(el){el.focus();if(which!=='name')el.select&&el.select()}},30)}
+function flashEl(el){if(!el)return;el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash')}
+/* ranked suggestions: saved first, then history; prefix beats contains */
+function acSuggest(q){
+  q=String(q||'').trim().toLowerCase();
+  var saved=acctNames(),hist=acctHistory(),seen={},out=[];
+  function score(n){var l=n.toLowerCase();if(!q)return 1;if(l.indexOf(q)===0)return 3;if(l.split(/\s+/).some(function(w){return w.indexOf(q)===0}))return 2;return l.indexOf(q)>=0?1:0}
+  saved.forEach(function(n){var sc=score(n);if(sc){seen[n.toLowerCase()]=1;out.push({name:n,saved:true,sc:sc+10,n:0})}});
+  hist.forEach(function(h){var k=h.name.toLowerCase();if(seen[k])return;var sc=score(h.name);if(sc){seen[k]=1;out.push({name:h.name,saved:false,sc:sc,n:h.n})}});
+  if(settings.autocomplete!==false&&q)names.forEach(function(n){var k=n.toLowerCase();if(seen[k])return;var sc=score(n);if(sc>=2){seen[k]=1;out.push({name:n,saved:false,sc:sc-0.5,n:0,payer:true})}});
+  hist.forEach(function(h){out.forEach(function(o){if(o.name.toLowerCase()===h.name.toLowerCase())o.n=h.n})});
+  out.sort(function(a,b){return b.sc-a.sc||b.n-a.n||a.name.localeCompare(b.name)});
+  return out.slice(0,8);
+}
+function acMark(n,q){q=String(q||'').trim();if(!q)return esc(n);var i=n.toLowerCase().indexOf(q.toLowerCase());if(i<0)return esc(n);return esc(n.slice(0,i))+'<mark>'+esc(n.slice(i,i+q.length))+'</mark>'+esc(n.slice(i+q.length))}
+var acState={input:null,items:[],idx:-1,typed:''};
+function acMenu(){var m=$('#acMenu');if(!m){m=document.createElement('div');m.id='acMenu';m.className='ac-menu';m.setAttribute('role','listbox');document.body.appendChild(m);
+  m.addEventListener('pointerdown',function(e){e.preventDefault()});
+  m.addEventListener('click',function(e){var b=e.target.closest('[data-aci]');if(b){acPick(Number(b.dataset.aci));return}var sv=e.target.closest('[data-acsave]');if(sv){var n=acState.input&&acState.input.value.trim();if(n&&addAcctName(n)){sfx('success');toast('“'+n+'” saved to accounts')}acOpen(acState.input)}var st=e.target.closest('[data-go-acct-settings]');if(st){acClose();go('settings');setTimeout(function(){var el=$('#newAcctName');if(el){el.scrollIntoView({block:'center'});el.focus()}},350)}})}
+  return m}
+function acPlace(){var inp=acState.input,m=$('#acMenu');if(!inp||!m)return;var r=inp.getBoundingClientRect(),vh=window.visualViewport?visualViewport.height:innerHeight;
+  var below=vh-r.bottom,h=Math.min(m.scrollHeight,300),up=below<h+16&&r.top>below;
+  m.style.left=Math.max(8,r.left)+'px';m.style.width=Math.max(220,Math.min(r.width+60,innerWidth-16-Math.max(8,r.left)))+'px';
+  m.style.top=(up?Math.max(8,r.top-h-6):r.bottom+6)+'px';m.classList.toggle('up',up)}
+function acOpen(inp){
+  if(!inp)return;acState.input=inp;var q=inp.value;acState.typed=q;
+  var items=acSuggest(q);acState.items=items;acState.idx=items.length&&q?0:-1;
+  var m=acMenu(),qt=q.trim(),exact=items.some(function(o){return o.name.toLowerCase()===qt.toLowerCase()});
+  var savedHit=acctNames().some(function(n){return n.toLowerCase()===qt.toLowerCase()});
+  var html=items.map(function(o,k){return '<button type="button" role="option" class="ac-item'+(k===acState.idx?' on':'')+'" data-aci="'+k+'" style="--k:'+k+'"><span class="ac-ico'+(o.saved?' saved':'')+'">'+(o.saved?'★':o.name.charAt(0).toUpperCase())+'</span><span class="ac-name">'+acMark(o.name,q)+'</span><span class="ac-meta">'+(o.saved?'Saved':o.n?o.n+'×':'Payer')+'</span></button>'}).join('');
+  if(qt.length>=3&&!savedHit)html+='<button type="button" class="ac-save" data-acsave><i>+</i>Save “'+esc(qt)+'” to accounts</button>';
+  if(!items.length&&!qt)html='<div class="ac-empty"><b>No saved accounts yet</b><button type="button" data-go-acct-settings>Add them in Settings</button></div>';
+  m.innerHTML=html;
+  if(!html){acClose();return}
+  m.classList.add('show');inp.setAttribute('aria-expanded','true');acPlace();
+}
+function acClose(){var m=$('#acMenu');if(m)m.classList.remove('show');if(acState.input)acState.input.setAttribute('aria-expanded','false');acState.idx=-1}
+function acPick(k){
+  var o=acState.items[k],inp=acState.input;if(!o||!inp)return;
+  var i=Number(inp.dataset.an);inp.value=o.name;if(draft.accounts[i])draft.accounts[i].name=o.name;addName(o.name);persist();
+  acClose();sfx('tap');buzz(6);flashEl(inp.closest('.ac-wrap'));renderAcctQuick();buildPreview&&buildPreview();
+  var amt=$('#acctRows [data-aa="'+i+'"]');if(amt&&!nn(amt.value))setTimeout(function(){amt.focus()},40);
+}
+document.addEventListener('focusin',function(e){if(e.target.classList&&e.target.classList.contains('ac-input'))acOpen(e.target)});
+document.addEventListener('focusout',function(e){if(e.target===acState.input)setTimeout(function(){if(document.activeElement!==acState.input)acClose()},120)});
+document.addEventListener('keydown',function(e){
+  if(!acState.input||e.target!==acState.input)return;var m=$('#acMenu');if(!m||!m.classList.contains('show')){if(e.key==='ArrowDown'){acOpen(e.target);e.preventDefault()}return}
+  var n=acState.items.length;
+  if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();if(!n)return;acState.idx=(acState.idx+(e.key==='ArrowDown'?1:-1)+n)%n;$$('#acMenu .ac-item').forEach(function(b,k){b.classList.toggle('on',k===acState.idx);if(k===acState.idx)b.scrollIntoView({block:'nearest'})});sfx('tap')}
+  else if(e.key==='Enter'){if(acState.idx>=0){e.preventDefault();acPick(acState.idx)}else acClose()}
+  else if(e.key==='Escape'){acClose()}
+  else if(e.key==='Tab'){if(acState.idx>=0&&acState.typed.trim())acPick(acState.idx);acClose()}
+});
+window.addEventListener('resize',function(){if($('#acMenu')&&$('#acMenu').classList.contains('show'))acPlace()});
+window.addEventListener('scroll',function(){if($('#acMenu')&&$('#acMenu').classList.contains('show'))acPlace()},{passive:true});
+/* quick amount + quick add taps */
+document.addEventListener('click',function(e){
+  var qa=e.target.closest&&e.target.closest('[data-qa]');
+  if(qa){var i=Number(qa.dataset.qa),v=Number(qa.dataset.v);if(!draft.accounts[i])return;
+    draft.accounts[i].amount=String(v);var inp=$('#acctRows [data-aa="'+i+'"]');if(inp){inp.value=v;flashEl(inp.parentNode)}
+    $$('#acctRows [data-qa="'+i+'"]').forEach(function(b){b.classList.toggle('on',b===qa)});
+    qa.classList.remove('pop');void qa.offsetWidth;qa.classList.add('pop');
+    sfx('coin');buzz(8);render();persist();return}
+  var aq=e.target.closest&&e.target.closest('[data-aq]');
+  if(aq){var n=aq.dataset.aq;var empty=draft.accounts.findIndex(function(a){return !String(a.name||'').trim()&&!nn(a.amount)});
+    if(empty>=0)draft.accounts[empty].name=n;else draft.accounts.push({name:n,amount:''});
+    var idx=empty>=0?empty:draft.accounts.length-1;addName(n);
+    sfx('pop');buzz(6);rowInputs();render();persist();
+    var row=$('#acctRows [data-ai="'+idx+'"]');if(row)row.classList.add('enter');focusAcct(idx,'amt');return}
+  if(e.target.closest&&e.target.closest('#acctQuick [data-go-acct-settings]')){go('settings');setTimeout(function(){var el=$('#newAcctName');if(el){el.scrollIntoView({block:'center'});el.focus()}},350)}
+});
+/* settings: account names + quick amounts */
+function renderAcctSettings(){
+  var box=$('#acctNameChips');if(!box)return;var L=acctNames();
+  box.innerHTML=L.length?L.map(function(n,k){return '<span class="chip acct-chip" style="--k:'+k+'">'+esc(n)+'<button type="button" data-delacct="'+esc(n)+'" aria-label="Remove '+esc(n)+'">&times;</button></span>'}).join(''):'<span class="mono-mut">No accounts yet</span>';
+  var sub=$('#acctNamesSub');if(sub)sub.textContent=L.length?L.length+' saved · shown first when you log an account':'Shown first when you log an account';
+  var hist=acctHistory().filter(function(h){return !L.some(function(n){return n.toLowerCase()===h.name.toLowerCase()})});
+  var imp=$('#acctImport');if(imp){imp.hidden=!hist.length;imp.textContent='Add '+hist.length+' name'+(hist.length===1?'':'s')+' from past shifts'}
+  var qe=$('#qaEdit');if(qe)qe.innerHTML=settings.quickAmts.map(function(a,k){return '<label class="qa-in"><span>$</span><input type="number" min="1" max="999" step="1" inputmode="numeric" data-qae="'+k+'" value="'+a+'"></label>'}).join('')+'<button type="button" class="linkish" id="qaReset">Reset</button>';
+}
+document.addEventListener('click',function(e){
+  var d=e.target.closest&&e.target.closest('[data-delacct]');
+  if(d){var n=d.dataset.delacct;settings.accountNames=acctNames().filter(function(x){return x!==n});persist();renderAcctSettings();renderAcctQuick();sfx('tap');toast('Removed '+n);return}
+  if(e.target.id==='addAcctName'){var inp=$('#newAcctName'),n=inp.value.trim();if(!n){toast('Enter an account name');return}if(!addAcctName(n)){toast('Already saved','warn');return}inp.value='';renderAcctSettings();renderAcctQuick();var ch=$('#acctNameChips .acct-chip:last-child');if(ch)ch.classList.add('new');toast('Account added');return}
+  if(e.target.id==='acctImport'){var add=acctHistory().map(function(h){return h.name}),c=0;add.forEach(function(n){if(addAcctName(n))c++});renderAcctSettings();renderAcctQuick();toast(c+' account'+(c===1?'':'s')+' added');return}
+  if(e.target.id==='qaReset'){settings.quickAmts=[5,10,15,25,60];persist();renderAcctSettings();if($('#acctRows'))renderAcctRows();toast('Quick amounts reset');return}
+});
+document.addEventListener('keydown',function(e){if(e.target.id==='newAcctName'&&e.key==='Enter'){e.preventDefault();$('#addAcctName').click()}});
+document.addEventListener('change',function(e){var k=e.target.dataset&&e.target.dataset.qae;if(k==null)return;var v=Math.round(Number(e.target.value));if(!(v>0&&v<1000)){toast('Use a whole amount from $1 to $999','warn');renderAcctSettings();return}settings.quickAmts[Number(k)]=v;persist();renderAcctRows();toast('Quick amount saved')});
+
 /* ---------- shift interactions ---------- */
 document.addEventListener('input',function(e){
   var d=e.target.dataset;var v=e.target.value;
@@ -3822,8 +4029,8 @@ document.addEventListener('input',function(e){
   else if(d.ca!=null)draft.cash[d.ca].amount=v;
   else if(d.sn!=null)draft.square[d.sn].name=v;
   else if(d.sa!=null)draft.square[d.sa].amount=v;
-  else if(d.an!=null)draft.accounts[d.an].name=v;
-  else if(d.aa!=null)draft.accounts[d.aa].amount=v;
+  else if(d.an!=null){draft.accounts[d.an].name=v;acOpen(e.target)}
+  else if(d.aa!=null){draft.accounts[d.aa].amount=v;$$('#acctRows [data-qa="'+d.aa+'"]').forEach(function(b){b.classList.toggle('on',Number(b.dataset.v)===nn(v))})}
   else if(d.custom!=null){draft.custom[d.custom]=v;render();return;}
   else if(d.fa!=null)draft.fuel[d.fa].amount=v;
   else if(e.target.id==='runs')draft.runs=v;
@@ -3835,6 +4042,7 @@ document.addEventListener('change',function(e){
   if(d.ft!=null){draft.fuel[d.ft].type=e.target.value;render()}
   else if(e.target.id==='rego'){draft.rego=e.target.value;buildPreview();persist();if(typeof updateFooter==='function')updateFooter();if(typeof updateReviewSum==='function')updateReviewSum();if(typeof updateLogProgress==='function')updateLogProgress();}
   if(d.cn!=null||d.an!=null||d.sn!=null)addName(e.target.value);
+  if(d.an!=null)renderAcctQuick();
 });
 document.addEventListener('click',function(e){
   var d=e.target.dataset;var t=e.target;
@@ -3864,7 +4072,7 @@ $('#shiftDate').onchange=function(){if(this.value)setDraftDate(this.value)};
 
 $('#addCash').onclick=function(){draft.cash.push({name:'',amount:0});rowInputs();render()};
 $('#addSquare').onclick=function(){draft.square.push({name:'',amount:0});rowInputs();render()};
-$('#addAcct').onclick=function(){draft.accounts.push({name:'',amount:0});rowInputs();render()};
+$('#addAcct').onclick=function(){draft.accounts.push({name:'',amount:0});rowInputs();render();focusAcct(draft.accounts.length-1,'name')};
 $('#addFuel').onclick=function(){draft.fuel.push({amount:0,type:settings.fuel,opPaid:false});rowInputs();render()};
 if($('#addEos'))$('#addEos').onclick=function(){draft.eos.push('');rowInputs();render()};
 $('#hailMinus').onclick=function(){draft.hail=Math.max(0,nn(draft.hail)-1);var h=$('#hail');if(h)h.value=draft.hail;render()};
@@ -5845,6 +6053,7 @@ function renderSettings(){
   var sn=$('#setName');if(sn&&document.activeElement!==sn)sn.value=settings.driverName||'';
   var sst=$('#setStart');if(sst)sst.value=settings.startTab||'hub';
   var shp=$('#setHaptics');if(shp)shp.classList.toggle('on',settings.haptics!==false);
+  renderAcctSettings();
   var sso=$('#setSounds');if(sso)sso.classList.toggle('on',settings.sounds!==false);
   var stm=$('#setTaxMode');if(stm)stm.value=settings.taxMode||'auto';
   var stp=$('#setTaxPct');if(stp&&document.activeElement!==stp)stp.value=settings.taxPct;
