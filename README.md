@@ -5,7 +5,7 @@ client run planner,
 weekly payout tracker, and ATO-ready tax/BAS reports. Works offline, installs
 to your home screen. All data is stored locally in your browser.
 
-**Current version:** 10.0 (Signal)
+**Current version:** 11.0
 
 ---
 
@@ -33,7 +33,7 @@ That URL is what you install as a PWA.
 
 ## Updating the app
 When you push changes, bump these together so returning users get the update:
-- `CACHE_NAME` in `sw.js` (e.g. `fareo-v10.0` → `fareo-v10.1`)
+- `CACHE_NAME` in `sw.js` (e.g. `fareo-v11.0` → `fareo-v11.1`)
 - `APP_VERSION` in `index.html`
 - add a `CHANGELOG` entry in `index.html`
 - copy `index.html` over `404.html`
