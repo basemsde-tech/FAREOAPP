@@ -1582,6 +1582,94 @@ html.calm .tally{transition:none}
 .sm-opt em{font-style:normal;font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:5px;background:var(--accent);color:var(--accent-ink)}
 .sm-opt small{display:block;font-size:11.5px;color:var(--mut);margin-top:3px;line-height:1.4}
 .sm-opt.rec{border-color:var(--accent-line);background:var(--accent-dim)}
+.fb-steps{margin:4px 0 10px;padding-left:18px;font-size:12px;line-height:1.5;color:var(--body)}
+.fb-steps li{margin:3px 0}
+.fb-steps code{font-family:var(--mono);font-size:11px;background:var(--field);padding:1px 4px;border-radius:4px}
+.sync-adv summary{display:flex;align-items:center;gap:8px}
+.sync-adv .tag.on{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+/* ---------- Fareo 14 · Settings redesign ---------- */
+.set-top{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.set-hero{display:grid;grid-template-columns:auto 1fr;grid-template-areas:"av t" "chips chips";gap:12px 14px;align-items:center;width:100%;padding:16px;border-radius:var(--radius-lg);border:1px solid var(--bd);background:linear-gradient(135deg,var(--accent-dim),transparent 60%),var(--card);color:var(--head);text-align:left;cursor:pointer;position:relative;overflow:hidden;animation:riseIn .45s var(--ease) both;transition:transform .2s var(--spring),border-color .2s}
+.set-hero:active{transform:scale(.99)}
+.set-hero::after{content:"";position:absolute;right:-40px;top:-40px;width:140px;height:140px;border-radius:50%;border:1px solid var(--accent-line);opacity:.5}
+.sh-av{grid-area:av;width:54px;height:54px;border-radius:16px;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink);font-family:var(--mono);font-size:19px;font-weight:700}
+.sh-t{grid-area:t;min-width:0}
+.sh-t b{display:block;font-size:18px;font-weight:700;letter-spacing:-.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sh-t small{display:block;font-family:var(--mono);font-size:10.5px;color:var(--mut);margin-top:3px}
+.sh-chips{grid-area:chips;display:flex;gap:6px;flex-wrap:wrap}
+.sh-chips .tag.on{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+.set-search{position:relative;display:flex;align-items:center}
+.set-search svg{position:absolute;left:13px;width:17px;height:17px;color:var(--mut);pointer-events:none}
+.set-search input{padding-left:40px;padding-right:38px;height:46px;border-radius:13px;background:var(--card);border-color:var(--bd2);font-size:15px}
+.set-search input::-webkit-search-cancel-button{display:none}
+#setSearchX{position:absolute;right:8px;width:30px;height:30px;border-radius:9px;border:0;background:var(--field);color:var(--mut);font-size:18px;cursor:pointer}
+.set-nav{display:flex;flex-direction:column;gap:6px}
+.sn{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;width:100%;padding:12px 12px 12px 12px;border-radius:15px;border:1px solid var(--bd);background:var(--card);color:var(--head);text-align:left;cursor:pointer;animation:riseIn .4s var(--ease) both;animation-delay:calc(var(--i)*35ms);transition:transform .2s var(--spring),border-color .2s,background .2s}
+.sn:active{transform:scale(.985)}
+.sn-ico,.sp-ico{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:color-mix(in srgb,var(--tone) 14%,transparent);color:var(--tone);flex:0 0 auto}
+.sn-ico svg,.sp-ico svg{width:19px;height:19px}
+.sn-t{min-width:0}
+.sn-t b{display:block;font-size:14.5px;font-weight:600;letter-spacing:-.01em}
+.sn-t small{display:block;font-family:var(--mono);font-size:10.5px;color:var(--mut);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sn-chev{width:17px;height:17px;color:var(--mut);transition:transform .2s var(--ease)}
+.set-pane{display:none}
+.sp-head{display:flex;align-items:center;gap:11px;margin:0 0 6px}
+.sp-head h2{margin:0;font-size:21px;font-weight:700;letter-spacing:-.035em;color:var(--head)}
+.sp-back{width:38px;height:38px;border-radius:12px;border:1px solid var(--bd2);background:var(--card);color:var(--head);display:grid;place-items:center;cursor:pointer;flex:0 0 auto}
+.sp-back svg{width:18px;height:18px}
+.sp-sec .grp{margin-top:18px}
+.sp-sec:first-of-type .grp{margin-top:14px}
+.set-pane > .sp-sec:first-of-type > .card:first-child{margin-top:14px}
+.set-pane .card{margin-bottom:10px}
+.set-pane.enter{animation:paneIn .38s var(--ease) both}
+@keyframes paneIn{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+.set-empty{text-align:center;color:var(--mut);font-size:13px;padding:30px 0}
+.sr-hide{display:none!important}
+.set-pane .set.sr-hit{background:color-mix(in srgb,var(--accent) 7%,transparent)}
+/* phones: list → drill-in */
+@media (max-width:739px){
+  .set-shell.pane-open .set-nav{display:none}
+  .set-shell.pane-open .set-pane.on{display:block}
+  html.set-drill [data-tab="settings"] .set-top,html.set-drill [data-tab="settings"] > .sub{display:none}
+  .set-shell.searching .set-nav{display:none}
+  .set-shell.searching .set-pane{display:none}
+  .set-shell.searching .set-pane.sr-match{display:block;animation:none}
+  .set-shell.searching .sp-back{display:none}
+  .set-shell.searching .set-pane.sr-match .sp-head{margin-top:14px}
+}
+/* tablet & PC: sidebar + detail */
+@media (min-width:740px){
+  .app{max-width:1180px}
+  [data-tab="settings"] .set-top{display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:stretch}
+  [data-tab="settings"] .set-search{order:-1;align-self:end}
+  [data-tab="settings"] .set-search input{height:100%;min-height:48px}
+  .set-hero{grid-template-columns:auto 1fr auto;grid-template-areas:"av t chips"}
+  .set-shell{display:grid;grid-template-columns:300px minmax(0,1fr);gap:16px;align-items:start}
+  .set-nav{position:sticky;top:calc(76px + env(safe-area-inset-top));padding:6px;border-radius:var(--radius-lg);border:1px solid var(--bd);background:var(--card)}
+  .sn{border-color:transparent;background:transparent;padding:10px}
+  .sn:hover{background:var(--field)}
+  .sn.on{background:color-mix(in srgb,var(--tone) 12%,var(--card));border-color:color-mix(in srgb,var(--tone) 35%,transparent)}
+  .sn.on .sn-chev{transform:translateX(3px);color:var(--tone)}
+  .set-pane.on{display:block}
+  .sp-back{display:none}
+  .sp-head{padding:4px 2px}
+  .set-shell.searching .set-pane{display:none}
+  .set-shell.searching .set-pane.sr-match{display:block;animation:none;margin-bottom:10px}
+  .set-shell.searching .sn{opacity:.55}
+  .set-pane .set .sl p{max-width:56ch}
+  .set-pane .set input,.set-pane .set select{min-width:150px}
+  .set-pane .set .unit-in input{min-width:0;width:110px}
+}
+@media (min-width:740px) and (max-width:1023px){
+  [data-tab="settings"] .set-top,.set-shell{grid-template-columns:250px minmax(0,1fr)}
+  .set-hero{grid-template-columns:auto 1fr;grid-template-areas:"av t" "chips chips"}
+  .sn-t small{display:none}
+}
+@media (min-width:740px) and (max-width:1023px){[data-tab="settings"] .set-top{display:flex;flex-direction:column}[data-tab="settings"] .set-search{order:0}}
+@media (min-width:1180px){
+  .set-pane[data-spane="shifts"] .sp-secs,.set-pane[data-spane="data"]{}
+  .set-pane.on{columns:auto}
+}
 </style>
 </head>
 <body>
@@ -1978,21 +2066,41 @@ html.calm .tally{transition:none}
   </section>
 
   <section class="screen" data-tab="settings">
-    <div class="sub">Settings <small>Your profile, pay rules and data</small></div>
-    <div class="set-grid">
-
-    <div class="set-group">
-    <p class="grp">Profile</p>
-    <div class="card set-card">
+    <div class="sub">Settings <small>Profile &middot; pay rules &middot; sync</small></div>
+    <div class="set-top">
+      <button type="button" class="set-hero" id="setHero">
+        <span class="sh-av" id="shAv">F</span>
+        <span class="sh-t"><b id="shName">Add your name</b><small id="shStats">Fareo</small></span>
+        <span class="sh-chips"><span class="tag" id="shSync">Sync off</span><span class="tag" id="shVer">v</span></span>
+      </button>
+      <label class="set-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="setSearch" type="search" placeholder="Search settings" autocomplete="off" enterkeyhint="search"><button type="button" id="setSearchX" aria-label="Clear search" hidden>&times;</button></label>
+    </div>
+    <div class="set-shell" id="setShell">
+      <nav class="set-nav" id="setNav" aria-label="Settings sections">
+      <button type="button" class="sn" data-sp="profile" style="--tone:var(--accent);--i:0"><span class="sn-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="8" r="4"/></svg></span><span class="sn-t"><b>Profile &amp; vehicle</b><small data-sum="profile"></small></span><svg class="sn-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
+      <button type="button" class="sn" data-sp="pay" style="--tone:var(--inc);--i:1"><span class="sn-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg></span><span class="sn-t"><b>Pay &amp; tax</b><small data-sum="pay"></small></span><svg class="sn-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
+      <button type="button" class="sn" data-sp="shifts" style="--tone:var(--hail);--i:2"><span class="sn-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h3M8 17h6"/></svg></span><span class="sn-t"><b>Shifts &amp; accounts</b><small data-sum="shifts"></small></span><svg class="sn-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
+      <button type="button" class="sn" data-sp="look" style="--tone:var(--levy);--i:3"><span class="sn-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18Z" fill="currentColor"/></svg></span><span class="sn-t"><b>Appearance &amp; sound</b><small data-sum="look"></small></span><svg class="sn-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
+      <button type="button" class="sn" data-sp="weather" style="--tone:var(--fuel);--i:4"><span class="sn-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 .5-8 5.5 5.5 0 0 0-10.6 1.5A3.3 3.3 0 0 0 7 18Z"/></svg></span><span class="sn-t"><b>Weather</b><small data-sum="weather"></small></span><svg class="sn-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
+      <button type="button" class="sn" data-sp="data" style="--tone:var(--acct);--i:5"><span class="sn-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/></svg></span><span class="sn-t"><b>Sync &amp; backup</b><small data-sum="data"></small></span><svg class="sn-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
+      <button type="button" class="sn" data-sp="help" style="--tone:var(--fink);--i:6"><span class="sn-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14M12 17.5v.01"/></svg></span><span class="sn-t"><b>Help &amp; updates</b><small data-sum="help"></small></span><svg class="sn-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
+      </nav>
+      <div class="set-panes">
+      <section class="set-pane" data-spane="profile" style="--tone:var(--accent)" aria-label="Profile &amp; vehicle">
+        <header class="sp-head"><button type="button" class="sp-back" aria-label="All settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><span class="sp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="8" r="4"/></svg></span><h2>Profile &amp; vehicle</h2></header>
+        <div class="sp-sec">
+        <div class="card set-card">
       <div class="set"><div class="sl"><b>Your name</b><p>Used for your greeting and initials</p></div><input id="setName" type="text" placeholder="Driver" autocomplete="given-name" maxlength="24"></div>
       <div class="set" style="display:block"><div class="sl"><b>Vehicle regos</b><p>Pick one on each shift</p></div>
         <div class="rego-add"><input id="newRego" placeholder="e.g. 5088M" autocapitalize="characters"><button class="add" id="addRego">Add</button></div>
         <div class="chips" id="regoChips"></div></div>
     </div>
-    </div>
-    <div class="set-group">
-    <p class="grp">Pay &amp; tax</p>
-    <div class="card set-card">
+        </div>
+      </section>
+      <section class="set-pane" data-spane="pay" style="--tone:var(--inc)" aria-label="Pay &amp; tax">
+        <header class="sp-head"><button type="button" class="sp-back" aria-label="All settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><span class="sp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg></span><h2>Pay &amp; tax</h2></header>
+        <div class="sp-sec">
+        <div class="card set-card">
       <div class="set hot"><div class="sl"><b>Driver share</b><p>% of takings you keep &middot; used everywhere</p></div><div class="unit-in"><input id="setPct" type="number" min="0" max="100" inputmode="decimal"><i>%</i></div></div>
       <div class="set"><div class="sl"><b>Hail trip levy <span class="help" data-help="When you add this levy to the passenger fare it becomes part of the taxable supply — GST is 1/11 of the full fare. The amount you remit to SRO Victoria comes off your take-home (no GST credit). Set 0 if your BSP pays it." aria-label="Help">?</span></b><p>Per hail trip &middot; set 0 if your BSP pays</p></div><div class="unit-in pre"><i>$</i><input id="setLevy" type="number" min="0" step="0.01" inputmode="decimal"></div></div>
       <div class="set"><div class="sl"><b>Cash &amp; Square tax-free <span class="help" data-help="When on, cash and Square are not taxable income. They are left out of G1 and 1A. You still keep that money in take-home and Weekly. EFTPOS, accounts and runs stay in G1 (GST 1/11). Turn off if GST applies to cash too." aria-label="Help">?</span></b><p>Left out of G1 and 1A &middot; still in take-home</p></div><button class="tgl" id="setCashGst" aria-label="Toggle cash tax-free"></button></div>
@@ -2003,10 +2111,26 @@ html.calm .tally{transition:none}
         <div id="payTypeChips" class="chips" style="margin:10px 0 2px"></div>
         <button class="add" id="addPayType">+ Add payment type</button></div>
     </div>
+        </div>
+      </section>
+      <section class="set-pane" data-spane="shifts" style="--tone:var(--hail)" aria-label="Shifts &amp; accounts">
+        <header class="sp-head"><button type="button" class="sp-back" aria-label="All settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><span class="sp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h3M8 17h6"/></svg></span><h2>Shifts &amp; accounts</h2></header>
+        <div class="sp-sec"><p class="grp">Week &amp; payday</p>
+        <div class="card set-card">
+      <div class="set"><div class="sl"><b>Week starts on</b><p>Your settlement cycle</p></div><select id="setWeek"></select></div>
+      <div class="set"><div class="sl"><b>Paid on</b><p>Payday after the week ends</p></div><select id="setCredit"></select></div>
     </div>
-    <div class="set-group">
-    <p class="grp">Accounts</p>
-    <div class="card set-card">
+        </div>
+        <div class="sp-sec"><p class="grp">Shift form</p>
+        <div class="card set-card">
+      <div class="set"><div class="sl"><b>Default fuel</b><p>Pre-filled on new fill-ups</p></div><select id="setFuel"><option>Diesel</option><option>Petrol</option><option>LPG</option></select></div>
+      <div class="set"><div class="sl"><b>Name suggestions</b><p>Suggest past payer &amp; account names</p></div><button class="tgl" id="setAuto" aria-label="Toggle name suggestions"></button></div>
+      <div class="set"><div class="sl"><b>Read hail count from photos</b><p>Scans EOS slips for Rank / Hail trips</p></div><button class="tgl on" id="setOcrHail" aria-label="Toggle hail OCR"></button></div>
+      <div class="set"><div class="sl"><b>Address region <span class="help" data-help="Prioritises and predicts addresses in your Australian state (Victoria by default)." aria-label="Help">?</span></b><p>Focus for address search</p></div><select id="setState"><option value="VIC">VIC (Victoria)</option><option value="NSW">NSW</option><option value="QLD">QLD</option><option value="SA">SA</option><option value="WA">WA</option><option value="TAS">TAS</option><option value="ACT">ACT</option><option value="NT">NT</option><option value="ALL">All Australia</option></select></div>
+    </div>
+        </div>
+        <div class="sp-sec"><p class="grp">Accounts</p>
+        <div class="card set-card">
       <div class="set" style="display:block"><div class="sl"><b>Account names <span class="help" data-help="Clients or companies you bill on account. They appear first in the Accounts dropdown on Log Shift, and as one-tap chips when you add an account." aria-label="Help">?</span></b><p id="acctNamesSub">Shown first when you log an account</p></div>
         <div class="rego-add"><input id="newAcctName" placeholder="e.g. NDIS, City Council" autocomplete="off" maxlength="40"><button class="add" id="addAcctName">Add</button></div>
         <div class="chips acct-chips" id="acctNameChips"></div>
@@ -2014,47 +2138,34 @@ html.calm .tally{transition:none}
       <div class="set" style="display:block"><div class="sl"><b>Quick amounts</b><p>One-tap amounts under each account</p></div>
         <div class="qa-edit" id="qaEdit"></div></div>
     </div>
-    </div>
-    <div class="set-group">
-    <p class="grp">Weather</p>
-    <div class="card set-card">
-      <div class="set"><div class="sl"><b>Weather &amp; driving tips <span class="help" data-help="Uses your phone’s precise location to show the weather where you are, the next few hours and tips for the road. Your location is only sent to the free Open-Meteo weather service and a suburb lookup, never stored on a server." aria-label="Help">?</span></b><p id="wxSetSub">Rain alerts and tips for where you are</p></div><button class="tgl" id="setWx" aria-label="Toggle weather tips"></button></div>
-      <div class="set" id="wxRefreshRow" hidden><div class="sl"><b>Update location</b><p id="wxPlaceSub">Uses your precise location</p></div><span class="chev">&#8635;</span></div>
-    </div>
-    </div>
-    <div class="set-group">
-    <p class="grp">Week &amp; payday</p>
-    <div class="card set-card">
-      <div class="set"><div class="sl"><b>Week starts on</b><p>Your settlement cycle</p></div><select id="setWeek"></select></div>
-      <div class="set"><div class="sl"><b>Paid on</b><p>Payday after the week ends</p></div><select id="setCredit"></select></div>
-    </div>
-    </div>
-    <div class="set-group">
-    <p class="grp">Shift form</p>
-    <div class="card set-card">
-      <div class="set"><div class="sl"><b>Default fuel</b><p>Pre-filled on new fill-ups</p></div><select id="setFuel"><option>Diesel</option><option>Petrol</option><option>LPG</option></select></div>
-      <div class="set"><div class="sl"><b>Name suggestions</b><p>Suggest past payer &amp; account names</p></div><button class="tgl" id="setAuto" aria-label="Toggle name suggestions"></button></div>
-      <div class="set"><div class="sl"><b>Read hail count from photos</b><p>Scans EOS slips for Rank / Hail trips</p></div><button class="tgl on" id="setOcrHail" aria-label="Toggle hail OCR"></button></div>
-      <div class="set"><div class="sl"><b>Address region <span class="help" data-help="Prioritises and predicts addresses in your Australian state (Victoria by default)." aria-label="Help">?</span></b><p>Focus for address search</p></div><select id="setState"><option value="VIC">VIC (Victoria)</option><option value="NSW">NSW</option><option value="QLD">QLD</option><option value="SA">SA</option><option value="WA">WA</option><option value="TAS">TAS</option><option value="ACT">ACT</option><option value="NT">NT</option><option value="ALL">All Australia</option></select></div>
-    </div>
-    </div>
-    <div class="set-group">
-    <p class="grp">Look, sound &amp; feel</p>
-    <div class="card set-card">
+        </div>
+      </section>
+      <section class="set-pane" data-spane="look" style="--tone:var(--levy)" aria-label="Appearance &amp; sound">
+        <header class="sp-head"><button type="button" class="sp-back" aria-label="All settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><span class="sp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18Z" fill="currentColor"/></svg></span><h2>Appearance &amp; sound</h2></header>
+        <div class="sp-sec">
+        <div class="card set-card">
       <div class="set"><div class="sl"><b>Theme</b><p>Dark is the signature look</p></div><select id="setTheme"><option value="dark">Dark</option><option value="light">Light</option><option value="system">Match device</option></select></div>
       <div class="set"><div class="sl"><b>Open on</b><p>Screen shown when the app starts</p></div><select id="setStart"><option value="hub">Home</option><option value="shift">Log Shift</option><option value="weekly">Weekly</option></select></div>
       <div class="set"><div class="sl"><b>Sound effects</b><p>Soft tones for taps, saves and alerts</p></div><button class="tgl" id="setSounds" aria-label="Toggle sound effects"></button></div>
       <div class="set"><div class="sl"><b>Haptics</b><p>Light vibration on taps &amp; saves</p></div><button class="tgl" id="setHaptics" aria-label="Toggle haptics"></button></div>
       <div class="set"><div class="sl"><b>Reduce motion</b><p>Turn off animations</p></div><button class="tgl" id="setCalm" aria-label="Toggle reduce motion"></button></div>
     </div>
+        </div>
+      </section>
+      <section class="set-pane" data-spane="weather" style="--tone:var(--fuel)" aria-label="Weather">
+        <header class="sp-head"><button type="button" class="sp-back" aria-label="All settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><span class="sp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 .5-8 5.5 5.5 0 0 0-10.6 1.5A3.3 3.3 0 0 0 7 18Z"/></svg></span><h2>Weather</h2></header>
+        <div class="sp-sec">
+        <div class="card set-card">
+      <div class="set"><div class="sl"><b>Weather &amp; driving tips <span class="help" data-help="Uses your phone’s precise location to show the weather where you are, the next few hours and tips for the road. Your location is only sent to the free Open-Meteo weather service and a suburb lookup, never stored on a server." aria-label="Help">?</span></b><p id="wxSetSub">Rain alerts and tips for where you are</p></div><button class="tgl" id="setWx" aria-label="Toggle weather tips"></button></div>
+      <div class="set" id="wxRefreshRow" hidden><div class="sl"><b>Update location</b><p id="wxPlaceSub">Uses your precise location</p></div><span class="chev">&#8635;</span></div>
     </div>
-    <div class="set-group">
-    <p class="grp">Your data</p>
-    <div class="card set-card">
-      <div class="set" id="archiveLink"><div class="sl"><b>Receipts &amp; EOS archive</b><p><span id="archiveCount">0</span> saved</p></div><span class="chev">&rsaquo;</span></div>
-      <div class="set" id="exportBtn"><div class="sl"><b>Export backup</b><p>Save everything to a file</p></div><span class="chev">&darr;</span></div>
-      <div class="set" id="importBtn"><div class="sl"><b>Restore backup</b><p>Load a saved backup file</p></div><span class="chev">&uarr;</span></div>
-      <details class="set-more">
+        </div>
+      </section>
+      <section class="set-pane" data-spane="data" style="--tone:var(--acct)" aria-label="Sync &amp; backup">
+        <header class="sp-head"><button type="button" class="sp-back" aria-label="All settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><span class="sp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/></svg></span><h2>Sync &amp; backup</h2></header>
+        <div class="sp-sec"><p class="grp">Multi-device sync</p>
+        <div class="card set-card">
+      <details class="set-more" open>
         <summary class="set"><div class="sl"><b>Multi-device sync <span class="help" data-help="Optional. Set up a free Firebase project once and sign in with the same email on each phone to keep them in sync. Data stays on your device until you sign in." aria-label="Help">?</span></b><p id="syncState">Off &middot; local only</p></div><span class="chev">&rsaquo;</span></summary>
         <div class="set-more-body">
           <div class="sync-safe"><i aria-hidden="true">✓</i><span>Safe sign-in: Fareo keeps a copy of this phone’s data and asks before anything is replaced.</span></div>
@@ -2066,24 +2177,39 @@ html.calm .tally{transition:none}
             <input id="syncPass" type="password" placeholder="Password" autocomplete="current-password" style="margin-top:8px">
             <div class="two" style="margin-top:8px"><button class="btn neutral" id="syncSignin">Sign in</button><button class="btn neutral" id="syncCreate">Create account</button></div>
           </div>
-          <details class="sync-adv" id="syncAdv"><summary>Firebase project</summary><textarea id="fbConfig" placeholder="Paste your Firebase config here"></textarea><p class="mono-mut" id="fbCfgNote"></p></details>
+          <details class="sync-adv" id="syncAdv"><summary>Firebase project <span class="tag" id="fbCfgTag">Not set</span></summary>
+            <ol class="fb-steps"><li>Open <b>console.firebase.google.com</b> and pick your project.</li><li>Gear icon &rarr; <b>Project settings</b> &rarr; <b>General</b> &rarr; <b>Your apps</b> &rarr; your web app &rarr; <b>Config</b>.</li><li>Copy the <code>firebaseConfig = { &hellip; }</code> block and paste it below.</li><li>In <b>Authentication &rarr; Sign-in method</b> turn on Google and Email link, and add <b>basemsde-tech.github.io</b> under Authorized domains.</li></ol>
+            <textarea id="fbConfig" placeholder="firebaseConfig = { apiKey: &hellip;, authDomain: &hellip;, projectId: &hellip; }"></textarea>
+            <div class="two" style="margin-top:8px"><button type="button" class="btn neutral" id="fbCfgSave">Save project</button><button type="button" class="btn neutral" id="fbCfgClear">Clear</button></div>
+            <p class="mono-mut" id="fbCfgNote"></p></details>
           <button class="btn neutral" id="syncOut" style="display:none;margin-top:8px">Sign out</button>
         </div>
       </details>
       <button type="button" class="set sync-restore" id="syncRestore" hidden>Restore data from before sync</button>
     </div>
+        </div>
+        <div class="sp-sec"><p class="grp">Backup &amp; records</p>
+        <div class="card set-card">
+      <div class="set" id="archiveLink"><div class="sl"><b>Receipts &amp; EOS archive</b><p><span id="archiveCount">0</span> saved</p></div><span class="chev">&rsaquo;</span></div>
+      <div class="set" id="exportBtn"><div class="sl"><b>Export backup</b><p>Save everything to a file</p></div><span class="chev">&darr;</span></div>
+      <div class="set" id="importBtn"><div class="sl"><b>Restore backup</b><p>Load a saved backup file</p></div><span class="chev">&uarr;</span></div>
     </div>
-    <div class="set-group">
-    <p class="grp">Troubleshooting</p>
-    <div class="card set-card">
+        </div>
+      </section>
+      <section class="set-pane" data-spane="help" style="--tone:var(--fink)" aria-label="Help &amp; updates">
+        <header class="sp-head"><button type="button" class="sp-back" aria-label="All settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><span class="sp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14M12 17.5v.01"/></svg></span><h2>Help &amp; updates</h2></header>
+        <div class="sp-sec">
+        <div class="card set-card">
       <div class="set" id="clearCache"><div class="sl"><b>Check for updates</b><p>Clears the app cache and reloads &middot; data is kept</p></div><span class="chev">&rsaquo;</span></div>
       <div class="set" id="rollbackUpdate"><div class="sl"><b>Roll back last update</b><p>Go back one version if this one misbehaves</p></div><span class="chev">&larr;</span></div>
       <div class="set" id="newFy"><div class="sl"><b class="danger">Start new financial year</b><p>Clears shifts &amp; income &middot; keeps settings and clients</p></div><span class="chev danger">&rsaquo;</span></div>
     </div>
+        </div>
+        <div class="about" id="versionRow"><svg class="brand-mark" viewBox="0 0 512 512" aria-hidden="true"><g transform="translate(-14 0)"><path d="M214 352V178a26 26 0 0 1 26-26h88" fill="none" stroke="url(#bmG)" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"/><path d="M214 258h58" fill="none" stroke="url(#bmG)" stroke-width="40" stroke-linecap="round"/><circle cx="322" cy="258" r="23" fill="url(#bmG)"/></g></svg><b>Fareo</b><p id="versionLine">Version &middot; tap for release notes</p></div>
+      </section>
+        <p class="set-empty" id="setEmpty" hidden>No settings match &ldquo;<span id="setEmptyQ"></span>&rdquo;</p>
+      </div>
     </div>
-    </div>
-
-    <div class="about" id="versionRow"><svg class="brand-mark" viewBox="0 0 512 512" aria-hidden="true"><g transform="translate(-14 0)"><path d="M214 352V178a26 26 0 0 1 26-26h88" fill="none" stroke="url(#bmG)" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"/><path d="M214 258h58" fill="none" stroke="url(#bmG)" stroke-width="40" stroke-linecap="round"/><circle cx="322" cy="258" r="23" fill="url(#bmG)"/></g></svg><b>Fareo</b><p id="versionLine">Version &middot; tap for release notes</p></div>
   </section>
 
   </div>
@@ -2449,8 +2575,13 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='13.1';
+var APP_VERSION='14.0';
 var CHANGELOG=[
+  {v:'14.0',date:'November 2, 2026',notes:[
+    ['UI/UX','Settings redesigned and reorganised into seven sections: Profile & vehicle, Pay & tax, Shifts & accounts, Appearance & sound, Weather, Sync & backup, and Help & updates. Each shows an icon and a live summary.'],
+    ['UI/UX','On phones you tap a section to open it, and Back returns to the list. On tablets and computers a sidebar stays on the left with the chosen section beside it.'],
+    ['Feature','Search settings by name. A profile header shows your name, shifts logged, sync status and version, and tapping it edits your name.'],
+  ]},
   {v:'13.1',date:'November 2, 2026',notes:[
     ['Bug Fix','Signing in to sync can no longer overwrite newer data on this phone with an older cloud copy. Fareo now tracks every local edit, not only edits made while sync was on.'],
     ['Feature','Safe first sync: Fareo saves a full copy of this phone\u2019s data, then shows both sides (shifts, latest date, costs, clients) and lets you Merge both, Keep this phone or Use cloud. Settings has Restore data from before sync.'],
@@ -4230,7 +4361,7 @@ document.addEventListener('click',function(e){
   var st=e.target.closest&&e.target.closest('.ac-strip');if(!st)return;
   var b=e.target.closest('[data-aci]');if(b){acPick(Number(b.dataset.aci));return}
   if(e.target.closest('[data-acsave]')){var n=acState.input&&acState.input.value.trim();if(n&&addAcctName(n)){sfx('success');toast('“'+n+'” saved to accounts');renderAcctQuick()}acOpen(acState.input);return}
-  if(e.target.closest('[data-go-acct-settings]')){acClose();go('settings');setTimeout(function(){var el=$('#newAcctName');if(el){el.scrollIntoView({block:'center'});el.focus()}},350)}
+  if(e.target.closest('[data-go-acct-settings]')){acClose();go('settings');setTimeout(function(){revealSetting('#newAcctName',true)},300)}
 });
 function acPick(k){
   var o=acState.items[k],inp=acState.input;if(!o||!inp)return;
@@ -4262,7 +4393,7 @@ document.addEventListener('click',function(e){
     var idx=empty>=0?empty:draft.accounts.length-1;addName(n);
     sfx('pop');buzz(6);rowInputs();render();persist();
     var row=$('#acctRows [data-ai="'+idx+'"]');if(row)row.classList.add('enter');focusAcct(idx,'amt');return}
-  if(e.target.closest&&e.target.closest('#acctQuick [data-go-acct-settings]')){go('settings');setTimeout(function(){var el=$('#newAcctName');if(el){el.scrollIntoView({block:'center'});el.focus()}},350)}
+  if(e.target.closest&&e.target.closest('#acctQuick [data-go-acct-settings]')){go('settings');setTimeout(function(){revealSetting('#newAcctName',true)},300)}
 });
 /* settings: account names + quick amounts */
 function renderAcctSettings(){
@@ -6403,7 +6534,7 @@ function renderSettings(){
   var sn=$('#setName');if(sn&&document.activeElement!==sn)sn.value=settings.driverName||'';
   var sst=$('#setStart');if(sst)sst.value=settings.startTab||'hub';
   var shp=$('#setHaptics');if(shp)shp.classList.toggle('on',settings.haptics!==false);
-  renderAcctSettings();syncWxSettings();
+  renderAcctSettings();syncWxSettings();renderSettingsNav();
   var sso=$('#setSounds');if(sso)sso.classList.toggle('on',settings.sounds!==false);
   var stm=$('#setTaxMode');if(stm)stm.value=settings.taxMode||'auto';
   var stp=$('#setTaxPct');if(stp&&document.activeElement!==stp)stp.value=settings.taxPct;
@@ -6535,8 +6666,19 @@ function applyRemoteData(data,updatedAt){
 /* Built-in project config so devices only need to sign in. Fill FAREO_FB
    with the web config from Firebase > Project settings > Your apps. */
 var FAREO_FB=null;
+function fbCfgUI(){
+  var c=null;try{c=JSON.parse(localStorage.getItem('fareo_fbcfg')||'null')}catch(_){}c=c&&c.apiKey?c:FAREO_FB;
+  var note=$('#fbCfgNote'),tag=$('#fbCfgTag'),adv=$('#syncAdv');
+  if(note)note.textContent=c?('Project: '+(c.projectId||'?')+(FAREO_FB&&c===FAREO_FB?' (built in)':'')):'No project yet — paste the config above.';
+  if(tag){tag.textContent=c?'Connected':'Not set';tag.classList.toggle('on',!!c)}
+  if(adv&&!c)adv.open=true;
+}
+document.addEventListener('click',function(e){
+  if(e.target.id==='fbCfgSave'){var c=parseCfg($('#fbConfig').value.trim());if(!c||!c.apiKey||!c.projectId){toast('That doesn’t look like a Firebase config','error');return}localStorage.setItem('fareo_fbcfg',JSON.stringify(c));fbCfgUI();toast('Firebase project saved · '+c.projectId)}
+  if(e.target.id==='fbCfgClear'){ask('Clear the Firebase project?','Sync stops on this device until a project is pasted again. Your data stays.','Clear',function(){syncSignOut();localStorage.removeItem('fareo_fbcfg');$('#fbConfig').value='';fbCfgUI()},{danger:false,noLbl:'Cancel'})}
+});
 function fbCfg(){var t=($('#fbConfig')&&$('#fbConfig').value.trim())||'';var c=t?parseCfg(t):null;if(c&&c.apiKey)return c;try{var st=JSON.parse(localStorage.getItem('fareo_fbcfg')||'null');if(st&&st.apiKey)return st}catch(_){}return FAREO_FB}
-async function fbReady(){var cfg=fbCfg();if(!cfg||!cfg.apiKey){var adv=$('#syncAdv');if(adv)adv.open=true;toast('Paste your Firebase config first','warn');throw new Error('no-config')}localStorage.setItem('fareo_fbcfg',JSON.stringify(cfg));await fbInit(cfg);return cfg}
+async function fbReady(){var cfg=fbCfg();if(!cfg||!cfg.apiKey){var adv=$('#syncAdv');if(adv)adv.open=true;revealSetting('#syncAdv');toast('Paste your Firebase config first','warn');throw new Error('no-config')}localStorage.setItem('fareo_fbcfg',JSON.stringify(cfg));await fbInit(cfg);return cfg}
 function syncErr(e){var c=(e&&e.code)||'';var m={'auth/popup-closed-by-user':'Sign-in cancelled','auth/cancelled-popup-request':'Sign-in cancelled','auth/unauthorized-domain':'This web address isn’t allowed in Firebase yet','auth/operation-not-allowed':'That sign-in method is off in Firebase','auth/wrong-password':'Wrong password','auth/invalid-credential':'Email or password doesn’t match','auth/user-not-found':'No account for that email','auth/email-already-in-use':'That email already has an account — sign in instead','auth/weak-password':'Use at least 6 characters','auth/network-request-failed':'No connection'}[c];
   if(e&&e.message==='no-config')return;setSyncState(m?m:('Error: '+(c||'failed')));toast(m||'Sync failed','error')}
 async function syncConnect(create){try{
@@ -6652,7 +6794,7 @@ if($('#syncCreate'))$('#syncCreate').onclick=function(){syncConnect(true)};
 if($('#syncOut'))$('#syncOut').onclick=syncSignOut;
 (function autoConnect(){try{
   var stored=localStorage.getItem('fareo_fbcfg'),pre=$('#fbConfig');if(pre&&stored)pre.value=stored;
-  var note=$('#fbCfgNote');if(note)note.textContent=(FAREO_FB||stored)?'Connected to project '+((FAREO_FB||JSON.parse(stored)).projectId||''):'No project yet';
+  fbCfgUI();
   syncRestoreUI();
   if(/[?&](mode=signIn|oobCode=)/.test(location.href)){finishEmailLink();return}
   var cfg=fbCfg();if(!cfg||!cfg.apiKey)return;
@@ -8142,6 +8284,69 @@ function setClientPane(p){
 }
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-cpane-go]');if(!b)return;e.preventDefault();buzz(6);setClientPane(b.dataset.cpaneGo);window.scrollTo({top:0,behavior:'smooth'})});
 var hubTallyDelay=0;
+/* ---------- settings: sections, drill-in on phones, sidebar on tablet/PC, search ---------- */
+function setNarrow(){return window.matchMedia?!matchMedia('(min-width: 740px)').matches:innerWidth<740}
+var setPaneCur=(function(){try{return localStorage.getItem('fareo_setpane')||'profile'}catch(_){return 'profile'}})();
+function openSetPane(cat,quiet){
+  var sh=$('#setShell');if(!sh)return;var pane=$('.set-pane[data-spane="'+cat+'"]');if(!pane)return;
+  setPaneCur=cat;try{localStorage.setItem('fareo_setpane',cat)}catch(_){}
+  $$('.set-pane').forEach(function(p){p.classList.toggle('on',p===pane)});
+  $$('#setNav .sn').forEach(function(b){b.classList.toggle('on',b.dataset.sp===cat);b.setAttribute('aria-current',b.dataset.sp===cat?'true':'false')});
+  if(setNarrow()){sh.classList.add('pane-open');document.documentElement.classList.add('set-drill');window.scrollTo({top:0})}
+  pane.classList.remove('enter');void pane.offsetWidth;pane.classList.add('enter');
+  if(!quiet)sfx('tap');
+}
+function closeSetPane(){var sh=$('#setShell');if(!sh)return;sh.classList.remove('pane-open');document.documentElement.classList.remove('set-drill');window.scrollTo({top:0});sfx('tap')}
+function revealSetting(sel,focus){var el=typeof sel==='string'?$(sel):sel;if(!el)return;var pane=el.closest('.set-pane');if(pane)openSetPane(pane.dataset.spane,true);setTimeout(function(){el.scrollIntoView({block:'center',behavior:motionOff()?'auto':'smooth'});if(focus&&el.focus)el.focus()},60)}
+function renderSettingsNav(){
+  var S={};
+  S.profile=((settings.driverName||'').trim()||'Add your name')+' · '+settings.regos.length+' rego'+(settings.regos.length===1?'':'s');
+  S.pay=settings.pct+'% share · levy '+money(levyRate())+' · GST on '+(settings.gstBase==='share'?'share':'gross');
+  S.shifts='Week starts '+DAYS[settings.weekStart].slice(0,3)+' · paid '+DAYS[settings.creditedDay].slice(0,3)+' · '+acctNames().length+' account'+(acctNames().length===1?'':'s');
+  S.look={dark:'Dark',light:'Light',system:'Match device'}[settings.theme]+' · sounds '+(settings.sounds!==false?'on':'off')+(settings.calm?' · calm':'');
+  var w=wxLoad();S.weather=settings.weather?('On'+(w&&w.place?' · '+w.place:'')):'Off';
+  S.data=(syncOn?'Sync on':'Sync off')+' · '+receipts.length+' receipt'+(receipts.length===1?'':'s');
+  S.help='Version '+APP_VERSION+' · updates & reset';
+  Object.keys(S).forEach(function(k){var el=$('[data-sum="'+k+'"]');if(el)el.textContent=S[k]});
+  var nm=(settings.driverName||'').trim();
+  $('#shAv').textContent=nm?nm.split(/\s+/).map(function(x){return x[0]}).join('').slice(0,2).toUpperCase():'F';
+  $('#shName').textContent=nm||'Add your name';
+  var first=entries.reduce(function(m,e){return !m||e.date<m?e.date:m},'');
+  $('#shStats').textContent=entries.length?entries.length+' shift'+(entries.length===1?'':'s')+' logged · since '+asDate(first).toLocaleDateString('en-AU',{month:'short',year:'numeric'}):'No shifts logged yet';
+  var ss=$('#shSync');ss.textContent=syncOn?'Synced':'Sync off';ss.classList.toggle('on',!!syncOn);
+  $('#shVer').textContent='v'+APP_VERSION;
+  var sh=$('#setShell');
+  if(sh&&!sh.dataset.init){sh.dataset.init='1';openSetPane(setPaneCur,true);if(setNarrow()){sh.classList.remove('pane-open');document.documentElement.classList.remove('set-drill')}}
+  else if(sh&&!setNarrow()&&!$('.set-pane.on'))openSetPane(setPaneCur,true);
+}
+document.addEventListener('click',function(e){
+  var n=e.target.closest&&e.target.closest('#setNav .sn');if(n){clearSetSearch();openSetPane(n.dataset.sp);return}
+  if(e.target.closest&&e.target.closest('.sp-back')){closeSetPane();return}
+  if(e.target.closest&&e.target.closest('#setHero')){clearSetSearch();revealSetting('#setName',true);return}
+  if(e.target.id==='setSearchX'){clearSetSearch();$('#setSearch').focus()}
+});
+window.addEventListener('resize',function(){var sh=$('#setShell');if(!sh)return;if(!setNarrow()){sh.classList.remove('pane-open');document.documentElement.classList.remove('set-drill');if(!$('.set-pane.on'))openSetPane(setPaneCur,true)}});
+function clearSetSearch(){var i=$('#setSearch');if(i&&i.value){i.value='';runSetSearch()}}
+function runSetSearch(){
+  var q=($('#setSearch').value||'').trim().toLowerCase(),sh=$('#setShell');
+  $('#setSearchX').hidden=!q;sh.classList.toggle('searching',!!q);
+  var any=false;
+  $$('.set-pane').forEach(function(p){
+    var paneHit=false,title=(p.querySelector('h2').textContent||'').toLowerCase();
+    $$('.sp-sec',p).forEach(function(sec){
+      var secTitle=((sec.querySelector('.grp')||{}).textContent||'').toLowerCase(),secHit=false;
+      $$('.set',sec).forEach(function(row){
+        if(row.closest('.set-more-body'))return;
+        var t=(row.textContent||'').toLowerCase();var hit=!q||t.indexOf(q)>=0||secTitle.indexOf(q)>=0||title.indexOf(q)>=0;
+        row.classList.toggle('sr-hide',!hit);row.classList.toggle('sr-hit',!!q&&hit);if(hit)secHit=true;
+      });
+      sec.classList.toggle('sr-hide',!secHit);if(secHit)paneHit=true;
+    });
+    p.classList.toggle('sr-match',!!q&&paneHit);if(q&&paneHit)any=true;
+  });
+  $('#setEmpty').hidden=!q||any;$('#setEmptyQ').textContent=q;
+}
+document.addEventListener('input',function(e){if(e.target.id==='setSearch')runSetSearch()});
 /* ---------- weather & driving tips (Open-Meteo, precise location) ---------- */
 var WX_TTL=20*60*1000,wxBusy=false;
 var WX_ICON={
@@ -8292,6 +8497,7 @@ function go(tab){
   syncTrailBtns();
 }
 function smartBack(){
+  if(typeof curTab!=='undefined'&&curTab==='settings'&&setNarrow()&&$('#setShell')&&$('#setShell').classList.contains('pane-open')&&!anyModal()){closeSetPane();return}
   if(closeTopModal()){syncTrailBtns();return}
   if(histI>0){history.back();return}
   if(curTab!=='hub')go('hub');
