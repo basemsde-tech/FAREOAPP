@@ -5,7 +5,7 @@ client run planner,
 weekly payout tracker, and ATO-ready tax/BAS reports. Works offline, installs
 to your home screen. All data is stored locally in your browser.
 
-**Current version:** 9.0 (Noir)
+**Current version:** 10.0 (Signal)
 
 ---
 
@@ -33,7 +33,7 @@ That URL is what you install as a PWA.
 
 ## Updating the app
 When you push changes, bump these together so returning users get the update:
-- `CACHE_NAME` in `sw.js` (e.g. `fareo-v9.0` → `fareo-v9.1`)
+- `CACHE_NAME` in `sw.js` (e.g. `fareo-v10.0` → `fareo-v10.1`)
 - `APP_VERSION` in `index.html`
 - add a `CHANGELOG` entry in `index.html`
 - copy `index.html` over `404.html`
@@ -46,6 +46,18 @@ cached copy.
 
 ---
 
+## Tests
+The pay, BAS and income tax maths has a test suite that drives the real functions in `index.html`:
+
+```
+npm install --no-save playwright && npx playwright install chromium
+node tests/calc.test.js
+```
+
+Run it before every release, and update `TAX_TABLES` / `MEDICARE_LOW` in `index.html` when the ATO publishes new rates.
+
+---
+
 ## Files
 | File | Purpose |
 |------|---------|
@@ -54,9 +66,9 @@ cached copy.
 | `manifest.webmanifest` | PWA install metadata |
 | `404.html` | SPA fallback (copy of index.html) |
 | `.nojekyll` | Tells GitHub Pages to skip Jekyll |
-| `icon-*-v90.png` | App icons (standard + maskable) |
-| `apple-touch-icon-v90.png` | iOS home-screen icon |
-| `favicon-64-v90.png` | Browser tab icon |
+| `icon-*-v100.png` | App icons (standard + maskable) |
+| `apple-touch-icon-v100.png` | iOS home-screen icon |
+| `favicon-64-v100.png` | Browser tab icon |
 
 ---
 
