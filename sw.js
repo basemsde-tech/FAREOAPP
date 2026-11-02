@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fareo-v12.2';
+const CACHE_NAME = 'fareo-v13.0';
 const ROLLBACK_CACHE = 'fareo-rollback';
 const META_CACHE = 'fareo-meta';
 
@@ -124,6 +124,8 @@ self.addEventListener('fetch', (e) => {
   const req = e.request;
 
   if (req.method !== 'GET') return;
+  /* Live data (weather, suburb lookup) must never come from the cache. */
+  try { const h = new URL(req.url).hostname; if (/(^|\.)open-meteo\.com$|(^|\.)bigdatacloud\.net$/.test(h)) return; } catch (_) {}
 
   if (req.mode === 'navigate') {
     e.respondWith(
