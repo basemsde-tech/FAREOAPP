@@ -2575,8 +2575,11 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='14.0';
+var APP_VERSION='14.1';
 var CHANGELOG=[
+  {v:'14.1',date:'November 2, 2026',notes:[
+    ['Feature','Your Fareo Firebase project is now built in, so every device only needs to sign in: Settings \u2192 Sync & backup \u2192 Continue with Google (or an email link, or your password), then Merge both.'],
+  ]},
   {v:'14.0',date:'November 2, 2026',notes:[
     ['UI/UX','Settings redesigned and reorganised into seven sections: Profile & vehicle, Pay & tax, Shifts & accounts, Appearance & sound, Weather, Sync & backup, and Help & updates. Each shows an icon and a live summary.'],
     ['UI/UX','On phones you tap a section to open it, and Back returns to the list. On tablets and computers a sidebar stays on the left with the chosen section beside it.'],
@@ -6665,13 +6668,26 @@ function applyRemoteData(data,updatedAt){
 }
 /* Built-in project config so devices only need to sign in. Fill FAREO_FB
    with the web config from Firebase > Project settings > Your apps. */
-var FAREO_FB=null;
+var FAREO_FB={
+  apiKey:"AIzaSyBOp0sv-aQB0Hrzrp66rBg2t7_3kZbytX0",
+  authDomain:"drive2earn-f3fb3.firebaseapp.com",
+  projectId:"drive2earn-f3fb3",
+  storageBucket:"drive2earn-f3fb3.firebasestorage.app",
+  messagingSenderId:"999057168600",
+  appId:"1:999057168600:web:fb8eb5c72b570c110e5fad"
+};
+/* One project for every device: a config saved from an older project is
+   parked (not deleted) and sync restarts safely on the built-in project. */
+(function(){try{var st=JSON.parse(localStorage.getItem('fareo_fbcfg')||'null');
+  if(st&&st.projectId&&FAREO_FB&&st.projectId!==FAREO_FB.projectId){localStorage.setItem('fareo_fbcfg_legacy',JSON.stringify(st));localStorage.removeItem('fareo_fbcfg');localStorage.removeItem('fareo_sync_on');localStorage.removeItem('fareo_synced_uid')}
+}catch(_){}})();
 function fbCfgUI(){
   var c=null;try{c=JSON.parse(localStorage.getItem('fareo_fbcfg')||'null')}catch(_){}c=c&&c.apiKey?c:FAREO_FB;
   var note=$('#fbCfgNote'),tag=$('#fbCfgTag'),adv=$('#syncAdv');
   if(note)note.textContent=c?('Project: '+(c.projectId||'?')+(FAREO_FB&&c===FAREO_FB?' (built in)':'')):'No project yet — paste the config above.';
   if(tag){tag.textContent=c?'Connected':'Not set';tag.classList.toggle('on',!!c)}
-  if(adv&&!c)adv.open=true;
+  if(adv)adv.open=!c;
+  var steps=$('#syncAdv .fb-steps');if(steps)steps.hidden=!!c;
 }
 document.addEventListener('click',function(e){
   if(e.target.id==='fbCfgSave'){var c=parseCfg($('#fbConfig').value.trim());if(!c||!c.apiKey||!c.projectId){toast('That doesn’t look like a Firebase config','error');return}localStorage.setItem('fareo_fbcfg',JSON.stringify(c));fbCfgUI();toast('Firebase project saved · '+c.projectId)}
@@ -6793,7 +6809,7 @@ if($('#syncSignin'))$('#syncSignin').onclick=function(){syncConnect(false)};
 if($('#syncCreate'))$('#syncCreate').onclick=function(){syncConnect(true)};
 if($('#syncOut'))$('#syncOut').onclick=syncSignOut;
 (function autoConnect(){try{
-  var stored=localStorage.getItem('fareo_fbcfg'),pre=$('#fbConfig');if(pre&&stored)pre.value=stored;
+  var stored=localStorage.getItem('fareo_fbcfg'),pre=$('#fbConfig');if(pre&&stored&&!(FAREO_FB&&JSON.parse(stored).projectId===FAREO_FB.projectId))pre.value=stored;
   fbCfgUI();
   syncRestoreUI();
   if(/[?&](mode=signIn|oobCode=)/.test(location.href)){finishEmailLink();return}
