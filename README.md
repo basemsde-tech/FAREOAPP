@@ -5,7 +5,7 @@ client run planner,
 weekly payout tracker, and ATO-ready tax/BAS reports. Works offline, installs
 to your home screen. All data is stored locally in your browser.
 
-**Current version:** 14.4
+**Current version:** 15.0
 
 ---
 
@@ -73,11 +73,17 @@ Run it before every release, and update `TAX_TABLES` / `MEDICARE_LOW` in `index.
 ---
 
 ## Your data
-Data lives in your browser's local storage for the site's URL — it is **not**
-stored in this repo. Deploying or updating the app does not touch it. You can
-lose data only if you clear the browser's site data, switch browser/device
-without syncing, or use **Start New Financial Year** in the app.
+Data lives only in your browser's local storage on each device. It is **not**
+stored in this repo and nothing syncs between devices. Deploying or updating
+the app does not touch it. You can lose data only if you clear the browser's
+site data or use **Start New Financial Year** in the app.
 
-Before switching hosting or devices, use **Settings → Advanced → Backup →
-Export backup** and keep the JSON file safe. **Restore backup** brings
-everything back, including receipts.
+**Google Drive backup** (Settings → Backup & restore) saves one backup file to
+Drive › Fareo at the frequency you choose (after changes, daily, weekly or
+monthly), replacing it each time. **Restore from Drive** brings it back on any
+device. Fareo uses the `drive.file` scope, so it can only see files it created.
+The Google Drive API must be enabled for the Firebase project
+(`drive2earn-f3fb3`) in Google Cloud.
+
+**Export backup** / **Restore backup** still work with a JSON file, receipts
+included.

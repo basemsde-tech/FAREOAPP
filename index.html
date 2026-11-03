@@ -1475,7 +1475,7 @@ html.calm .tally{transition:none}
 @keyframes readyPulse{0%{box-shadow:0 0 0 0 var(--glow)}50%{box-shadow:0 0 0 8px transparent}100%{box-shadow:0 0 0 0 transparent}}
 /* ---------- Fareo 13 · date strip, weather, undo ---------- */
 .date-card{padding:13px 13px 12px;transition:border-color .3s,box-shadow .3s}
-.date-card.need{border-color:color-mix(in srgb,var(--fuel) 45%,transparent)}
+.date-card.dneed{border-color:color-mix(in srgb,var(--fuel) 45%,transparent)}
 .date-card.shake{animation:hmShake .45s var(--ease);border-color:var(--dgr);box-shadow:0 0 0 3px var(--dgr-bg)}
 .date-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px}
 .date-kicker{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin:0}
@@ -1505,7 +1505,7 @@ html.calm .tally{transition:none}
 .dp-gap{flex:0 0 1px;background:var(--bd2);margin:10px 2px}
 .date-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:6px}
 .date-label{margin:0;font-size:14px;font-weight:700;letter-spacing:-.02em;color:var(--head)}
-.date-card.need .date-label{color:var(--mut);font-weight:500;font-size:13px}
+.date-card.dneed .date-label{color:var(--mut);font-weight:500;font-size:13px}
 .date-other{position:relative;display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;padding:7px 10px;border-radius:10px;border:1px solid var(--bd2);background:transparent;color:var(--body);font-size:12px;font-weight:600;cursor:pointer;overflow:hidden}
 .date-other svg{width:15px;height:15px;color:var(--mut)}
 .date-other input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;border:0;padding:0}
@@ -1754,7 +1754,68 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
 .rp-row.more{border-color:var(--accent-line);background:var(--accent-dim)}
 .rp-btn{border:1px solid var(--accent);background:transparent;color:var(--accent);border-radius:9px;padding:8px 12px;font-weight:700;font-size:12px;cursor:pointer}
 .rp-row.more .rp-btn{background:var(--accent);color:var(--accent-ink)}
-.sm-opt small em.warn{font-style:normal;color:var(--dgr);font-weight:600}
+.sm-opt small em.warn{all:unset;color:var(--dgr);font-weight:600}
+/* ---------- Fareo 15.0 · Google Drive backup ---------- */
+.gd-local{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;font-size:12.5px;line-height:1.45;color:var(--mut);border-bottom:1px solid var(--bd)}
+.gd-local i{flex:none;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:var(--accent-dim);color:var(--accent)}
+.gd-local i svg{width:15px;height:15px}
+#gdState.warn{color:var(--warn,#f0b44c)}
+.gd-freq{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:4px;margin-top:10px;background:var(--field);border:1px solid var(--bd);border-radius:12px}
+.gd-freq button{border:0;background:transparent;color:var(--mut);border-radius:9px;padding:9px 4px;font-size:12px;font-weight:650;cursor:pointer;transition:background .2s var(--ease),color .2s var(--ease)}
+.gd-freq button.on{background:var(--accent);color:var(--accent-ink)}
+.gd-acts{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:4px 14px 6px}
+.gd-acts .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.gd-acts .btn svg{width:16px;height:16px;flex:none}
+.gd-acts .btn:disabled{opacity:.6}
+.gd-off{display:block;width:100%;border:0;background:transparent;color:var(--dgr);font-size:12.5px;font-weight:600;padding:10px 14px 14px;cursor:pointer;text-align:center}
+.gd-due{display:flex;align-items:center;gap:11px;width:calc(100% - 32px);max-width:560px;margin:4px auto 10px;padding:11px 14px;border-radius:14px;border:1px solid var(--accent-line);background:var(--accent-dim);color:var(--head);text-align:left;cursor:pointer;animation:gdIn .45s var(--ease) both}
+.gd-due[hidden]{display:none!important}
+.gd-due svg{width:22px;height:22px;flex:none}
+.gd-due span{flex:1;min-width:0}
+.gd-due b{display:block;font-size:13.5px}
+.gd-due small{display:block;font-size:11.5px;color:var(--mut);margin-top:2px}
+.gd-due i{font-style:normal;font-size:22px;color:var(--accent)}
+@keyframes gdIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.gd-due{animation:none}}
+/* ---------- Fareo 15.0 · simpler date picker ---------- */
+.date-month-btn{position:relative;display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:9px;border:1px solid var(--bd2);font-family:var(--mono);font-size:10.5px;color:var(--body);cursor:pointer;overflow:hidden}
+.date-month-btn svg{width:13px;height:13px;color:var(--mut)}
+.date-month-btn input,.dq-pick input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;border:0;padding:0}
+.date-month-btn input::-webkit-calendar-picker-indicator,.dq-pick input::-webkit-calendar-picker-indicator{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+.dq{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.dq-b{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0;padding:11px 11px 10px;border-radius:14px;border:1px solid var(--bd2);background:var(--card2);color:var(--head);text-align:left;cursor:pointer;overflow:hidden;-webkit-tap-highlight-color:transparent;transition:transform .25s var(--spring),background .25s,border-color .25s}
+.dq-b b{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.dq-b small{font-family:var(--mono);font-size:10px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.dq-b.logged small{color:var(--acct)}
+.dq-b.sug{border-color:var(--accent);animation:sugPulse 1.8s var(--ease) .4s infinite}
+.dq-b.on{background:var(--accent);border-color:var(--accent);transform:translateY(-2px)}
+.dq-b.on b,.dq-b.on small{color:var(--accent-ink)}
+.dq-b.dq-pick{border-style:dashed}
+.dq-b:active{transform:scale(.95)}
+.dq-b.pick,#dateCard .dc.pick{animation:dpPick .45s var(--spring)}
+.dw{display:grid;grid-template-columns:30px 1fr 30px;align-items:center;gap:4px;margin-top:10px}
+#dateCard .dw-nav{height:46px;border:0;border-radius:10px;background:transparent;color:var(--mut);display:grid;place-items:center;cursor:pointer}
+#dateCard .dw-nav svg{width:18px;height:18px}
+#dateCard .dw-nav:disabled{opacity:.25;cursor:default}
+.dw-days{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;touch-action:pan-y}
+.dw-days.slide-l{animation:dwL .3s var(--ease)}.dw-days.slide-r{animation:dwR .3s var(--ease)}
+@keyframes dwL{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+@keyframes dwR{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:none}}
+#dateCard .dc{position:relative;min-width:0;padding:0;margin:0;box-shadow:none;height:50px;border-radius:12px;border:1px solid transparent;background:transparent;color:var(--body);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .2s,border-color .2s,transform .2s var(--spring)}
+#dateCard .dc small{font-family:var(--mono);font-size:9px;color:var(--mut)}
+#dateCard .dc b{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--head);line-height:1.1}
+#dateCard .dc i{width:5px;height:5px;border-radius:50%;background:transparent;margin-top:2px}
+#dateCard .dc.logged i{background:var(--acct)}
+#dateCard .dc.miss{border:1px dashed color-mix(in srgb,var(--fuel) 55%,transparent)}
+#dateCard .dc.today b{color:var(--accent)}
+#dateCard .dc.sug{border-color:var(--accent)}
+#dateCard .dc.on{background:var(--accent);border-color:var(--accent)}
+#dateCard .dc.on small,#dateCard .dc.on b{color:var(--accent-ink)}#dateCard .dc.on i{background:var(--accent-ink)}
+#dateCard .dc:disabled{opacity:.28;cursor:default}
+#dateCard .dc:not(:disabled):active{transform:scale(.9)}
+.dw-range{font-family:var(--mono);font-size:10px;color:var(--mut);flex:0 0 auto}
+@media (max-width:360px){.dq-b{padding:10px 8px}.dq-b b{font-size:13.5px}}
+@media (prefers-reduced-motion:reduce){.dq-b.sug{animation:none}.dw-days.slide-l,.dw-days.slide-r{animation:none}}
 </style>
 </head>
 <body>
@@ -1776,6 +1837,7 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
       <div class="av" id="hubAv" aria-hidden="true">F</div>
       <div><p class="hub-date" id="today">Today</p><h1 class="hub-greet" id="greet">Welcome back</h1></div>
     </div>
+    <button type="button" class="gd-due" id="gdDue" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#0F9D58" d="M8.3 3h7.4l7 12-3.7 6.4-7-12z"/><path fill="#FFC107" d="M8.3 3 1.3 15l3.7 6.4 7-12z"/><path fill="#4285F4" d="M5 21.4h14l3.7-6.4H8.7z"/></svg><span><b>Backup due</b><small id="gdDueSub">Tap to back up to Google Drive</small></span><i aria-hidden="true">&rsaquo;</i></button>
     <div class="hub">
       <div class="hub-wheel">
         <span class="hub-orbit" aria-hidden="true"></span>
@@ -1802,12 +1864,15 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
     <div class="msg" id="msg"></div>
     <div data-pane="1">
       <div class="card date-card" id="dateCard">
-        <div class="date-head"><span class="date-kicker">Shift date <span class="req" id="dateReq">Required</span></span><span class="date-month" id="dateMonth"></span></div>
-        <div class="day-strip" id="dayStrip" role="listbox" aria-label="Choose the shift date"></div>
-        <div class="date-foot">
-          <div class="date-label" id="dateLabel">Tap the day this shift started</div>
-          <label class="date-other"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span>Other date</span><input type="date" id="shiftDate" aria-label="Pick another date"></label>
+        <div class="date-head"><span class="date-kicker">Shift date <span class="req" id="dateReq">Required</span></span>
+          <label class="date-month-btn" id="dateMonthBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span id="dateMonth">Pick a date</span><input type="date" id="shiftDate" aria-label="Pick any date"></label></div>
+        <div class="dq" id="dateQuick" role="radiogroup" aria-label="Quick dates"></div>
+        <div class="dw" id="dateWeek">
+          <button type="button" class="dw-nav" id="dwPrev" aria-label="Previous week"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <div class="dw-days" id="dwDays" role="listbox" aria-label="Days this week"></div>
+          <button type="button" class="dw-nav" id="dwNext" aria-label="Next week"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
         </div>
+        <div class="date-foot"><div class="date-label" id="dateLabel">Tap the day this shift started</div><span class="dw-range" id="dwRange"></span></div>
         <div class="date-hint" id="dateHint"></div>
       </div>
 
@@ -2156,12 +2221,12 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
   </section>
 
   <section class="screen" data-tab="settings">
-    <div class="sub">Settings <small>Profile &middot; pay rules &middot; sync</small></div>
+    <div class="sub">Settings <small>Profile &middot; pay rules &middot; backup</small></div>
     <div class="set-top">
       <button type="button" class="set-hero" id="setHero">
         <span class="sh-av" id="shAv">F</span>
         <span class="sh-t"><b id="shName">Add your name</b><small id="shStats">Fareo</small></span>
-        <span class="sh-chips"><span class="tag" id="shSync">Sync off</span><span class="tag" id="shVer">v</span></span>
+        <span class="sh-chips"><span class="tag" id="shSync">Drive off</span><span class="tag" id="shVer">v</span></span>
       </button>
       <label class="set-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="setSearch" type="search" placeholder="Search settings" autocomplete="off" enterkeyhint="search"><button type="button" id="setSearchX" aria-label="Clear search" hidden>&times;</button></label>
     </div>
@@ -2172,7 +2237,7 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
       <button type="button" class="sn" data-sp="shifts" style="--tone:var(--hail);--i:2"><span class="sn-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h3M8 17h6"/></svg></span><span class="sn-t"><b>Shifts &amp; accounts</b><small data-sum="shifts"></small></span><svg class="sn-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
       <button type="button" class="sn" data-sp="look" style="--tone:var(--levy);--i:3"><span class="sn-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18Z" fill="currentColor"/></svg></span><span class="sn-t"><b>Appearance &amp; sound</b><small data-sum="look"></small></span><svg class="sn-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
       <button type="button" class="sn" data-sp="weather" style="--tone:var(--fuel);--i:4"><span class="sn-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 .5-8 5.5 5.5 0 0 0-10.6 1.5A3.3 3.3 0 0 0 7 18Z"/></svg></span><span class="sn-t"><b>Weather</b><small data-sum="weather"></small></span><svg class="sn-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
-      <button type="button" class="sn" data-sp="data" style="--tone:var(--acct);--i:5"><span class="sn-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/></svg></span><span class="sn-t"><b>Sync &amp; backup</b><small data-sum="data"></small></span><svg class="sn-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
+      <button type="button" class="sn" data-sp="data" style="--tone:var(--acct);--i:5"><span class="sn-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/></svg></span><span class="sn-t"><b>Backup &amp; restore</b><small data-sum="data"></small></span><svg class="sn-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
       <button type="button" class="sn" data-sp="help" style="--tone:var(--fink);--i:6"><span class="sn-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14M12 17.5v.01"/></svg></span><span class="sn-t"><b>Help &amp; updates</b><small data-sum="help"></small></span><svg class="sn-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
       </nav>
       <div class="set-panes">
@@ -2253,38 +2318,24 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
     </div>
         </div>
       </section>
-      <section class="set-pane" data-spane="data" style="--tone:var(--acct)" aria-label="Sync &amp; backup">
-        <header class="sp-head"><button type="button" class="sp-back" aria-label="All settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><span class="sp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/></svg></span><h2>Sync &amp; backup</h2></header>
-        <div class="sp-sec"><p class="grp">Multi-device sync</p>
-        <div class="card set-card">
-      <details class="set-more" open>
-        <summary class="set"><div class="sl"><b>Multi-device sync <span class="help" data-help="Optional. Set up a free Firebase project once and sign in with the same email on each phone to keep them in sync. Data stays on your device until you sign in." aria-label="Help">?</span></b><p id="syncState">Off &middot; local only</p></div><span class="chev">&rsaquo;</span></summary>
-        <div class="set-more-body">
-          <div class="sync-safe"><i aria-hidden="true">✓</i><span>Safe sign-in: Fareo keeps a copy of this phone’s data and asks before anything is replaced.</span></div>
-          <button class="btn sync-google" id="syncGoogle" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#EA4335" d="M12 10.2v3.9h5.5c-.2 1.3-1.6 3.8-5.5 3.8-3.3 0-6-2.7-6-6.1s2.7-6.1 6-6.1c1.9 0 3.1.8 3.8 1.5l2.6-2.5C16.8 3.2 14.6 2.2 12 2.2 6.6 2.2 2.2 6.6 2.2 12s4.4 9.8 9.8 9.8c5.7 0 9.4-4 9.4-9.6 0-.6-.1-1.1-.2-1.6H12Z"/></svg>Continue with Google</button>
-          <div class="sync-or"><span>or use your email</span></div>
-          <input id="syncEmail" type="email" placeholder="you@example.com" autocomplete="username" inputmode="email">
-          <div class="two" style="margin-top:8px"><button class="btn neutral" id="syncLink" type="button">Email me a sign-in link</button><button class="btn neutral" id="syncPwToggle" type="button">Use password</button></div>
-          <div id="syncPwWrap" hidden>
-            <input id="syncPass" type="password" placeholder="Password" autocomplete="current-password" style="margin-top:8px">
-            <div class="two" style="margin-top:8px"><button class="btn neutral" id="syncSignin">Sign in</button><button class="btn neutral" id="syncCreate">Create account</button></div>
-          </div>
-          <details class="sync-adv" id="syncAdv"><summary>Firebase project <span class="tag" id="fbCfgTag">Not set</span></summary>
-            <ol class="fb-steps"><li>Open <b>console.firebase.google.com</b> and pick your project.</li><li>Gear icon &rarr; <b>Project settings</b> &rarr; <b>General</b> &rarr; <b>Your apps</b> &rarr; your web app &rarr; <b>Config</b>.</li><li>Copy the <code>firebaseConfig = { &hellip; }</code> block and paste it below.</li><li>In <b>Authentication &rarr; Sign-in method</b> turn on Google and Email link, and add <b>basemsde-tech.github.io</b> under Authorized domains.</li></ol>
-            <textarea id="fbConfig" placeholder="firebaseConfig = { apiKey: &hellip;, authDomain: &hellip;, projectId: &hellip; }"></textarea>
-            <div class="two" style="margin-top:8px"><button type="button" class="btn neutral" id="fbCfgSave">Save project</button><button type="button" class="btn neutral" id="fbCfgClear">Clear</button></div>
-            <p class="mono-mut" id="fbCfgNote"></p></details>
-          <button class="btn neutral" id="syncOut" style="display:none;margin-top:8px">Sign out</button>
-        </div>
-      </details>
-      <button type="button" class="set sync-restore" id="syncRestore" hidden>Restore data from before sync</button>
+      <section class="set-pane" data-spane="data" style="--tone:var(--acct)" aria-label="Backup &amp; restore">
+        <header class="sp-head"><button type="button" class="sp-back" aria-label="All settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><span class="sp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/></svg></span><h2>Backup &amp; restore</h2></header>
+        <div class="sp-sec"><p class="grp">Google Drive backup</p>
+        <div class="card set-card gd-card">
+      <div class="gd-local"><i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg></i><span>Your data lives on this device. Fareo doesn&rsquo;t sync it anywhere; Google Drive just keeps a backup copy.</span></div>
+      <div class="set"><div class="sl"><b>Automatic backup <span class="help" data-help="Fareo saves one backup file to your Google Drive (in a folder called Fareo) and replaces it each time, at the frequency you choose. Fareo can only see files it created, nothing else in your Drive. Backups run while Fareo is open; if Google needs you to sign in again, a small Back up button appears on Home." aria-label="Help">?</span></b><p id="gdState">Off</p></div><button class="tgl" id="gdOn" aria-label="Automatic Google Drive backup"></button></div>
+      <div id="gdBody" hidden>
+        <div class="set" style="display:block"><div class="sl"><b>How often</b><p>Each backup replaces the previous file in Drive &rsaquo; Fareo</p></div>
+          <div class="gd-freq" id="gdFreq" role="radiogroup" aria-label="Backup frequency"><button type="button" role="radio" data-f="change">After changes</button><button type="button" role="radio" data-f="daily">Daily</button><button type="button" role="radio" data-f="weekly">Weekly</button><button type="button" role="radio" data-f="monthly">Monthly</button></div></div>
+        <div class="gd-acts"><button type="button" class="btn" id="gdNow"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#0F9D58" d="M8.3 3h7.4l7 12-3.7 6.4-7-12z"/><path fill="#FFC107" d="M8.3 3 1.3 15l3.7 6.4 7-12z"/><path fill="#4285F4" d="M5 21.4h14l3.7-6.4H8.7z"/></svg>Back up now</button><button type="button" class="btn neutral" id="gdRestore">Restore from Drive</button></div>
+        <button type="button" class="gd-off" id="gdOff">Disconnect Google Drive</button>
+      </div>
     </div>
         </div>
         <div class="sp-sec"><p class="grp">Recovery</p>
     <div class="card set-card rp-card">
-      <div class="set" style="display:block"><div class="sl"><b>Saved copies on this device <span class="help" data-help="Fareo keeps up to six full copies of your data on this device: one a day, plus one before every sync change, restore or merge. Restoring keeps a copy of what you have now, so you can always go back." aria-label="Help">?</span></b><p id="dataCheck">This device</p></div>
+      <div class="set" style="display:block"><div class="sl"><b>Saved copies on this device <span class="help" data-help="Fareo keeps up to six full copies of your data on this device: one a day, plus one before every restore. Restoring keeps a copy of what you have now, so you can always go back." aria-label="Help">?</span></b><p id="dataCheck">This device</p></div>
         <div id="recoveryList" class="rp-list"></div>
-        <button type="button" class="btn neutral" id="recoverCloud" hidden style="margin-top:10px">Compare with my cloud copy</button>
     </div>
         </div>
         </div>
@@ -2358,16 +2409,16 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
   <button class="att" id="expRcpt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.2L14 21l-2-1.2L10 21l-2-1.2L6 21z"/><path d="M9 8h6M9 12h6"/></svg><span id="expRcptTxt">Attach receipt</span></button>
   <div class="two" style="margin-top:14px"><button class="btn neutral" id="expCancel">Cancel</button><button class="btn" id="expSave">Save cost</button></div>
 </div></div>
-<div class="modal" id="syncMergeModal"><div class="sheet">
+<div class="modal" id="gdChoiceModal"><div class="sheet">
   <div class="grip"></div>
-  <span class="eyebrow" style="color:var(--hail)">Your data is safe &middot; a copy is saved</span>
-  <h3>This phone and your cloud both have data</h3>
-  <p class="csub">Choose how to combine them. You can undo with &ldquo;Restore data from before sync&rdquo; in Settings.</p>
-  <div class="sm-cmp"><div class="sm-col" id="smLocal"></div><div class="sm-col" id="smCloud"></div></div>
-  <button type="button" class="sm-opt rec" data-sm="merge"><b>Merge both <em>Recommended</em></b><small>Keeps every shift, cost, client and fuel entry from both. Duplicates are matched and kept once.</small></button>
-  <button type="button" class="sm-opt" data-sm="local"><b>Keep this device only</b><small>Replaces the cloud copy <em class="warn">and the data on your other devices</em> with this device&rsquo;s data.</small></button>
-  <button type="button" class="sm-opt" data-sm="cloud"><b>Use cloud</b><small>Replaces this phone&rsquo;s data with the cloud copy.</small></button>
-  <button type="button" class="btn neutral" id="smCancel" style="margin-top:10px">Not now &mdash; stay signed out</button>
+  <span class="eyebrow" style="color:var(--hail)">Backup paused &middot; nothing was replaced</span>
+  <h3 id="gdcTitle">Your Drive backup has more shifts than this device</h3>
+  <p class="csub">Choose what to do. Fareo saves a copy of this device&rsquo;s data first either way.</p>
+  <div class="sm-cmp"><div class="sm-col" id="gdcLocal"></div><div class="sm-col" id="gdcDrive"></div></div>
+  <button type="button" class="sm-opt rec" data-gdc="restore"><b>Restore from Drive <em>Recommended</em></b><small>Replaces this device&rsquo;s data with the Drive backup.</small></button>
+  <button type="button" class="sm-opt" data-gdc="merge"><b>Merge both</b><small>Keeps every shift, cost and client from both, then backs up the result.</small></button>
+  <button type="button" class="sm-opt" data-gdc="replace"><b>Replace the Drive backup</b><small>Backs up this device as it is. <em class="warn">The shifts only in Drive are lost.</em></small></button>
+  <button type="button" class="btn neutral" id="gdcLater" style="margin-top:10px">Decide later</button>
 </div></div>
 <div class="modal hail-modal" id="hailModal"><div class="sheet">
   <div class="grip"></div>
@@ -2669,14 +2720,19 @@ function fmtDMY(ds){var d=asDate(ds);if(isNaN(d.getTime()))return '';return pad2
 function fmtDayDMY(ds){var d=asDate(ds);if(isNaN(d.getTime()))return '';return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]+' '+fmtDMY(d)}
 function fmtDayLong(ds){var d=asDate(ds);if(isNaN(d.getTime()))return '';return ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][d.getDay()]+' '+fmtDMY(d)}
 var load=function(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}};
-var save=function(k,v){try{localStorage.setItem(k,JSON.stringify(v));if(k!=='fareo_draft'&&!(typeof applyingRemote!=='undefined'&&applyingRemote))localStorage.setItem('fareo_localEditAt',String(Date.now()))}catch(e){} if(typeof scheduleSync==='function')scheduleSync();};
+var save=function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){} if(k!=='fareo_draft'&&typeof gdChanged==='function')gdChanged();};
 var RUN=5, RATE=1.20;
 /* ---------- version & release notes ----------
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='14.4';
+var APP_VERSION='15.0';
 var CHANGELOG=[
+  {v:'15.0',date:'November 3, 2026',notes:[
+    ['Feature','Your data now lives only on this device. Multi-device sync is gone, so another device can never change or wipe what\u2019s here.'],
+    ['Feature','Automatic Google Drive backup: Settings \u2192 Backup & restore. Choose after changes, daily, weekly or monthly. Each backup replaces one file in Drive \u203a Fareo, and you can restore from it on any device. If Drive has more shifts than this device, Fareo pauses and asks instead of overwriting.'],
+    ['UI/UX','Simpler, smarter shift date: Today, Yesterday and any missed workday are one tap, with the pay week below (swipe or use the arrows) and the calendar on the month button. Logged days show a dot, missed usual workdays are outlined, and if today is already logged Fareo suggests the day that isn\u2019t.'],
+  ]},
   {v:'14.4',date:'November 3, 2026',notes:[
     ['Bug Fix','Sync could replace all data on your other devices when one device uploaded fewer shifts (for example after choosing \u201cKeep this phone\u201d on a device with little data, or when an older copy looked newer). Fareo now pauses and asks before any update would remove more than 3 shifts, and merges instead of overwriting when two devices both changed.'],
     ['Bug Fix','A device with fewer shifts than your cloud copy can no longer upload over it without asking.'],
@@ -5218,36 +5274,69 @@ function yesterdayStr(){var d=new Date();d.setDate(d.getDate()-1);return iso(d)}
 /* Late finish (before 5am) usually belongs to the shift that started yesterday. */
 function suggestShiftDate(){var h=new Date().getHours();return h<5?yesterdayStr():todayStr()}
 function dayLogged(ds){return entries.filter(function(e){return e.date===ds})}
+/* Weekdays you usually drive (3+ shifts on that weekday in the last 8 weeks). */
+function usualWorkdays(){var c=[0,0,0,0,0,0,0],cut=new Date();cut.setDate(cut.getDate()-56);var cs=iso(cut);
+  entries.forEach(function(e){if(e.date>=cs)c[asDate(e.date).getDay()]++});return c.map(function(n){return n>=3})}
+/* Most recent usual workday in the last 2 weeks with no shift logged
+   (not today or yesterday, they have their own buttons). */
+function missedDay(){var usual=usualWorkdays();if(!entries.length)return null;
+  var first=entries.reduce(function(m,e){return e.date<m?e.date:m},'9999');
+  for(var k=2;k<=14;k++){var d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-k);var ds=iso(d);
+    if(ds<first)break;if(usual[d.getDay()]&&!dayLogged(ds).length)return ds}
+  return null}
+/* Suggestion: before 5am it's yesterday's shift; if today is already
+   logged, the most recent unlogged day instead. */
+function smartSuggest(){var base=suggestShiftDate();
+  if(dayLogged(base).length&&String((dayLogged(base)[0]||{}).id)!==String(draft._sourceEntryId)){
+    var y=yesterdayStr();if(base!==y&&!dayLogged(y).length)return y;var m=missedDay();if(m)return m}
+  return base}
+var dwStart=null;
+function dayTake(ds){return dayLogged(ds).reduce(function(a,e){return a+(Number(e.take)||0)},0)}
 function renderDatePicker(){
-  var strip=$('#dayStrip');if(!strip)return;
-  var sel=draft.date||suggestShiftDate(),set=!!draft.dateSet,sug=suggestShiftDate();
-  var today=new Date();today.setHours(0,0,0,0);
-  var days=[];for(var k=20;k>=0;k--){var d=new Date(today);d.setDate(d.getDate()-k);days.push(d)}
-  var selInStrip=days.some(function(d){return iso(d)===sel});
-  var DOW=['SUN','MON','TUE','WED','THU','FRI','SAT'];
-  strip.innerHTML=(set&&!selInStrip?'<button type="button" role="option" class="dp on far" data-d="'+sel+'"><small>'+DOW[asDate(sel).getDay()]+'</small><b>'+asDate(sel).getDate()+'</b><em>'+asDate(sel).toLocaleDateString('en-AU',{month:'short'})+'</em></button><span class="dp-gap"></span>':'')
-   +days.map(function(d,i){var ds=iso(d),lg=dayLogged(ds),isT=ds===iso(today),isY=ds===yesterdayStr();
-    var cls='dp'+(set&&ds===sel?' on':'')+(!set&&ds===sug?' sug':'')+(isT?' today':'')+(lg.length?' logged':'')+(d.getDate()===1?' m1':'');
-    var tag=isT?'Today':isY?'Yest':(lg.length?'$'+Math.round(lg.reduce(function(s,e){return s+(Number(e.take)||0)},0)).toLocaleString('en-AU'):'');
-    return '<button type="button" role="option" aria-selected="'+(set&&ds===sel)+'" class="'+cls+'" data-d="'+ds+'" style="--i:'+i+'"><small>'+DOW[d.getDay()]+'</small><b>'+d.getDate()+'</b><em>'+tag+'</em>'+(lg.length?'<i class="dp-dot"></i>':'')+'</button>'}).join('');
-  var sd=$('#shiftDate');if(sd){sd.value=sel;sd.max=todayStr()}
-  var mo=$('#dateMonth');if(mo)mo.textContent=asDate(sel).toLocaleDateString('en-AU',{month:'long',year:'numeric'});
+  var quick=$('#dateQuick'),daysEl=$('#dwDays');if(!quick||!daysEl)return;
+  var set=!!draft.dateSet,sel=set?draft.date:null,sug=smartSuggest(),T=todayStr(),Y=yesterdayStr(),miss=missedDay(),usual=usualWorkdays();
+  var DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  function short(ds){var d=asDate(ds);return DOW[d.getDay()]+' '+d.getDate()+' '+d.toLocaleDateString('en-AU',{month:'short'})}
+  function q(ds,label){var lg=dayLogged(ds).length,cls='dq-b'+(sel===ds?' on':'')+(!set&&ds===sug?' sug':'')+(lg?' logged':'');
+    var st=lg?'Logged · $'+Math.round(dayTake(ds)).toLocaleString('en-AU'):(ds===miss?'Not logged':short(ds));
+    return '<button type="button" role="radio" aria-checked="'+(sel===ds)+'" class="'+cls+'" data-d="'+ds+'"><b>'+label+'</b><small>'+st+'</small></button>'}
+  var third=(miss&&miss!==T&&miss!==Y)?q(miss,DOW[asDate(miss).getDay()]+' '+asDate(miss).getDate()):'<label class="dq-b dq-pick">'+'<b>Other day</b><small>Pick from calendar</small><input type="date" class="dq-native" max="'+T+'" aria-label="Pick another date"></label>';
+  quick.innerHTML=q(T,'Today')+q(Y,'Yesterday')+third;
+  /* week row: the pay week holding the chosen (or suggested) day */
+  var anchor=sel||sug;if(!dwStart||dwStart._for!==anchor){dwStart=weekStartOf(asDate(anchor));dwStart._for=anchor}
+  var cells=[],today=asDate(T);
+  for(var i=0;i<7;i++){var d=new Date(dwStart);d.setDate(d.getDate()+i);var ds=iso(d),lg=dayLogged(ds).length,fut=ds>T;
+    var cls='dc'+(sel===ds?' on':'')+(!set&&ds===sug?' sug':'')+(ds===T?' today':'')+(lg?' logged':'')+(!lg&&!fut&&ds<T&&usual[d.getDay()]&&entries.length&&ds>=entries.reduce(function(m,e){return e.date<m?e.date:m},'9999')?' miss':'');
+    cells.push('<button type="button" role="option" aria-selected="'+(sel===ds)+'" class="'+cls+'" data-d="'+ds+'"'+(fut?' disabled':'')+' style="--i:'+i+'" aria-label="'+esc(fmtDayLong(ds))+(lg?', logged':'')+'"><small>'+DOW[d.getDay()].charAt(0)+'</small><b>'+d.getDate()+'</b><i></i></button>')}
+  daysEl.innerHTML=cells.join('');
+  var end=new Date(dwStart);end.setDate(end.getDate()+6);
+  var nx=$('#dwNext');if(nx)nx.disabled=iso(end)>=T;
+  var rg=$('#dwRange');if(rg){var wk=entries.filter(function(e){return e.date>=iso(dwStart)&&e.date<=iso(end)});rg.textContent=dwStart.getDate()+' '+dwStart.toLocaleDateString('en-AU',{month:'short'})+' – '+end.getDate()+' '+end.toLocaleDateString('en-AU',{month:'short'})+(wk.length?' · '+wk.length+' logged':'')}
+  var sd=$('#shiftDate');if(sd){sd.value=sel||sug;sd.max=T}
+  var mo=$('#dateMonth');if(mo)mo.textContent=asDate(sel||sug).toLocaleDateString('en-AU',{month:'long',year:'numeric'});
   var dl=$('#dateLabel');if(dl)dl.innerHTML=set?esc(friendlyDate(sel)):'Tap the day this shift started';
-  var card=$('#dateCard');if(card){card.classList.toggle('need',!set);card.classList.toggle('done',set)}
+  var card=$('#dateCard');if(card){card.classList.toggle('dneed',!set);card.classList.toggle('done',set)}
   var rq=$('#dateReq');if(rq){rq.textContent=set?'✓ Set':'Required'}
   var hint=$('#dateHint');
-  if(hint){var lg=set?dayLogged(sel):[],h='';
-    if(!set){var late=sug!==todayStr();h='<span class="dh-ico">✦</span><span>'+(late?'Late finish? This shift probably started <b>yesterday</b>.':'Looks like a shift for <b>today</b>.')+'</span><button type="button" class="dh-btn" data-d="'+sug+'">Use '+(late?'Yesterday':'Today')+'</button>'}
-    else if(lg.length){var same=lg.filter(function(e){return e.rego&&e.rego===draft.rego&&String(e.id)!==String(draft._sourceEntryId)});
-      h='<span class="dh-ico warn">!</span><span>Already logged '+esc(fmtDayLong(sel))+': '+lg.map(function(e){return esc(e.rego||'no rego')+' '+money(e.take)}).join(', ')+(same.length?'. Saving with <b>'+esc(draft.rego)+'</b> replaces it.':'.')+'</span>'}
-    hint.innerHTML=h;hint.className='date-hint'+(h?' show':'')+(lg.length?' warn':'');}
-  /* keep the chosen day in view */
-  requestAnimationFrame(function(){var on=strip.querySelector('.dp.on')||strip.querySelector('.dp.sug')||strip.lastElementChild;if(on&&strip.scrollWidth>strip.clientWidth){var x=on.offsetLeft-strip.clientWidth+on.offsetWidth+40;if(Math.abs(strip.scrollLeft-x)>4)strip.scrollTo({left:Math.max(0,x),behavior:strip.dataset.ready?'smooth':'auto'})}strip.dataset.ready='1'});
+  if(hint){var lg2=set?dayLogged(sel):[],h='';
+    if(!set&&sug===Y&&suggestShiftDate()===Y)h='<span class="dh-ico">✦</span><span>Late finish? This shift probably started <b>yesterday</b>.</span>';
+    else if(!set&&sug!==T&&dayLogged(T).length)h='<span class="dh-ico">✦</span><span>Today is already logged. <b>'+esc(friendlyDate(sug))+'</b> isn’t.</span><button type="button" class="dh-btn" data-d="'+sug+'">Use it</button>';
+    else if(lg2.length){var same=lg2.filter(function(e){return e.rego&&e.rego===draft.rego&&String(e.id)!==String(draft._sourceEntryId)});
+      h='<span class="dh-ico warn">!</span><span>Already logged '+esc(fmtDayLong(sel))+': '+lg2.map(function(e){return esc(e.rego||'no rego')+' '+money(e.take)}).join(', ')+(same.length?'. Saving with <b>'+esc(draft.rego)+'</b> replaces it.':'.')+'</span>'}
+    hint.innerHTML=h;hint.className='date-hint'+(h?' show':'')+(lg2.length?' warn':'');}
 }
+function dwShift(n){if(!dwStart)return;var d=new Date(dwStart);d.setDate(d.getDate()+7*n);if(iso(d)>todayStr())return;dwStart=d;dwStart._for=draft.dateSet?draft.date:smartSuggest();var el=$('#dwDays');renderDatePicker();if(el){el.classList.remove('slide-l','slide-r');void el.offsetWidth;el.classList.add(n<0?'slide-r':'slide-l')}sfx('tap')}
 document.addEventListener('click',function(e){
-  var b=e.target.closest&&e.target.closest('#dayStrip .dp,.dh-btn');if(!b)return;
-  setDraftDate(b.dataset.d);var on=$('#dayStrip .dp.on');if(on){on.classList.add('pick');setTimeout(function(){on.classList.remove('pick')},450)}
+  if(e.target.closest&&e.target.closest('#dwPrev')){dwShift(-1);return}
+  if(e.target.closest&&e.target.closest('#dwNext')){dwShift(1);return}
+  var b=e.target.closest&&e.target.closest('#dateQuick [data-d],#dwDays .dc,.dh-btn');if(!b||b.disabled)return;
+  var keep=dwStart;setDraftDate(b.dataset.d);
+  if(b.classList.contains('dc')&&keep){dwStart=keep;dwStart._for=draft.date;renderDatePicker()}
+  var on=$('#dateCard .on');if(on){on.classList.add('pick');setTimeout(function(){on.classList.remove('pick')},450)}
 });
+document.addEventListener('change',function(e){if(e.target.classList&&e.target.classList.contains('dq-native')&&e.target.value)setDraftDate(e.target.value)});
+(function(){var el=null,x0=0,y0=0;document.addEventListener('touchstart',function(e){el=e.target.closest&&e.target.closest('#dwDays');if(el){x0=e.touches[0].clientX;y0=e.touches[0].clientY}},{passive:true});
+  document.addEventListener('touchend',function(e){if(!el)return;var dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;el=null;if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.4)dwShift(dx>0?-1:1)},{passive:true})})();
 function dateGateFail(){
   if(draft.dateSet)return false;
   var c=$('#dateCard');if(c){c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake');setTimeout(function(){c.classList.remove('shake')},500)}
@@ -6919,7 +7008,7 @@ if($('#setOcrHail'))$('#setOcrHail').onclick=function(){
   toast(settings.ocrHail!==false?'Hail OCR on — reads Rank/Hail from EOS photos':'Hail OCR off — enter hail manually');
 };
 $('#addRego').onclick=function(){var v=$('#newRego').value.trim().toUpperCase();if(!v){toast('Enter a rego');return}if(settings.regos.indexOf(v)<0)settings.regos.push(v);$('#newRego').value='';persist();renderSettings();rowInputs();toast('Rego added')};
-$('#newFy').onclick=function(){allowBigPush=true;ask('Start a new financial year?','Clears shifts, income, deductions and manual fuel. Settings, receipt jar and address book stay.','Clear year',function(){entries=[];deductions=[];fuelManual=[];draft=freshDraft(settings.regos[0]||'');persist();toast('New financial year started');rowInputs();render();renderWeekly();renderReports()})};
+$('#newFy').onclick=function(){ask('Start a new financial year?','Clears shifts, income, deductions and manual fuel. Settings, receipt jar and address book stay.','Clear year',function(){entries=[];deductions=[];fuelManual=[];draft=freshDraft(settings.regos[0]||'');persist();toast('New financial year started');rowInputs();render();renderWeekly();renderReports()})};
 async function fullRefresh(){
   var t0=updFlowStart(['Clearing the app cache','Checking for updates','Restarting'],'Checking for updates');
   try{
@@ -6939,16 +7028,16 @@ async function fullRefresh(){
 }
 $('#clearCache').onclick=fullRefresh;
 
-/* ---------- backup + cloud sync ---------- */
+/* ---------- backup ---------- */
 var SYNC_KEYS=['fareo_settings','fareo_entries','fareo_deductions','fareo_recurring','fareo_fuelManual','fareo_draft','fareo_names','fareo_clients','fareo_run_plan'];
 function allData(){var o={};SYNC_KEYS.forEach(function(k){var v=localStorage.getItem(k);if(v!=null)o[k]=v});return o}
 /* Backup includes receipts (for a full audit-safe export); cloud sync does not. */
 function allDataFull(){var o=allData();var r=localStorage.getItem('fareo_receipts');if(r!=null)o['fareo_receipts']=r;return o}
 function applyData(d){Object.keys(d||{}).forEach(function(k){if(k.indexOf('fareo_')===0){var v=d[k];try{localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v))}catch(_){}}})}
+function backupDump(){var data=allDataFull();return {app:'fareo',schema:2,ver:APP_VERSION,exported:new Date().toISOString(),device:deviceId(),counts:backupCounts(data),data:data}}
 function backupCounts(d){function L(k){try{var v=d[k];v=typeof v==='string'?JSON.parse(v):v;return Array.isArray(v)?v.length:0}catch(_){return 0}}return {shifts:L('fareo_entries'),costs:L('fareo_deductions')+L('fareo_fuelManual')+L('fareo_recurring'),clients:L('fareo_clients'),receipts:L('fareo_receipts')}}
 $('#exportBtn').onclick=function(){
-  var data=allDataFull(),c=backupCounts(data),d=new Date();
-  var dump={app:'fareo',schema:2,ver:APP_VERSION,exported:d.toISOString(),counts:c,data:data};
+  var dump=backupDump(),c=dump.counts,d=new Date(dump.exported);
   var hm=('0'+d.getHours()).slice(-2)+('0'+d.getMinutes()).slice(-2);
   deliverFile(new Blob([JSON.stringify(dump)],{type:'application/json'}),'Fareo-backup_'+todayStr()+'_'+hm+'.json','Fareo backup','Backup ready · '+c.shifts+' shifts');
 };
@@ -6957,7 +7046,7 @@ $('#importBtn').onclick=function(){$('#importFile').click()};
    share sheets; writes every key or tells you what didn't fit; and when
    sync is on it uploads the restored data before reloading, so the cloud
    (or another device) can't put the old data straight back. */
-var META_KEYS=['fareo_updatedAt','fareo_localEditAt','fareo_synced_uid','fareo_sync_on','fareo_device','fareo_fbcfg','fareo_fbcfg_legacy','fareo_rp','fareo_presync','fareo_prerestore','fareo_cloudShifts','fareo_pendingPush'];
+var META_KEYS=['fareo_gdrive','fareo_gdrive_tok','fareo_updatedAt','fareo_localEditAt','fareo_synced_uid','fareo_sync_on','fareo_device','fareo_fbcfg','fareo_fbcfg_legacy','fareo_rp','fareo_presync','fareo_prerestore','fareo_cloudShifts','fareo_pendingPush'];
 function parseBackup(txt){
   txt=String(txt||'').replace(/^﻿/,'').trim();
   var obj=JSON.parse(txt);if(typeof obj==='string')obj=JSON.parse(obj);
@@ -6979,49 +7068,28 @@ function writeBackupData(d){
     failed.push(k)});
   return failed;
 }
-function doRestoreBackup(d){
+function doRestoreBackup(d,opts){
   saveRecoveryPoint('Before restoring a backup');
   try{localStorage.setItem('fareo_prerestore',JSON.stringify({at:Date.now(),data:allData()}))}catch(_){}
   var failed=writeBackupData(d);
   var lostCore=failed.filter(function(k){return k!=='fareo_receipts'});
   if(lostCore.length){toast('Couldn’t restore '+lostCore.join(', ').replace(/fareo_/g,'')+' — storage is full','error');return}
-  var now=Date.now();localStorage.setItem('fareo_localEditAt',String(now));
-  var done=function(msg){toast(msg+(failed.length?' (receipt photos didn’t fit)':''),'success');setTimeout(function(){location.reload()},900)};
-  if(syncOn&&fb.uid&&fb.fsM){
-    localStorage.setItem('fareo_pendingPush','1');
-    var ts=Date.now();localStorage.setItem('fareo_updatedAt',String(ts));localStorage.setItem('fareo_cloudShifts',String(dataSummary(allData()).shifts));
-    toast('Restored — uploading to your other devices…');
-    fb.fsM.setDoc(docRef(),{data:allData(),updatedAt:ts,_device:deviceId()}).then(function(){localStorage.removeItem('fareo_pendingPush');done('Backup restored and synced')}).catch(function(){done('Backup restored — will sync when online')});
-  }else{
-    /* Signed out: the next sign-in on this device asks before mixing. */
-    localStorage.removeItem('fareo_synced_uid');
-    done('Backup restored');
-  }
+  if(opts&&opts.fromDrive)gdMarkInSync(opts.fromDrive);
+  toast((opts&&opts.fromDrive?'Restored from Google Drive':'Backup restored')+(failed.length?' (receipt photos didn\u2019t fit)':''),'success');setTimeout(function(){location.reload()},900);
 }
 $('#importFile').onchange=function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();
   r.onerror=function(){toast('Couldn’t open that file','error')};
   r.onload=function(){var b;try{b=parseBackup(r.result)}catch(err){toast('That file isn’t a Fareo backup'+(f.name?' ('+f.name+')':''),'error');return}
     var c=backupCounts(b.data),obj=b.obj||{},when=obj.exported?new Date(obj.exported).toLocaleString('en-AU',{day:'numeric',month:'short',year:'numeric',hour:'numeric',minute:'2-digit'}):'an unknown date',cur=dataSummary(allData());
-    ask('Restore this backup?','From '+when+(obj.ver?' (Fareo '+obj.ver+')':'')+': '+c.shifts+' shifts, '+c.costs+' costs, '+c.clients+' clients, '+c.receipts+' receipts. It replaces the '+cur.shifts+' shifts on this device (a copy is kept under Recovery)'+(syncOn?' and updates your other devices.':'.'),'Restore',function(){doRestoreBackup(b.data)},{danger:false,noLbl:'Cancel',noUndo:true})};
+    ask('Restore this backup?','From '+when+(obj.ver?' (Fareo '+obj.ver+')':'')+': '+c.shifts+' shifts, '+c.costs+' costs, '+c.clients+' clients, '+c.receipts+' receipts. It replaces the '+cur.shifts+' shifts on this device. A copy of what you have now is kept under Recovery.','Restore',function(){doRestoreBackup(b.data)},{danger:false,noLbl:'Cancel',noUndo:true})};
   r.readAsText(f);e.target.value=''};
 function deviceId(){var id=localStorage.getItem('fareo_device');if(!id){id='d'+Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('fareo_device',id)}return id}
-function parseCfg(t){if(!t)return null;t=String(t).trim().replace(/^(export\s+)?(const|let|var)\s+[\w$]+\s*=\s*/,'').replace(/;\s*$/,'');var m=t.match(/\{[\s\S]*\}/);if(m)t=m[0];try{return JSON.parse(t)}catch(e){try{return (new Function('return ('+t+')'))()}catch(e2){return null}}}
-var fb={app:null,auth:null,db:null,authM:null,fsM:null,uid:null,email:''},syncOn=false,syncTimer=null,applyingRemote=false;
-function setSyncState(t){var el=$('#syncState');if(el)el.textContent=t;var out=$('#syncOut');if(out)out.style.display=syncOn?'block':'none'}
-async function fbInit(cfg){if(fb.app)return;var A=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');fb.authM=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');fb.fsM=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');fb.app=A.initializeApp(cfg);fb.auth=fb.authM.getAuth(fb.app);fb.db=fb.fsM.getFirestore(fb.app)}
-function docRef(){return fb.fsM.doc(fb.db,'fareo_users',fb.uid)}
-function applyRemoteData(data,updatedAt){
-  try{saveRecoveryPoint('Before sync update')}catch(_){}
-  applyingRemote=true;
-  try{
-    applyData(data);
-    localStorage.setItem('fareo_updatedAt',String(updatedAt||Date.now()));
-    localStorage.setItem('fareo_cloudShifts',String(dataSummary(data||{}).shifts));
-    reloadAll();
-  }finally{applyingRemote=false}
-}
-/* Built-in project config so devices only need to sign in. Fill FAREO_FB
-   with the web config from Firebase > Project settings > Your apps. */
+/* ================= Google Drive backup =================
+   This device's storage is the only source of truth: nothing syncs.
+   A full backup (the same file as Export backup) is written to one file in
+   the user's Drive, replaced each time. Google sign-in goes through the
+   Fareo Firebase project (Auth only) to get a short-lived Drive token with
+   the drive.file scope, so Fareo can only see files it created. */
 var FAREO_FB={
   apiKey:"AIzaSyBOp0sv-aQB0Hrzrp66rBg2t7_3kZbytX0",
   authDomain:"drive2earn-f3fb3.firebaseapp.com",
@@ -7030,76 +7098,149 @@ var FAREO_FB={
   messagingSenderId:"999057168600",
   appId:"1:999057168600:web:fb8eb5c72b570c110e5fad"
 };
-/* One project for every device: a config saved from an older project is
-   parked (not deleted) and sync restarts safely on the built-in project. */
-(function(){try{var st=JSON.parse(localStorage.getItem('fareo_fbcfg')||'null');
-  if(st&&st.projectId&&FAREO_FB&&st.projectId!==FAREO_FB.projectId){localStorage.setItem('fareo_fbcfg_legacy',JSON.stringify(st));localStorage.removeItem('fareo_fbcfg');localStorage.removeItem('fareo_sync_on');localStorage.removeItem('fareo_synced_uid')}
-}catch(_){}})();
-function fbCfgUI(){
-  var c=null;try{c=JSON.parse(localStorage.getItem('fareo_fbcfg')||'null')}catch(_){}c=c&&c.apiKey?c:FAREO_FB;
-  var note=$('#fbCfgNote'),tag=$('#fbCfgTag'),adv=$('#syncAdv');
-  if(note)note.textContent=c?('Project: '+(c.projectId||'?')+(FAREO_FB&&c===FAREO_FB?' (built in)':'')):'No project yet — paste the config above.';
-  if(tag){tag.textContent=c?'Connected':'Not set';tag.classList.toggle('on',!!c)}
-  if(adv)adv.open=!c;
-  var steps=$('#syncAdv .fb-steps');if(steps)steps.hidden=!!c;
+var fb={app:null,auth:null,authM:null};
+/* Old sync settings are no longer used. Data is untouched. */
+(function(){try{['fareo_sync_on','fareo_synced_uid','fareo_updatedAt','fareo_localEditAt','fareo_cloudShifts','fareo_pendingPush','fareo_sync_pending','fareo_link_email','fareo_fbcfg','fareo_fbcfg_legacy'].forEach(function(k){localStorage.removeItem(k)})}catch(_){}})();
+async function fbInit(){if(fb.app)return;var A=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');fb.authM=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');fb.app=A.initializeApp(FAREO_FB);fb.auth=fb.authM.getAuth(fb.app)}
+/* Safari only allows the Google window if it opens in the same tap, so the
+   SDK is loaded ahead of time and the pop-up call has no await before it. */
+function fbPreload(){if(fb.app||fbPreload._p)return fbPreload._p;fbPreload._p=fbInit().catch(function(){fbPreload._p=null});return fbPreload._p}
+var GD_API='https://www.googleapis.com',GD_SCOPE='https://www.googleapis.com/auth/drive.file',GD_NAME='Fareo backup.json';
+var GD_FREQ={change:{lbl:'after changes',ms:0},daily:{lbl:'daily',ms:864e5},weekly:{lbl:'weekly',ms:7*864e5},monthly:{lbl:'monthly',ms:30*864e5}};
+var gdBusy=false,gdTimer=null;
+function gdState(){try{return JSON.parse(localStorage.getItem('fareo_gdrive')||'null')||{}}catch(_){return {}}}
+function gdSet(p){var st=Object.assign(gdState(),p);try{localStorage.setItem('fareo_gdrive',JSON.stringify(st))}catch(_){}return st}
+function gdToken(){try{var t=JSON.parse(localStorage.getItem('fareo_gdrive_tok')||'null');if(t&&t.t&&t.exp>Date.now()+60000)return t.t}catch(_){}return null}
+function gdSetToken(t){try{if(t)localStorage.setItem('fareo_gdrive_tok',JSON.stringify({t:t,exp:Date.now()+55*60000}));else localStorage.removeItem('fareo_gdrive_tok')}catch(_){}}
+function gdHash(str){var h=5381,i=str.length;while(i)h=(h*33)^str.charCodeAt(--i);return (h>>>0).toString(36)+':'+str.length}
+function gdErrMsg(e){var r=e&&e.reason||'',c=e&&e.code||'';
+  if(r==='accessNotConfigured'||r==='SERVICE_DISABLED')return 'The Google Drive API is off for the Fareo project';
+  if(r==='insufficientPermissions'||r==='ACCESS_TOKEN_SCOPE_INSUFFICIENT'||c==='no-scope')return 'Drive access wasn’t allowed — tick the Drive box when Google asks';
+  if(r==='storageQuotaExceeded')return 'Your Google Drive is full';
+  if(c==='auth/popup-closed-by-user'||c==='auth/cancelled-popup-request')return 'Google sign-in cancelled';
+  if(c==='auth/popup-blocked')return 'The Google window was blocked — tap again';
+  if(c==='auth/unauthorized-domain')return 'This web address isn’t allowed in Firebase yet';
+  if(c==='auth/network-request-failed'||(e&&e.offline))return 'No connection — will try again';
+  return (e&&e.message)||'Backup failed';}
+/* Google pop-up. Call straight from a tap. Resolves with a Drive token. */
+function gdSignIn(){
+  function go(){var prov=new fb.authM.GoogleAuthProvider();prov.addScope(GD_SCOPE);var st=gdState();prov.setCustomParameters(st.email?{login_hint:st.email}:{prompt:'select_account'});
+    return fb.authM.signInWithPopup(fb.auth,prov).then(function(r){var cr=fb.authM.GoogleAuthProvider.credentialFromResult(r);if(!cr||!cr.accessToken)throw {code:'no-scope'};
+      gdSetToken(cr.accessToken);gdSet({email:(r.user&&r.user.email)||st.email||''});return cr.accessToken})}
+  if(fb.app&&fb.authM)return go();
+  return fbInit().then(go);
 }
+function gdTokenOrSignIn(){var t=gdToken();return t?Promise.resolve(t):gdSignIn()}
+async function gdApi(method,path,tok,body,ctype){
+  var res;try{res=await fetch(GD_API+path,{method:method,headers:Object.assign({Authorization:'Bearer '+tok},ctype?{'Content-Type':ctype}:{}),body:body})}catch(_){throw {offline:true}}
+  if(res.status===401){gdSetToken(null);throw {status:401,auth:true}}
+  if(!res.ok){var j=null;try{j=await res.json()}catch(_){}var er=j&&j.error||{};var rs=(er.errors&&er.errors[0]&&er.errors[0].reason)||(er.details&&er.details[0]&&er.details[0].reason)||er.status||'';throw {status:res.status,reason:rs,message:er.message}}
+  var ct=res.headers.get('content-type')||'';return /json/.test(ct)?res.json():res.text();
+}
+function gdMultipart(meta,content){var B='fareo'+Date.now().toString(36);return {type:'multipart/related; boundary='+B,body:'--'+B+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+JSON.stringify(meta)+'\r\n--'+B+'\r\nContent-Type: application/json\r\n\r\n'+content+'\r\n--'+B+'--'}}
+function gdQ(q){return encodeURIComponent(q)}
+async function gdFind(tok){var r=await gdApi('GET','/drive/v3/files?spaces=drive&pageSize=5&orderBy=modifiedTime%20desc&fields=files(id,name,modifiedTime,appProperties,trashed)&q='+gdQ("appProperties has { key='fareo' and value='backup' } and trashed=false"),tok);return (r.files&&r.files[0])||null}
+async function gdFileMeta(tok,id){try{var m=await gdApi('GET','/drive/v3/files/'+encodeURIComponent(id)+'?fields=id,name,modifiedTime,appProperties,trashed',tok);return m&&!m.trashed?m:null}catch(e){if(e.status===404)return null;throw e}}
+async function gdLocate(tok){var st=gdState(),m=null;if(st.fileId)m=await gdFileMeta(tok,st.fileId);if(!m)m=await gdFind(tok);return m}
+async function gdFolder(tok){var st=gdState();
+  if(st.folderId){var f=await gdFileMeta(tok,st.folderId);if(f)return f.id}
+  var r=await gdApi('GET','/drive/v3/files?spaces=drive&pageSize=1&fields=files(id)&q='+gdQ("appProperties has { key='fareo' and value='folder' } and mimeType='application/vnd.google-apps.folder' and trashed=false"),tok);
+  var id=r.files&&r.files[0]&&r.files[0].id;
+  if(!id){var c=await gdApi('POST','/drive/v3/files?fields=id',tok,JSON.stringify({name:'Fareo',mimeType:'application/vnd.google-apps.folder',appProperties:{fareo:'folder'}}),'application/json');id=c.id}
+  gdSet({folderId:id});return id}
+function gdDriveSum(m){var a=m&&m.appProperties||{};return {shifts:Number(a.shifts||0),costs:Number(a.costs||0),clients:Number(a.clients||0),at:m&&m.modifiedTime?Date.parse(m.modifiedTime):0,device:a.device||''}}
+/* Write the backup. o.manual: upload even if unchanged. o.force: skip the
+   "Drive has more shifts" guard (only after the user chose to replace). */
+async function gdBackup(o){o=o||{};if(gdBusy)return 'busy';var tok=o.token||gdToken();if(!tok){gdSet({due:true});gdUI();return 'auth'}
+  gdBusy=true;gdUI('Backing up…');
+  try{
+    var dump=backupDump(),content=JSON.stringify(dump),sig=gdHash(JSON.stringify(dump.data)),st=gdState(),mine=dump.counts;
+    if(!o.manual&&!o.force&&st.lastSig===sig&&st.fileId){gdSet({due:false,checkedAt:Date.now(),err:''});return 'same'}
+    var m=await gdLocate(tok);
+    if(m&&!o.force){var ds=gdDriveSum(m);
+      if(mine.shifts<ds.shifts-SAFE_DELETES&&m.appProperties&&m.appProperties.sig!==sig){gdSet({fileId:m.id,conflict:ds,due:false});gdBusy=false;gdUI();gdShowChoice();return 'conflict'}}
+    var props={fareo:'backup',shifts:String(mine.shifts),costs:String(mine.costs),clients:String(mine.clients),device:deviceId(),ver:APP_VERSION,sig:sig},r;
+    if(m){var mp=gdMultipart({appProperties:props},content);r=await gdApi('PATCH','/upload/drive/v3/files/'+encodeURIComponent(m.id)+'?uploadType=multipart&fields=id,modifiedTime',tok,mp.body,mp.type)}
+    else{var folder=await gdFolder(tok);var mp2=gdMultipart({name:GD_NAME,mimeType:'application/json',parents:[folder],appProperties:props},content);r=await gdApi('POST','/upload/drive/v3/files?uploadType=multipart&fields=id,modifiedTime',tok,mp2.body,mp2.type)}
+    gdSet({fileId:r.id,lastAt:Date.now(),checkedAt:Date.now(),lastSig:sig,lastShifts:mine.shifts,due:false,err:'',conflict:null});
+    return 'ok';
+  }catch(e){
+    if(e&&e.auth){gdSet({due:true});return 'auth'}
+    gdSet({err:gdErrMsg(e)});throw e;
+  }finally{gdBusy=false;gdUI()}
+}
+/* After a restore from Drive the device and the file match. */
+function gdMarkInSync(fileId){try{gdSet({fileId:fileId,lastSig:gdHash(JSON.stringify(allDataFull())),lastAt:Date.now(),checkedAt:Date.now(),conflict:null,due:false,err:''})}catch(_){}}
+function gdIsDue(){var st=gdState();if(!st.on||st.conflict||gdBusy)return false;var f=GD_FREQ[st.freq]||GD_FREQ.daily;
+  if(!st.lastAt)return true;
+  if(f.ms===0)return (st.dirtyAt||0)>(st.lastAt||0);
+  return Date.now()-Math.max(st.lastAt||0,st.checkedAt||0)>=f.ms}
+function gdTick(){if(!gdIsDue())return;gdBackup().catch(function(){})}
+function gdChanged(){var st=gdState();if(!st.on)return;gdSet({dirtyAt:Date.now()});if((st.freq||'daily')==='change'){clearTimeout(gdTimer);gdTimer=setTimeout(gdTick,20000)}}
+function gdAgo(t){if(!t)return 'never';var m=Math.round((Date.now()-t)/60000);if(m<1)return 'just now';if(m<60)return m+' min ago';var h=Math.round(m/60);if(h<24)return h+' h ago';var d=new Date(t);return d.toLocaleDateString('en-AU',{day:'numeric',month:'short'})+' '+d.toLocaleTimeString('en-AU',{hour:'numeric',minute:'2-digit'})}
+function gdUI(busyMsg){
+  var st=gdState(),on=!!st.on,el=$('#gdState'),f=GD_FREQ[st.freq]||GD_FREQ.daily;
+  var line=!on?'Off · tap to back up to your Google Drive':busyMsg?busyMsg:st.conflict?'Paused — your Drive backup has more shifts. Tap Back up now to choose.':st.err?st.err:st.due&&!gdToken()?'Backup due — tap Back up now':('Backs up '+f.lbl+' · last '+gdAgo(st.lastAt)+(st.email?' · '+st.email:''));
+  if(el){el.textContent=line;el.classList.toggle('warn',on&&!!(st.conflict||st.err||st.due))}
+  var t=$('#gdOn');if(t)t.classList.toggle('on',on);
+  var b=$('#gdBody');if(b)b.hidden=!on;
+  $$('#gdFreq [data-f]').forEach(function(x){var sel=x.dataset.f===(st.freq||'daily');x.classList.toggle('on',sel);x.setAttribute('aria-checked',sel?'true':'false')});
+  var now=$('#gdNow');if(now)now.disabled=!!busyMsg;
+  var due=$('#gdDue'),need=on&&!busyMsg&&(!!st.conflict||(st.due&&!gdToken()));
+  if(due){due.hidden=!need;var sub=$('#gdDueSub');if(sub)sub.textContent=st.conflict?'Your Drive backup has more shifts — tap to choose':'Google needs you to sign in again — tap to back up'}
+  var ss=$('#shSync');if(ss){ss.textContent=on?(st.conflict||st.err?'Drive: check':'Drive on'):'Drive off';ss.classList.toggle('on',on&&!st.conflict&&!st.err)}
+}
+/* One tap: sign in if needed, then back up (or show the choice). */
+function gdBackupNow(manual){var st=gdState();if(st.conflict){gdShowChoice();return}
+  gdTokenOrSignIn().then(function(tok){return gdBackup({token:tok,manual:manual})}).then(function(r){
+    if(r==='ok'){toast('Backed up to Google Drive','success')}else if(r==='same'){toast('Drive backup is already up to date','success')}
+  }).catch(function(e){if(e&&e.code&&/cancel|closed/.test(e.code))return;toast(gdErrMsg(e),'error');gdUI()})}
+async function gdConnect(){
+  try{
+    var tok=await gdSignIn();var st=gdSet({on:true,freq:gdState().freq||'daily',err:''});gdUI('Checking your Drive…');
+    var m=await gdLocate(tok);
+    if(m){var ds=gdDriveSum(m),mine=dataSummary(allData());gdSet({fileId:m.id});
+      if(ds.shifts>mine.shifts&&mine.shifts<ds.shifts-0){gdSet({conflict:ds});gdUI();gdShowChoice();return}}
+    var r=await gdBackup({token:tok,manual:true});
+    if(r==='ok')toast('Google Drive backup is on','success');
+  }catch(e){if(e&&e.code&&/cancel|closed/.test(e.code)){if(!gdState().fileId)gdSet({on:false})}else toast(gdErrMsg(e),'error');gdUI()}
+}
+function gdShowChoice(){var st=gdState(),ds=st.conflict;if(!ds)return;var L=dataSummary(allData());
+  function col(t,s2,sub){return '<b>'+t+'</b><span>'+s2.shifts+' shifts</span><span>'+s2.costs+' costs</span><span>'+s2.clients+' clients</span>'+(sub?'<small>'+sub+'</small>':'')}
+  $('#gdcLocal').innerHTML=col('This device',L,L.last?'Latest '+fmtDMY(L.last):'');
+  $('#gdcDrive').innerHTML=col('Google Drive',ds,ds.at?'Saved '+gdAgo(ds.at):'');
+  showModal('gdChoiceModal');sfx('warn');}
+async function gdDownload(tok){var m=await gdLocate(tok);if(!m)throw {message:'No Fareo backup in your Google Drive yet'};var txt=await gdApi('GET','/drive/v3/files/'+encodeURIComponent(m.id)+'?alt=media',tok);return {meta:m,backup:parseBackup(typeof txt==='string'?txt:JSON.stringify(txt))}}
+function gdRestoreFlow(){
+  gdTokenOrSignIn().then(gdDownload).then(function(r){var b=r.backup,c=backupCounts(b.data),cur=dataSummary(allData());
+    ask('Restore from Google Drive?','Backup saved '+gdAgo(Date.parse(r.meta.modifiedTime))+': '+c.shifts+' shifts, '+c.costs+' costs, '+c.clients+' clients, '+c.receipts+' receipts. It replaces the '+cur.shifts+' shifts on this device. A copy of what you have now is kept under Recovery.','Restore',function(){doRestoreBackup(b.data,{fromDrive:r.meta.id})},{danger:false,noLbl:'Cancel',noUndo:true})
+  }).catch(function(e){if(e&&e.code&&/cancel|closed/.test(e.code))return;toast(gdErrMsg(e),'error')})}
 document.addEventListener('click',function(e){
-  if(e.target.id==='fbCfgSave'){var c=parseCfg($('#fbConfig').value.trim());if(!c||!c.apiKey||!c.projectId){toast('That doesn’t look like a Firebase config','error');return}localStorage.setItem('fareo_fbcfg',JSON.stringify(c));fbCfgUI();toast('Firebase project saved · '+c.projectId)}
-  if(e.target.id==='fbCfgClear'){ask('Clear the Firebase project?','Sync stops on this device until a project is pasted again. Your data stays.','Clear',function(){syncSignOut();localStorage.removeItem('fareo_fbcfg');$('#fbConfig').value='';fbCfgUI()},{danger:false,noLbl:'Cancel'})}
+  var t=e.target,c=function(sel){return t.closest&&t.closest(sel)};
+  if(c('#gdOn')){var st=gdState();if(st.on){ask('Turn off Drive backup?','Fareo stops backing up. The last backup stays in your Google Drive and your data stays on this device.','Turn off',function(){gdSet({on:false,due:false,conflict:null});gdSetToken(null);gdUI()},{danger:false,noLbl:'Keep on',noUndo:true})}else gdConnect();return}
+  var fq=c('#gdFreq [data-f]');if(fq){gdSet({freq:fq.dataset.f});gdUI();sfx('tap');gdTick();return}
+  if(c('#gdNow')||c('#gdDue')){gdBackupNow(true);return}
+  if(c('#gdRestore')){gdRestoreFlow();return}
+  if(c('#gdOff')){ask('Disconnect Google Drive?','Automatic backups stop and Fareo signs out of Google on this device. Your backup file stays in Drive.','Disconnect',function(){gdSet({on:false,due:false,conflict:null,email:''});gdSetToken(null);try{if(fb.auth)fb.authM.signOut(fb.auth)}catch(_){}gdUI();toast('Google Drive disconnected')},{danger:false,noLbl:'Cancel',noUndo:true});return}
+  if(t.id==='gdcLater'){closeModal('gdChoiceModal');gdUI();return}
+  var g=c('[data-gdc]');if(g){var mode=g.dataset.gdc;closeModal('gdChoiceModal');saveRecoveryPoint('Before Drive choice');
+    if(mode==='replace'){gdSet({conflict:null});gdTokenOrSignIn().then(function(tok){return gdBackup({token:tok,force:true})}).then(function(r){if(r==='ok')toast('Drive backup replaced','success')}).catch(function(er){toast(gdErrMsg(er),'error')});return}
+    gdTokenOrSignIn().then(gdDownload).then(function(r){
+      if(mode==='restore'){gdSet({conflict:null});doRestoreBackup(r.backup.data,{fromDrive:r.meta.id});return}
+      var merged=mergeData(allData(),r.backup.data);if(r.backup.data.fareo_receipts&&!localStorage.getItem('fareo_receipts'))merged.fareo_receipts=r.backup.data.fareo_receipts;
+      writeBackupData(merged);reloadAll();gdSet({conflict:null});return gdBackup({force:true}).then(function(){toast('Merged and backed up','success');renderRecovery()})
+    }).catch(function(er){if(er&&er.code&&/cancel|closed/.test(er.code))return;toast(gdErrMsg(er),'error')});}
 });
-function fbCfg(){var t=($('#fbConfig')&&$('#fbConfig').value.trim())||'';var c=t?parseCfg(t):null;if(c&&c.apiKey)return c;try{var st=JSON.parse(localStorage.getItem('fareo_fbcfg')||'null');if(st&&st.apiKey)return st}catch(_){}return FAREO_FB}
-async function fbReady(){var cfg=fbCfg();if(!cfg||!cfg.apiKey){var adv=$('#syncAdv');if(adv)adv.open=true;revealSetting('#syncAdv');toast('Paste your Firebase config first','warn');throw new Error('no-config')}localStorage.setItem('fareo_fbcfg',JSON.stringify(cfg));await fbInit(cfg);return cfg}
-function syncErr(e){var c=(e&&e.code)||'';var m={'auth/popup-blocked':'Your browser blocked the Google window \u2014 tap Continue with Google again','auth/web-storage-unsupported':'This browser is blocking sign-in storage \u2014 turn off Private Browsing','auth/internal-error':'Google sign-in didn\u2019t finish \u2014 try again, or use email','auth/popup-closed-by-user':'Sign-in cancelled','auth/cancelled-popup-request':'Sign-in cancelled','auth/unauthorized-domain':'This web address isn’t allowed in Firebase yet','auth/operation-not-allowed':'That sign-in method is off in Firebase','auth/wrong-password':'Wrong password','auth/invalid-credential':'Email or password doesn’t match','auth/user-not-found':'No account for that email','auth/email-already-in-use':'That email already has an account — sign in instead','auth/weak-password':'Use at least 6 characters','auth/network-request-failed':'No connection'}[c];
-  if(e&&e.message==='no-config')return;setSyncState(m?m:('Error: '+(c||(e&&e.message)||'failed')));toast(m||('Sign-in failed: '+(c||'unknown error')),'error')}
-async function syncConnect(create){try{
-  var email=$('#syncEmail').value.trim(),pass=$('#syncPass').value;if(!email||!pass){toast('Enter email and password');return}
-  setSyncState('Connecting...');await fbReady();
-  if(create)await fb.authM.createUserWithEmailAndPassword(fb.auth,email,pass);else await fb.authM.signInWithEmailAndPassword(fb.auth,email,pass);
-  afterAuth(fb.auth.currentUser,true);
-}catch(e){syncErr(e)}}
-/* Safari (iPad/iPhone) only allows the Google pop-up if it opens in the same
-   tap, so the SDK is preloaded and signInWithPopup is called with no await
-   before it. Redirect is only a fallback, because Safari's tracking
-   protection often breaks redirect sign-in on a different auth domain. */
-function fbPreload(){var c=fbCfg();if(!c||!c.apiKey||fb.app||fbPreload._p)return fbPreload._p;fbPreload._p=fbInit(c).catch(function(){fbPreload._p=null});return fbPreload._p}
-function googleProvider(){var prov=new fb.authM.GoogleAuthProvider();prov.setCustomParameters({prompt:'select_account'});return prov}
-function syncGoogle(){
-  setSyncState('Opening Google…');
-  function viaRedirect(){try{localStorage.setItem('fareo_sync_pending','1');setSyncState('Redirecting to Google…');return fb.authM.signInWithRedirect(fb.auth,googleProvider())}catch(e){syncErr(e)}}
-  function popup(){
-    return fb.authM.signInWithPopup(fb.auth,googleProvider()).then(function(r){afterAuth(r.user,true)}).catch(function(e){
-      var c=e&&e.code;
-      if(c==='auth/popup-blocked'||c==='auth/operation-not-supported-in-this-environment'||c==='auth/web-storage-unsupported')return viaRedirect();
-      syncErr(e);
-    });
-  }
-  if(fb.app&&fb.authM){popup();return}
-  fbReady().then(popup).catch(syncErr);
-}
-async function syncEmailLink(){try{
-  var email=$('#syncEmail').value.trim();if(!/^\S+@\S+\.\S+$/.test(email)){toast('Enter your email','warn');return}
-  await fbReady();
-  await fb.authM.sendSignInLinkToEmail(fb.auth,email,{url:location.origin+location.pathname+'#settings',handleCodeInApp:true});
-  localStorage.setItem('fareo_link_email',email);setSyncState('Link sent to '+email);toast('Sign-in link sent — open it on this device','success');
-}catch(e){syncErr(e)}}
-async function finishEmailLink(){try{
-  var cfg=fbCfg();if(!cfg||!cfg.apiKey)return;await fbInit(cfg);
-  if(!fb.authM.isSignInWithEmailLink(fb.auth,location.href))return;
-  var email=localStorage.getItem('fareo_link_email')||prompt('Confirm your email to finish signing in');if(!email)return;
-  var r=await fb.authM.signInWithEmailLink(fb.auth,email,location.href);localStorage.removeItem('fareo_link_email');
-  try{history.replaceState(history.state,'',location.pathname+'#settings')}catch(_){}
-  afterAuth(r.user,true);
-}catch(e){syncErr(e)}}
-/* ---------- safe first sync: snapshot, compare, merge ---------- */
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')setTimeout(gdTick,1500)});
+setInterval(gdTick,10*60000);
+setTimeout(function(){try{gdUI();if(gdState().on)fbPreload();gdTick()}catch(_){}},3000);
+/* ---------- data summaries ---------- */
 function dataSummary(d){
   function arr(k){try{var v=d[k];v=typeof v==='string'?JSON.parse(v):v;return Array.isArray(v)?v:[]}catch(_){return []}}
   var es=arr('fareo_entries'),last=es.reduce(function(m,e){return e.date>m?e.date:m},'');
   return {shifts:es.length,last:last,costs:arr('fareo_deductions').length+arr('fareo_fuelManual').length,clients:arr('fareo_clients').length,take:es.reduce(function(s,e){return s+(Number(e.take)||0)},0)};
 }
 function hasLocalData(){var s=dataSummary(allData());return s.shifts+s.costs+s.clients>0}
-/* Pre-sync copy: never replace a fuller copy with an emptier one. */
-function savePresync(){try{var cur=allData(),old=null;try{old=JSON.parse(localStorage.getItem('fareo_presync')||'null')}catch(_){}
-  if(old&&old.data&&dataSummary(old.data).shifts>dataSummary(cur).shifts){saveRecoveryPoint('Before sign-in');}else localStorage.setItem('fareo_presync',JSON.stringify({at:Date.now(),data:cur}))}catch(_){}syncRestoreUI()}
 /* ---------- recovery points: rotating full copies on this device ---------- */
 var RP_MAX=6;
 function rpList(){try{var v=JSON.parse(localStorage.getItem('fareo_rp')||'[]');return Array.isArray(v)?v:[]}catch(_){return []}}
@@ -7119,37 +7260,28 @@ function dailyRecoveryPoint(){var L=rpList();if(!L.length||Date.now()-L[0].at>20
    pre-sync copy and the pre-restore copy. */
 function recoverySources(){
   var out=rpList().map(function(r,i){return {id:'rp:'+i,at:r.at,reason:r.reason,sum:r.sum||dataSummary(r.data),data:r.data}});
-  [['fareo_presync','Before first sign-in'],['fareo_prerestore','Before restoring a backup']].forEach(function(k){try{var p=JSON.parse(localStorage.getItem(k[0])||'null');if(p&&p.data){var sm=dataSummary(p.data);if(sm.shifts+sm.costs+sm.clients>0)out.push({id:k[0],at:p.at,reason:k[1],sum:sm,data:p.data})}}catch(_){}});
+  [['fareo_presync','Before first sync sign-in'],['fareo_prerestore','Before restoring a backup']].forEach(function(k){try{var p=JSON.parse(localStorage.getItem(k[0])||'null');if(p&&p.data){var sm=dataSummary(p.data);if(sm.shifts+sm.costs+sm.clients>0)out.push({id:k[0],at:p.at,reason:k[1],sum:sm,data:p.data})}}catch(_){}});
   out.sort(function(a,b){return b.at-a.at});return out;
 }
 function restoreFromSource(src){
   saveRecoveryPoint('Before recovery');
-  var wasOn=syncOn;
-  applyRemoteData(src.data,Date.now());
-  localStorage.setItem('fareo_localEditAt',String(Date.now()));
-  if(wasOn&&fb.uid){allowBigPush=true;pushNow()}
+  applyData(src.data);reloadAll();gdChanged();
   renderRecovery();toast('Restored '+src.sum.shifts+' shifts','success');
 }
 function renderRecovery(){
   var box=$('#recoveryList');if(!box)return;var L=recoverySources(),cur=dataSummary(allData());
-  var dc=$('#dataCheck');if(dc){var up=Number(localStorage.getItem('fareo_updatedAt')||0);dc.textContent='This device: '+cur.shifts+' shifts · '+cur.costs+' costs · '+cur.clients+' clients'+(cur.last?' · latest '+fmtDayDMY(cur.last):'')+(syncOn&&up?' · last synced '+new Date(up).toLocaleString('en-AU',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}):'')}
+  var dc=$('#dataCheck');if(dc){var up=gdState().on?gdState().lastAt:0;dc.textContent='This device: '+cur.shifts+' shifts · '+cur.costs+' costs · '+cur.clients+' clients'+(cur.last?' · latest '+fmtDayDMY(cur.last):'')+(up?' · Drive backup '+new Date(up).toLocaleString('en-AU',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}):'')}
   box.innerHTML=L.length?L.map(function(r,i){var more=r.sum.shifts>cur.shifts;return '<div class="rp-row'+(more?' more':'')+'"><div><b>'+new Date(r.at).toLocaleString('en-AU',{weekday:'short',day:'numeric',month:'short',hour:'numeric',minute:'2-digit'})+'</b><small>'+esc(r.reason)+' · '+r.sum.shifts+' shifts · '+r.sum.costs+' costs · '+r.sum.clients+' clients'+(r.sum.last?' · latest '+fmtDMY(r.sum.last):'')+'</small></div><button type="button" class="rp-btn" data-rp="'+i+'">Restore</button></div>'}).join(''):'<p class="mono-mut" style="margin:6px 0 0">No saved copies on this device yet. Fareo now makes one every day and before any sync change.</p>';
   box._src=L;
-  var cr=$('#recoverCloud');if(cr)cr.hidden=!(syncOn&&fb.uid);
 }
 document.addEventListener('click',function(e){
   var b=e.target.closest&&e.target.closest('#recoveryList [data-rp]');
   if(b){var src=$('#recoveryList')._src[Number(b.dataset.rp)];if(!src)return;var cur=dataSummary(allData());
-    ask('Restore this copy?','Saved '+new Date(src.at).toLocaleString('en-AU',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'})+' ('+src.reason+'): '+src.sum.shifts+' shifts, '+src.sum.costs+' costs, '+src.sum.clients+' clients. This device has '+cur.shifts+' shifts now; a copy of that is kept too.'+(syncOn?' Your other devices will get the restored data.':''),'Restore',function(){restoreFromSource(src)},{danger:false,noLbl:'Cancel',noUndo:true});return}
-  if(e.target.id==='recoverCloud'){if(!syncOn||!fb.uid)return;fb.fsM.getDoc(docRef()).then(function(sn){if(!sn.exists()){toast('Nothing in the cloud yet','warn');return}var r=sn.data();saveRecoveryPoint('Before cloud check');showMergeChoice(r,'Cloud check')}).catch(function(){toast('Couldn’t reach the cloud','error')})}
+    ask('Restore this copy?','Saved '+new Date(src.at).toLocaleString('en-AU',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'})+' ('+src.reason+'): '+src.sum.shifts+' shifts, '+src.sum.costs+' costs, '+src.sum.clients+' clients. This device has '+cur.shifts+' shifts now; a copy of that is kept too.','Restore',function(){restoreFromSource(src)},{danger:false,noLbl:'Cancel',noUndo:true});return}
 });
-/* ---------- sync safety ---------- */
-var allowBigPush=false;
+/* ---------- shift comparison ---------- */
 function shiftIds(d){try{var v=d.fareo_entries;v=typeof v==='string'?JSON.parse(v):v;return (Array.isArray(v)?v:[]).map(function(e){return String(e.id)})}catch(_){return []}}
-/* How many of this device's shifts an incoming copy would remove. */
-function shiftsLost(localD,remoteD){var r={};shiftIds(remoteD).forEach(function(id){r[id]=1});return shiftIds(localD).filter(function(id){return !r[id]}).length}
 var SAFE_DELETES=3;
-function syncRestoreUI(){try{renderRecovery()}catch(_){}var b=$('#syncRestore');if(!b)return;var p=null;try{p=JSON.parse(localStorage.getItem('fareo_presync')||'null')}catch(_){}b.hidden=!p;if(p)b.textContent='Restore data from before sync ('+new Date(p.at).toLocaleDateString('en-AU',{day:'numeric',month:'short'})+')'}
 function mergeById(a,b,keyFn){var out=[],seen={};function k(x){return keyFn?keyFn(x):String(x&&x.id)}(a||[]).forEach(function(x){var kk=k(x);if(seen[kk])return;seen[kk]=1;out.push(x)});(b||[]).forEach(function(x){var kk=k(x);if(seen[kk])return;seen[kk]=1;out.push(x)});return out}
 function mergeData(local,remote){
   function J(d,k,def){try{var v=d[k];if(v==null)return def;return typeof v==='string'?JSON.parse(v):v}catch(_){return def}}
@@ -7169,92 +7301,7 @@ function mergeData(local,remote){
   out.fareo_settings=JSON.stringify(ls);
   return out;
 }
-var smPending=null;
-function showMergeChoice(rem,why){
-  var L=dataSummary(allData()),C=dataSummary(rem.data||{});
-  var h=$('#syncMergeModal h3');if(h)h.textContent=why==='protect'?'Your cloud copy has fewer shifts than this device':why==='push'?'This device has fewer shifts than your cloud copy':'This device and your cloud both have data';
-  function col(t,x){return '<small>'+t+'</small><b>'+x.shifts+' shifts</b><span>'+(x.last?'Latest '+fmtDayDMY(x.last):'No shifts')+'</span><span>'+x.costs+' costs · '+x.clients+' clients</span>'}
-  $('#smLocal').innerHTML=col('This device',L);$('#smCloud').innerHTML=col('Cloud ('+fb.email+')',C);
-  smPending=rem;showModal('syncMergeModal');sfx('warn');
-}
-document.addEventListener('click',function(e){
-  var b=e.target.closest&&e.target.closest('[data-sm]');
-  if(b&&smPending){var mode=b.dataset.sm,rem=smPending;smPending=null;closeModal('syncMergeModal');syncOn=true;
-    if(mode==='cloud')applyRemoteData(rem.data,rem.updatedAt);
-    else if(mode==='merge')applyRemoteData(mergeData(allData(),rem.data||{}),Date.now());
-    if(mode!=='cloud')allowBigPush=true;
-    localStorage.setItem('fareo_synced_uid',fb.uid);startLive();pushNow();
-    toast(mode==='merge'?'Merged and synced':mode==='local'?'This device\u2019s data uploaded':'Cloud data loaded','success');try{renderRecovery()}catch(_){}return}
-  if(e.target.id==='smCancel'){smPending=null;closeModal('syncMergeModal');syncSignOut()}
-  if(e.target.id==='syncGoogle'||e.target.closest&&e.target.closest('#syncGoogle'))syncGoogle();
-  if(e.target.id==='syncLink')syncEmailLink();
-  if(e.target.id==='syncPwToggle'){var w=$('#syncPwWrap');w.hidden=!w.hidden;e.target.textContent=w.hidden?'Use password':'Hide password'}
-  if(e.target.id==='syncRestore'){saveRecoveryPoint('Before recovery');ask('Restore data from before sync?','This device goes back to exactly how it was before you signed in. Sync is turned off; next time you sign in, Fareo asks how to combine it with the cloud.','Restore',function(){var p=JSON.parse(localStorage.getItem('fareo_presync')||'null');if(!p)return;syncSignOut();applyRemoteData(p.data,Date.now());localStorage.removeItem('fareo_synced_uid');localStorage.setItem('fareo_localEditAt',String(Date.now()));renderRecovery();toast('Restored data from before sync','success')},{danger:false,noLbl:'Cancel',noUndo:true})}
-});
-var liveUnsub=null;
-function startLive(){
-  if(liveUnsub)return;
-  liveUnsub=fb.fsM.onSnapshot(docRef(),function(sn){if(!sn.exists())return;var r2=sn.data();if(r2._device===deviceId())return;
-    if((r2.updatedAt||0)<=Number(localStorage.getItem('fareo_updatedAt')||0))return;
-    var lost=shiftsLost(allData(),r2.data||{});
-    if(lost>SAFE_DELETES){syncOn=false;setSyncState('Paused \u2014 waiting for your choice');showMergeChoice(r2,'protect');return}
-    applyRemoteData(r2.data,r2.updatedAt);localStorage.setItem('fareo_cloudShifts',String(dataSummary(r2.data||{}).shifts));toast('Synced from another device')});
-  setSyncState('On - '+fb.email);
-}
-async function afterAuth(user,interactive){
-  if(!user){syncOn=false;setSyncState('Off - local only');return}
-  fb.uid=user.uid;fb.email=user.email||'';setSyncState('Checking your cloud data…');
-  try{
-    var snap=await fb.fsM.getDoc(docRef());
-    var known=localStorage.getItem('fareo_synced_uid')===fb.uid;
-    localStorage.setItem('fareo_sync_on','1');
-    if(!known){
-      savePresync();
-      var rem=snap.exists()?snap.data():null;
-      var remHas=rem&&rem.data&&(function(s){return s.shifts+s.costs+s.clients>0})(dataSummary(rem.data));
-      if(remHas&&hasLocalData()){syncOn=false;setSyncState('Waiting for your choice\u2026');showMergeChoice(rem);return}
-      syncOn=true;
-      if(remHas)applyRemoteData(rem.data,rem.updatedAt);else pushNow();
-      localStorage.setItem('fareo_synced_uid',fb.uid);startLive();return;
-    }
-    syncOn=true;
-    /* already-synced device: newest edit wins, using the real local edit time */
-    var lastSync=Number(localStorage.getItem('fareo_updatedAt')||0),localEdit=Number(localStorage.getItem('fareo_localEditAt')||0);
-    if(!snap.exists()||localStorage.getItem('fareo_pendingPush')){allowBigPush=true;pushNow();startLive();return}
-    var r=snap.data(),cloudChanged=(r.updatedAt||0)>lastSync,localChanged=localEdit>lastSync;
-    localStorage.setItem('fareo_cloudShifts',String(dataSummary(r.data||{}).shifts));
-    var lost=shiftsLost(allData(),r.data||{}),gain=shiftsLost(r.data||{},allData());
-    if(cloudChanged&&lost>SAFE_DELETES){syncOn=false;setSyncState('Paused \u2014 waiting for your choice');showMergeChoice(r,'protect');return}
-    if(cloudChanged&&localChanged&&gain>0){applyRemoteData(mergeData(allData(),r.data||{}),Date.now());allowBigPush=true;pushNow();toast('Merged changes from your other devices')}
-    else if(cloudChanged)applyRemoteData(r.data,r.updatedAt);
-    else pushNow();
-    startLive();
-  }catch(e){setSyncState('Sync error - check Firestore rules')}
-}
-function pushNow(){if(!syncOn||!fb.uid||!fb.fsM)return;
-  var mine=dataSummary(allData()).shifts,cloudN=Number(localStorage.getItem('fareo_cloudShifts')||0);
-  if(!allowBigPush&&cloudN>0&&mine<cloudN-SAFE_DELETES){
-    fb.fsM.getDoc(docRef()).then(function(sn){if(!sn.exists()){allowBigPush=true;pushNow();return}var r=sn.data();
-      if(shiftsLost(r.data||{},allData())>SAFE_DELETES){syncOn=false;setSyncState('Paused — this device has fewer shifts than the cloud');showMergeChoice(r,'push')}else{allowBigPush=true;pushNow()}}).catch(function(){});
-    return}
-  allowBigPush=false;localStorage.setItem('fareo_cloudShifts',String(mine));
-  var ts=Date.now();localStorage.setItem('fareo_updatedAt',String(ts));fb.fsM.setDoc(docRef(),{data:allData(),updatedAt:ts,_device:deviceId()}).then(function(){localStorage.removeItem('fareo_pendingPush');setSyncState('On - saved')}).catch(function(){setSyncState('Offline - will retry')})}
-function scheduleSync(){if(!syncOn||applyingRemote)return;clearTimeout(syncTimer);syncTimer=setTimeout(pushNow,900)}
-async function syncSignOut(){try{if(liveUnsub){liveUnsub();liveUnsub=null}}catch(_){}try{if(fb.auth)await fb.authM.signOut(fb.auth)}catch(_){}syncOn=false;localStorage.removeItem('fareo_sync_on');setSyncState('Off - local only');toast('Signed out (data kept on device)')}
 function reloadAll(){settings=load('fareo_settings',settings)||settings;migrateSettings();entries=load('fareo_entries',[])||[];deductions=load('fareo_deductions',[])||[];recurring=load('fareo_recurring',[])||[];fuelManual=load('fareo_fuelManual',[])||[];receipts=load('fareo_receipts',[])||[];names=load('fareo_names',[])||[];clients=load('fareo_clients',[])||[];if(!Array.isArray(clients))clients=[];runPlan=load('fareo_run_plan',[])||[];if(!Array.isArray(runPlan))runPlan=[];draft=normalizeDraft(load('fareo_draft',draft));if(typeof draftHasWork==='function'&&!draftHasWork(draft)){draft.date=todayStr();draft.rego=''}clearReceiptAttach();try{renderNames();rowInputs();render();var a=document.querySelector('.screen.on');if(a){var t=a.dataset.tab;if(t==='weekly')renderWeekly();if(t==='reports')renderReports();if(t==='settings')renderSettings();if(t==='runs')renderRuns();if(t==='book')renderBook()}}catch(_){}}
-if($('#syncSignin'))$('#syncSignin').onclick=function(){syncConnect(false)};
-if($('#syncCreate'))$('#syncCreate').onclick=function(){syncConnect(true)};
-if($('#syncOut'))$('#syncOut').onclick=syncSignOut;
-(function autoConnect(){try{
-  var stored=localStorage.getItem('fareo_fbcfg'),pre=$('#fbConfig');if(pre&&stored&&!(FAREO_FB&&JSON.parse(stored).projectId===FAREO_FB.projectId))pre.value=stored;
-  fbCfgUI();
-  syncRestoreUI();
-  if(/[?&](mode=signIn|oobCode=)/.test(location.href)){finishEmailLink();return}
-  var cfg=fbCfg();if(!cfg||!cfg.apiKey)return;
-  if(localStorage.getItem('fareo_sync_pending')){localStorage.removeItem('fareo_sync_pending');fbInit(cfg).then(function(){return fb.authM.getRedirectResult(fb.auth)}).then(function(r){if(r&&r.user)afterAuth(r.user,true)}).catch(syncErr);return}
-  if(!localStorage.getItem('fareo_sync_on'))setTimeout(function(){try{fbPreload()}catch(_){}},2500);
-  if(localStorage.getItem('fareo_sync_on')){fbInit(cfg).then(function(){fb.authM.onAuthStateChanged(fb.auth,function(u){afterAuth(u)})}).catch(function(){setSyncState('Off - local only')})}
-}catch(_){}})();
 
 /* ---------- address book ---------- */
 function uid(p){return (p||'id')+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
@@ -8760,7 +8807,7 @@ function renderSettingsNav(){
   S.shifts='Week starts '+DAYS[settings.weekStart].slice(0,3)+' · paid '+DAYS[settings.creditedDay].slice(0,3)+' · '+acctNames().length+' account'+(acctNames().length===1?'':'s');
   S.look=themeInfo(currentAccent()).n+' · '+{dark:'Dark',light:'Light',system:'Match device'}[settings.theme]+' · sounds '+(settings.sounds!==false?'on':'off')+(settings.calm?' · calm':'');
   var w=wxLoad();S.weather=settings.weather?('On'+(w&&w.place?' · '+w.place:'')):'Off';
-  S.data=(syncOn?'Sync on':'Sync off')+' · '+receipts.length+' receipt'+(receipts.length===1?'':'s');
+  S.data=(gdState().on?'Drive backup '+(GD_FREQ[gdState().freq]||GD_FREQ.daily).lbl:'Drive backup off')+' · '+receipts.length+' receipt'+(receipts.length===1?'':'s');
   S.help='Version '+APP_VERSION+' · updates & reset';
   Object.keys(S).forEach(function(k){var el=$('[data-sum="'+k+'"]');if(el)el.textContent=S[k]});
   var nm=(settings.driverName||'').trim();
@@ -8768,7 +8815,7 @@ function renderSettingsNav(){
   $('#shName').textContent=nm||'Add your name';
   var first=entries.reduce(function(m,e){return !m||e.date<m?e.date:m},'');
   $('#shStats').textContent=entries.length?entries.length+' shift'+(entries.length===1?'':'s')+' logged · since '+asDate(first).toLocaleDateString('en-AU',{month:'short',year:'numeric'}):'No shifts logged yet';
-  var ss=$('#shSync');ss.textContent=syncOn?'Synced':'Sync off';ss.classList.toggle('on',!!syncOn);
+  try{gdUI()}catch(_){}
   $('#shVer').textContent='v'+APP_VERSION;
   var sh=$('#setShell');
   if(sh&&!sh.dataset.init){sh.dataset.init='1';openSetPane(setPaneCur,true);if(setNarrow()){sh.classList.remove('pane-open');document.documentElement.classList.remove('set-drill')}}
