@@ -1946,6 +1946,46 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
 .bk-share button.wa svg{color:#25D366}
 .bk-share button:active{transform:scale(.95)}
 @media (prefers-reduced-motion:reduce){.bk-home{animation:none}}
+/* ---------- Fareo 15.5 · cancel / delete bookings ---------- */
+.bk-acts .bk-x{margin-left:auto;background:transparent;border-color:transparent;color:var(--mut)}
+.bk-row.soon .bk-acts .bk-x{background:transparent;border-color:transparent;color:var(--mut)}
+.bk-ed-danger{display:flex;justify-content:space-between;gap:10px;margin-top:12px;padding-top:10px;border-top:1px solid var(--bd)}
+.bk-ed-danger[hidden]{display:none}
+.bk-ed-danger button{border:0;background:transparent;color:var(--dgr);font-size:13px;font-weight:650;padding:6px 2px;cursor:pointer}
+.bk-ed-danger button[hidden]{display:none}
+.bk-ed-danger #bkEdDelete{margin-left:auto;color:var(--mut)}
+.bk-ed-danger .share{color:var(--accent)}
+.bk-cx{color:var(--dgr);font-weight:650}
+.bk-clear{display:block;width:100%;margin:8px 0 4px;border:0;background:transparent;color:var(--dgr);font-size:12.5px;font-weight:650;padding:8px;cursor:pointer}
+[data-bsh][hidden]{display:none}
+/* Home booking card: slim (15.5) */
+.bk-home{width:100%;max-width:none;padding:4px 6px 2px;margin:0 0 12px;animation:riseIn .4s var(--ease) both}
+.bk-home.empty{width:100%}
+.bk-home.soon,.bk-home.late{box-shadow:none}
+.bk-home-head{display:flex;align-items:center;justify-content:space-between;margin:0 4px 2px}
+.bk-h-all{display:inline-flex;align-items:center;gap:6px;border:0;background:transparent;color:var(--mut);font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:6px 2px;cursor:pointer}
+.bk-h-all span{min-width:18px;height:18px;border-radius:9px;background:var(--field);color:var(--head);display:inline-grid;place-items:center;font-size:10px;letter-spacing:0;padding:0 5px}
+.bk-h-all i{font-style:normal;font-size:15px;line-height:1}
+.bk-home.soon .bk-h-all{color:var(--accent)}.bk-home.late .bk-h-all{color:var(--fuel)}
+.bk-h-add{width:28px;height:28px;border-radius:9px;border:0;background:var(--accent);color:var(--accent-ink);font-size:18px;font-weight:700;line-height:1;cursor:pointer}
+.bk-line{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:8px 8px;border-radius:12px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .2s}
+.bk-line+.bk-line{border-top:1px solid var(--bd);border-radius:0}
+.bk-line:active{background:var(--card2)}
+.bk-t{display:flex;flex-direction:column;min-width:52px}
+.bk-t b{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--head);line-height:1.1}
+.bk-t small{font-family:var(--mono);font-size:9.5px;color:var(--mut);text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
+.bk-m{min-width:0;display:flex;flex-direction:column}
+.bk-rt{font-size:13px;font-weight:600;color:var(--head);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bk-m small{font-size:11px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.bk-chip{flex:none;font-family:var(--mono);font-size:10.5px;font-weight:600;color:var(--mut);background:var(--field);border:0;border-radius:999px;padding:4px 9px;white-space:nowrap}
+.bk-line.soon .bk-chip{background:var(--accent);color:var(--accent-ink)}
+.bk-chip.done{background:var(--fuel);color:#1F1200;cursor:pointer}
+.bk-home.empty{padding:0}
+.bk-empty{padding:9px 12px;gap:10px;font-size:13px;color:var(--mut)}
+.bk-empty .bk-ico{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:var(--accent-dim);color:var(--accent);flex:none}
+.bk-empty .bk-ico svg{width:16px;height:16px}
+.bk-empty>span:not(.bk-ico){flex:1}
+.bk-empty i{font-size:18px}
 </style>
 </head>
 <body>
@@ -2594,7 +2634,18 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
     <div class="bk-f"><label for="bkNotes">Notes</label><input id="bkNotes" placeholder="Bags, wheelchair, flight number&hellip;" autocomplete="off"></div>
   </details>
   <div class="bk-f"><label>Remind me</label><div class="bk-seg" id="bkRemind"><button type="button" data-rm="0">Off</button><button type="button" data-rm="15">15 min</button><button type="button" data-rm="30">30 min</button><button type="button" data-rm="60">1 h</button><button type="button" data-rm="120">2 h</button></div><p class="bk-note">Shown on Home and as an alert while Fareo is open. Use <b>Add to calendar</b> for a phone alarm.</p></div>
-  <div class="two" style="margin-top:14px"><button type="button" class="btn neutral" id="bkCancel">Cancel</button><button type="button" class="btn" id="bkSave">Save booking</button></div>
+  <div class="two" style="margin-top:14px"><button type="button" class="btn neutral" id="bkCancel">Close</button><button type="button" class="btn" id="bkSave">Save booking</button></div>
+  <div class="bk-ed-danger" id="bkEdDanger" hidden><button type="button" id="bkEdShare" class="share">Share trip</button><button type="button" id="bkEdCancelBk">Cancel booking</button><button type="button" id="bkEdDelete">Delete</button></div>
+</div></div>
+<div class="modal" id="bkCancelModal"><div class="sheet">
+  <div class="grip"></div>
+  <span class="eyebrow" id="bkcEyebrow">Booking</span>
+  <h3 id="bkcTitle">Cancel or delete this booking?</h3>
+  <p class="csub" id="bkcSub"></p>
+  <button type="button" class="sm-opt rec" data-bkc="cancel" id="bkcCancelOpt"><b>Cancel booking</b><small>Stops the reminder and keeps it under Past as cancelled. You can text the customer a cancellation message.</small></button>
+  <button type="button" class="sm-opt" data-bkc="delete"><b>Delete booking</b><small><em class="warn">Removes it completely.</em> You can undo straight after.</small></button>
+  <p class="bk-note">Added it to your phone calendar? Delete it there too.</p>
+  <button type="button" class="btn neutral" id="bkcKeep" style="margin-top:8px">Keep booking</button>
 </div></div>
 <div class="modal" id="bkShareModal"><div class="sheet">
   <div class="grip"></div>
@@ -2930,8 +2981,13 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='15.4';
+var APP_VERSION='15.5';
 var CHANGELOG=[
+  {v:'15.5',date:'November 4, 2026',notes:[
+    ['Feature','Cancel or delete a taxi booking from Home, the Bookings list or the booking itself. Cancel stops the reminder, keeps it under Past as cancelled and offers a ready-made cancellation text (SMS or WhatsApp) to the customer. Delete removes it completely. Both can be undone.'],
+    ['UI/UX','Past bookings show Done or Cancelled, and Delete all past bookings clears the list in one go.'],
+    ['UI/UX','Smaller, simpler booking card on Home: one line per booking with the time, route and a countdown. Tap a booking to share, edit, cancel or delete it.'],
+  ]},
   {v:'15.4',date:'November 3, 2026',notes:[
     ['Feature','Bookings: save a taxi booking with date, time, From and To. Addresses autocomplete across Victoria: shopping centres, hospitals, medical centres, big retailers and stations, plus your address book, recent bookings and any street address. Airport terminals and main stations are one-tap hotspots, and \u2606 saves your own.'],
     ['Feature','Share a neat trip summary by SMS or WhatsApp in one tap (straight to the passenger\u2019s mobile if you add it), copy it, or add the booking to your phone calendar with an alarm.'],
@@ -7700,6 +7756,9 @@ function bkMessage(b){var d=bkAt(b);
   if(b.notes)L.push('\ud83d\udcdd '+b.notes);
   var dl=bkDriverLine();if(dl)L.push('','Your driver: '+dl);
   return L.join('\n')}
+function bkCancelMessage(b){var d=bkAt(b),first=String(b.name||'').trim().split(/\s+/)[0];
+  var L=[(first?'Hi '+first+', y':'Y')+'our taxi booking has been cancelled.','','\ud83d\udcc5 '+d.toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long'})+' at '+bkClock(d),'\ud83d\udccd '+b.from+(b.to?' \u2192 '+b.to:'')];
+  var dl=bkDriverLine();L.push('','Sorry for any inconvenience'+(dl?' \u2014 '+dl:'')+'.');return L.join('\n')}
 function bkIntl(ph){var d=String(ph||'').replace(/[^\d+]/g,'');if(!d)return '';if(d[0]==='+')return d.slice(1);if(/^0\d{9}$/.test(d))return '61'+d.slice(1);return d}
 function bkIcs(b){function z(n){return String(n).padStart(2,'0')}function u(d){return d.getUTCFullYear()+z(d.getUTCMonth()+1)+z(d.getUTCDate())+'T'+z(d.getUTCHours())+z(d.getUTCMinutes())+'00Z'}
   function e(t){return String(t||'').replace(/\\/g,'\\\\').replace(/;/g,'\;').replace(/,/g,'\\,').replace(/\r?\n/g,'\\n')}
@@ -7713,7 +7772,7 @@ var bkDraft=null,bkActive='from',bkHotEditing=false;
 function bkDefaultTime(){var d=new Date(Date.now()+60*60000);d.setMinutes(Math.ceil(d.getMinutes()/15)*15,0,0);return ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)}
 function openBooking(id){var b=id?bookings.filter(function(x){return x.id===id})[0]:null;
   bkDraft=b?JSON.parse(JSON.stringify(b)):{id:null,date:todayStr(),time:bkDefaultTime(),from:'',to:'',name:'',phone:'',notes:'',remind:settings.bkRemind!=null?settings.bkRemind:30};
-  $('#bkEyebrow').textContent=b?'Edit booking':'New booking';$('#bkSave').textContent=b?'Save changes':'Save booking';
+  $('#bkEyebrow').textContent=b?(b.status==='cancelled'?'Cancelled booking':'Edit booking'):'New booking';var dz=$('#bkEdDanger');if(dz){dz.hidden=!b;$('#bkEdCancelBk').hidden=!b||b.status!=='upcoming'}$('#bkSave').textContent=b?'Save changes':'Save booking';
   $('#bkDate').value=bkDraft.date;$('#bkDate').min=b?'':todayStr();$('#bkTime').value=bkDraft.time;
   ['from','to','name','phone','notes'].forEach(function(k){$('#bk'+k.charAt(0).toUpperCase()+k.slice(1)).value=bkDraft[k]||''});
   $('#bkMore').open=!!(bkDraft.phone||bkDraft.notes);
@@ -7772,8 +7831,9 @@ function bkSaveDraft(){
   var saved=bkDraft;setTimeout(function(){openBkShare(saved.id,isNew?'Booking saved':'Booking updated')},280)}
 /* ---------- share ---------- */
 var bkShareId=null;
-function openBkShare(id,eyebrow){var b=bookings.filter(function(x){return x.id===id})[0];if(!b)return;bkShareId=id;
-  $('#bkShEyebrow').textContent=eyebrow||'Share trip';$('#bkMsg').value=bkMessage(b);
+function openBkShare(id,eyebrow,mode){var b=bookings.filter(function(x){return x.id===id})[0];if(!b)return;bkShareId=id;var cancel=mode==='cancel';
+  $('#bkShEyebrow').textContent=eyebrow||'Share trip';$('#bkShTitle').textContent=cancel?'Let the customer know?':'Share trip details';$('#bkMsg').value=cancel?bkCancelMessage(b):bkMessage(b);
+  var cal=$('[data-bsh="cal"]');if(cal)cal.hidden=cancel;
   $('#bkShTo').textContent=b.phone?('SMS and WhatsApp open with '+b.phone+' filled in. You can edit the message first.'):'Add a mobile to the booking to send it straight to the passenger. You can edit the message first.';
   showModal('bkShareModal')}
 function bkShare(how){var b=bookings.filter(function(x){return x.id===bkShareId})[0];if(!b)return;var msg=$('#bkMsg').value,enc=encodeURIComponent(msg);
@@ -7782,28 +7842,33 @@ function bkShare(how){var b=bookings.filter(function(x){return x.id===bkShareId}
   if(how==='copy'){(navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(msg):Promise.reject()).then(function(){toast('Trip details copied','success')}).catch(function(){var t=$('#bkMsg');t.select();try{document.execCommand('copy');toast('Trip details copied','success')}catch(_){toast('Select the text and copy it','warn')}});return}
   if(how==='cal'){var d=bkAt(b);deliverFile(new Blob([bkIcs(b)],{type:'text/calendar'}),'Taxi-'+b.date+'-'+String(b.time).replace(':','')+'.ics','Taxi booking','Calendar event ready')}}
 /* ---------- Home card ---------- */
-function bkCardRow(b,hero){var at=bkAt(b),ms=at-Date.now(),late=ms<-5*60000,soon=!late&&ms<=Math.max(60,b.remind||0)*60000;
-  var cls='bk-row'+(hero?' hero':'')+(late?' late':soon?' soon':'');
-  var route='<span class="bk-route-l"><i class="bk-pin from"></i>'+esc(bkShort(b.from))+'</span>'+(b.to?'<span class="bk-arrow">\u2192</span><span class="bk-route-l"><i class="bk-pin to"></i>'+esc(bkShort(b.to))+'</span>':'');
-  var acts=hero?('<div class="bk-acts">'+(late?'<button type="button" data-bkdone="'+b.id+'">Done</button><button type="button" data-bkdel="'+b.id+'">Remove</button>':'<button type="button" data-bkshare="'+b.id+'">Share</button><button type="button" data-bkcal="'+b.id+'">Calendar</button>')+'</div>'):'';
-  return '<div class="'+cls+'" data-bkopen="'+b.id+'" role="button" tabindex="0"><div class="bk-when"><b>'+bkClock(at)+'</b><small>'+esc(bkDayLbl(b.date))+'</small></div><div class="bk-what"><div class="bk-rel">'+(late?'Pickup was '+bkRel(ms):soon?'Pickup '+bkRel(ms):bkRel(ms))+'</div><div class="bk-r">'+route+'</div>'+(b.name&&hero?'<small class="bk-who">'+esc(b.name)+(b.phone?' \u00b7 '+esc(b.phone):'')+'</small>':'')+acts+'</div></div>'}
+/* One slim line per booking: time | route (+ name) | countdown. Tap opens it. */
+function bkCardRow(b){var at=bkAt(b),ms=at-Date.now(),late=ms<-5*60000,soon=!late&&ms<=Math.max(60,b.remind||0)*60000;
+  var rel=late?'late':Math.abs(ms)<60000?'now':ms<3600e3?Math.round(ms/60000)+' min':ms<86400e3?Math.floor(ms/3600e3)+' h':bkDayLbl(b.date);
+  var route=esc(bkShort(b.from))+(b.to?' <span class="bk-arrow">→</span> '+esc(bkShort(b.to)):'');
+  return '<div class="bk-line'+(late?' late':soon?' soon':'')+'" data-bkopen="'+b.id+'" role="button" tabindex="0" aria-label="'+esc(bkClock(at)+' '+bkDayLbl(b.date)+', '+bkShort(b.from)+(b.to?' to '+bkShort(b.to):''))+'">'
+    +'<span class="bk-t"><b>'+bkClock(at)+'</b><small>'+esc(bkDayLbl(b.date))+'</small></span>'
+    +'<span class="bk-m"><span class="bk-rt">'+route+'</span>'+(b.name?'<small>'+esc(b.name)+'</small>':'')+'</span>'
+    +(late?'<button type="button" class="bk-chip done" data-bkdone="'+b.id+'">Done?</button>':'<span class="bk-chip">'+(rel==='now'?'now':/^\d/.test(rel)?'in '+rel:rel)+'</span>')+'</div>'}
 function renderBkHome(){var box=$('#bkHome');if(!box)return;var up=bkUpcoming();
-  if(!up.length){box.className='bk-home empty';box.innerHTML='<button type="button" class="bk-empty" id="bkHomeNew">'+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l1.6-4.3A2 2 0 0 1 8.5 7.4h7a2 2 0 0 1 1.9 1.3L19 13"/><path d="M4 13h16v4.5H4z"/><circle cx="7.5" cy="17.5" r="1.4"/><circle cx="16.5" cy="17.5" r="1.4"/><path d="M10 4.5h4"/></svg>'+'<span><b>Bookings</b><small>No upcoming pickups \u00b7 tap to add a reminder</small></span><i aria-hidden="true">+</i></button>';return}
+  if(!up.length){box.className='bk-home empty';box.innerHTML='<button type="button" class="bk-empty" id="bkHomeNew"><span class="bk-ico">'+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l1.6-4.3A2 2 0 0 1 8.5 7.4h7a2 2 0 0 1 1.9 1.3L19 13"/><path d="M4 13h16v4.5H4z"/><circle cx="7.5" cy="17.5" r="1.4"/><circle cx="16.5" cy="17.5" r="1.4"/></svg>'+'</span><span>Add a booking</span><i aria-hidden="true">+</i></button>';return}
   var first=up[0],ms=bkAt(first)-Date.now(),state=ms<-5*60000?'late':ms<=Math.max(60,first.remind||0)*60000?'soon':'';
   box.className='bk-home'+(state?' '+state:'');
-  box.innerHTML='<div class="bk-home-head"><span class="eyebrow">'+(state==='late'?'Check this booking':state==='soon'?'Pickup coming up':'Upcoming bookings')+' \u00b7 '+up.length+'</span><span class="bk-home-btns"><button type="button" class="bk-mini" id="bkHomeAll">All</button><button type="button" class="bk-mini add" id="bkHomeNew">+ New</button></span></div>'
-    +bkCardRow(first,true)+up.slice(1,3).map(function(b){return bkCardRow(b,false)}).join('')+(up.length>3?'<button type="button" class="bk-more-link" id="bkHomeAll2">+'+(up.length-3)+' more</button>':'')}
+  box.innerHTML='<div class="bk-home-head"><button type="button" class="bk-h-all" id="bkHomeAll">Bookings <span>'+up.length+'</span><i aria-hidden="true">›</i></button><button type="button" class="bk-h-add" id="bkHomeNew" aria-label="New booking">+</button></div>'
+    +up.slice(0,2).map(bkCardRow).join('')}
 /* ---------- Bookings screen ---------- */
+var bkPastOpen=false;
+document.addEventListener('toggle',function(e){if(e.target.classList&&e.target.classList.contains('bk-past'))bkPastOpen=e.target.open},true);
 function renderBookings(){var box=$('#bkList');if(!box)return;var now=Date.now(),up=bkUpcoming();
   var T=todayStr(),tm=new Date();tm.setDate(tm.getDate()+1);var TM=iso(tm);
   var groups=[['Today',function(b){return b.date<=T}],['Tomorrow',function(b){return b.date===TM}],['Later',function(b){return b.date>TM}]];
   var html=groups.map(function(g){var rows=up.filter(g[1]);if(!rows.length)return '';return '<p class="grp">'+g[0]+'</p><div class="card bk-card">'+rows.map(function(b){return bkListRow(b)}).join('')+'</div>'}).join('');
   var past=bookings.filter(function(b){return up.indexOf(b)<0}).sort(function(a,b){return bkAt(b)-bkAt(a)}).slice(0,30);
   if(!up.length)html='<div class="ded-empty bk-none">'+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l1.6-4.3A2 2 0 0 1 8.5 7.4h7a2 2 0 0 1 1.9 1.3L19 13"/><path d="M4 13h16v4.5H4z"/><circle cx="7.5" cy="17.5" r="1.4"/><circle cx="16.5" cy="17.5" r="1.4"/><path d="M10 4.5h4"/></svg>'+'<b>No upcoming bookings</b><span>Add the date, time and pickup address. Fareo reminds you on Home and can text the trip details to your passenger.</span><button type="button" class="btn" id="bkEmptyNew" style="margin-top:12px">+ New booking</button></div>';
-  if(past.length)html+='<details class="bk-past"><summary>Past &amp; done \u00b7 '+past.length+'</summary><div class="card bk-card">'+past.map(function(b){return bkListRow(b,true)}).join('')+'</div></details>';
+  if(past.length)html+='<details class="bk-past"'+(bkPastOpen?' open':'')+'><summary>Past, done &amp; cancelled \u00b7 '+past.length+'</summary><div class="card bk-card">'+past.map(function(b){return bkListRow(b,true)}).join('')+'</div><button type="button" class="bk-clear" id="bkClearPast">Delete all past bookings</button></details>';
   box.innerHTML=html}
-function bkListRow(b,past){var at=bkAt(b);return '<div class="bk-li'+(past?' past':'')+'"><button type="button" class="bk-li-main" data-bkopen="'+b.id+'"><span class="bk-when"><b>'+bkClock(at)+'</b><small>'+esc(bkDayLbl(b.date))+'</small></span><span class="bk-what"><span class="bk-r"><span class="bk-route-l"><i class="bk-pin from"></i>'+esc(bkShort(b.from))+'</span>'+(b.to?'<span class="bk-arrow">\u2192</span><span class="bk-route-l"><i class="bk-pin to"></i>'+esc(bkShort(b.to))+'</span>':'')+'</span><small>'+(past?(b.status==='done'?'Done':'Not marked done'):bkRel(at-Date.now()))+(b.name?' \u00b7 '+esc(b.name):'')+'</small></span></button>'
-  +'<span class="bk-li-acts">'+(past?'<button type="button" data-bkagain="'+b.id+'" aria-label="Book again">\u21bb</button>':'<button type="button" data-bkshare="'+b.id+'" aria-label="Share">\u2197</button><button type="button" data-bkdone="'+b.id+'" aria-label="Mark done">\u2713</button>')+'<button type="button" data-bkdel="'+b.id+'" aria-label="Remove">\u00d7</button></span></div>'}
+function bkListRow(b,past){var at=bkAt(b);return '<div class="bk-li'+(past?' past':'')+'"><button type="button" class="bk-li-main" data-bkopen="'+b.id+'"><span class="bk-when"><b>'+bkClock(at)+'</b><small>'+esc(bkDayLbl(b.date))+'</small></span><span class="bk-what"><span class="bk-r"><span class="bk-route-l"><i class="bk-pin from"></i>'+esc(bkShort(b.from))+'</span>'+(b.to?'<span class="bk-arrow">\u2192</span><span class="bk-route-l"><i class="bk-pin to"></i>'+esc(bkShort(b.to))+'</span>':'')+'</span><small>'+(past?(b.status==='done'?'Done':b.status==='cancelled'?'<span class="bk-cx">Cancelled</span>':'Not marked done'):bkRel(at-Date.now()))+(b.name?' \u00b7 '+esc(b.name):'')+'</small></span></button>'
+  +'<span class="bk-li-acts">'+(past?'<button type="button" data-bkagain="'+b.id+'" aria-label="Book again">\u21bb</button>':'<button type="button" data-bkshare="'+b.id+'" aria-label="Share">\u2197</button><button type="button" data-bkdone="'+b.id+'" aria-label="Mark done">\u2713</button>')+'<button type="button" data-bkdel="'+b.id+'" aria-label="'+(past?'Delete':'Cancel or delete')+'">\u00d7</button></span></div>'}
 /* ---------- reminders ---------- */
 function bkAlert(b){var at=bkAt(b),title='Taxi pickup '+bkRel(at-Date.now()),body=bkClock(at)+' \u00b7 '+bkShort(b.from)+(b.to?' \u2192 '+bkShort(b.to):'')+(b.name?' \u00b7 '+b.name:'');
   sfx('warn');buzz([120,80,120]);toast(title+' \u00b7 '+bkShort(b.from),'warn');
@@ -7824,7 +7889,7 @@ document.addEventListener('click',function(e){var t=e.target,c=function(sel){ret
   if((x=c('[data-bkshare]'))){openBkShare(x.dataset.bkshare,'Share trip');return}
   if((x=c('[data-bkcal]'))){bkShareId=x.dataset.bkcal;var b0=bookings.filter(function(b){return b.id===bkShareId})[0];if(b0){$('#bkMsg').value=bkMessage(b0);bkShare('cal')}return}
   if((x=c('[data-bkdone]'))){var id=x.dataset.bkdone;bkMark(id,'done');offerUndo&&toast('Marked done','success');return}
-  if((x=c('[data-bkdel]'))){var idd=x.dataset.bkdel,bb=bookings.filter(function(b){return b.id===idd})[0];if(!bb)return;ask('Remove this booking?',bkClock(bkAt(bb))+' '+bkDayLbl(bb.date)+' \u00b7 '+bkShort(bb.from)+(bb.to?' \u2192 '+bkShort(bb.to):''),'Remove',function(){bookings=bookings.filter(function(b){return b.id!==idd});saveBookings();renderBkHome();if(curTab==='bookings')renderBookings()});return}
+  if((x=c('[data-bkdel]'))){openBkCancel(x.dataset.bkdel);return}
   if((x=c('[data-bkagain]'))){var ob=bookings.filter(function(b){return b.id===x.dataset.bkagain})[0];if(!ob)return;openBooking(null);['from','to','name','phone','notes'].forEach(function(k){bkDraft[k]=ob[k]||'';$('#bk'+k.charAt(0).toUpperCase()+k.slice(1)).value=ob[k]||''});bkDraft.time=ob.time;$('#bkTime').value=ob.time;$('#bkMore').open=!!(ob.phone||ob.notes);bkRenderEditor();return}
   if((x=c('[data-bkopen]'))&&!c('.bk-acts')){openBooking(x.dataset.bkopen);return}
   /* editor */
@@ -7850,6 +7915,27 @@ document.addEventListener('click',function(e){var t=e.target,c=function(sel){ret
 document.addEventListener('focusin',function(e){var w=e.target.closest&&e.target.closest('.bk-addr');if(w){bkActive=w.dataset.which;if(bkDraft)bkRenderEditor()}});
 document.addEventListener('input',function(e){var id=e.target.id;if(id==='bkFrom'||id==='bkTo'){var w=id==='bkFrom'?'from':'to';bkActive=w;bkDraft[w]=e.target.value;bkSuggest(w);bkRenderEditor()}if(id==='bkName'){bkNameSuggest();bkRenderEditor()}if(id==='bkDate'&&e.target.value){bkDraft.date=e.target.value;bkRenderEditor()}});
 document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.closest&&e.target.closest('[data-bkopen]')&&e.target.matches('[data-bkopen]')){openBooking(e.target.dataset.bkopen)}if(e.key==='Enter'&&e.target.id==='bkFrom'){e.preventDefault();var l=$('#bkFromSug')._list;if(l&&l[0]&&$('#bkFromSug').innerHTML)bkPickAddr('from',l[0].line);else $('#bkTo').focus()}});
+/* ---------- cancel / delete ---------- */
+var bkCancelId=null;
+function openBkCancel(id){var b=bookings.filter(function(x){return x.id===id})[0];if(!b)return;bkCancelId=id;var up=b.status==='upcoming';
+  $('#bkcEyebrow').textContent=up?'Booking':b.status==='cancelled'?'Cancelled booking':'Past booking';
+  $('#bkcTitle').textContent=up?'Cancel or delete this booking?':'Delete this booking?';
+  $('#bkcSub').textContent=bkClock(bkAt(b))+' '+bkDayLbl(b.date)+' · '+bkShort(b.from)+(b.to?' → '+bkShort(b.to):'')+(b.name?' · '+b.name:'');
+  $('#bkcCancelOpt').hidden=!up;showModal('bkCancelModal');sfx('warn')}
+function bkRefresh(){saveBookings();renderBkHome();if(curTab==='bookings')renderBookings()}
+function bkCancelBooking(id){var b=bookings.filter(function(x){return x.id===id})[0];if(!b)return;var snap=snapState();
+  bookings=bookings.map(function(x){return x.id===id?Object.assign({},x,{status:'cancelled',cancelledAt:Date.now()}):x});bkRefresh();
+  offerUndo(snap,'Booking cancelled');
+  if(b.phone||b.name)setTimeout(function(){openBkShare(id,'Booking cancelled','cancel')},300)}
+function bkDeleteBooking(id){var snap=snapState();bookings=bookings.filter(function(x){return x.id!==id});bkRefresh();offerUndo(snap,'Booking deleted')}
+document.addEventListener('click',function(e){var t=e.target,x=t.closest&&t.closest('[data-bkc]');
+  if(x&&bkCancelId){var id=bkCancelId;bkCancelId=null;closeModal('bkCancelModal');if(x.dataset.bkc==='cancel')bkCancelBooking(id);else bkDeleteBooking(id);return}
+  if(t.id==='bkcKeep'){bkCancelId=null;closeModal('bkCancelModal');return}
+  if(t.id==='bkEdShare'){var sid=bkDraft&&bkDraft.id;if(!sid)return;closeModal('bkModal');setTimeout(function(){openBkShare(sid,'Share trip')},250);return}
+  if(t.id==='bkEdCancelBk'||t.id==='bkEdDelete'){var id2=bkDraft&&bkDraft.id;if(!id2)return;closeModal('bkModal');if(t.id==='bkEdDelete'){openBkCancel(id2);setTimeout(function(){},0)}else setTimeout(function(){openBkCancel(id2)},250);return}
+  if(t.id==='bkClearPast'){var past=bookings.filter(function(b){return bkUpcoming().indexOf(b)<0});if(!past.length)return;
+    ask('Delete all past bookings?',past.length+' past, done or cancelled booking'+(past.length===1?'':'s')+' will be removed. Upcoming bookings stay.','Delete',function(){var keep=bkUpcoming();bookings=bookings.filter(function(b){return keep.indexOf(b)>=0});bkRefresh()});return}
+},true);
 /* ---------- address book ---------- */
 function uid(p){return (p||'id')+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
 function clientLabel(c){return ((c.nick||'').trim()||(c.name||'').trim()||'Client')}
