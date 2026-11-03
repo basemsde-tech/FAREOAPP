@@ -1850,6 +1850,102 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
 .rc-row small{display:block;font-size:11.5px;color:var(--mut);margin-top:2px}
 .rc-one{border:1px solid var(--bd);border-radius:14px;margin-top:10px}
 @media (prefers-reduced-motion:reduce){.fold-body,.fold-peek,.fold-tg{transition:none}}
+/* ---------- Fareo 15.4 · bookings ---------- */
+.bk-home{width:calc(100% - 32px);max-width:560px;margin:2px auto 14px;border-radius:var(--radius-lg);border:1px solid var(--bd);background:var(--card);padding:12px 12px 10px;animation:riseIn .45s var(--ease) both}
+.screen[data-tab="hub"] .bk-home,.screen[data-tab="hub"] .gd-due{grid-column:1/-1}
+.bk-home.soon{border-color:var(--accent-line);box-shadow:0 0 0 3px var(--accent-dim)}
+.bk-home.late{border-color:color-mix(in srgb,var(--fuel) 55%,transparent);box-shadow:0 0 0 3px var(--fuel-bg)}
+.bk-home.empty{padding:0;border-style:dashed;background:transparent}
+.bk-empty{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border:0;background:transparent;color:var(--body);text-align:left;cursor:pointer}
+.bk-empty svg{width:22px;height:22px;color:var(--accent);flex:none}
+.bk-empty span{flex:1;min-width:0}.bk-empty b{display:block;font-size:14px;color:var(--head)}.bk-empty small{display:block;font-size:11.5px;color:var(--mut);margin-top:2px}
+.bk-empty i{font-style:normal;font-size:22px;color:var(--accent);line-height:1}
+.bk-home-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 2px 8px}
+.bk-home.soon .bk-home-head .eyebrow{color:var(--accent)}.bk-home.late .bk-home-head .eyebrow{color:var(--fuel)}
+.bk-home-btns{display:flex;gap:6px}
+.bk-mini{border:1px solid var(--bd2);background:transparent;color:var(--body);border-radius:9px;padding:6px 10px;font-size:12px;font-weight:650;cursor:pointer}
+.bk-mini.add{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.bk-row{display:grid;grid-template-columns:62px 1fr;gap:10px;align-items:start;padding:9px 6px;border-top:1px solid var(--bd);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.bk-row.hero{border-top:0;padding:10px 10px;border-radius:13px;background:var(--card2)}
+.bk-home.soon .bk-row.hero{background:var(--accent-dim)}.bk-home.late .bk-row.hero{background:var(--fuel-bg)}
+.bk-when b{display:block;font-family:var(--mono);font-size:15px;font-weight:600;color:var(--head);line-height:1.15}
+.bk-row.hero .bk-when b{font-size:19px}
+.bk-when small{display:block;font-family:var(--mono);font-size:10px;color:var(--mut);margin-top:2px;text-transform:uppercase;letter-spacing:.05em}
+.bk-what{min-width:0}
+.bk-rel{font-size:11.5px;font-weight:650;color:var(--mut);margin-bottom:3px}
+.bk-row.soon .bk-rel{color:var(--accent)}.bk-row.late .bk-rel{color:var(--fuel)}
+.bk-r{display:flex;flex-wrap:wrap;align-items:center;gap:3px 6px;font-size:13.5px;color:var(--head);font-weight:600;line-height:1.3}
+.bk-route-l{display:inline-flex;align-items:center;gap:5px;min-width:0}
+.bk-arrow{color:var(--mut);font-weight:400}
+.bk-pin{display:inline-block;width:8px;height:8px;border-radius:50%;flex:none}
+.bk-pin.from{background:var(--accent)}.bk-pin.to{background:transparent;border:2px solid var(--hail);width:9px;height:9px}
+.bk-who{display:block;font-size:11.5px;color:var(--mut);margin-top:3px}
+.bk-acts{display:flex;gap:6px;margin-top:9px}
+.bk-acts button{border:1px solid var(--bd2);background:var(--card);color:var(--body);border-radius:9px;padding:7px 12px;font-size:12px;font-weight:650;cursor:pointer}
+.bk-row.soon .bk-acts button:first-child{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.bk-row.late .bk-acts button:first-child{background:var(--fuel);border-color:var(--fuel);color:#1F1200}
+.bk-more-link{display:block;width:100%;border:0;background:transparent;color:var(--mut);font-size:12px;padding:8px 0 2px;cursor:pointer}
+.bk-sub{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.bk-new{width:auto;padding:9px 16px;font-size:13px;margin-bottom:2px}
+.bk-card{padding:4px 12px}
+.bk-li{display:flex;align-items:center;gap:8px;border-top:1px solid var(--bd)}
+.bk-card .bk-li:first-child{border-top:0}
+.bk-li-main{flex:1;min-width:0;display:grid;grid-template-columns:62px 1fr;gap:10px;align-items:center;padding:11px 0;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer}
+.bk-li-main small{display:block;font-size:11.5px;color:var(--mut);margin-top:3px}
+.bk-li-acts{display:flex;gap:4px;flex:none}
+.bk-li-acts button{width:34px;height:34px;border-radius:10px;border:1px solid var(--bd2);background:transparent;color:var(--body);font-size:15px;cursor:pointer}
+.bk-li-acts [data-bkdone]{color:var(--accent)}
+.bk-li.past{opacity:.7}
+.bk-past{margin-top:6px}.bk-past summary{cursor:pointer;color:var(--mut);font-size:12.5px;font-weight:650;padding:10px 2px;list-style:none}
+.bk-none svg{width:34px;height:34px;color:var(--accent)}
+.bk-sheet{max-height:92vh;overflow-y:auto}
+.bk-f{margin-top:12px}
+.bk-f>label{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);margin-bottom:6px}
+.bk-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.bk-chips::-webkit-scrollbar{display:none}
+.bk-chips button{flex:none;border:1px solid var(--bd2);background:var(--card2);color:var(--body);border-radius:999px;padding:8px 13px;font-size:12.5px;font-weight:650;cursor:pointer;white-space:nowrap;transition:background .2s,border-color .2s,color .2s}
+.bk-chips button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.bk-date{margin-top:8px}
+.bk-timerow{display:grid;grid-template-columns:130px 1fr;gap:8px;align-items:center}
+.bk-tq{min-width:0}
+.bk-route{position:relative;margin-top:2px;padding:2px 0}
+.bk-addr .bk-in{position:relative}
+.bk-addr input{padding-right:42px}
+.bk-addr.active input{border-color:var(--accent-line)}
+.bk-addr.shake{animation:hmShake .45s var(--ease)}
+.bk-star{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:32px;height:32px;border:0;background:transparent;color:var(--mut);font-size:18px;cursor:pointer}
+.bk-star.on{color:var(--fuel)}.bk-star[hidden]{display:none}
+.bk-swap{position:absolute;right:46px;top:calc(50% - 14px);width:30px;height:30px;border-radius:50%;border:1px solid var(--bd2);background:var(--card);color:var(--mut);display:grid;place-items:center;cursor:pointer;z-index:2}
+.bk-swap svg{width:15px;height:15px}
+.bk-sug{display:flex;flex-direction:column;margin-top:4px;border-radius:12px;overflow:hidden}
+.bk-sug:empty{display:none}
+.bk-sug button{display:flex;flex-direction:column;gap:1px;align-items:flex-start;text-align:left;border:0;border-top:1px solid var(--bd);background:var(--card2);color:var(--head);padding:9px 12px;cursor:pointer}
+.bk-sug button:first-child{border-top:0}
+.bk-sug b{font-size:13px;font-weight:600;line-height:1.3}
+.bk-sug small{font-size:10.5px;color:var(--mut);font-family:var(--mono)}
+.bk-hot{margin-top:10px}
+.bk-hot-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.bk-hot-head small{font-size:11px;color:var(--mut)}.bk-hot-head b{color:var(--accent)}
+.bk-hot-edit{border:0;background:transparent;color:var(--mut);font-size:12px;font-weight:650;cursor:pointer}
+#bkHot{flex-wrap:wrap;overflow:visible}
+#bkHot button.mine{border-color:var(--accent-line)}
+#bkHot button.editing{border-style:dashed}#bkHot button i{font-style:normal;margin-left:6px;color:var(--dgr)}
+.bk-more{margin-top:12px;border:1px solid var(--bd);border-radius:12px;padding:0 12px}
+.bk-more summary{cursor:pointer;padding:11px 0;font-size:13px;font-weight:650;color:var(--body)}
+.bk-more summary span{color:var(--mut);font-weight:500}
+.bk-more[open]{padding-bottom:12px}
+.bk-namesug{margin-top:6px}.bk-namesug:empty{display:none}
+.bk-seg{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:4px;background:var(--field);border:1px solid var(--bd);border-radius:12px}
+.bk-seg button{border:0;background:transparent;color:var(--mut);border-radius:9px;padding:9px 2px;font-size:12px;font-weight:650;cursor:pointer}
+.bk-seg button.on{background:var(--accent);color:var(--accent-ink)}
+.bk-note{font-size:11.5px;color:var(--mut);margin:7px 2px 0;line-height:1.45}
+.bk-msg{min-height:170px;font-family:var(--mono);font-size:13px;line-height:1.5;resize:vertical;margin-top:4px}
+.bk-share{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.bk-share button{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 4px;border-radius:13px;border:1px solid var(--bd2);background:var(--card2);color:var(--head);font-size:12px;font-weight:650;cursor:pointer}
+.bk-share button svg{width:22px;height:22px;color:var(--accent)}
+.bk-share button.wa svg{color:#25D366}
+.bk-share button:active{transform:scale(.95)}
+@media (prefers-reduced-motion:reduce){.bk-home{animation:none}}
 </style>
 </head>
 <body>
@@ -1872,6 +1968,7 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
       <div><p class="hub-date" id="today">Today</p><h1 class="hub-greet" id="greet">Welcome back</h1></div>
     </div>
     <button type="button" class="gd-due" id="gdDue" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#0F9D58" d="M8.3 3h7.4l7 12-3.7 6.4-7-12z"/><path fill="#FFC107" d="M8.3 3 1.3 15l3.7 6.4 7-12z"/><path fill="#4285F4" d="M5 21.4h14l3.7-6.4H8.7z"/></svg><span><b>Backup due</b><small id="gdDueSub">Tap to back up to Google Drive</small></span><i aria-hidden="true">&rsaquo;</i></button>
+    <div class="bk-home" id="bkHome"></div>
     <div class="hub">
       <div class="hub-wheel">
         <span class="hub-orbit" aria-hidden="true"></span>
@@ -2256,6 +2353,11 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
     <button type="button" class="rep-hidden-chip" id="repHiddenChip" hidden></button>
   </section>
 
+  <section class="screen" data-tab="bookings">
+    <div class="sub bk-sub"><span>Bookings <small>Reminders &middot; share trip details</small></span><button type="button" class="btn bk-new" id="bkNew">+ New</button></div>
+    <div id="bkList"></div>
+  </section>
+
   <section class="screen" data-tab="settings">
     <div class="sub">Settings <small>Profile &middot; pay rules &middot; backup</small></div>
     <div class="set-top">
@@ -2473,6 +2575,40 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
   <button type="button" class="sm-opt rec" data-rcm="photos"><b>Add receipts &amp; EOS photos only <em>Keeps your shifts</em></b><small id="rcPhotosSub">Adds the photos from the backup. Your shifts, costs and settings stay as they are.</small></button>
   <button type="button" class="sm-opt" data-rcm="all"><b>Restore everything</b><small id="rcAllSub">Replaces this device&rsquo;s shifts and costs with the backup and adds its photos. A copy of what you have now is kept under Recovery.</small></button>
   <button type="button" class="btn neutral" id="rcmCancel" style="margin-top:10px">Cancel</button>
+</div></div>
+<div class="modal" id="bkModal"><div class="sheet bk-sheet">
+  <div class="grip"></div>
+  <span class="eyebrow" id="bkEyebrow">New booking</span>
+  <h3 id="bkTitle">Taxi booking</h3>
+  <div class="bk-f"><label for="bkDate">Date</label><div class="bk-chips" id="bkDays"></div><input type="date" id="bkDate" class="bk-date"></div>
+  <div class="bk-f"><label for="bkTime">Pickup time</label><div class="bk-timerow"><input type="time" id="bkTime" step="300"><div class="bk-chips bk-tq" id="bkTimeQuick"><button type="button" data-tq="15">In 15 min</button><button type="button" data-tq="30">30 min</button><button type="button" data-tq="60">1 h</button></div></div></div>
+  <div class="bk-f"><label for="bkName">Customer name</label><input id="bkName" placeholder="Name (shows in the message)" autocomplete="off" autocapitalize="words"><div class="bk-chips bk-namesug" id="bkNameSug"></div></div>
+  <div class="bk-route">
+    <div class="bk-f bk-addr" data-which="from"><label for="bkFrom"><i class="bk-pin from"></i>From</label><div class="bk-in"><input id="bkFrom" placeholder="Pickup address" autocomplete="off" enterkeyhint="next" spellcheck="false"><button type="button" class="bk-star" data-star="from" aria-label="Save pickup as a hotspot">&#9734;</button></div><div class="bk-sug" id="bkFromSug"></div></div>
+    <button type="button" class="bk-swap" id="bkSwap" aria-label="Swap From and To"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M3 8l4-4 4 4M17 20V4M13 16l4 4 4-4"/></svg></button>
+    <div class="bk-f bk-addr" data-which="to"><label for="bkTo"><i class="bk-pin to"></i>To</label><div class="bk-in"><input id="bkTo" placeholder="Destination (optional)" autocomplete="off" enterkeyhint="done" spellcheck="false"><button type="button" class="bk-star" data-star="to" aria-label="Save destination as a hotspot">&#9734;</button></div><div class="bk-sug" id="bkToSug"></div></div>
+  </div>
+  <div class="bk-hot"><div class="bk-hot-head"><small>Hotspots &middot; tap to fill <b id="bkHotFor">From</b></small><button type="button" class="bk-hot-edit" id="bkHotEdit">Edit</button></div><div class="bk-chips" id="bkHot"></div></div>
+  <details class="bk-more" id="bkMore"><summary>Mobile &amp; notes <span id="bkMoreSum"></span></summary>
+    <div class="bk-f"><label for="bkPhone">Mobile</label><input id="bkPhone" type="tel" inputmode="tel" placeholder="For SMS or WhatsApp (optional)" autocomplete="off"></div>
+    <div class="bk-f"><label for="bkNotes">Notes</label><input id="bkNotes" placeholder="Bags, wheelchair, flight number&hellip;" autocomplete="off"></div>
+  </details>
+  <div class="bk-f"><label>Remind me</label><div class="bk-seg" id="bkRemind"><button type="button" data-rm="0">Off</button><button type="button" data-rm="15">15 min</button><button type="button" data-rm="30">30 min</button><button type="button" data-rm="60">1 h</button><button type="button" data-rm="120">2 h</button></div><p class="bk-note">Shown on Home and as an alert while Fareo is open. Use <b>Add to calendar</b> for a phone alarm.</p></div>
+  <div class="two" style="margin-top:14px"><button type="button" class="btn neutral" id="bkCancel">Cancel</button><button type="button" class="btn" id="bkSave">Save booking</button></div>
+</div></div>
+<div class="modal" id="bkShareModal"><div class="sheet">
+  <div class="grip"></div>
+  <span class="eyebrow" id="bkShEyebrow">Booking saved</span>
+  <h3 id="bkShTitle">Share trip details</h3>
+  <textarea id="bkMsg" class="bk-msg" rows="8" aria-label="Message to send"></textarea>
+  <div class="bk-share">
+    <button type="button" data-bsh="sms"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.9A8 8 0 1 1 21 12z"/></svg><span>SMS</span></button>
+    <button type="button" data-bsh="wa" class="wa"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.2.1.6-.1 1.2z"/></svg><span>WhatsApp</span></button>
+    <button type="button" data-bsh="copy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copy</span></button>
+    <button type="button" data-bsh="cal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M12 14v4M10 16h4"/></svg><span>Calendar</span></button>
+  </div>
+  <p class="bk-note" id="bkShTo"></p>
+  <button type="button" class="btn neutral" id="bkShDone" style="margin-top:6px">Done</button>
 </div></div>
 <div class="modal hail-modal" id="hailModal"><div class="sheet">
   <div class="grip"></div>
@@ -2794,8 +2930,13 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='15.3';
+var APP_VERSION='15.4';
 var CHANGELOG=[
+  {v:'15.4',date:'November 3, 2026',notes:[
+    ['Feature','Bookings: save a taxi booking with date, time, From and To. Addresses autocomplete across Victoria: shopping centres, hospitals, medical centres, big retailers and stations, plus your address book, recent bookings and any street address. Airport terminals and main stations are one-tap hotspots, and \u2606 saves your own.'],
+    ['Feature','Share a neat trip summary by SMS or WhatsApp in one tap (straight to the passenger\u2019s mobile if you add it), copy it, or add the booking to your phone calendar with an alarm.'],
+    ['Feature','Home shows your next bookings with a countdown, highlights pickups coming up, alerts you at your reminder time while Fareo is open, and asks you to mark late pickups done.'],
+  ]},
   {v:'15.3',date:'November 3, 2026',notes:[
     ['Bug Fix','EOS and receipt photos could silently fail to save once the browser\u2019s small storage (about 5 MB) was full, and disappeared after closing the app. Photos and saved copies now live in the browser\u2019s large storage, existing photos move there automatically, and Fareo asks the browser to keep its data permanently.'],
     ['Bug Fix','If anything ever fails to save, Fareo now tells you straight away instead of failing silently.'],
@@ -4122,7 +4263,7 @@ function toast(t,kind){var e=$('#toast');kind=kind||toastKind(String(t));
   if(kind==='error'||kind==='warn')buzz(kind==='error'?[18,40,18]:14);
   clearTimeout(toast._t);toast._t=setTimeout(function(){e.classList.remove('show')},kind==='error'?2600:1900)}
 /* ---------- undo: snapshot → act → offer Undo on the toast ---------- */
-var UNDO_KEYS=['settings','entries','deductions','recurring','fuelManual','draft','clients','runPlan'];
+var UNDO_KEYS=['settings','entries','deductions','recurring','fuelManual','draft','clients','runPlan','bookings'];
 function snapState(){var o={};UNDO_KEYS.forEach(function(k){try{o[k]=JSON.stringify(window[k]!==undefined?window[k]:eval(k))}catch(_){}});o.receipts=(typeof receipts!=='undefined'?receipts.slice():null);o.names=(typeof names!=='undefined'?names.slice():null);return o}
 function restoreState(o){
   if(!o)return;
@@ -4134,6 +4275,7 @@ function restoreState(o){
   try{draft=normalizeDraft(JSON.parse(o.draft))}catch(_){}
   try{clients=JSON.parse(o.clients)}catch(_){}
   try{runPlan=JSON.parse(o.runPlan)}catch(_){}
+  try{if(o.bookings)bookings=JSON.parse(o.bookings)}catch(_){}
   if(o.receipts){receipts=o.receipts;try{saveReceipts()}catch(_){}}
   if(o.names){names=o.names;save('fareo_names',names);renderNames()}
   persist();
@@ -4252,7 +4394,7 @@ function hideHelp(){if(helpPop){helpPop.classList.remove('show')}helpFor=null}
   window.addEventListener('scroll',function(){if(helpPop&&helpPop.classList.contains('show'))hideHelp()},true);
 })();
 /* Build a help marker span. Content is escaped-safe. */
-function persist(){save('fareo_settings',settings);save('fareo_entries',entries);save('fareo_deductions',deductions);save('fareo_recurring',recurring);save('fareo_fuelManual',fuelManual);save('fareo_draft',draft);save('fareo_clients',clients);save('fareo_run_plan',runPlan)}
+function persist(){save('fareo_settings',settings);save('fareo_entries',entries);save('fareo_deductions',deductions);save('fareo_recurring',recurring);save('fareo_fuelManual',fuelManual);save('fareo_draft',draft);save('fareo_clients',clients);save('fareo_run_plan',runPlan);if(typeof bookings!=='undefined')save('fareo_bookings',bookings)}
 function saveReceipts(){save('fareo_receipts',receipts)}
 var names=load('fareo_names',[]);
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
@@ -7178,7 +7320,7 @@ async function fullRefresh(){
 $('#clearCache').onclick=fullRefresh;
 
 /* ---------- backup ---------- */
-var SYNC_KEYS=['fareo_settings','fareo_entries','fareo_deductions','fareo_recurring','fareo_fuelManual','fareo_draft','fareo_names','fareo_clients','fareo_run_plan'];
+var SYNC_KEYS=['fareo_settings','fareo_entries','fareo_deductions','fareo_recurring','fareo_fuelManual','fareo_draft','fareo_names','fareo_clients','fareo_run_plan','fareo_bookings'];
 function allData(){var o={};SYNC_KEYS.forEach(function(k){var v=localStorage.getItem(k);if(v!=null)o[k]=v});return o}
 /* Backup includes receipts (for a full audit-safe export); cloud sync does not. */
 function allDataFull(){var o=allData();if(receipts&&receipts.length)o['fareo_receipts']=JSON.stringify(receipts);return o}
@@ -7488,7 +7630,7 @@ function mergeData(local,remote){
   var le=J(local,'fareo_entries',[]),re=J(remote,'fareo_entries',[]);
   var ids={},dr={};le.forEach(function(e){ids[String(e.id)]=1;dr[e.date+'|'+(e.rego||'')]=1});
   out.fareo_entries=JSON.stringify(le.concat(re.filter(function(e){return !ids[String(e.id)]&&!dr[e.date+'|'+(e.rego||'')]})).sort(function(x,y){return x.date<y.date?-1:1}));
-  ['fareo_deductions','fareo_recurring','fareo_fuelManual','fareo_clients'].forEach(function(k){out[k]=JSON.stringify(mergeById(J(local,k,[]),J(remote,k,[])))});
+  ['fareo_deductions','fareo_recurring','fareo_fuelManual','fareo_clients','fareo_bookings'].forEach(function(k){out[k]=JSON.stringify(mergeById(J(local,k,[]),J(remote,k,[])))});
   out.fareo_names=JSON.stringify(mergeById(J(local,'fareo_names',[]),J(remote,'fareo_names',[]),function(n){return String(n).toLowerCase()}));
   var ls=J(local,'fareo_settings',{}),rs=J(remote,'fareo_settings',{});
   ls.regos=mergeById(ls.regos||[],rs.regos||[],function(x){return String(x).toUpperCase()});
@@ -7499,8 +7641,215 @@ function mergeData(local,remote){
   out.fareo_settings=JSON.stringify(ls);
   return out;
 }
-function reloadAll(){settings=load('fareo_settings',settings)||settings;migrateSettings();entries=load('fareo_entries',[])||[];deductions=load('fareo_deductions',[])||[];recurring=load('fareo_recurring',[])||[];fuelManual=load('fareo_fuelManual',[])||[];if(KV.isOff())receipts=load('fareo_receipts',[])||[];names=load('fareo_names',[])||[];clients=load('fareo_clients',[])||[];if(!Array.isArray(clients))clients=[];runPlan=load('fareo_run_plan',[])||[];if(!Array.isArray(runPlan))runPlan=[];draft=normalizeDraft(load('fareo_draft',draft));if(typeof draftHasWork==='function'&&!draftHasWork(draft)){draft.date=todayStr();draft.rego=''}clearReceiptAttach();try{renderNames();rowInputs();render();var a=document.querySelector('.screen.on');if(a){var t=a.dataset.tab;if(t==='weekly')renderWeekly();if(t==='reports')renderReports();if(t==='settings')renderSettings();if(t==='runs')renderRuns();if(t==='book')renderBook()}}catch(_){}}
+function reloadAll(){settings=load('fareo_settings',settings)||settings;migrateSettings();entries=load('fareo_entries',[])||[];deductions=load('fareo_deductions',[])||[];recurring=load('fareo_recurring',[])||[];fuelManual=load('fareo_fuelManual',[])||[];if(KV.isOff())receipts=load('fareo_receipts',[])||[];names=load('fareo_names',[])||[];clients=load('fareo_clients',[])||[];if(!Array.isArray(clients))clients=[];runPlan=load('fareo_run_plan',[])||[];if(!Array.isArray(runPlan))runPlan=[];bookings=load('fareo_bookings',[])||[];if(!Array.isArray(bookings))bookings=[];draft=normalizeDraft(load('fareo_draft',draft));if(typeof draftHasWork==='function'&&!draftHasWork(draft)){draft.date=todayStr();draft.rego=''}clearReceiptAttach();try{renderNames();rowInputs();render();var a=document.querySelector('.screen.on');if(a){var t=a.dataset.tab;if(t==='weekly')renderWeekly();if(t==='reports')renderReports();if(t==='settings')renderSettings();if(t==='runs')renderRuns();if(t==='book')renderBook();if(t==='bookings')renderBookings()}try{renderBkHome()}catch(_){}}catch(_){}}
 
+/* ================= Bookings: taxi booking reminders =================
+   Lightweight: date, time, From, To (+ optional passenger, mobile, notes).
+   Address autocomplete = hotspots + address book + recent bookings + the
+   Photon address search used by the address book. Reminders show on Home
+   and as an alert while Fareo is open; Add to calendar gives a phone alarm. */
+var bookings=load('fareo_bookings',[])||[];if(!Array.isArray(bookings))bookings=[];
+function saveBookings(){save('fareo_bookings',bookings)}
+/* Victoria only. Quick-select chips: airports and main stations. */
+var BK_HOT=['Melbourne Airport T1 (Qantas), Tullamarine','Melbourne Airport T2 (International), Tullamarine','Melbourne Airport T3 (Virgin), Tullamarine','Melbourne Airport T4 (Jetstar, Rex), Tullamarine','Avalon Airport','Southern Cross Station, Melbourne','Flinders Street Station, Melbourne'];
+/* Built-in Victorian places for autocomplete (works offline). */
+var BK_PLACES=[
+ ['Shopping centre',['Chadstone Shopping Centre, Malvern East','Westfield Doncaster, Doncaster','Westfield Fountain Gate, Narre Warren','Westfield Southland, Cheltenham','Westfield Knox, Wantirna South','Westfield Plenty Valley, Mill Park','Westfield Airport West, Airport West','Highpoint Shopping Centre, Maribyrnong','Eastland Shopping Centre, Ringwood','Northland Shopping Centre, Preston','Melbourne Central, Melbourne','Emporium Melbourne, Melbourne','DFO South Wharf, South Wharf','DFO Essendon, Essendon Fields','DFO Moorabbin, Moorabbin','Pacific Epping, Epping','Pacific Werribee, Hoppers Crossing','Watergardens Town Centre, Taylors Lakes','Box Hill Central, Box Hill','The Glen, Glen Waverley','Brimbank Shopping Centre, Deer Park','Broadmeadows Central, Broadmeadows','Greensborough Plaza, Greensborough','Frankston Bayside Shopping Centre, Frankston','Karingal Hub, Frankston','Dandenong Plaza, Dandenong','Westfield Geelong, Geelong','Stud Park Shopping Centre, Rowville','Waverley Gardens, Mulgrave','Forest Hill Chase, Forest Hill','Craigieburn Central, Craigieburn','Highpoint Homemaker, Maribyrnong']],
+ ['Hospital',['Royal Melbourne Hospital, Parkville','The Alfred, Melbourne','St Vincent’s Hospital, Fitzroy','Austin Hospital, Heidelberg','Royal Children’s Hospital, Parkville','Royal Women’s Hospital, Parkville','Peter MacCallum Cancer Centre, Melbourne','Monash Medical Centre, Clayton','Box Hill Hospital, Box Hill','Maroondah Hospital, Ringwood East','Dandenong Hospital, Dandenong','Casey Hospital, Berwick','Frankston Hospital, Frankston','Northern Hospital, Epping','Sunshine Hospital, St Albans','Footscray Hospital, Footscray','Werribee Mercy Hospital, Werribee','Angliss Hospital, Upper Ferntree Gully','Western Hospital, Footscray','Epworth Richmond, Richmond','Cabrini Malvern, Malvern','University Hospital Geelong, Geelong','Royal Victorian Eye and Ear Hospital, East Melbourne','Caulfield Hospital, Caulfield','Sandringham Hospital, Sandringham']],
+ ['Retail',['IKEA Richmond','IKEA Springvale','Costco Docklands','Costco Ringwood','Costco Epping','Bunnings Hawthorn','Bunnings Port Melbourne','Queen Victoria Market, Melbourne','South Melbourne Market, South Melbourne','Prahran Market, South Yarra']],
+ ['Venue',['Crown Melbourne, Southbank','MCG, Jolimont','Marvel Stadium, Docklands','Rod Laver Arena, Melbourne','Melbourne Convention and Exhibition Centre, South Wharf','Flemington Racecourse, Flemington','AAMI Park, Melbourne','Spencer Outlet Centre, Melbourne','Melbourne Zoo, Parkville']],
+ ['Station',['Southern Cross Station, Melbourne','Flinders Street Station, Melbourne','Melbourne Central Station, Melbourne','Parliament Station, Melbourne','Richmond Station, Richmond','Footscray Station, Footscray','Box Hill Station, Box Hill','Dandenong Station, Dandenong','Frankston Station, Frankston','Geelong Station, Geelong']]
+];
+function bkHotList(){var hid=settings.bkHotHidden||[];return (settings.bkHot||[]).concat(BK_HOT.filter(function(h){return hid.indexOf(h)<0}))}
+/* Live search inside Victoria: addresses plus places (shopping centres,
+   hospitals, medical centres, shops) from the Photon search. */
+var VIC_BBOX='140.96,-39.20,150.05,-33.98';
+function bkPlaceType(p){var k=p.osm_key,v=p.osm_value;
+  if(v==='mall'||v==='shopping_centre')return 'Shopping centre';
+  if(v==='hospital')return 'Hospital';
+  if(v==='clinic'||v==='doctors'||v==='doctor'||k==='healthcare'||v==='dentist')return 'Medical centre';
+  if(v==='pharmacy'||v==='chemist')return 'Pharmacy';
+  if(k==='shop')return 'Store';
+  if(k==='railway'||v==='station'||k==='public_transport')return 'Station';
+  if(k==='aeroway')return 'Airport';
+  if(k==='amenity'||k==='leisure'||k==='tourism')return 'Place';
+  return 'Address'}
+function bkPlaces(q,cb){q=(q||'').trim();if(q.length<3){cb([]);return}
+  clearTimeout(bkPlaces._t);bkPlaces._t=setTimeout(function(){
+    try{if(bkPlaces._ab)bkPlaces._ab.abort()}catch(_){}bkPlaces._ab=typeof AbortController!=='undefined'?new AbortController():null;
+    var w=(typeof wxLoad==='function'&&wxLoad())||{},lat=w.lat||-37.8136,lon=w.lon||144.9631;
+    fetch('https://photon.komoot.io/api/?q='+encodeURIComponent(q)+'&limit=12&lang=en&bbox='+VIC_BBOX+'&lat='+lat+'&lon='+lon,bkPlaces._ab?{signal:bkPlaces._ab.signal}:{}).then(function(r){return r.json()}).then(function(j){
+      var out=[],seen={};
+      (j.features||[]).forEach(function(f){var p=f.properties||{};if(String(p.state||'')!=='Victoria')return;
+        var type=bkPlaceType(p),addr=[[p.housenumber,p.street].filter(Boolean).join(' '),p.district||p.city||p.locality].filter(Boolean),line;
+        if(type!=='Address'&&p.name)line=p.name+(addr.length?', '+addr.join(', '):'');
+        else line=[[p.housenumber,p.street||p.name].filter(Boolean).join(' '),p.district||p.city||p.locality,p.postcode].filter(Boolean).join(', ');
+        if(!line)return;var k=line.toLowerCase().replace(/[^a-z0-9]/g,'');if(seen[k])return;seen[k]=1;out.push({line:line,src:type})});
+      cb(out.slice(0,6))}).catch(function(e){if(e&&e.name==='AbortError')return;cb([])})},250)}
+function bkShort(a){a=String(a||'');if(/ Airport/.test(a))return a.split(',')[0].replace(/ \(.*\)/,'');return a.split(',')[0]}
+function bkAt(b){var t=String(b.time||'00:00').split(':');var d=asDate(b.date);d.setHours(Number(t[0])||0,Number(t[1])||0,0,0);return d}
+function bkClock(d){return d.toLocaleTimeString('en-AU',{hour:'numeric',minute:'2-digit'}).replace(/\s/g,'').toLowerCase()}
+function bkDayLbl(ds){var T=todayStr(),tm=new Date();tm.setDate(tm.getDate()+1);if(ds===T)return 'Today';if(ds===iso(tm))return 'Tomorrow';if(ds===yesterdayStr())return 'Yesterday';var d=asDate(ds);return d.toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'})}
+function bkRel(ms){var m=Math.round(ms/60000),neg=m<0;m=Math.abs(m);var s=m<1?'now':m<60?m+' min':m<1440?Math.floor(m/60)+' h'+(m%60?' '+(m%60)+' min':''):Math.round(m/1440)+' day'+(Math.round(m/1440)===1?'':'s');return s==='now'?'now':neg?s+' ago':'in '+s}
+function bkUpcoming(){var now=Date.now();return bookings.filter(function(b){return b.status==='upcoming'&&bkAt(b).getTime()>now-3*3600e3}).sort(function(a,b){return bkAt(a)-bkAt(b)})}
+function bkDriverLine(){var nm=(settings.driverName||'').trim(),rg=(settings.regos||[])[0];return [nm,rg?'Taxi '+rg:''].filter(Boolean).join(' \u00b7 ')}
+function bkMessage(b){var d=bkAt(b);
+  var first=String(b.name||'').trim().split(/\s+/)[0];
+  var L=[first?'Hi '+first+', your taxi is booked \ud83d\ude95':'\ud83d\ude95 Taxi booking','','\ud83d\udcc5 '+d.toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long'})+' at '+bkClock(d),'\ud83d\udccd Pickup: '+b.from,'\ud83c\udfc1 Drop-off: '+(b.to||'As directed')];
+  if(b.name)L.push('\ud83d\udc64 Customer: '+b.name+(b.phone?' ('+b.phone+')':''));
+  if(b.notes)L.push('\ud83d\udcdd '+b.notes);
+  var dl=bkDriverLine();if(dl)L.push('','Your driver: '+dl);
+  return L.join('\n')}
+function bkIntl(ph){var d=String(ph||'').replace(/[^\d+]/g,'');if(!d)return '';if(d[0]==='+')return d.slice(1);if(/^0\d{9}$/.test(d))return '61'+d.slice(1);return d}
+function bkIcs(b){function z(n){return String(n).padStart(2,'0')}function u(d){return d.getUTCFullYear()+z(d.getUTCMonth()+1)+z(d.getUTCDate())+'T'+z(d.getUTCHours())+z(d.getUTCMinutes())+'00Z'}
+  function e(t){return String(t||'').replace(/\\/g,'\\\\').replace(/;/g,'\;').replace(/,/g,'\\,').replace(/\r?\n/g,'\\n')}
+  var st=bkAt(b),en=new Date(st.getTime()+45*60000);
+  var L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Fareo//Bookings//EN','CALSCALE:GREGORIAN','BEGIN:VEVENT','UID:'+b.id+'@fareo','DTSTAMP:'+u(new Date()),'DTSTART:'+u(st),'DTEND:'+u(en),
+    'SUMMARY:'+e('Taxi: '+bkShort(b.from)+(b.to?' \u2192 '+bkShort(b.to):'')),'LOCATION:'+e(b.from),'DESCRIPTION:'+e(bkMessage(b))];
+  if(b.remind)L.push('BEGIN:VALARM','TRIGGER:-PT'+b.remind+'M','ACTION:DISPLAY','DESCRIPTION:'+e('Taxi pickup at '+bkShort(b.from)),'END:VALARM');
+  L.push('END:VEVENT','END:VCALENDAR');return L.join('\r\n')}
+/* ---------- editor ---------- */
+var bkDraft=null,bkActive='from',bkHotEditing=false;
+function bkDefaultTime(){var d=new Date(Date.now()+60*60000);d.setMinutes(Math.ceil(d.getMinutes()/15)*15,0,0);return ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)}
+function openBooking(id){var b=id?bookings.filter(function(x){return x.id===id})[0]:null;
+  bkDraft=b?JSON.parse(JSON.stringify(b)):{id:null,date:todayStr(),time:bkDefaultTime(),from:'',to:'',name:'',phone:'',notes:'',remind:settings.bkRemind!=null?settings.bkRemind:30};
+  $('#bkEyebrow').textContent=b?'Edit booking':'New booking';$('#bkSave').textContent=b?'Save changes':'Save booking';
+  $('#bkDate').value=bkDraft.date;$('#bkDate').min=b?'':todayStr();$('#bkTime').value=bkDraft.time;
+  ['from','to','name','phone','notes'].forEach(function(k){$('#bk'+k.charAt(0).toUpperCase()+k.slice(1)).value=bkDraft[k]||''});
+  $('#bkMore').open=!!(bkDraft.phone||bkDraft.notes);
+  bkActive=bkDraft.from?'to':'from';bkHotEditing=false;
+  ['#bkFromSug','#bkToSug','#bkNameSug'].forEach(function(x){$(x).innerHTML=''});
+  bkRenderEditor();showModal('bkModal');
+  if(!b)setTimeout(function(){var f=$('#bkFrom');if(f&&!touchDevice())f.focus()},350)}
+function bkRenderEditor(){
+  var days=[];for(var k=0;k<5;k++){var d=new Date();d.setDate(d.getDate()+k);days.push(iso(d))}
+  if(days.indexOf(bkDraft.date)<0)days.push(bkDraft.date);
+  $('#bkDays').innerHTML=days.map(function(ds){return '<button type="button" class="'+(ds===bkDraft.date?'on':'')+'" data-bkd="'+ds+'">'+esc(bkDayLbl(ds))+'</button>'}).join('');
+  $$('#bkRemind [data-rm]').forEach(function(x){x.classList.toggle('on',Number(x.dataset.rm)===Number(bkDraft.remind))});
+  $('#bkHotFor').textContent=bkActive==='to'?'To':'From';
+  $$('.bk-addr').forEach(function(x){x.classList.toggle('active',x.dataset.which===bkActive)});
+  var hot=bkHotList();
+  $('#bkHot').innerHTML=hot.map(function(h,i){var mine=(settings.bkHot||[]).indexOf(h)>=0;return '<button type="button" class="'+(mine?'mine':'')+(bkHotEditing?' editing':'')+'" data-hot="'+i+'" title="'+esc(h)+'">'+(mine?'\u2605 ':'')+esc(bkShort(h))+(bkHotEditing?'<i aria-hidden="true">\u00d7</i>':'')+'</button>'}).join('')||'<span class="bk-note">No hotspots \u2014 tap \u2606 next to an address to save one.</span>';
+  $('#bkHot')._list=hot;$('#bkHotEdit').textContent=bkHotEditing?'Done':'Edit';
+  ['from','to'].forEach(function(w){var v=$('#bk'+(w==='from'?'From':'To')).value.trim(),st=$('[data-star="'+w+'"]');var saved=v&&(settings.bkHot||[]).indexOf(v)>=0;st.innerHTML=saved?'&#9733;':'&#9734;';st.classList.toggle('on',saved);st.hidden=!v});
+  var ms=$('#bkMoreSum');if(ms){var n=$('#bkPhone').value.trim();ms.textContent=n?'\u00b7 '+n:''}
+}
+/* Local suggestions: hotspots, address book, recent bookings. */
+function bkLocal(q){q=q.toLowerCase().trim();var words=q.split(/\s+/).filter(Boolean),out=[],seen={};
+  function add(line,src){var k=line.toLowerCase().replace(/[^a-z0-9]/g,'');if(!line||seen[k])return;var l=line.toLowerCase();if(words.length&&!words.every(function(w){return l.indexOf(w)>=0||src.toLowerCase().indexOf(w)>=0}))return;seen[k]=1;out.push({line:line,src:src})}
+  bkHotList().forEach(function(h){add(h,(settings.bkHot||[]).indexOf(h)>=0?'Your hotspot':'Hotspot')});
+  if(words.length)BK_PLACES.forEach(function(g){g[1].forEach(function(pl){add(pl,g[0])})});
+  bookings.slice().sort(function(a,b){return (b.createdAt||0)-(a.createdAt||0)}).slice(0,40).forEach(function(b){add(b.from,'Recent');if(b.to)add(b.to,'Recent')});
+  (clients||[]).forEach(function(c){filledAddrs(c).forEach(function(a){add(a.line,clientLabel(c)+(a.title?' \u00b7 '+a.title:''))})});
+  return out}
+function bkSuggest(which){var inp=$('#bk'+(which==='from'?'From':'To')),box=$('#bk'+(which==='from'?'From':'To')+'Sug'),q=inp.value.trim();
+  if(!q){box.innerHTML='';return}
+  var loc=bkLocal(q).slice(0,5);
+  function head(l){return l.split(',')[0].toLowerCase().replace(/[^a-z0-9]/g,'')}
+  function draw(online){var all=loc.concat((online||[]).filter(function(o){return !loc.some(function(l){return head(l.line)===head(o.line)})})).slice(0,7);
+    if(inp.value.trim()!==q)return;
+    box.innerHTML=all.map(function(o,i){return '<button type="button" data-sug="'+i+'"><b>'+esc(o.line)+'</b><small>'+esc(o.src)+'</small></button>'}).join('');box._list=all}
+  draw([]);if(q.length>=3)bkPlaces(q,function(r){draw(r)})}
+function bkPickAddr(which,line){var inp=$('#bk'+(which==='from'?'From':'To'));inp.value=line;bkDraft[which]=line;$('#bk'+(which==='from'?'From':'To')+'Sug').innerHTML='';sfx('tap');
+  if(which==='from'&&!$('#bkTo').value.trim()){bkActive='to';if(!touchDevice())$('#bkTo').focus()}bkRenderEditor()}
+function bkNameSuggest(){var q=$('#bkName').value.trim().toLowerCase(),box=$('#bkNameSug');if(!q){box.innerHTML='';return}
+  var hits=(clients||[]).filter(function(c){return (clientLabel(c)+' '+(c.name||'')).toLowerCase().indexOf(q)>=0}).slice(0,4);
+  box.innerHTML=hits.map(function(c){return '<button type="button" data-cli="'+esc(c.id)+'">'+esc(clientLabel(c))+'</button>'}).join('')}
+function bkSaveDraft(){
+  bkDraft.date=$('#bkDate').value;bkDraft.time=$('#bkTime').value;
+  ['from','to','name','phone','notes'].forEach(function(k){bkDraft[k]=$('#bk'+k.charAt(0).toUpperCase()+k.slice(1)).value.trim()});
+  if(!bkDraft.date){toast('Pick the date','warn');return}
+  if(!bkDraft.time){toast('Set the pickup time','warn');$('#bkTime').focus();return}
+  if(!bkDraft.from){toast('Add the pickup address','warn');var f=$('#bkFrom');f.focus();f.closest('.bk-addr').classList.add('shake');setTimeout(function(){f.closest('.bk-addr').classList.remove('shake')},500);return}
+  var at=bkAt(bkDraft).getTime(),isNew=!bkDraft.id,prev=isNew?null:bookings.filter(function(x){return x.id===bkDraft.id})[0];
+  if(isNew&&at<Date.now()-5*60000){toast('That time has already passed','warn');return}
+  if(isNew){bkDraft.id='bk'+Date.now().toString(36);bkDraft.createdAt=Date.now();bkDraft.status='upcoming';bookings.push(bkDraft)}
+  else{if(prev&&(prev.date!==bkDraft.date||prev.time!==bkDraft.time||prev.remind!==bkDraft.remind))bkDraft.alerted=false;if(at>Date.now())bkDraft.status='upcoming';bookings=bookings.map(function(x){return x.id===bkDraft.id?bkDraft:x})}
+  settings.bkRemind=bkDraft.remind;save('fareo_settings',settings);
+  saveBookings();closeModal('bkModal');sfx('success');buzz(10);
+  if(bkDraft.remind&&typeof Notification!=='undefined'&&Notification.permission==='default'){try{Notification.requestPermission()}catch(_){}}
+  renderBkHome();if(curTab==='bookings')renderBookings();
+  var saved=bkDraft;setTimeout(function(){openBkShare(saved.id,isNew?'Booking saved':'Booking updated')},280)}
+/* ---------- share ---------- */
+var bkShareId=null;
+function openBkShare(id,eyebrow){var b=bookings.filter(function(x){return x.id===id})[0];if(!b)return;bkShareId=id;
+  $('#bkShEyebrow').textContent=eyebrow||'Share trip';$('#bkMsg').value=bkMessage(b);
+  $('#bkShTo').textContent=b.phone?('SMS and WhatsApp open with '+b.phone+' filled in. You can edit the message first.'):'Add a mobile to the booking to send it straight to the passenger. You can edit the message first.';
+  showModal('bkShareModal')}
+function bkShare(how){var b=bookings.filter(function(x){return x.id===bkShareId})[0];if(!b)return;var msg=$('#bkMsg').value,enc=encodeURIComponent(msg);
+  if(how==='sms'){var ios=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);location.href='sms:'+String(b.phone||'').replace(/[^\d+]/g,'')+(ios?'&':'?')+'body='+enc;return}
+  if(how==='wa'){var n=bkIntl(b.phone);window.open('https://wa.me/'+n+'?text='+enc,'_blank');return}
+  if(how==='copy'){(navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(msg):Promise.reject()).then(function(){toast('Trip details copied','success')}).catch(function(){var t=$('#bkMsg');t.select();try{document.execCommand('copy');toast('Trip details copied','success')}catch(_){toast('Select the text and copy it','warn')}});return}
+  if(how==='cal'){var d=bkAt(b);deliverFile(new Blob([bkIcs(b)],{type:'text/calendar'}),'Taxi-'+b.date+'-'+String(b.time).replace(':','')+'.ics','Taxi booking','Calendar event ready')}}
+/* ---------- Home card ---------- */
+function bkCardRow(b,hero){var at=bkAt(b),ms=at-Date.now(),late=ms<-5*60000,soon=!late&&ms<=Math.max(60,b.remind||0)*60000;
+  var cls='bk-row'+(hero?' hero':'')+(late?' late':soon?' soon':'');
+  var route='<span class="bk-route-l"><i class="bk-pin from"></i>'+esc(bkShort(b.from))+'</span>'+(b.to?'<span class="bk-arrow">\u2192</span><span class="bk-route-l"><i class="bk-pin to"></i>'+esc(bkShort(b.to))+'</span>':'');
+  var acts=hero?('<div class="bk-acts">'+(late?'<button type="button" data-bkdone="'+b.id+'">Done</button><button type="button" data-bkdel="'+b.id+'">Remove</button>':'<button type="button" data-bkshare="'+b.id+'">Share</button><button type="button" data-bkcal="'+b.id+'">Calendar</button>')+'</div>'):'';
+  return '<div class="'+cls+'" data-bkopen="'+b.id+'" role="button" tabindex="0"><div class="bk-when"><b>'+bkClock(at)+'</b><small>'+esc(bkDayLbl(b.date))+'</small></div><div class="bk-what"><div class="bk-rel">'+(late?'Pickup was '+bkRel(ms):soon?'Pickup '+bkRel(ms):bkRel(ms))+'</div><div class="bk-r">'+route+'</div>'+(b.name&&hero?'<small class="bk-who">'+esc(b.name)+(b.phone?' \u00b7 '+esc(b.phone):'')+'</small>':'')+acts+'</div></div>'}
+function renderBkHome(){var box=$('#bkHome');if(!box)return;var up=bkUpcoming();
+  if(!up.length){box.className='bk-home empty';box.innerHTML='<button type="button" class="bk-empty" id="bkHomeNew">'+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l1.6-4.3A2 2 0 0 1 8.5 7.4h7a2 2 0 0 1 1.9 1.3L19 13"/><path d="M4 13h16v4.5H4z"/><circle cx="7.5" cy="17.5" r="1.4"/><circle cx="16.5" cy="17.5" r="1.4"/><path d="M10 4.5h4"/></svg>'+'<span><b>Bookings</b><small>No upcoming pickups \u00b7 tap to add a reminder</small></span><i aria-hidden="true">+</i></button>';return}
+  var first=up[0],ms=bkAt(first)-Date.now(),state=ms<-5*60000?'late':ms<=Math.max(60,first.remind||0)*60000?'soon':'';
+  box.className='bk-home'+(state?' '+state:'');
+  box.innerHTML='<div class="bk-home-head"><span class="eyebrow">'+(state==='late'?'Check this booking':state==='soon'?'Pickup coming up':'Upcoming bookings')+' \u00b7 '+up.length+'</span><span class="bk-home-btns"><button type="button" class="bk-mini" id="bkHomeAll">All</button><button type="button" class="bk-mini add" id="bkHomeNew">+ New</button></span></div>'
+    +bkCardRow(first,true)+up.slice(1,3).map(function(b){return bkCardRow(b,false)}).join('')+(up.length>3?'<button type="button" class="bk-more-link" id="bkHomeAll2">+'+(up.length-3)+' more</button>':'')}
+/* ---------- Bookings screen ---------- */
+function renderBookings(){var box=$('#bkList');if(!box)return;var now=Date.now(),up=bkUpcoming();
+  var T=todayStr(),tm=new Date();tm.setDate(tm.getDate()+1);var TM=iso(tm);
+  var groups=[['Today',function(b){return b.date<=T}],['Tomorrow',function(b){return b.date===TM}],['Later',function(b){return b.date>TM}]];
+  var html=groups.map(function(g){var rows=up.filter(g[1]);if(!rows.length)return '';return '<p class="grp">'+g[0]+'</p><div class="card bk-card">'+rows.map(function(b){return bkListRow(b)}).join('')+'</div>'}).join('');
+  var past=bookings.filter(function(b){return up.indexOf(b)<0}).sort(function(a,b){return bkAt(b)-bkAt(a)}).slice(0,30);
+  if(!up.length)html='<div class="ded-empty bk-none">'+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l1.6-4.3A2 2 0 0 1 8.5 7.4h7a2 2 0 0 1 1.9 1.3L19 13"/><path d="M4 13h16v4.5H4z"/><circle cx="7.5" cy="17.5" r="1.4"/><circle cx="16.5" cy="17.5" r="1.4"/><path d="M10 4.5h4"/></svg>'+'<b>No upcoming bookings</b><span>Add the date, time and pickup address. Fareo reminds you on Home and can text the trip details to your passenger.</span><button type="button" class="btn" id="bkEmptyNew" style="margin-top:12px">+ New booking</button></div>';
+  if(past.length)html+='<details class="bk-past"><summary>Past &amp; done \u00b7 '+past.length+'</summary><div class="card bk-card">'+past.map(function(b){return bkListRow(b,true)}).join('')+'</div></details>';
+  box.innerHTML=html}
+function bkListRow(b,past){var at=bkAt(b);return '<div class="bk-li'+(past?' past':'')+'"><button type="button" class="bk-li-main" data-bkopen="'+b.id+'"><span class="bk-when"><b>'+bkClock(at)+'</b><small>'+esc(bkDayLbl(b.date))+'</small></span><span class="bk-what"><span class="bk-r"><span class="bk-route-l"><i class="bk-pin from"></i>'+esc(bkShort(b.from))+'</span>'+(b.to?'<span class="bk-arrow">\u2192</span><span class="bk-route-l"><i class="bk-pin to"></i>'+esc(bkShort(b.to))+'</span>':'')+'</span><small>'+(past?(b.status==='done'?'Done':'Not marked done'):bkRel(at-Date.now()))+(b.name?' \u00b7 '+esc(b.name):'')+'</small></span></button>'
+  +'<span class="bk-li-acts">'+(past?'<button type="button" data-bkagain="'+b.id+'" aria-label="Book again">\u21bb</button>':'<button type="button" data-bkshare="'+b.id+'" aria-label="Share">\u2197</button><button type="button" data-bkdone="'+b.id+'" aria-label="Mark done">\u2713</button>')+'<button type="button" data-bkdel="'+b.id+'" aria-label="Remove">\u00d7</button></span></div>'}
+/* ---------- reminders ---------- */
+function bkAlert(b){var at=bkAt(b),title='Taxi pickup '+bkRel(at-Date.now()),body=bkClock(at)+' \u00b7 '+bkShort(b.from)+(b.to?' \u2192 '+bkShort(b.to):'')+(b.name?' \u00b7 '+b.name:'');
+  sfx('warn');buzz([120,80,120]);toast(title+' \u00b7 '+bkShort(b.from),'warn');
+  try{if(typeof Notification!=='undefined'&&Notification.permission==='granted'){var opts={body:body,tag:b.id,icon:'icon-192-v100.png',badge:'favicon-64-v100.png'};
+    if(navigator.serviceWorker&&navigator.serviceWorker.getRegistration)navigator.serviceWorker.getRegistration().then(function(r){if(r&&r.showNotification)r.showNotification(title,opts);else new Notification(title,opts)}).catch(function(){});else new Notification(title,opts)}}catch(_){}}
+function bkTick(){var now=Date.now(),ch=false;
+  bookings.forEach(function(b){if(b.status!=='upcoming'||!b.remind||b.alerted)return;var at=bkAt(b).getTime();if(now>=at-b.remind*60000&&now<at+20*60000){b.alerted=true;ch=true;bkAlert(b)}});
+  if(ch)saveBookings();if(curTab==='hub')renderBkHome();if(curTab==='bookings')renderBookings()}
+setInterval(bkTick,30000);
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')setTimeout(bkTick,800)});
+setTimeout(function(){try{bkTick();renderBkHome()}catch(_){}},1500);
+/* ---------- events ---------- */
+function bkMark(id,st){bookings=bookings.map(function(b){if(b.id===id){b=Object.assign({},b,{status:st})}return b});saveBookings();renderBkHome();if(curTab==='bookings')renderBookings()}
+document.addEventListener('click',function(e){var t=e.target,c=function(sel){return t.closest&&t.closest(sel)};
+  if(c('#bkNew')||c('#bkHomeNew')||c('#bkEmptyNew')){openBooking(null);sfx('tap');return}
+  if(c('#bkHomeAll')||c('#bkHomeAll2')){go('bookings');return}
+  var x;
+  if((x=c('[data-bkshare]'))){openBkShare(x.dataset.bkshare,'Share trip');return}
+  if((x=c('[data-bkcal]'))){bkShareId=x.dataset.bkcal;var b0=bookings.filter(function(b){return b.id===bkShareId})[0];if(b0){$('#bkMsg').value=bkMessage(b0);bkShare('cal')}return}
+  if((x=c('[data-bkdone]'))){var id=x.dataset.bkdone;bkMark(id,'done');offerUndo&&toast('Marked done','success');return}
+  if((x=c('[data-bkdel]'))){var idd=x.dataset.bkdel,bb=bookings.filter(function(b){return b.id===idd})[0];if(!bb)return;ask('Remove this booking?',bkClock(bkAt(bb))+' '+bkDayLbl(bb.date)+' \u00b7 '+bkShort(bb.from)+(bb.to?' \u2192 '+bkShort(bb.to):''),'Remove',function(){bookings=bookings.filter(function(b){return b.id!==idd});saveBookings();renderBkHome();if(curTab==='bookings')renderBookings()});return}
+  if((x=c('[data-bkagain]'))){var ob=bookings.filter(function(b){return b.id===x.dataset.bkagain})[0];if(!ob)return;openBooking(null);['from','to','name','phone','notes'].forEach(function(k){bkDraft[k]=ob[k]||'';$('#bk'+k.charAt(0).toUpperCase()+k.slice(1)).value=ob[k]||''});bkDraft.time=ob.time;$('#bkTime').value=ob.time;$('#bkMore').open=!!(ob.phone||ob.notes);bkRenderEditor();return}
+  if((x=c('[data-bkopen]'))&&!c('.bk-acts')){openBooking(x.dataset.bkopen);return}
+  /* editor */
+  if((x=c('#bkDays [data-bkd]'))){bkDraft.date=x.dataset.bkd;$('#bkDate').value=bkDraft.date;bkRenderEditor();sfx('tap');return}
+  if((x=c('#bkTimeQuick [data-tq]'))){var d=new Date(Date.now()+Number(x.dataset.tq)*60000);d.setMinutes(Math.ceil(d.getMinutes()/5)*5,0,0);bkDraft.date=iso(d);bkDraft.time=('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);$('#bkDate').value=bkDraft.date;$('#bkTime').value=bkDraft.time;bkRenderEditor();sfx('tap');return}
+  if((x=c('#bkRemind [data-rm]'))){bkDraft.remind=Number(x.dataset.rm);bkRenderEditor();sfx('tap');return}
+  if((x=c('.bk-sug [data-sug]'))){var box=x.closest('.bk-sug'),which=box.id==='bkFromSug'?'from':'to',o=box._list[Number(x.dataset.sug)];if(o)bkPickAddr(which,o.line);return}
+  if((x=c('#bkHot [data-hot]'))){var h=$('#bkHot')._list[Number(x.dataset.hot)];if(!h)return;
+    if(bkHotEditing){var mine=settings.bkHot||[];if(mine.indexOf(h)>=0)settings.bkHot=mine.filter(function(v){return v!==h});else settings.bkHotHidden=(settings.bkHotHidden||[]).concat([h]);save('fareo_settings',settings);bkRenderEditor();return}
+    bkPickAddr(bkActive,h);return}
+  if(c('#bkHotEdit')){bkHotEditing=!bkHotEditing;bkRenderEditor();return}
+  if((x=c('[data-star]'))){var w=x.dataset.star,v=$('#bk'+(w==='from'?'From':'To')).value.trim();if(!v)return;var L=settings.bkHot||[];
+    if(L.indexOf(v)>=0){settings.bkHot=L.filter(function(a){return a!==v});toast('Removed from hotspots')}else{settings.bkHot=[v].concat(L).slice(0,12);settings.bkHotHidden=(settings.bkHotHidden||[]).filter(function(a){return a!==v});toast('Saved as a hotspot','success')}
+    save('fareo_settings',settings);bkRenderEditor();return}
+  if(c('#bkSwap')){var f=$('#bkFrom'),tt=$('#bkTo'),tmp=f.value;f.value=tt.value;tt.value=tmp;bkDraft.from=f.value;bkDraft.to=tt.value;bkRenderEditor();sfx('tap');return}
+  if((x=c('#bkNameSug [data-cli]'))){var cl=(clients||[]).filter(function(q){return String(q.id)===x.dataset.cli})[0];if(!cl)return;$('#bkName').value=clientLabel(cl);if(cl.phone&&!$('#bkPhone').value)$('#bkPhone').value=cl.phone;
+    var pa=pickupAddr(cl),da=dropAddr(cl);if(pa&&!$('#bkFrom').value.trim())$('#bkFrom').value=pa.line;if(da&&da!==pa&&!$('#bkTo').value.trim())$('#bkTo').value=da.line;$('#bkNameSug').innerHTML='';bkRenderEditor();sfx('tap');return}
+  if(t.id==='bkSave'){bkSaveDraft();return}
+  if(t.id==='bkCancel'){closeModal('bkModal');return}
+  if((x=c('[data-bsh]'))){bkShare(x.dataset.bsh);return}
+  if(t.id==='bkShDone'){closeModal('bkShareModal');return}
+});
+document.addEventListener('focusin',function(e){var w=e.target.closest&&e.target.closest('.bk-addr');if(w){bkActive=w.dataset.which;if(bkDraft)bkRenderEditor()}});
+document.addEventListener('input',function(e){var id=e.target.id;if(id==='bkFrom'||id==='bkTo'){var w=id==='bkFrom'?'from':'to';bkActive=w;bkDraft[w]=e.target.value;bkSuggest(w);bkRenderEditor()}if(id==='bkName'){bkNameSuggest();bkRenderEditor()}if(id==='bkDate'&&e.target.value){bkDraft.date=e.target.value;bkRenderEditor()}});
+document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.closest&&e.target.closest('[data-bkopen]')&&e.target.matches('[data-bkopen]')){openBooking(e.target.dataset.bkopen)}if(e.key==='Enter'&&e.target.id==='bkFrom'){e.preventDefault();var l=$('#bkFromSug')._list;if(l&&l[0]&&$('#bkFromSug').innerHTML)bkPickAddr('from',l[0].line);else $('#bkTo').focus()}});
 /* ---------- address book ---------- */
 function uid(p){return (p||'id')+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
 function clientLabel(c){return ((c.nick||'').trim()||(c.name||'').trim()||'Client')}
@@ -8971,7 +9320,7 @@ function watchForUpdates(){
 }
 
 /* ---------- nav ---------- */
-var TABS=['hub','shift','weekly','reports','runs','settings'];
+var TABS=['hub','shift','weekly','reports','runs','settings','bookings'];
 /* v9: Book merged into Clients (runs); Refresh moved into Settings. Old links still work. */
 var clientPane='plan';
 function resolveTab(tab){if(tab==='book'){clientPane='book';return 'runs'}if(tab==='refresh')return 'settings';return tab}
@@ -9181,7 +9530,8 @@ function applyTab(tab){
   if(tab==='reports'){repTallyDelay=calcIn(_sec);renderReports();repTallyDelay=0;setTimeout(function(){pdfReady().catch(function(){})},1200)}
   if(tab==='settings')renderSettings();
   if(tab==='runs')setClientPane(clientPane);
-  if(tab==='hub'){hubTallyDelay=calcIn(_sec);renderHub();renderWx();wxFetch(false)}
+  if(tab==='bookings')renderBookings();
+  if(tab==='hub'){hubTallyDelay=calcIn(_sec);renderHub();renderWx();wxFetch(false);try{renderBkHome()}catch(_){}}
   window.scrollTo({top:0});
   syncTrailBtns();
   if(typeof updateLogProgress==='function')updateLogProgress();
