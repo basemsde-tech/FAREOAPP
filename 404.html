@@ -1816,6 +1816,40 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
 .dw-range{font-family:var(--mono);font-size:10px;color:var(--mut);flex:0 0 auto}
 @media (max-width:360px){.dq-b{padding:10px 8px}.dq-b b{font-size:13.5px}}
 @media (prefers-reduced-motion:reduce){.dq-b.sug{animation:none}.dw-days.slide-l,.dw-days.slide-r{animation:none}}
+/* ---------- Fareo 15.1 · Reports fold / hide ---------- */
+.rep-sub{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.rep-tools{display:flex;gap:6px;flex:0 0 auto;margin-bottom:2px}
+.rep-tool{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 11px;border-radius:11px;border:1px solid var(--bd2);background:var(--card);color:var(--body);font:inherit;font-size:12px;font-weight:650;letter-spacing:0;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .2s,border-color .2s,transform .2s var(--spring)}
+.rep-tool svg{width:16px;height:16px;color:var(--mut)}
+.rep-tool.on{border-color:var(--accent-line);color:var(--accent)}.rep-tool.on svg{color:var(--accent)}
+.rep-tool:active{transform:scale(.94)}
+@media (max-width:380px){.rep-tool span{display:none}.rep-tool{width:36px;padding:0;justify-content:center}}
+@media (max-width:440px){.rep-sub small{display:none}.rep-sub{align-items:center}}
+.card.foldable{transition:padding .3s var(--ease)}
+.fold-head{cursor:pointer;-webkit-tap-highlight-color:transparent;transition:margin .3s var(--ease)}
+.fold-head:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:10px}
+.fold-tg{flex:0 0 auto;width:28px;height:28px;margin-left:2px;border-radius:9px;display:grid;place-items:center;background:var(--field);color:var(--mut);align-self:center;transition:transform .35s var(--spring),background .2s,color .2s}
+.fold-tg svg{width:16px;height:16px}
+.card.folded .fold-tg{transform:rotate(-90deg);background:transparent}
+.fold-head:hover .fold-tg{color:var(--head)}
+.fold-body{display:grid;grid-template-rows:1fr;transition:grid-template-rows .38s var(--ease),opacity .3s var(--ease);opacity:1}
+.fold-in{min-height:0;overflow:hidden;margin:-4px;padding:4px}
+.card.folded .fold-body{grid-template-rows:0fr;opacity:0;pointer-events:none}
+.card.folded .fold-head{margin-bottom:0}
+.fold-peek{display:block;overflow:hidden;max-height:0;opacity:0;font-family:var(--mono);font-size:11.5px;color:var(--mut);white-space:nowrap;text-overflow:ellipsis;cursor:pointer;transition:max-height .3s var(--ease),opacity .3s var(--ease),margin .3s var(--ease)}
+.card.folded .fold-peek{max-height:24px;opacity:1;margin-top:8px}
+.card.fold-instant,.card.fold-instant *{transition:none!important}
+.card[hidden]{display:none!important}
+.rep-hidden-chip{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;margin:2px 0 12px;padding:11px 14px;border-radius:13px;border:1px dashed var(--bd2);background:transparent;color:var(--mut);font:inherit;font-size:12px;cursor:pointer}
+.rep-hidden-chip b{color:var(--body);font-weight:650}
+.rep-hidden-chip[hidden]{display:none!important}
+.rc-list{display:flex;flex-direction:column;border:1px solid var(--bd);border-radius:14px;overflow:hidden;margin-top:6px}
+.rc-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-top:1px solid var(--bd)}
+.rc-list .rc-row:first-child{border-top:0}
+.rc-row b{display:block;font-size:14px;color:var(--head)}
+.rc-row small{display:block;font-size:11.5px;color:var(--mut);margin-top:2px}
+.rc-one{border:1px solid var(--bd);border-radius:14px;margin-top:10px}
+@media (prefers-reduced-motion:reduce){.fold-body,.fold-peek,.fold-tg{transition:none}}
 </style>
 </head>
 <body>
@@ -2064,7 +2098,8 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
   </section>
 
   <section class="screen" data-tab="reports">
-    <div class="sub">Reports <small>Dashboard · BAS · costs</small></div>
+    <div class="sub rep-sub"><span>Reports <small>Dashboard · BAS · costs</small></span>
+      <span class="rep-tools"><button type="button" class="rep-tool" id="repFoldAll" aria-label="Collapse all cards"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5M7 9l5-5 5 5"/></svg><span id="repFoldAllLbl">Collapse</span></button><button type="button" class="rep-tool" id="repCustom" aria-label="Customise Reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg><span>Customise</span></button></span></div>
 
     <div class="filterrow" id="filterRow">
       <button data-k="week" class="filt on">Cycle</button>
@@ -2218,6 +2253,7 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
       </div>
       <button class="btn neutral ex-summ" id="summaryBtn"><span class="summ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.7 4.3L18 9l-4.3 1.7L12 15l-1.7-4.3L6 9l4.3-1.7z"/></svg>Summary</span></button>
     </div>
+    <button type="button" class="rep-hidden-chip" id="repHiddenChip" hidden></button>
   </section>
 
   <section class="screen" data-tab="settings">
@@ -2419,6 +2455,15 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
   <button type="button" class="sm-opt" data-gdc="merge"><b>Merge both</b><small>Keeps every shift, cost and client from both, then backs up the result.</small></button>
   <button type="button" class="sm-opt" data-gdc="replace"><b>Replace the Drive backup</b><small>Backs up this device as it is. <em class="warn">The shifts only in Drive are lost.</em></small></button>
   <button type="button" class="btn neutral" id="gdcLater" style="margin-top:10px">Decide later</button>
+</div></div>
+<div class="modal" id="repCustomModal"><div class="sheet">
+  <div class="grip"></div>
+  <span class="eyebrow">Reports layout</span>
+  <h3>Show only what you need</h3>
+  <p class="csub">Hide the cards you don&rsquo;t use. Tap any card&rsquo;s title in Reports to fold or open it.</p>
+  <div class="rc-list" id="rcList"></div>
+  <div class="rc-row rc-one"><div><b>Open one card at a time</b><small>Opening a card folds the others</small></div><button type="button" class="tgl" id="rcOne" aria-label="Open one card at a time"></button></div>
+  <div class="two" style="margin-top:12px"><button type="button" class="btn neutral" id="rcReset">Show everything</button><button type="button" class="btn" id="rcDone">Done</button></div>
 </div></div>
 <div class="modal hail-modal" id="hailModal"><div class="sheet">
   <div class="grip"></div>
@@ -2726,8 +2771,11 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='15.0';
+var APP_VERSION='15.1';
 var CHANGELOG=[
+  {v:'15.1',date:'November 3, 2026',notes:[
+    ['UI/UX','Reports is tidier: tap any card\u2019s title to fold it down to its key figure, or tap Collapse to fold them all. Customise hides the cards you don\u2019t use and can keep just one card open at a time. Your layout is remembered.'],
+  ]},
   {v:'15.0',date:'November 3, 2026',notes:[
     ['Feature','Your data now lives only on this device. Multi-device sync is gone, so another device can never change or wipe what\u2019s here.'],
     ['Feature','Automatic Google Drive backup: Settings \u2192 Backup & restore. Choose after changes, daily, weekly or monthly. Each backup replaces one file in Drive \u203a Fareo, and you can restore from it on any device. If Drive has more shifts than this device, Fareo pauses and asks instead of overwriting.'],
@@ -6495,6 +6543,65 @@ function renderReports(){
     $('#recurRows').innerHTML=recurring.map(function(r){return '<div class="tr" style="grid-template-columns:1fr auto auto auto"><span>'+esc(r.name)+'</span><span class="rg">'+esc(freqLabel[r.freq]||r.freq)+'</span><span class="am" style="color:var(--inc)">'+money(r.amount)+'</span><button class="x" data-delrecur="'+r.id+'" style="background:transparent;border:1px solid var(--dgr);border-radius:8px;color:var(--dgr);width:28px;height:28px;cursor:pointer;font-weight:700">&times;</button></div>'}).join('');
     $$('[data-delrecur]').forEach(function(b){b.onclick=function(){var rid=Number(b.dataset.delrecur);var r=recurring.filter(function(x){return x.id===rid})[0];ask('Remove this repeating cost?',(r?(r.name||'')+' \u00b7 '+money(r.amount)+'. ':'')+'Future copies drop off reports. Past logged weeks stay as they were.','Remove',function(){recurring=recurring.filter(function(x){return x.id!==rid});save('fareo_recurring',recurring);renderReports();toast('Recurring expense removed')})}});}
 }
+
+/* ---------- Reports: fold, hide and focus cards ----------
+   Each card's header folds it. Folded cards show one key figure. Cards can
+   be hidden from Customise, and "one at a time" keeps a single card open.
+   Stored in settings.repUI so it comes back with a backup. */
+var REP_CARDS=[
+  {id:'execCard',name:'Executive summary',head:'.exec-head',peek:function(){return 'Kept after tax '+txt('#exKept')}},
+  {id:'pulseCard',name:'This range',head:'.ph-head',peek:function(){return txt('#pulseHeroLbl')+' '+txt('#repTake')}},
+  {id:'deadlineCard',name:'Due dates',head:'.ph-head',peek:function(){return 'GST '+txt('#qGstAmt')+' · levy '+txt('#qLevyAmt')}},
+  {id:'basCopyCard',name:'Copy onto your BAS',head:'.ph-head',peek:function(){return 'G1 '+txt('#basCopyG1')+' · '+txt('#taxNetLabel')+' '+txt('#taxNetAmt')}},
+  {id:'taxCard',name:'Costs & credits',head:'.ph-head',peek:function(){return '1B '+txt('#repGstCred')+' · deductions '+txt('#repDeduct')}},
+  {id:'exportCard',name:'Export & print',head:'.ex-head',peek:function(){return 'PDF, print and CSV · '+txt('#exCount')}}
+];
+function txt(sel){var e=$(sel);if(!e)return '';if(e.classList.contains('tally')&&e.dataset.v!=null&&!e.dataset.fmt)return money(Number(e.dataset.v)||0);return e.textContent.trim()}
+function repUI(){var u=settings.repUI;if(!u||typeof u!=='object'){u=settings.repUI={collapsed:{},hidden:{},one:false}}u.collapsed=u.collapsed||{};u.hidden=u.hidden||{};return u}
+function repUISave(){save('fareo_settings',settings)}
+function repFoldInit(){
+  REP_CARDS.forEach(function(c){var card=document.getElementById(c.id);if(!card||card.dataset.fold)return;var head=card.querySelector(c.head);if(!head)return;
+    card.dataset.fold='1';card.classList.add('foldable');head.classList.add('fold-head');head.setAttribute('role','button');head.setAttribute('tabindex','0');
+    var body=document.createElement('div');body.className='fold-body';var inner=document.createElement('div');inner.className='fold-in';body.appendChild(inner);
+    var n=head.nextSibling;while(n){var nx=n.nextSibling;inner.appendChild(n);n=nx}
+    card.appendChild(body);
+    var peek=document.createElement('div');peek.className='fold-peek';peek.setAttribute('aria-hidden','true');head.insertAdjacentElement('afterend',peek);
+    var tg=document.createElement('span');tg.className='fold-tg';tg.setAttribute('aria-hidden','true');tg.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';head.appendChild(tg);
+  });
+  repFoldApply(true);
+}
+function repFoldApply(instant){var u=repUI(),hiddenN=0;
+  REP_CARDS.forEach(function(c){var card=document.getElementById(c.id);if(!card)return;var hid=!!u.hidden[c.id],col=!!u.collapsed[c.id];if(hid)hiddenN++;
+    card.hidden=hid;if(instant)card.classList.add('fold-instant');card.classList.toggle('folded',col);
+    var h=card.querySelector('.fold-head');if(h)h.setAttribute('aria-expanded',col?'false':'true');
+    if(instant)requestAnimationFrame(function(){card.classList.remove('fold-instant')})});
+  var chip=$('#repHiddenChip');if(chip){chip.hidden=!hiddenN;chip.innerHTML='<b>'+hiddenN+' hidden card'+(hiddenN===1?'':'s')+'</b><span>Show or hide cards</span>'}
+  var vis=REP_CARDS.filter(function(c){return !u.hidden[c.id]}),allCol=vis.length&&vis.every(function(c){return u.collapsed[c.id]});
+  var lb=$('#repFoldAllLbl');if(lb)lb.textContent=allCol?'Expand':'Collapse';var fa=$('#repFoldAll');if(fa){fa.classList.toggle('on',!!allCol);fa.setAttribute('aria-label',allCol?'Expand all cards':'Collapse all cards')}
+  repFoldPeek();
+}
+function repFoldPeek(){REP_CARDS.forEach(function(c){var card=document.getElementById(c.id);if(!card)return;var pk=card.querySelector('.fold-peek');if(pk)try{pk.textContent=c.peek()}catch(_){}})}
+function repToggle(id){var u=repUI(),open=!!u.collapsed[id];
+  if(open&&u.one)REP_CARDS.forEach(function(c){if(c.id!==id)u.collapsed[c.id]=true});
+  u.collapsed[id]=!open;repUISave();repFoldApply();sfx('tap');buzz(5);
+  if(open){var card=document.getElementById(id);if(card&&u.one)setTimeout(function(){var r=card.getBoundingClientRect();if(r.top<70||r.top>innerHeight*.6)card.scrollIntoView({block:'start',behavior:motionOff()?'auto':'smooth'})},380)}}
+function renderRepCustom(){var u=repUI();
+  $('#rcList').innerHTML=REP_CARDS.map(function(c){var on=!u.hidden[c.id];return '<div class="rc-row"><div><b>'+esc(c.name)+'</b><small>'+(on?(u.collapsed[c.id]?'Shown · folded':'Shown'):'Hidden')+'</small></div><button type="button" class="tgl'+(on?' on':'')+'" data-rc="'+c.id+'" aria-label="Show '+esc(c.name)+'"></button></div>'}).join('');
+  $('#rcOne').classList.toggle('on',!!u.one)}
+document.addEventListener('click',function(e){
+  var t=e.target;
+  var h=t.closest&&t.closest('.card.foldable > .fold-head');
+  if(h&&!t.closest('.help,button,a,input,select,.ph-pill.tap')){repToggle(h.closest('.card').id);return}
+  if(t.closest&&t.closest('.fold-peek')){repToggle(t.closest('.card').id);return}
+  if(t.closest&&t.closest('#repFoldAll')){var u=repUI(),vis=REP_CARDS.filter(function(c){return !u.hidden[c.id]}),allCol=vis.every(function(c){return u.collapsed[c.id]});vis.forEach(function(c){u.collapsed[c.id]=!allCol});repUISave();repFoldApply();sfx('tap');return}
+  if(t.closest&&(t.closest('#repCustom')||t.closest('#repHiddenChip'))){renderRepCustom();showModal('repCustomModal');sfx('tap');return}
+  var rc=t.closest&&t.closest('[data-rc]');if(rc){var u2=repUI(),id=rc.dataset.rc;if(!u2.hidden[id]&&REP_CARDS.filter(function(c){return !u2.hidden[c.id]}).length<=1){toast('Keep at least one card','warn');return}u2.hidden[id]=!u2.hidden[id];if(!u2.hidden[id])u2.collapsed[id]=false;repUISave();renderRepCustom();repFoldApply();sfx('tap');return}
+  if(t.id==='rcOne'){var u3=repUI();u3.one=!u3.one;if(u3.one){var firstOpen=null;REP_CARDS.forEach(function(c){if(u3.hidden[c.id])return;if(!u3.collapsed[c.id]&&!firstOpen)firstOpen=c.id;else u3.collapsed[c.id]=true})}repUISave();renderRepCustom();repFoldApply();sfx('tap');return}
+  if(t.id==='rcReset'){settings.repUI={collapsed:{},hidden:{},one:false};repUISave();renderRepCustom();repFoldApply();toast('All cards shown','success');return}
+  if(t.id==='rcDone'){closeModal('repCustomModal');return}
+});
+document.addEventListener('keydown',function(e){if((e.key==='Enter'||e.key===' ')&&e.target.classList&&e.target.classList.contains('fold-head')){e.preventDefault();repToggle(e.target.closest('.card').id)}});
+(function(){var orig=renderReports;renderReports=function(){var r=orig.apply(this,arguments);try{repFoldInit();repFoldPeek()}catch(_){}return r}})();
 $$('#filterRow .filt').forEach(function(b){b.onclick=function(){setFilter(b.dataset.k)}});
 /* [F10] auto-swap inverted ranges */
 $('#applyCustom').onclick=function(){var f=$('#repFrom').value,t=$('#repTo').value;if(!f||!t){toast('Pick both dates');return}if(f>t){var tmp=f;f=t;t=tmp;toast('Dates were swapped')}repRange.from=f;repRange.to=t;repRange.name='Custom';renderReports();closeModal('rangeModal')};
