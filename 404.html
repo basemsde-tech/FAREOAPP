@@ -1746,6 +1746,15 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
 .ex.busy::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,color-mix(in srgb,currentColor 18%,transparent),transparent);background-size:50% 100%;background-repeat:no-repeat;animation:scan .9s var(--ease) infinite}
 .ex-summ{margin-top:10px}
 @media (min-width:1024px){.ex-grid{grid-template-columns:repeat(4,1fr)}.screen[data-tab="reports"] > .export-card{grid-column:1/-1}}
+/* ---------- Fareo 14.4 · recovery ---------- */
+.rp-list{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.rp-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:10px 11px;border-radius:11px;border:1px solid var(--bd);background:var(--card2)}
+.rp-row b{display:block;font-size:13px;color:var(--head)}
+.rp-row small{display:block;font-family:var(--mono);font-size:10.5px;color:var(--mut);margin-top:3px;line-height:1.4}
+.rp-row.more{border-color:var(--accent-line);background:var(--accent-dim)}
+.rp-btn{border:1px solid var(--accent);background:transparent;color:var(--accent);border-radius:9px;padding:8px 12px;font-weight:700;font-size:12px;cursor:pointer}
+.rp-row.more .rp-btn{background:var(--accent);color:var(--accent-ink)}
+.sm-opt small em.warn{font-style:normal;color:var(--dgr);font-weight:600}
 </style>
 </head>
 <body>
@@ -2271,6 +2280,14 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
       <button type="button" class="set sync-restore" id="syncRestore" hidden>Restore data from before sync</button>
     </div>
         </div>
+        <div class="sp-sec"><p class="grp">Recovery</p>
+    <div class="card set-card rp-card">
+      <div class="set" style="display:block"><div class="sl"><b>Saved copies on this device <span class="help" data-help="Fareo keeps up to six full copies of your data on this device: one a day, plus one before every sync change, restore or merge. Restoring keeps a copy of what you have now, so you can always go back." aria-label="Help">?</span></b><p id="dataCheck">This device</p></div>
+        <div id="recoveryList" class="rp-list"></div>
+        <button type="button" class="btn neutral" id="recoverCloud" hidden style="margin-top:10px">Compare with my cloud copy</button>
+    </div>
+        </div>
+        </div>
         <div class="sp-sec"><p class="grp">Backup &amp; records</p>
         <div class="card set-card">
       <div class="set" id="archiveLink"><div class="sl"><b>Receipts &amp; EOS archive</b><p><span id="archiveCount">0</span> saved</p></div><span class="chev">&rsaquo;</span></div>
@@ -2300,7 +2317,7 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
 
 <datalist id="nameList"></datalist>
 <input type="file" id="expRcptFile" accept="image/*,application/pdf" style="display:none">
-<input type="file" id="importFile" accept="application/json,.json" style="display:none">
+<input type="file" id="importFile" style="display:none">
 <div class="modal" id="rangeModal"><div class="sheet">
   <div class="grip"></div><h3 id="rangeTitle">Custom range</h3><p class="csub">Pick a timeframe for your report.</p>
   <div id="customRange" style="margin-top:11px">
@@ -2348,7 +2365,7 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
   <p class="csub">Choose how to combine them. You can undo with &ldquo;Restore data from before sync&rdquo; in Settings.</p>
   <div class="sm-cmp"><div class="sm-col" id="smLocal"></div><div class="sm-col" id="smCloud"></div></div>
   <button type="button" class="sm-opt rec" data-sm="merge"><b>Merge both <em>Recommended</em></b><small>Keeps every shift, cost, client and fuel entry from both. Duplicates are matched and kept once.</small></button>
-  <button type="button" class="sm-opt" data-sm="local"><b>Keep this phone</b><small>Uploads this phone&rsquo;s data and replaces the cloud copy.</small></button>
+  <button type="button" class="sm-opt" data-sm="local"><b>Keep this device only</b><small>Replaces the cloud copy <em class="warn">and the data on your other devices</em> with this device&rsquo;s data.</small></button>
   <button type="button" class="sm-opt" data-sm="cloud"><b>Use cloud</b><small>Replaces this phone&rsquo;s data with the cloud copy.</small></button>
   <button type="button" class="btn neutral" id="smCancel" style="margin-top:10px">Not now &mdash; stay signed out</button>
 </div></div>
@@ -2658,8 +2675,14 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='14.3';
+var APP_VERSION='14.4';
 var CHANGELOG=[
+  {v:'14.4',date:'November 3, 2026',notes:[
+    ['Bug Fix','Sync could replace all data on your other devices when one device uploaded fewer shifts (for example after choosing \u201cKeep this phone\u201d on a device with little data, or when an older copy looked newer). Fareo now pauses and asks before any update would remove more than 3 shifts, and merges instead of overwriting when two devices both changed.'],
+    ['Bug Fix','A device with fewer shifts than your cloud copy can no longer upload over it without asking.'],
+    ['Bug Fix','Restoring a backup now uploads it before reloading, so sync can\u2019t bring the old data straight back. Backups renamed by Files, Mail or messaging apps can be picked again, and Fareo says exactly what didn\u2019t fit if storage is full.'],
+    ['Feature','Recovery: Settings \u2192 Sync & backup keeps up to six full copies on each device (daily and before every sync change) next to the pre-sign-in copy. Restore any of them in one tap; a copy of the current data is always kept first.'],
+  ]},
   {v:'14.3',date:'November 2, 2026',notes:[
     ['Feature','Colour themes: choose Signal, Ocean, Ember, Violet, Rose, Noir Gold, Mint or Mono in Settings \u2192 Appearance & sound. Each recolours the whole app in dark and light mode.'],
     ['Feature','New theme every day: Fareo rotates through the themes at midnight.'],
@@ -6810,7 +6833,7 @@ function renderSettings(){
   var sn=$('#setName');if(sn&&document.activeElement!==sn)sn.value=settings.driverName||'';
   var sst=$('#setStart');if(sst)sst.value=settings.startTab||'hub';
   var shp=$('#setHaptics');if(shp)shp.classList.toggle('on',settings.haptics!==false);
-  renderAcctSettings();syncWxSettings();renderSettingsNav();renderThemeGrid();
+  renderAcctSettings();syncWxSettings();renderSettingsNav();renderThemeGrid();try{renderRecovery()}catch(_){}
   var sso=$('#setSounds');if(sso)sso.classList.toggle('on',settings.sounds!==false);
   var stm=$('#setTaxMode');if(stm)stm.value=settings.taxMode||'auto';
   var stp=$('#setTaxPct');if(stp&&document.activeElement!==stp)stp.value=settings.taxPct;
@@ -6896,7 +6919,7 @@ if($('#setOcrHail'))$('#setOcrHail').onclick=function(){
   toast(settings.ocrHail!==false?'Hail OCR on — reads Rank/Hail from EOS photos':'Hail OCR off — enter hail manually');
 };
 $('#addRego').onclick=function(){var v=$('#newRego').value.trim().toUpperCase();if(!v){toast('Enter a rego');return}if(settings.regos.indexOf(v)<0)settings.regos.push(v);$('#newRego').value='';persist();renderSettings();rowInputs();toast('Rego added')};
-$('#newFy').onclick=function(){ask('Start a new financial year?','Clears shifts, income, deductions and manual fuel. Settings, receipt jar and address book stay.','Clear year',function(){entries=[];deductions=[];fuelManual=[];draft=freshDraft(settings.regos[0]||'');persist();toast('New financial year started');rowInputs();render();renderWeekly();renderReports()})};
+$('#newFy').onclick=function(){allowBigPush=true;ask('Start a new financial year?','Clears shifts, income, deductions and manual fuel. Settings, receipt jar and address book stay.','Clear year',function(){entries=[];deductions=[];fuelManual=[];draft=freshDraft(settings.regos[0]||'');persist();toast('New financial year started');rowInputs();render();renderWeekly();renderReports()})};
 async function fullRefresh(){
   var t0=updFlowStart(['Clearing the app cache','Checking for updates','Restarting'],'Checking for updates');
   try{
@@ -6930,7 +6953,57 @@ $('#exportBtn').onclick=function(){
   deliverFile(new Blob([JSON.stringify(dump)],{type:'application/json'}),'Fareo-backup_'+todayStr()+'_'+hm+'.json','Fareo backup','Backup ready · '+c.shifts+' shifts');
 };
 $('#importBtn').onclick=function(){$('#importFile').click()};
-$('#importFile').onchange=function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var obj=JSON.parse(r.result);var d=obj.data||obj;if(!d||typeof d!=='object'||!Object.keys(d).some(function(k){return k.indexOf('fareo_')===0}))throw 0;var c=backupCounts(d),when=obj.exported?new Date(obj.exported).toLocaleString('en-AU',{day:'numeric',month:'short',year:'numeric',hour:'numeric',minute:'2-digit'}):'an unknown date';ask('Restore this backup?','From '+when+(obj.ver?' (Fareo '+obj.ver+')':'')+': '+c.shifts+' shifts, '+c.costs+' costs, '+c.clients+' clients, '+c.receipts+' receipts. It replaces the data on this device.','Restore',function(){try{localStorage.setItem('fareo_prerestore',JSON.stringify({at:Date.now(),data:allData()}))}catch(_){}applyData(d);toast('Restored - reloading');setTimeout(function(){location.reload()},700)})}catch(_){toast('Invalid backup file')}};r.readAsText(f);e.target.value=''};
+/* Restore a backup file. Tolerant of older backups and files renamed by
+   share sheets; writes every key or tells you what didn't fit; and when
+   sync is on it uploads the restored data before reloading, so the cloud
+   (or another device) can't put the old data straight back. */
+var META_KEYS=['fareo_updatedAt','fareo_localEditAt','fareo_synced_uid','fareo_sync_on','fareo_device','fareo_fbcfg','fareo_fbcfg_legacy','fareo_rp','fareo_presync','fareo_prerestore','fareo_cloudShifts','fareo_pendingPush'];
+function parseBackup(txt){
+  txt=String(txt||'').replace(/^﻿/,'').trim();
+  var obj=JSON.parse(txt);if(typeof obj==='string')obj=JSON.parse(obj);
+  var d=obj&&obj.data?obj.data:obj;if(typeof d==='string')d=JSON.parse(d);
+  if(!d||typeof d!=='object'||Array.isArray(d))throw new Error('not a Fareo backup');
+  var out={};Object.keys(d).forEach(function(k){if(k.indexOf('fareo_')===0&&META_KEYS.indexOf(k)<0)out[k]=d[k]});
+  if(!Object.keys(out).length)throw new Error('no Fareo data inside');
+  return {obj:obj,data:out};
+}
+function writeBackupData(d){
+  var failed=[];
+  Object.keys(d).forEach(function(k){var v=d[k];v=typeof v==='string'?v:JSON.stringify(v);
+    for(var tries=0;tries<4;tries++){try{localStorage.setItem(k,v);return}catch(e){
+      /* Out of space: drop the oldest saved copies and try again. */
+      var L=rpList();if(L.length>1){L.splice(Math.ceil(L.length/2));try{localStorage.setItem('fareo_rp',JSON.stringify(L))}catch(_){localStorage.removeItem('fareo_rp')}}
+      else if(L.length){localStorage.removeItem('fareo_rp')}
+      else if(tries===2){localStorage.removeItem('fareo_presync')}
+    }}
+    failed.push(k)});
+  return failed;
+}
+function doRestoreBackup(d){
+  saveRecoveryPoint('Before restoring a backup');
+  try{localStorage.setItem('fareo_prerestore',JSON.stringify({at:Date.now(),data:allData()}))}catch(_){}
+  var failed=writeBackupData(d);
+  var lostCore=failed.filter(function(k){return k!=='fareo_receipts'});
+  if(lostCore.length){toast('Couldn’t restore '+lostCore.join(', ').replace(/fareo_/g,'')+' — storage is full','error');return}
+  var now=Date.now();localStorage.setItem('fareo_localEditAt',String(now));
+  var done=function(msg){toast(msg+(failed.length?' (receipt photos didn’t fit)':''),'success');setTimeout(function(){location.reload()},900)};
+  if(syncOn&&fb.uid&&fb.fsM){
+    localStorage.setItem('fareo_pendingPush','1');
+    var ts=Date.now();localStorage.setItem('fareo_updatedAt',String(ts));localStorage.setItem('fareo_cloudShifts',String(dataSummary(allData()).shifts));
+    toast('Restored — uploading to your other devices…');
+    fb.fsM.setDoc(docRef(),{data:allData(),updatedAt:ts,_device:deviceId()}).then(function(){localStorage.removeItem('fareo_pendingPush');done('Backup restored and synced')}).catch(function(){done('Backup restored — will sync when online')});
+  }else{
+    /* Signed out: the next sign-in on this device asks before mixing. */
+    localStorage.removeItem('fareo_synced_uid');
+    done('Backup restored');
+  }
+}
+$('#importFile').onchange=function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();
+  r.onerror=function(){toast('Couldn’t open that file','error')};
+  r.onload=function(){var b;try{b=parseBackup(r.result)}catch(err){toast('That file isn’t a Fareo backup'+(f.name?' ('+f.name+')':''),'error');return}
+    var c=backupCounts(b.data),obj=b.obj||{},when=obj.exported?new Date(obj.exported).toLocaleString('en-AU',{day:'numeric',month:'short',year:'numeric',hour:'numeric',minute:'2-digit'}):'an unknown date',cur=dataSummary(allData());
+    ask('Restore this backup?','From '+when+(obj.ver?' (Fareo '+obj.ver+')':'')+': '+c.shifts+' shifts, '+c.costs+' costs, '+c.clients+' clients, '+c.receipts+' receipts. It replaces the '+cur.shifts+' shifts on this device (a copy is kept under Recovery)'+(syncOn?' and updates your other devices.':'.'),'Restore',function(){doRestoreBackup(b.data)},{danger:false,noLbl:'Cancel',noUndo:true})};
+  r.readAsText(f);e.target.value=''};
 function deviceId(){var id=localStorage.getItem('fareo_device');if(!id){id='d'+Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('fareo_device',id)}return id}
 function parseCfg(t){if(!t)return null;t=String(t).trim().replace(/^(export\s+)?(const|let|var)\s+[\w$]+\s*=\s*/,'').replace(/;\s*$/,'');var m=t.match(/\{[\s\S]*\}/);if(m)t=m[0];try{return JSON.parse(t)}catch(e){try{return (new Function('return ('+t+')'))()}catch(e2){return null}}}
 var fb={app:null,auth:null,db:null,authM:null,fsM:null,uid:null,email:''},syncOn=false,syncTimer=null,applyingRemote=false;
@@ -6938,10 +7011,12 @@ function setSyncState(t){var el=$('#syncState');if(el)el.textContent=t;var out=$
 async function fbInit(cfg){if(fb.app)return;var A=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');fb.authM=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');fb.fsM=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');fb.app=A.initializeApp(cfg);fb.auth=fb.authM.getAuth(fb.app);fb.db=fb.fsM.getFirestore(fb.app)}
 function docRef(){return fb.fsM.doc(fb.db,'fareo_users',fb.uid)}
 function applyRemoteData(data,updatedAt){
+  try{saveRecoveryPoint('Before sync update')}catch(_){}
   applyingRemote=true;
   try{
     applyData(data);
     localStorage.setItem('fareo_updatedAt',String(updatedAt||Date.now()));
+    localStorage.setItem('fareo_cloudShifts',String(dataSummary(data||{}).shifts));
     reloadAll();
   }finally{applyingRemote=false}
 }
@@ -7022,8 +7097,59 @@ function dataSummary(d){
   return {shifts:es.length,last:last,costs:arr('fareo_deductions').length+arr('fareo_fuelManual').length,clients:arr('fareo_clients').length,take:es.reduce(function(s,e){return s+(Number(e.take)||0)},0)};
 }
 function hasLocalData(){var s=dataSummary(allData());return s.shifts+s.costs+s.clients>0}
-function savePresync(){try{localStorage.setItem('fareo_presync',JSON.stringify({at:Date.now(),data:allData()}))}catch(_){}syncRestoreUI()}
-function syncRestoreUI(){var b=$('#syncRestore');if(!b)return;var p=null;try{p=JSON.parse(localStorage.getItem('fareo_presync')||'null')}catch(_){}b.hidden=!p;if(p)b.textContent='Restore data from before sync ('+new Date(p.at).toLocaleDateString('en-AU',{day:'numeric',month:'short'})+')'}
+/* Pre-sync copy: never replace a fuller copy with an emptier one. */
+function savePresync(){try{var cur=allData(),old=null;try{old=JSON.parse(localStorage.getItem('fareo_presync')||'null')}catch(_){}
+  if(old&&old.data&&dataSummary(old.data).shifts>dataSummary(cur).shifts){saveRecoveryPoint('Before sign-in');}else localStorage.setItem('fareo_presync',JSON.stringify({at:Date.now(),data:cur}))}catch(_){}syncRestoreUI()}
+/* ---------- recovery points: rotating full copies on this device ---------- */
+var RP_MAX=6;
+function rpList(){try{var v=JSON.parse(localStorage.getItem('fareo_rp')||'[]');return Array.isArray(v)?v:[]}catch(_){return []}}
+function rpSig(d){var s2=dataSummary(d);return s2.shifts+'|'+s2.costs+'|'+s2.clients+'|'+Math.round(s2.take*100)+'|'+s2.last}
+function saveRecoveryPoint(reason,data){
+  try{
+    data=data||allData();var sum=dataSummary(data);if(sum.shifts+sum.costs+sum.clients===0)return false;
+    var L=rpList(),sig=rpSig(data);if(L.length&&L[0].sig===sig)return false;
+    L.unshift({at:Date.now(),reason:reason,sig:sig,sum:sum,data:data});
+    while(L.length>RP_MAX)L.pop();
+    for(;;){try{localStorage.setItem('fareo_rp',JSON.stringify(L));break}catch(e){if(L.length<=1)break;L.pop()}}
+    return true;
+  }catch(_){return false}
+}
+function dailyRecoveryPoint(){var L=rpList();if(!L.length||Date.now()-L[0].at>20*3600*1000)saveRecoveryPoint('Daily copy')}
+/* Every copy we can restore from, newest first: recovery points, the
+   pre-sync copy and the pre-restore copy. */
+function recoverySources(){
+  var out=rpList().map(function(r,i){return {id:'rp:'+i,at:r.at,reason:r.reason,sum:r.sum||dataSummary(r.data),data:r.data}});
+  [['fareo_presync','Before first sign-in'],['fareo_prerestore','Before restoring a backup']].forEach(function(k){try{var p=JSON.parse(localStorage.getItem(k[0])||'null');if(p&&p.data){var sm=dataSummary(p.data);if(sm.shifts+sm.costs+sm.clients>0)out.push({id:k[0],at:p.at,reason:k[1],sum:sm,data:p.data})}}catch(_){}});
+  out.sort(function(a,b){return b.at-a.at});return out;
+}
+function restoreFromSource(src){
+  saveRecoveryPoint('Before recovery');
+  var wasOn=syncOn;
+  applyRemoteData(src.data,Date.now());
+  localStorage.setItem('fareo_localEditAt',String(Date.now()));
+  if(wasOn&&fb.uid){allowBigPush=true;pushNow()}
+  renderRecovery();toast('Restored '+src.sum.shifts+' shifts','success');
+}
+function renderRecovery(){
+  var box=$('#recoveryList');if(!box)return;var L=recoverySources(),cur=dataSummary(allData());
+  var dc=$('#dataCheck');if(dc){var up=Number(localStorage.getItem('fareo_updatedAt')||0);dc.textContent='This device: '+cur.shifts+' shifts · '+cur.costs+' costs · '+cur.clients+' clients'+(cur.last?' · latest '+fmtDayDMY(cur.last):'')+(syncOn&&up?' · last synced '+new Date(up).toLocaleString('en-AU',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}):'')}
+  box.innerHTML=L.length?L.map(function(r,i){var more=r.sum.shifts>cur.shifts;return '<div class="rp-row'+(more?' more':'')+'"><div><b>'+new Date(r.at).toLocaleString('en-AU',{weekday:'short',day:'numeric',month:'short',hour:'numeric',minute:'2-digit'})+'</b><small>'+esc(r.reason)+' · '+r.sum.shifts+' shifts · '+r.sum.costs+' costs · '+r.sum.clients+' clients'+(r.sum.last?' · latest '+fmtDMY(r.sum.last):'')+'</small></div><button type="button" class="rp-btn" data-rp="'+i+'">Restore</button></div>'}).join(''):'<p class="mono-mut" style="margin:6px 0 0">No saved copies on this device yet. Fareo now makes one every day and before any sync change.</p>';
+  box._src=L;
+  var cr=$('#recoverCloud');if(cr)cr.hidden=!(syncOn&&fb.uid);
+}
+document.addEventListener('click',function(e){
+  var b=e.target.closest&&e.target.closest('#recoveryList [data-rp]');
+  if(b){var src=$('#recoveryList')._src[Number(b.dataset.rp)];if(!src)return;var cur=dataSummary(allData());
+    ask('Restore this copy?','Saved '+new Date(src.at).toLocaleString('en-AU',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'})+' ('+src.reason+'): '+src.sum.shifts+' shifts, '+src.sum.costs+' costs, '+src.sum.clients+' clients. This device has '+cur.shifts+' shifts now; a copy of that is kept too.'+(syncOn?' Your other devices will get the restored data.':''),'Restore',function(){restoreFromSource(src)},{danger:false,noLbl:'Cancel',noUndo:true});return}
+  if(e.target.id==='recoverCloud'){if(!syncOn||!fb.uid)return;fb.fsM.getDoc(docRef()).then(function(sn){if(!sn.exists()){toast('Nothing in the cloud yet','warn');return}var r=sn.data();saveRecoveryPoint('Before cloud check');showMergeChoice(r,'Cloud check')}).catch(function(){toast('Couldn’t reach the cloud','error')})}
+});
+/* ---------- sync safety ---------- */
+var allowBigPush=false;
+function shiftIds(d){try{var v=d.fareo_entries;v=typeof v==='string'?JSON.parse(v):v;return (Array.isArray(v)?v:[]).map(function(e){return String(e.id)})}catch(_){return []}}
+/* How many of this device's shifts an incoming copy would remove. */
+function shiftsLost(localD,remoteD){var r={};shiftIds(remoteD).forEach(function(id){r[id]=1});return shiftIds(localD).filter(function(id){return !r[id]}).length}
+var SAFE_DELETES=3;
+function syncRestoreUI(){try{renderRecovery()}catch(_){}var b=$('#syncRestore');if(!b)return;var p=null;try{p=JSON.parse(localStorage.getItem('fareo_presync')||'null')}catch(_){}b.hidden=!p;if(p)b.textContent='Restore data from before sync ('+new Date(p.at).toLocaleDateString('en-AU',{day:'numeric',month:'short'})+')'}
 function mergeById(a,b,keyFn){var out=[],seen={};function k(x){return keyFn?keyFn(x):String(x&&x.id)}(a||[]).forEach(function(x){var kk=k(x);if(seen[kk])return;seen[kk]=1;out.push(x)});(b||[]).forEach(function(x){var kk=k(x);if(seen[kk])return;seen[kk]=1;out.push(x)});return out}
 function mergeData(local,remote){
   function J(d,k,def){try{var v=d[k];if(v==null)return def;return typeof v==='string'?JSON.parse(v):v}catch(_){return def}}
@@ -7044,10 +7170,11 @@ function mergeData(local,remote){
   return out;
 }
 var smPending=null;
-function showMergeChoice(rem){
+function showMergeChoice(rem,why){
   var L=dataSummary(allData()),C=dataSummary(rem.data||{});
+  var h=$('#syncMergeModal h3');if(h)h.textContent=why==='protect'?'Your cloud copy has fewer shifts than this device':why==='push'?'This device has fewer shifts than your cloud copy':'This device and your cloud both have data';
   function col(t,x){return '<small>'+t+'</small><b>'+x.shifts+' shifts</b><span>'+(x.last?'Latest '+fmtDayDMY(x.last):'No shifts')+'</span><span>'+x.costs+' costs · '+x.clients+' clients</span>'}
-  $('#smLocal').innerHTML=col('This phone',L);$('#smCloud').innerHTML=col('Cloud ('+fb.email+')',C);
+  $('#smLocal').innerHTML=col('This device',L);$('#smCloud').innerHTML=col('Cloud ('+fb.email+')',C);
   smPending=rem;showModal('syncMergeModal');sfx('warn');
 }
 document.addEventListener('click',function(e){
@@ -7055,18 +7182,23 @@ document.addEventListener('click',function(e){
   if(b&&smPending){var mode=b.dataset.sm,rem=smPending;smPending=null;closeModal('syncMergeModal');syncOn=true;
     if(mode==='cloud')applyRemoteData(rem.data,rem.updatedAt);
     else if(mode==='merge')applyRemoteData(mergeData(allData(),rem.data||{}),Date.now());
+    if(mode!=='cloud')allowBigPush=true;
     localStorage.setItem('fareo_synced_uid',fb.uid);startLive();pushNow();
-    toast(mode==='merge'?'Merged and synced':mode==='local'?'This phone’s data uploaded':'Cloud data loaded','success');return}
+    toast(mode==='merge'?'Merged and synced':mode==='local'?'This device\u2019s data uploaded':'Cloud data loaded','success');try{renderRecovery()}catch(_){}return}
   if(e.target.id==='smCancel'){smPending=null;closeModal('syncMergeModal');syncSignOut()}
   if(e.target.id==='syncGoogle'||e.target.closest&&e.target.closest('#syncGoogle'))syncGoogle();
   if(e.target.id==='syncLink')syncEmailLink();
   if(e.target.id==='syncPwToggle'){var w=$('#syncPwWrap');w.hidden=!w.hidden;e.target.textContent=w.hidden?'Use password':'Hide password'}
-  if(e.target.id==='syncRestore'){ask('Restore data from before sync?','This phone goes back to exactly how it was before you signed in. Sync is turned off.','Restore',function(){var p=JSON.parse(localStorage.getItem('fareo_presync')||'null');if(!p)return;syncSignOut();applyRemoteData(p.data,Date.now());toast('Restored data from before sync')},{danger:false,noLbl:'Cancel',noUndo:true})}
+  if(e.target.id==='syncRestore'){saveRecoveryPoint('Before recovery');ask('Restore data from before sync?','This device goes back to exactly how it was before you signed in. Sync is turned off; next time you sign in, Fareo asks how to combine it with the cloud.','Restore',function(){var p=JSON.parse(localStorage.getItem('fareo_presync')||'null');if(!p)return;syncSignOut();applyRemoteData(p.data,Date.now());localStorage.removeItem('fareo_synced_uid');localStorage.setItem('fareo_localEditAt',String(Date.now()));renderRecovery();toast('Restored data from before sync','success')},{danger:false,noLbl:'Cancel',noUndo:true})}
 });
 var liveUnsub=null;
 function startLive(){
   if(liveUnsub)return;
-  liveUnsub=fb.fsM.onSnapshot(docRef(),function(sn){if(!sn.exists())return;var r2=sn.data();if(r2._device===deviceId())return;if((r2.updatedAt||0)>Number(localStorage.getItem('fareo_updatedAt')||0)){applyRemoteData(r2.data,r2.updatedAt);toast('Synced from another device')}});
+  liveUnsub=fb.fsM.onSnapshot(docRef(),function(sn){if(!sn.exists())return;var r2=sn.data();if(r2._device===deviceId())return;
+    if((r2.updatedAt||0)<=Number(localStorage.getItem('fareo_updatedAt')||0))return;
+    var lost=shiftsLost(allData(),r2.data||{});
+    if(lost>SAFE_DELETES){syncOn=false;setSyncState('Paused \u2014 waiting for your choice');showMergeChoice(r2,'protect');return}
+    applyRemoteData(r2.data,r2.updatedAt);localStorage.setItem('fareo_cloudShifts',String(dataSummary(r2.data||{}).shifts));toast('Synced from another device')});
   setSyncState('On - '+fb.email);
 }
 async function afterAuth(user,interactive){
@@ -7087,12 +7219,26 @@ async function afterAuth(user,interactive){
     }
     syncOn=true;
     /* already-synced device: newest edit wins, using the real local edit time */
-    var localTs=Math.max(Number(localStorage.getItem('fareo_updatedAt')||0),Number(localStorage.getItem('fareo_localEditAt')||0));
-    if(snap.exists()){var r=snap.data();if((r.updatedAt||0)>localTs)applyRemoteData(r.data,r.updatedAt);else pushNow()}else pushNow();
+    var lastSync=Number(localStorage.getItem('fareo_updatedAt')||0),localEdit=Number(localStorage.getItem('fareo_localEditAt')||0);
+    if(!snap.exists()||localStorage.getItem('fareo_pendingPush')){allowBigPush=true;pushNow();startLive();return}
+    var r=snap.data(),cloudChanged=(r.updatedAt||0)>lastSync,localChanged=localEdit>lastSync;
+    localStorage.setItem('fareo_cloudShifts',String(dataSummary(r.data||{}).shifts));
+    var lost=shiftsLost(allData(),r.data||{}),gain=shiftsLost(r.data||{},allData());
+    if(cloudChanged&&lost>SAFE_DELETES){syncOn=false;setSyncState('Paused \u2014 waiting for your choice');showMergeChoice(r,'protect');return}
+    if(cloudChanged&&localChanged&&gain>0){applyRemoteData(mergeData(allData(),r.data||{}),Date.now());allowBigPush=true;pushNow();toast('Merged changes from your other devices')}
+    else if(cloudChanged)applyRemoteData(r.data,r.updatedAt);
+    else pushNow();
     startLive();
   }catch(e){setSyncState('Sync error - check Firestore rules')}
 }
-function pushNow(){if(!syncOn||!fb.uid||!fb.fsM)return;var ts=Date.now();localStorage.setItem('fareo_updatedAt',String(ts));fb.fsM.setDoc(docRef(),{data:allData(),updatedAt:ts,_device:deviceId()}).then(function(){setSyncState('On - saved')}).catch(function(){setSyncState('Offline - will retry')})}
+function pushNow(){if(!syncOn||!fb.uid||!fb.fsM)return;
+  var mine=dataSummary(allData()).shifts,cloudN=Number(localStorage.getItem('fareo_cloudShifts')||0);
+  if(!allowBigPush&&cloudN>0&&mine<cloudN-SAFE_DELETES){
+    fb.fsM.getDoc(docRef()).then(function(sn){if(!sn.exists()){allowBigPush=true;pushNow();return}var r=sn.data();
+      if(shiftsLost(r.data||{},allData())>SAFE_DELETES){syncOn=false;setSyncState('Paused — this device has fewer shifts than the cloud');showMergeChoice(r,'push')}else{allowBigPush=true;pushNow()}}).catch(function(){});
+    return}
+  allowBigPush=false;localStorage.setItem('fareo_cloudShifts',String(mine));
+  var ts=Date.now();localStorage.setItem('fareo_updatedAt',String(ts));fb.fsM.setDoc(docRef(),{data:allData(),updatedAt:ts,_device:deviceId()}).then(function(){localStorage.removeItem('fareo_pendingPush');setSyncState('On - saved')}).catch(function(){setSyncState('Offline - will retry')})}
 function scheduleSync(){if(!syncOn||applyingRemote)return;clearTimeout(syncTimer);syncTimer=setTimeout(pushNow,900)}
 async function syncSignOut(){try{if(liveUnsub){liveUnsub();liveUnsub=null}}catch(_){}try{if(fb.auth)await fb.authM.signOut(fb.auth)}catch(_){}syncOn=false;localStorage.removeItem('fareo_sync_on');setSyncState('Off - local only');toast('Signed out (data kept on device)')}
 function reloadAll(){settings=load('fareo_settings',settings)||settings;migrateSettings();entries=load('fareo_entries',[])||[];deductions=load('fareo_deductions',[])||[];recurring=load('fareo_recurring',[])||[];fuelManual=load('fareo_fuelManual',[])||[];receipts=load('fareo_receipts',[])||[];names=load('fareo_names',[])||[];clients=load('fareo_clients',[])||[];if(!Array.isArray(clients))clients=[];runPlan=load('fareo_run_plan',[])||[];if(!Array.isArray(runPlan))runPlan=[];draft=normalizeDraft(load('fareo_draft',draft));if(typeof draftHasWork==='function'&&!draftHasWork(draft)){draft.date=todayStr();draft.rego=''}clearReceiptAttach();try{renderNames();rowInputs();render();var a=document.querySelector('.screen.on');if(a){var t=a.dataset.tab;if(t==='weekly')renderWeekly();if(t==='reports')renderReports();if(t==='settings')renderSettings();if(t==='runs')renderRuns();if(t==='book')renderBook()}}catch(_){}}
@@ -8864,6 +9010,7 @@ applyTheme();renderNames();rowInputs();render();setSub(1);renderDeadlines();upda
 })();
 watchForUpdates();
 updFlowCelebrate();
+try{dailyRecoveryPoint()}catch(_){}
 (function layoutForDevice(){
   function apply(){
     var w=window.innerWidth||0,h=window.innerHeight||0;
