@@ -1760,8 +1760,8 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
 .gd-local i{flex:none;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:var(--accent-dim);color:var(--accent)}
 .gd-local i svg{width:15px;height:15px}
 #gdState.warn{color:var(--warn,#f0b44c)}
-.gd-freq{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:4px;margin-top:10px;background:var(--field);border:1px solid var(--bd);border-radius:12px}
-.gd-freq button{border:0;background:transparent;color:var(--mut);border-radius:9px;padding:9px 4px;font-size:12px;font-weight:650;cursor:pointer;transition:background .2s var(--ease),color .2s var(--ease)}
+.gd-freq{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:4px;margin-top:10px;background:var(--field);border:1px solid var(--bd);border-radius:12px}
+.gd-freq button{border:0;background:transparent;color:var(--mut);border-radius:9px;padding:9px 2px;font-size:11.5px;line-height:1.2;font-weight:650;cursor:pointer;transition:background .2s var(--ease),color .2s var(--ease)}
 .gd-freq button.on{background:var(--accent);color:var(--accent-ink)}
 .gd-acts{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:4px 14px 6px}
 .gd-acts .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px}
@@ -2361,8 +2361,8 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
       <div class="gd-local"><i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg></i><span>Your data lives on this device. Fareo doesn&rsquo;t sync it anywhere; Google Drive just keeps a backup copy.</span></div>
       <div class="set"><div class="sl"><b>Automatic backup <span class="help" data-help="Fareo saves one backup file to your Google Drive (in a folder called Fareo) and replaces it each time, at the frequency you choose. Fareo can only see files it created, nothing else in your Drive. Backups run while Fareo is open; if Google needs you to sign in again, a small Back up button appears on Home." aria-label="Help">?</span></b><p id="gdState">Off</p></div><button class="tgl" id="gdOn" aria-label="Automatic Google Drive backup"></button></div>
       <div id="gdBody" hidden>
-        <div class="set" style="display:block"><div class="sl"><b>How often</b><p>Each backup replaces the previous file in Drive &rsaquo; Fareo</p></div>
-          <div class="gd-freq" id="gdFreq" role="radiogroup" aria-label="Backup frequency"><button type="button" role="radio" data-f="change">After changes</button><button type="button" role="radio" data-f="daily">Daily</button><button type="button" role="radio" data-f="weekly">Weekly</button><button type="button" role="radio" data-f="monthly">Monthly</button></div></div>
+        <div class="set" style="display:block"><div class="sl"><b>How often</b><p id="gdFreqSub">Each backup replaces the previous file in Drive &rsaquo; Fareo</p></div>
+          <div class="gd-freq" id="gdFreq" role="radiogroup" aria-label="Backup frequency"><button type="button" role="radio" data-f="change">After changes</button><button type="button" role="radio" data-f="daily">Daily</button><button type="button" role="radio" data-f="cycle">Pay week</button><button type="button" role="radio" data-f="weekly">Weekly</button><button type="button" role="radio" data-f="monthly">Monthly</button></div></div>
         <div class="gd-acts"><button type="button" class="btn" id="gdNow"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#0F9D58" d="M8.3 3h7.4l7 12-3.7 6.4-7-12z"/><path fill="#FFC107" d="M8.3 3 1.3 15l3.7 6.4 7-12z"/><path fill="#4285F4" d="M5 21.4h14l3.7-6.4H8.7z"/></svg>Back up now</button><button type="button" class="btn neutral" id="gdRestore">Restore from Drive</button></div>
         <button type="button" class="gd-off" id="gdOff">Disconnect Google Drive</button>
       </div>
@@ -2771,8 +2771,11 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='15.1';
+var APP_VERSION='15.2';
 var CHANGELOG=[
+  {v:'15.2',date:'November 3, 2026',notes:[
+    ['Feature','Google Drive backup can now run once per pay week: Settings \u2192 Backup & restore \u2192 How often \u2192 Pay week. It backs up the first time Fareo is open after your pay week ends, so the backup holds the finished week.'],
+  ]},
   {v:'15.1',date:'November 3, 2026',notes:[
     ['UI/UX','Reports is tidier: tap any card\u2019s title to fold it down to its key figure, or tap Collapse to fold them all. Customise hides the cards you don\u2019t use and can keep just one card open at a time. Your layout is remembered.'],
   ]},
@@ -7213,7 +7216,11 @@ async function fbInit(){if(fb.app)return;var A=await import('https://www.gstatic
    SDK is loaded ahead of time and the pop-up call has no await before it. */
 function fbPreload(){if(fb.app||fbPreload._p)return fbPreload._p;fbPreload._p=fbInit().catch(function(){fbPreload._p=null});return fbPreload._p}
 var GD_API='https://www.googleapis.com',GD_SCOPE='https://www.googleapis.com/auth/drive.file',GD_NAME='Fareo backup.json';
-var GD_FREQ={change:{lbl:'after changes',ms:0},daily:{lbl:'daily',ms:864e5},weekly:{lbl:'weekly',ms:7*864e5},monthly:{lbl:'monthly',ms:30*864e5}};
+var GD_FREQ={change:{lbl:'after changes',ms:0},daily:{lbl:'daily',ms:864e5},cycle:{lbl:'each pay week',cycle:true},weekly:{lbl:'weekly',ms:7*864e5},monthly:{lbl:'monthly',ms:30*864e5}};
+/* Pay week: one backup per pay cycle, the first time Fareo is open after
+   the new cycle starts, so it holds the finished week. */
+function gdCycleStart(){return weekStartOf(new Date()).getTime()}
+function gdPayWeekLbl(){return DAYS[settings.weekStart].slice(0,3)+'\u2013'+DAYS[(settings.weekStart+6)%7].slice(0,3)}
 var gdBusy=false,gdTimer=null;
 function gdState(){try{return JSON.parse(localStorage.getItem('fareo_gdrive')||'null')||{}}catch(_){return {}}}
 function gdSet(p){var st=Object.assign(gdState(),p);try{localStorage.setItem('fareo_gdrive',JSON.stringify(st))}catch(_){}return st}
@@ -7281,17 +7288,19 @@ function gdMarkInSync(fileId){try{gdSet({fileId:fileId,lastSig:gdHash(JSON.strin
 function gdIsDue(){var st=gdState();if(!st.on||st.conflict||gdBusy)return false;var f=GD_FREQ[st.freq]||GD_FREQ.daily;
   if(!st.lastAt)return true;
   if(f.ms===0)return (st.dirtyAt||0)>(st.lastAt||0);
+  if(f.cycle)return Math.max(st.lastAt||0,st.checkedAt||0)<gdCycleStart();
   return Date.now()-Math.max(st.lastAt||0,st.checkedAt||0)>=f.ms}
 function gdTick(){if(!gdIsDue())return;gdBackup().catch(function(){})}
 function gdChanged(){var st=gdState();if(!st.on)return;gdSet({dirtyAt:Date.now()});if((st.freq||'daily')==='change'){clearTimeout(gdTimer);gdTimer=setTimeout(gdTick,20000)}}
 function gdAgo(t){if(!t)return 'never';var m=Math.round((Date.now()-t)/60000);if(m<1)return 'just now';if(m<60)return m+' min ago';var h=Math.round(m/60);if(h<24)return h+' h ago';var d=new Date(t);return d.toLocaleDateString('en-AU',{day:'numeric',month:'short'})+' '+d.toLocaleTimeString('en-AU',{hour:'numeric',minute:'2-digit'})}
 function gdUI(busyMsg){
   var st=gdState(),on=!!st.on,el=$('#gdState'),f=GD_FREQ[st.freq]||GD_FREQ.daily;
-  var line=!on?'Off · tap to back up to your Google Drive':busyMsg?busyMsg:st.conflict?'Paused — your Drive backup has more shifts. Tap Back up now to choose.':st.err?st.err:st.due&&!gdToken()?'Backup due — tap Back up now':('Backs up '+f.lbl+' · last '+gdAgo(st.lastAt)+(st.email?' · '+st.email:''));
+  var line=!on?'Off · tap to back up to your Google Drive':busyMsg?busyMsg:st.conflict?'Paused — your Drive backup has more shifts. Tap Back up now to choose.':st.err?st.err:st.due&&!gdToken()?'Backup due — tap Back up now':('Backs up '+f.lbl+(f.cycle?' ('+gdPayWeekLbl()+')':'')+' · last '+gdAgo(st.lastAt)+(st.email?' · '+st.email:''));
   if(el){el.textContent=line;el.classList.toggle('warn',on&&!!(st.conflict||st.err||st.due))}
   var t=$('#gdOn');if(t)t.classList.toggle('on',on);
   var b=$('#gdBody');if(b)b.hidden=!on;
   $$('#gdFreq [data-f]').forEach(function(x){var sel=x.dataset.f===(st.freq||'daily');x.classList.toggle('on',sel);x.setAttribute('aria-checked',sel?'true':'false')});
+  var fs=$('#gdFreqSub');if(fs)fs.textContent=(st.freq==='cycle'?'Once per pay week ('+gdPayWeekLbl()+'), when Fareo is next open after it ends. ':'')+'Each backup replaces the previous file in Drive \u203a Fareo';
   var now=$('#gdNow');if(now)now.disabled=!!busyMsg;
   var due=$('#gdDue'),need=on&&!busyMsg&&(!!st.conflict||(st.due&&!gdToken()));
   if(due){due.hidden=!need;var sub=$('#gdDueSub');if(sub)sub.textContent=st.conflict?'Your Drive backup has more shifts — tap to choose':'Google needs you to sign in again — tap to back up'}

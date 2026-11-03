@@ -5,7 +5,7 @@ client run planner,
 weekly payout tracker, and ATO-ready tax/BAS reports. Works offline, installs
 to your home screen. All data is stored locally in your browser.
 
-**Current version:** 15.1
+**Current version:** 15.2
 
 ---
 
@@ -79,7 +79,7 @@ the app does not touch it. You can lose data only if you clear the browser's
 site data or use **Start New Financial Year** in the app.
 
 **Google Drive backup** (Settings → Backup & restore) saves one backup file to
-Drive › Fareo at the frequency you choose (after changes, daily, weekly or
+Drive › Fareo at the frequency you choose (after changes, daily, each pay week, weekly or
 monthly), replacing it each time. **Restore from Drive** brings it back on any
 device. Fareo uses the `drive.file` scope, so it can only see files it created.
 The Google Drive API must be enabled for the Firebase project
