@@ -2370,7 +2370,7 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
         </div>
         <div class="sp-sec"><p class="grp">Recovery</p>
     <div class="card set-card rp-card">
-      <div class="set" style="display:block"><div class="sl"><b>Saved copies on this device <span class="help" data-help="Fareo keeps up to six full copies of your data on this device: one a day, plus one before every restore. Restoring keeps a copy of what you have now, so you can always go back." aria-label="Help">?</span></b><p id="dataCheck">This device</p></div>
+      <div class="set" style="display:block"><div class="sl"><b>Saved copies on this device <span class="help" data-help="Fareo keeps up to six full copies of your data on this device: one a day, plus one before every restore. Restoring keeps a copy of what you have now, so you can always go back." aria-label="Help">?</span></b><p id="dataCheck">This device</p><p id="storageLine" class="mono-mut" style="margin:4px 0 0"></p></div>
         <div id="recoveryList" class="rp-list"></div>
     </div>
         </div>
@@ -2464,6 +2464,15 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
   <div class="rc-list" id="rcList"></div>
   <div class="rc-row rc-one"><div><b>Open one card at a time</b><small>Opening a card folds the others</small></div><button type="button" class="tgl" id="rcOne" aria-label="Open one card at a time"></button></div>
   <div class="two" style="margin-top:12px"><button type="button" class="btn neutral" id="rcReset">Show everything</button><button type="button" class="btn" id="rcDone">Done</button></div>
+</div></div>
+<div class="modal" id="restoreChoiceModal"><div class="sheet">
+  <div class="grip"></div>
+  <span class="eyebrow" id="rcEyebrow">Backup from &hellip;</span>
+  <h3>What do you want to restore?</h3>
+  <p class="csub" id="rcSub"></p>
+  <button type="button" class="sm-opt rec" data-rcm="photos"><b>Add receipts &amp; EOS photos only <em>Keeps your shifts</em></b><small id="rcPhotosSub">Adds the photos from the backup. Your shifts, costs and settings stay as they are.</small></button>
+  <button type="button" class="sm-opt" data-rcm="all"><b>Restore everything</b><small id="rcAllSub">Replaces this device&rsquo;s shifts and costs with the backup and adds its photos. A copy of what you have now is kept under Recovery.</small></button>
+  <button type="button" class="btn neutral" id="rcmCancel" style="margin-top:10px">Cancel</button>
 </div></div>
 <div class="modal hail-modal" id="hailModal"><div class="sheet">
   <div class="grip"></div>
@@ -2765,14 +2774,33 @@ function fmtDMY(ds){var d=asDate(ds);if(isNaN(d.getTime()))return '';return pad2
 function fmtDayDMY(ds){var d=asDate(ds);if(isNaN(d.getTime()))return '';return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]+' '+fmtDMY(d)}
 function fmtDayLong(ds){var d=asDate(ds);if(isNaN(d.getTime()))return '';return ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][d.getDay()]+' '+fmtDMY(d)}
 var load=function(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}};
-var save=function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){} if(k!=='fareo_draft'&&typeof gdChanged==='function')gdChanged();};
+/* ---------- large storage (IndexedDB) for photos and saved copies ----------
+   localStorage holds ~5 MB, which receipt and EOS photos fill quickly.
+   Photos and recovery copies live in IndexedDB (hundreds of MB). */
+var KV=(function(){var dbp=null,off=!(typeof indexedDB!=='undefined');
+  function db(){if(!dbp)dbp=new Promise(function(res,rej){try{var r=indexedDB.open('fareo',1);r.onupgradeneeded=function(){r.result.createObjectStore('kv')};r.onsuccess=function(){res(r.result)};r.onerror=function(){rej(r.error)};r.onblocked=function(){rej(new Error('blocked'))}}catch(e){rej(e)}});return dbp}
+  function run(mode,fn){return db().then(function(d){return new Promise(function(res,rej){var t=d.transaction('kv',mode),req=fn(t.objectStore('kv'));t.oncomplete=function(){res(req&&req.result)};t.onerror=function(){rej(t.error)};t.onabort=function(){rej(t.error||new Error('aborted'))}})})}
+  return {isOff:function(){return off},setOff:function(){off=true},get:function(k){return run('readonly',function(s){return s.get(k)})},set:function(k,v){return run('readwrite',function(s){return s.put(v,k)})}};})();
+var storeWarnAt=0,receiptsWrite=Promise.resolve(),receiptsOk=true;
+function storageWarn(what){var n=Date.now();if(n-storeWarnAt<15000)return;storeWarnAt=n;try{toast('Storage full — '+what+' wasn’t saved. Back up now, then remove old receipts.','error')}catch(_){}}
+var save=function(k,v){
+  if(k==='fareo_receipts'&&!KV.isOff()){var arr=v;receiptsWrite=receiptsWrite.then(function(){return KV.set('fareo_receipts',arr)}).then(function(){receiptsOk=true},function(){receiptsOk=false;storageWarn('a receipt photo')});if(typeof gdChanged==='function')gdChanged();return}
+  try{localStorage.setItem(k,JSON.stringify(v))}catch(e){if(k!=='fareo_draft')storageWarn(k==='fareo_receipts'?'a receipt photo':'your latest change')}
+  if(k!=='fareo_draft'&&typeof gdChanged==='function')gdChanged();};
+/* Ask the browser not to clear Fareo's storage when the phone is low on space. */
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persisted().then(function(p){if(!p)return navigator.storage.persist()}).catch(function(){})}catch(_){}
 var RUN=5, RATE=1.20;
 /* ---------- version & release notes ----------
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='15.2';
+var APP_VERSION='15.3';
 var CHANGELOG=[
+  {v:'15.3',date:'November 3, 2026',notes:[
+    ['Bug Fix','EOS and receipt photos could silently fail to save once the browser\u2019s small storage (about 5 MB) was full, and disappeared after closing the app. Photos and saved copies now live in the browser\u2019s large storage, existing photos move there automatically, and Fareo asks the browser to keep its data permanently.'],
+    ['Bug Fix','If anything ever fails to save, Fareo now tells you straight away instead of failing silently.'],
+    ['Feature','Restoring a backup that has photos lets you add just the receipt & EOS photos and keep this device\u2019s shifts. Restores now always add photos rather than replacing them. Recovery shows how many photos are stored and how much space is used.'],
+  ]},
   {v:'15.2',date:'November 3, 2026',notes:[
     ['Feature','Google Drive backup can now run once per pay week: Settings \u2192 Backup & restore \u2192 How often \u2192 Pay week. It backs up the first time Fareo is open after your pay week ends, so the backup holds the finished week.'],
   ]},
@@ -3281,6 +3309,17 @@ var deductions=load('fareo_deductions',[]);
 var recurring=load('fareo_recurring',[]);
 var fuelManual=load('fareo_fuelManual',[]);   /* manual fuel expenses added in Reports */
 var receipts=load('fareo_receipts',[])||[];        /* receipt archive: {id,dataUrl,name,kind,...} */
+if(!Array.isArray(receipts))receipts=[];
+function unionById(a,b){var seen={},out=[];(a||[]).concat(b||[]).forEach(function(r){if(r&&r.id!=null&&!seen[r.id]){seen[r.id]=1;out.push(r)}});return out}
+var receiptsLoaded=(function(){
+  if(KV.isOff())return Promise.resolve();
+  return KV.get('fareo_receipts').then(function(v){
+    var idb=Array.isArray(v)?v:[],hadLegacy=localStorage.getItem('fareo_receipts')!=null;
+    receipts=unionById(idb,receipts);
+    var p=receipts.length!==idb.length?KV.set('fareo_receipts',receipts):Promise.resolve();
+    return p.then(function(){if(hadLegacy)localStorage.removeItem('fareo_receipts')});
+  }).catch(function(){KV.setOff()}).then(function(){try{renderJarMeta()}catch(_){}try{var ac=$('#archiveCount');if(ac)ac.textContent=receipts.length}catch(_){}});
+})();
 var clients=load('fareo_clients',[])||[];
 if(!Array.isArray(clients))clients=[];
 var runPlan=load('fareo_run_plan',[])||[];
@@ -7142,11 +7181,14 @@ $('#clearCache').onclick=fullRefresh;
 var SYNC_KEYS=['fareo_settings','fareo_entries','fareo_deductions','fareo_recurring','fareo_fuelManual','fareo_draft','fareo_names','fareo_clients','fareo_run_plan'];
 function allData(){var o={};SYNC_KEYS.forEach(function(k){var v=localStorage.getItem(k);if(v!=null)o[k]=v});return o}
 /* Backup includes receipts (for a full audit-safe export); cloud sync does not. */
-function allDataFull(){var o=allData();var r=localStorage.getItem('fareo_receipts');if(r!=null)o['fareo_receipts']=r;return o}
-function applyData(d){Object.keys(d||{}).forEach(function(k){if(k.indexOf('fareo_')===0){var v=d[k];try{localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v))}catch(_){}}})}
+function allDataFull(){var o=allData();if(receipts&&receipts.length)o['fareo_receipts']=JSON.stringify(receipts);return o}
+function parseArr(v){try{v=typeof v==='string'?JSON.parse(v):v}catch(_){v=[]}return Array.isArray(v)?v:[]}
+/* Photos are only ever added on restore, never thrown away. */
+function addReceiptsFrom(v){var before=receipts.length;receipts=unionById(receipts,parseArr(v));saveReceipts();return receipts.length-before}
+function applyData(d){Object.keys(d||{}).forEach(function(k){if(k.indexOf('fareo_')!==0)return;var v=d[k];if(k==='fareo_receipts'&&!KV.isOff()){addReceiptsFrom(v);return}try{localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v))}catch(_){storageWarn('restored data')}})}
 function backupDump(){var data=allDataFull();return {app:'fareo',schema:2,ver:APP_VERSION,exported:new Date().toISOString(),device:deviceId(),counts:backupCounts(data),data:data}}
 function backupCounts(d){function L(k){try{var v=d[k];v=typeof v==='string'?JSON.parse(v):v;return Array.isArray(v)?v.length:0}catch(_){return 0}}return {shifts:L('fareo_entries'),costs:L('fareo_deductions')+L('fareo_fuelManual')+L('fareo_recurring'),clients:L('fareo_clients'),receipts:L('fareo_receipts')}}
-$('#exportBtn').onclick=function(){
+$('#exportBtn').onclick=async function(){try{await receiptsLoaded}catch(_){}
   var dump=backupDump(),c=dump.counts,d=new Date(dump.exported);
   var hm=('0'+d.getHours()).slice(-2)+('0'+d.getMinutes()).slice(-2);
   deliverFile(new Blob([JSON.stringify(dump)],{type:'application/json'}),'Fareo-backup_'+todayStr()+'_'+hm+'.json','Fareo backup','Backup ready · '+c.shifts+' shifts');
@@ -7168,31 +7210,50 @@ function parseBackup(txt){
 }
 function writeBackupData(d){
   var failed=[];
-  Object.keys(d).forEach(function(k){var v=d[k];v=typeof v==='string'?v:JSON.stringify(v);
-    for(var tries=0;tries<4;tries++){try{localStorage.setItem(k,v);return}catch(e){
-      /* Out of space: drop the oldest saved copies and try again. */
-      var L=rpList();if(L.length>1){L.splice(Math.ceil(L.length/2));try{localStorage.setItem('fareo_rp',JSON.stringify(L))}catch(_){localStorage.removeItem('fareo_rp')}}
-      else if(L.length){localStorage.removeItem('fareo_rp')}
-      else if(tries===2){localStorage.removeItem('fareo_presync')}
-    }}
+  Object.keys(d).forEach(function(k){var v=d[k];
+    if(k==='fareo_receipts'&&!KV.isOff()){addReceiptsFrom(v);return}
+    v=typeof v==='string'?v:JSON.stringify(v);
+    for(var tries=0;tries<2;tries++){try{localStorage.setItem(k,v);return}catch(e){
+      /* Out of space: clear copies left over from older versions and retry. */
+      ['fareo_rp','fareo_presync','fareo_prerestore'].forEach(function(x){try{localStorage.removeItem(x)}catch(_){}})}}
     failed.push(k)});
   return failed;
 }
 function doRestoreBackup(d,opts){
   saveRecoveryPoint('Before restoring a backup');
-  try{localStorage.setItem('fareo_prerestore',JSON.stringify({at:Date.now(),data:allData()}))}catch(_){}
+  rpExtraSet('prerestore',{at:Date.now(),data:allData()});
   var failed=writeBackupData(d);
   var lostCore=failed.filter(function(k){return k!=='fareo_receipts'});
   if(lostCore.length){toast('Couldn’t restore '+lostCore.join(', ').replace(/fareo_/g,'')+' — storage is full','error');return}
   if(opts&&opts.fromDrive)gdMarkInSync(opts.fromDrive);
-  toast((opts&&opts.fromDrive?'Restored from Google Drive':'Backup restored')+(failed.length?' (receipt photos didn\u2019t fit)':''),'success');setTimeout(function(){location.reload()},900);
+  Promise.all([receiptsWrite,rpWrite]).then(function(){
+    toast((opts&&opts.fromDrive?'Restored from Google Drive':'Backup restored')+((failed.length||!receiptsOk)?' (receipt photos didn\u2019t fit)':''),'success');setTimeout(function(){location.reload()},900)});
 }
 $('#importFile').onchange=function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();
   r.onerror=function(){toast('Couldn’t open that file','error')};
   r.onload=function(){var b;try{b=parseBackup(r.result)}catch(err){toast('That file isn’t a Fareo backup'+(f.name?' ('+f.name+')':''),'error');return}
     var c=backupCounts(b.data),obj=b.obj||{},when=obj.exported?new Date(obj.exported).toLocaleString('en-AU',{day:'numeric',month:'short',year:'numeric',hour:'numeric',minute:'2-digit'}):'an unknown date',cur=dataSummary(allData());
+    if(c.receipts&&cur.shifts){restoreChooser(b.data,'From '+when,{});return}
     ask('Restore this backup?','From '+when+(obj.ver?' (Fareo '+obj.ver+')':'')+': '+c.shifts+' shifts, '+c.costs+' costs, '+c.clients+' clients, '+c.receipts+' receipts. It replaces the '+cur.shifts+' shifts on this device. A copy of what you have now is kept under Recovery.','Restore',function(){doRestoreBackup(b.data)},{danger:false,noLbl:'Cancel',noUndo:true})};
   r.readAsText(f);e.target.value=''};
+/* ---------- restore chooser: everything, or only add photos ---------- */
+var rcmPending=null;
+function restoreChooser(data,from,opts){var c=backupCounts(data),cur=dataSummary(allData()),have={};receipts.forEach(function(r){have[r.id]=1});
+  var fresh=parseArr(data.fareo_receipts).filter(function(r){return r&&!have[r.id]}).length;
+  rcmPending={data:data,opts:opts||{}};
+  $('#rcEyebrow').textContent=from;
+  $('#rcSub').textContent='Backup: '+c.shifts+' shifts, '+c.costs+' costs, '+c.receipts+' photos. This device: '+cur.shifts+' shifts, '+receipts.length+' photos.';
+  $('#rcPhotosSub').textContent=fresh?('Adds '+fresh+' photo'+(fresh===1?'':'s')+' this device doesn’t have. Your shifts, costs and settings stay as they are.'):'This device already has every photo in this backup.';
+  showModal('restoreChoiceModal');sfx('warn')}
+document.addEventListener('click',function(e){
+  var b=e.target.closest&&e.target.closest('[data-rcm]');
+  if(b&&rcmPending){var p=rcmPending;rcmPending=null;closeModal('restoreChoiceModal');
+    if(b.dataset.rcm==='all'){doRestoreBackup(p.data,p.opts);return}
+    var added=addReceiptsFrom(p.data.fareo_receipts);
+    receiptsWrite.then(function(){try{renderJarMeta()}catch(_){}try{renderRecovery()}catch(_){}
+      if(!receiptsOk)return;toast(added?('Added '+added+' receipt & EOS photo'+(added===1?'':'s')):'No new photos — you already have them all','success')});return}
+  if(e.target.id==='rcmCancel'){rcmPending=null;closeModal('restoreChoiceModal')}
+});
 function deviceId(){var id=localStorage.getItem('fareo_device');if(!id){id='d'+Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('fareo_device',id)}return id}
 /* ================= Google Drive backup =================
    This device's storage is the only source of truth: nothing syncs.
@@ -7265,7 +7326,7 @@ async function gdFolder(tok){var st=gdState();
 function gdDriveSum(m){var a=m&&m.appProperties||{};return {shifts:Number(a.shifts||0),costs:Number(a.costs||0),clients:Number(a.clients||0),at:m&&m.modifiedTime?Date.parse(m.modifiedTime):0,device:a.device||''}}
 /* Write the backup. o.manual: upload even if unchanged. o.force: skip the
    "Drive has more shifts" guard (only after the user chose to replace). */
-async function gdBackup(o){o=o||{};if(gdBusy)return 'busy';var tok=o.token||gdToken();if(!tok){gdSet({due:true});gdUI();return 'auth'}
+async function gdBackup(o){o=o||{};if(gdBusy)return 'busy';try{await receiptsLoaded}catch(_){}var tok=o.token||gdToken();if(!tok){gdSet({due:true});gdUI();return 'auth'}
   gdBusy=true;gdUI('Backing up…');
   try{
     var dump=backupDump(),content=JSON.stringify(dump),sig=gdHash(JSON.stringify(dump.data)),st=gdState(),mine=dump.counts;
@@ -7329,6 +7390,7 @@ function gdShowChoice(){var st=gdState(),ds=st.conflict;if(!ds)return;var L=data
 async function gdDownload(tok){var m=await gdLocate(tok);if(!m)throw {message:'No Fareo backup in your Google Drive yet'};var txt=await gdApi('GET','/drive/v3/files/'+encodeURIComponent(m.id)+'?alt=media',tok);return {meta:m,backup:parseBackup(typeof txt==='string'?txt:JSON.stringify(txt))}}
 function gdRestoreFlow(){
   gdTokenOrSignIn().then(gdDownload).then(function(r){var b=r.backup,c=backupCounts(b.data),cur=dataSummary(allData());
+    if(c.receipts&&cur.shifts){restoreChooser(b.data,'Google Drive \u00b7 saved '+gdAgo(Date.parse(r.meta.modifiedTime)),{fromDrive:r.meta.id});return}
     ask('Restore from Google Drive?','Backup saved '+gdAgo(Date.parse(r.meta.modifiedTime))+': '+c.shifts+' shifts, '+c.costs+' costs, '+c.clients+' clients, '+c.receipts+' receipts. It replaces the '+cur.shifts+' shifts on this device. A copy of what you have now is kept under Recovery.','Restore',function(){doRestoreBackup(b.data,{fromDrive:r.meta.id})},{danger:false,noLbl:'Cancel',noUndo:true})
   }).catch(function(e){if(e&&e.code&&/cancel|closed/.test(e.code))return;toast(gdErrMsg(e),'error')})}
 document.addEventListener('click',function(e){
@@ -7343,7 +7405,7 @@ document.addEventListener('click',function(e){
     if(mode==='replace'){gdSet({conflict:null});gdTokenOrSignIn().then(function(tok){return gdBackup({token:tok,force:true})}).then(function(r){if(r==='ok')toast('Drive backup replaced','success')}).catch(function(er){toast(gdErrMsg(er),'error')});return}
     gdTokenOrSignIn().then(gdDownload).then(function(r){
       if(mode==='restore'){gdSet({conflict:null});doRestoreBackup(r.backup.data,{fromDrive:r.meta.id});return}
-      var merged=mergeData(allData(),r.backup.data);if(r.backup.data.fareo_receipts&&!localStorage.getItem('fareo_receipts'))merged.fareo_receipts=r.backup.data.fareo_receipts;
+      var merged=mergeData(allData(),r.backup.data);if(r.backup.data.fareo_receipts)merged.fareo_receipts=r.backup.data.fareo_receipts;
       writeBackupData(merged);reloadAll();gdSet({conflict:null});return gdBackup({force:true}).then(function(){toast('Merged and backed up','success');renderRecovery()})
     }).catch(function(er){if(er&&er.code&&/cancel|closed/.test(er.code))return;toast(gdErrMsg(er),'error')});}
 });
@@ -7359,7 +7421,25 @@ function dataSummary(d){
 function hasLocalData(){var s=dataSummary(allData());return s.shifts+s.costs+s.clients>0}
 /* ---------- recovery points: rotating full copies on this device ---------- */
 var RP_MAX=6;
-function rpList(){try{var v=JSON.parse(localStorage.getItem('fareo_rp')||'[]');return Array.isArray(v)?v:[]}catch(_){return []}}
+var rpCache=null,rpExtra={},rpWrite=Promise.resolve();
+function rpList(){return (rpCache||[]).slice()}
+function rpPersist(){var L=rpCache||[];
+  if(KV.isOff()){try{localStorage.setItem('fareo_rp',JSON.stringify(L))}catch(_){}return rpWrite}
+  rpWrite=rpWrite.then(function(){return KV.set('fareo_rp',L)}).catch(function(){if(L.length>1){rpCache=L.slice(0,Math.ceil(L.length/2));return KV.set('fareo_rp',rpCache).catch(function(){})}});return rpWrite}
+function rpExtraSet(k,v){rpExtra[k]=v;if(KV.isOff()){try{localStorage.setItem('fareo_'+k,JSON.stringify(v))}catch(_){}return}var x=Object.assign({},rpExtra);rpWrite=rpWrite.then(function(){return KV.set('fareo_rpx',x)}).catch(function(){})}
+var rpLoaded=(function(){
+  function J(k,d){try{var v=JSON.parse(localStorage.getItem(k)||'null');return v==null?d:v}catch(_){return d}}
+  var lsRp=J('fareo_rp',[]),lsPre=J('fareo_presync',null),lsRes=J('fareo_prerestore',null);if(!Array.isArray(lsRp))lsRp=[];
+  function newest(a,b){return !a?b:!b?a:(a.at>=b.at?a:b)}
+  if(KV.isOff()){rpCache=lsRp.concat(rpCache||[]);rpExtra={presync:lsPre,prerestore:lsRes};return Promise.resolve()}
+  return Promise.all([KV.get('fareo_rp'),KV.get('fareo_rpx')]).then(function(r){
+    var idb=Array.isArray(r[0])?r[0]:[],x=r[1]||{},seen={},all=[];
+    (rpCache||[]).concat(idb,lsRp).forEach(function(p){var key=p.at+'|'+p.sig;if(!seen[key]){seen[key]=1;all.push(p)}});
+    all.sort(function(a,b){return b.at-a.at});rpCache=all.slice(0,RP_MAX);
+    rpExtra={presync:newest(x.presync,lsPre),prerestore:newest(x.prerestore,rpExtra.prerestore?newest(rpExtra.prerestore,lsRes):lsRes)};
+    return Promise.all([KV.set('fareo_rp',rpCache),KV.set('fareo_rpx',rpExtra)]).then(function(){['fareo_rp','fareo_presync','fareo_prerestore'].forEach(function(k){localStorage.removeItem(k)})});
+  }).catch(function(){KV.setOff();rpCache=lsRp;rpExtra={presync:lsPre,prerestore:lsRes}}).then(function(){try{renderRecovery()}catch(_){}});
+})();
 function rpSig(d){var s2=dataSummary(d);return s2.shifts+'|'+s2.costs+'|'+s2.clients+'|'+Math.round(s2.take*100)+'|'+s2.last}
 function saveRecoveryPoint(reason,data){
   try{
@@ -7367,7 +7447,7 @@ function saveRecoveryPoint(reason,data){
     var L=rpList(),sig=rpSig(data);if(L.length&&L[0].sig===sig)return false;
     L.unshift({at:Date.now(),reason:reason,sig:sig,sum:sum,data:data});
     while(L.length>RP_MAX)L.pop();
-    for(;;){try{localStorage.setItem('fareo_rp',JSON.stringify(L));break}catch(e){if(L.length<=1)break;L.pop()}}
+    rpCache=L;rpPersist();
     return true;
   }catch(_){return false}
 }
@@ -7376,7 +7456,7 @@ function dailyRecoveryPoint(){var L=rpList();if(!L.length||Date.now()-L[0].at>20
    pre-sync copy and the pre-restore copy. */
 function recoverySources(){
   var out=rpList().map(function(r,i){return {id:'rp:'+i,at:r.at,reason:r.reason,sum:r.sum||dataSummary(r.data),data:r.data}});
-  [['fareo_presync','Before first sync sign-in'],['fareo_prerestore','Before restoring a backup']].forEach(function(k){try{var p=JSON.parse(localStorage.getItem(k[0])||'null');if(p&&p.data){var sm=dataSummary(p.data);if(sm.shifts+sm.costs+sm.clients>0)out.push({id:k[0],at:p.at,reason:k[1],sum:sm,data:p.data})}}catch(_){}});
+  [['presync','Before first sync sign-in'],['prerestore','Before restoring a backup']].forEach(function(k){try{var p=rpExtra[k[0]];if(p&&p.data){var sm=dataSummary(p.data);if(sm.shifts+sm.costs+sm.clients>0)out.push({id:k[0],at:p.at,reason:k[1],sum:sm,data:p.data})}}catch(_){}});
   out.sort(function(a,b){return b.at-a.at});return out;
 }
 function restoreFromSource(src){
@@ -7389,6 +7469,8 @@ function renderRecovery(){
   var dc=$('#dataCheck');if(dc){var up=gdState().on?gdState().lastAt:0;dc.textContent='This device: '+cur.shifts+' shifts · '+cur.costs+' costs · '+cur.clients+' clients'+(cur.last?' · latest '+fmtDayDMY(cur.last):'')+(up?' · Drive backup '+new Date(up).toLocaleString('en-AU',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}):'')}
   box.innerHTML=L.length?L.map(function(r,i){var more=r.sum.shifts>cur.shifts;return '<div class="rp-row'+(more?' more':'')+'"><div><b>'+new Date(r.at).toLocaleString('en-AU',{weekday:'short',day:'numeric',month:'short',hour:'numeric',minute:'2-digit'})+'</b><small>'+esc(r.reason)+' · '+r.sum.shifts+' shifts · '+r.sum.costs+' costs · '+r.sum.clients+' clients'+(r.sum.last?' · latest '+fmtDMY(r.sum.last):'')+'</small></div><button type="button" class="rp-btn" data-rp="'+i+'">Restore</button></div>'}).join(''):'<p class="mono-mut" style="margin:6px 0 0">No saved copies on this device yet. Fareo now makes one every day and before any sync change.</p>';
   box._src=L;
+  var sl=$('#storageLine');if(sl){var n=receipts.length;sl.textContent=n+' receipt & EOS photo'+(n===1?'':'s')+' stored'+(KV.isOff()?'':' in large storage');
+    try{if(navigator.storage&&navigator.storage.estimate)navigator.storage.estimate().then(function(e){var mb=(e.usage||0)/1048576;sl.textContent=n+' receipt & EOS photo'+(n===1?'':'s')+' \u00b7 '+(mb<0.1?'<0.1':mb.toFixed(1))+' MB used'+(e.quota?' of '+Math.round(e.quota/1048576).toLocaleString('en-AU')+' MB available':'')}).catch(function(){})}catch(_){}}
 }
 document.addEventListener('click',function(e){
   var b=e.target.closest&&e.target.closest('#recoveryList [data-rp]');
@@ -7417,7 +7499,7 @@ function mergeData(local,remote){
   out.fareo_settings=JSON.stringify(ls);
   return out;
 }
-function reloadAll(){settings=load('fareo_settings',settings)||settings;migrateSettings();entries=load('fareo_entries',[])||[];deductions=load('fareo_deductions',[])||[];recurring=load('fareo_recurring',[])||[];fuelManual=load('fareo_fuelManual',[])||[];receipts=load('fareo_receipts',[])||[];names=load('fareo_names',[])||[];clients=load('fareo_clients',[])||[];if(!Array.isArray(clients))clients=[];runPlan=load('fareo_run_plan',[])||[];if(!Array.isArray(runPlan))runPlan=[];draft=normalizeDraft(load('fareo_draft',draft));if(typeof draftHasWork==='function'&&!draftHasWork(draft)){draft.date=todayStr();draft.rego=''}clearReceiptAttach();try{renderNames();rowInputs();render();var a=document.querySelector('.screen.on');if(a){var t=a.dataset.tab;if(t==='weekly')renderWeekly();if(t==='reports')renderReports();if(t==='settings')renderSettings();if(t==='runs')renderRuns();if(t==='book')renderBook()}}catch(_){}}
+function reloadAll(){settings=load('fareo_settings',settings)||settings;migrateSettings();entries=load('fareo_entries',[])||[];deductions=load('fareo_deductions',[])||[];recurring=load('fareo_recurring',[])||[];fuelManual=load('fareo_fuelManual',[])||[];if(KV.isOff())receipts=load('fareo_receipts',[])||[];names=load('fareo_names',[])||[];clients=load('fareo_clients',[])||[];if(!Array.isArray(clients))clients=[];runPlan=load('fareo_run_plan',[])||[];if(!Array.isArray(runPlan))runPlan=[];draft=normalizeDraft(load('fareo_draft',draft));if(typeof draftHasWork==='function'&&!draftHasWork(draft)){draft.date=todayStr();draft.rego=''}clearReceiptAttach();try{renderNames();rowInputs();render();var a=document.querySelector('.screen.on');if(a){var t=a.dataset.tab;if(t==='weekly')renderWeekly();if(t==='reports')renderReports();if(t==='settings')renderSettings();if(t==='runs')renderRuns();if(t==='book')renderBook()}}catch(_){}}
 
 /* ---------- address book ---------- */
 function uid(p){return (p||'id')+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
@@ -9173,7 +9255,7 @@ applyTheme();renderNames();rowInputs();render();setSub(1);renderDeadlines();upda
 })();
 watchForUpdates();
 updFlowCelebrate();
-try{dailyRecoveryPoint()}catch(_){}
+rpLoaded.then(function(){try{dailyRecoveryPoint()}catch(_){}});
 (function layoutForDevice(){
   function apply(){
     var w=window.innerWidth||0,h=window.innerHeight||0;
