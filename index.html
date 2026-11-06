@@ -254,7 +254,7 @@ html.kb-open .sfoot{opacity:0;visibility:hidden;pointer-events:none;transform:tr
 .totrow{display:flex;justify-content:space-between;align-items:center;padding-top:11px;margin-top:4px;border-top:2px solid var(--head)}
 .totrow b{font-size:25px;font-weight:800;color:var(--inc)}
 #wkCard.credited{border-color:var(--inc);border-width:1.5px;box-shadow:0 0 0 1px var(--inc),var(--shadow)}
-#wkCard.credited::before{content:"\2713  Week credited \u2014 payment received";display:block;margin:-2px 0 10px;padding:8px 11px;background:var(--inc-bg);color:var(--on-inc);border:1px solid var(--inc);border-radius:9px;font-size:11.5px;font-weight:700;text-align:center}
+#wkCard.credited::before{content:"\2713  Week credited \2014  payment received";display:block;margin:-2px 0 10px;padding:8px 11px;background:var(--inc-bg);color:var(--on-inc);border:1px solid var(--inc);border-radius:9px;font-size:11.5px;font-weight:700;text-align:center}
 .totrow.credited{border-top-color:var(--inc)}
 .totrow.credited b{color:var(--inc)}
 .paid-stamp{display:inline-flex;align-items:center;gap:3px;background:var(--inc);color:var(--btn-ink);font-size:9px;font-weight:800;letter-spacing:.5px;border-radius:999px;padding:2px 8px;margin-left:6px;vertical-align:middle}
@@ -2042,6 +2042,20 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
 @keyframes vanPark{0%{transform:translateX(-18px)}70%{transform:translateX(1.5px)}85%{transform:translateX(-.5px) rotate(-3deg)}100%{transform:none}}
 @media (prefers-reduced-motion:reduce){.van-fx,.calc-van{display:none!important}}
 .calm .van-fx,.calm .calc-van{display:none!important}
+/* ---------- Fareo 15.7 · days off on Weekly ---------- */
+.wk-off{animation:riseIn .4s var(--ease) both}
+.wk-off .when{display:flex;flex-direction:column;gap:1px;min-width:0}
+.wk-off .when b{display:block;font-size:13.5px;color:var(--mut);font-weight:650;font-variant-numeric:tabular-nums}
+.wk-off .rg{font-size:11px}
+.wk-off-pill{font-family:var(--mono);font-size:10.5px!important;font-weight:700!important;letter-spacing:.1em;color:var(--mut)!important;background:var(--field);border:1px solid var(--bd);border-radius:999px;padding:3px 10px}
+.wk-off[data-day]{cursor:pointer}
+.wk-log{border:1px dashed var(--bd2);background:transparent;color:var(--mut);border-radius:9px;padding:6px 9px;font-size:11.5px;font-weight:650;cursor:pointer;white-space:nowrap}
+.wk-off[data-day]:hover .wk-log,.wk-log:focus-visible{color:var(--accent);border-color:var(--accent-line)}
+.wk-today .when b{color:var(--head)}
+.wk-today .rg{color:var(--accent)}
+.wk-up{opacity:.45}
+.wk-up .am{color:var(--mut)!important;font-weight:500}
+.wk-days{display:block;margin-top:3px;font-family:var(--mono);font-size:10.5px;font-weight:500;color:var(--mut);letter-spacing:0;text-transform:none}
 </style>
 </head>
 <body>
@@ -2198,7 +2212,7 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
     <div id="wkBadge" style="margin-bottom:10px"></div>
     <div class="wknav"><button id="wkPrev">&lsaquo;</button><span class="wl" id="wkLabel">This week</span><button id="wkNext">&rsaquo;</button></div>
     <div class="card" id="wkCard"><div id="wkRows"></div>
-      <div class="totrow" id="wkTotalRow"><span style="color:var(--mut);font-size:12px;font-weight:600">TOTAL <span id="wkPaidStamp" class="paid-stamp" style="display:none">&#10003; PAID</span></span><b class="tally" id="wkTotal">$0.00</b></div></div>
+      <div class="totrow" id="wkTotalRow"><span style="color:var(--mut);font-size:12px;font-weight:600">TOTAL <span id="wkPaidStamp" class="paid-stamp" style="display:none">&#10003; PAID</span><small class="wk-days" id="wkDays"></small></span><b class="tally" id="wkTotal">$0.00</b></div></div>
     <button class="btn neutral" id="shareWeek">Share Week</button>
     <button class="btn neutral" id="wkAdd" style="margin-top:9px">+ Add / override entry</button>
   </section>
@@ -3057,8 +3071,12 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='15.6';
+var APP_VERSION='15.7';
 var CHANGELOG=[
+  {v:'15.7',date:'November 7, 2026',notes:[
+    ['Bug Fix','The credited banner on Weekly showed \u201cu2014\u201d instead of a dash.'],
+    ['UI/UX','Weekly now lists every day of your pay week. Days with no shift show as Off (tap + Log if you forgot one), days still to come show as Not yet, and the total shows how many days you worked and had off. The shared week image includes your days off too.'],
+  ]},
   {v:'15.6',date:'November 7, 2026',notes:[
     ['UI/UX','Maxi van animations: when you save a shift or a booking, or mark a trip done, a wheelchair-accessible maxi drives in, lowers its ramp, a wheelchair rolls aboard, and it beeps off with your take-home. A mini maxi rides along while Home, Weekly and Reports calculate, and success messages park a little maxi. Turn it off in Settings \u2192 Appearance, or with Reduce motion.'],
   ]},
@@ -5408,6 +5426,7 @@ function maybeOfferCycleShare(ds){
   }
   showModal('cycleShareModal');
 }
+function weekDays(base){var out=[];for(var k=0;k<7;k++){var d=new Date(base);d.setDate(base.getDate()+k);out.push(iso(d))}return out}
 function renderWeekly(){
   var base=weekStartOf(new Date());base.setDate(base.getDate()+wkOffset*7);
   var end=new Date(base);end.setDate(base.getDate()+6);
@@ -5416,9 +5435,17 @@ function renderWeekly(){
   var bs=iso(base),es=iso(end);
   var rows=entries.filter(function(e){return e.date>=bs&&e.date<=es}).sort(function(a,b){return a.date<b.date?-1:1});
   var tot=rows.reduce(function(a,b){return a+(Number(b.take)||0)},0);
-  $('#wkRows').innerHTML=rows.map(function(e){
-    return '<div class="tr wk-row" data-id="'+esc(e.id)+'"><span class="when"><b>'+fmtDayDMY(e.date)+'</b><span class="rg">'+esc(e.rego||'')+'</span></span><span class="am">'+money(e.take)+'</span><button type="button" class="wk-share" data-share="'+esc(e.id)+'">Share</button></div>';
-  }).join('')||'<p style="color:var(--mut);font-size:12.5px;padding:8px 0">No shifts this week yet.</p>';
+  /* Every day of the pay week: shifts, or Off for days with no shift. */
+  function shiftRow(e){return '<div class="tr wk-row" data-id="'+esc(e.id)+'"><span class="when"><b>'+fmtDayDMY(e.date)+'</b><span class="rg">'+esc(e.rego||'')+'</span></span><span class="am">'+money(e.take)+'</span><button type="button" class="wk-share" data-share="'+esc(e.id)+'">Share</button></div>';
+  }
+  var T=todayStr(),worked=0,off=0,html='';
+  weekDays(base).forEach(function(ds){var dayRows=rows.filter(function(e){return e.date===ds});
+    if(dayRows.length){worked++;html+=dayRows.map(shiftRow).join('');return}
+    if(ds>T){html+='<div class="tr wk-off wk-up"><span class="when"><b>'+fmtDayDMY(ds)+'</b><span class="rg">Not yet</span></span><span class="am">\u2014</span><span></span></div>';return}
+    off++;
+    html+='<div class="tr wk-off'+(ds===T?' wk-today':'')+'" data-day="'+ds+'"><span class="when"><b>'+fmtDayDMY(ds)+'</b><span class="rg">'+(ds===T?'Today \u00b7 no shift logged':'Day off')+'</span></span><span class="am wk-off-pill">Off</span><button type="button" class="wk-log" data-log="'+ds+'" aria-label="Log a shift for '+fmtDayDMY(ds)+'">+ Log</button></div>'});
+  $('#wkRows').innerHTML=html;
+  var dEl=$('#wkDays');if(dEl)dEl.textContent=worked+' worked \u00b7 '+off+' off';
   tally($('#wkTotal'),tot,{delay:wkTallyDelay});wkTallyDelay=0;
   var st=statusFor(base,end);$('#wkBadge').innerHTML='<span class="badge '+st.c+'">'+(st.c==='st-cred'?'\u2713 ':'')+st.t+'</span>';
   /* Credited-week visual cue: highlight the card and stamp the total row */
@@ -5432,10 +5459,11 @@ function renderWeekly(){
 }
 $('#wkPrev').onclick=function(){wkOffset--;renderWeekly()};
 $('#wkNext').onclick=function(){wkOffset++;renderWeekly()};
-function weekData(){var base=weekStartOf(new Date());base.setDate(base.getDate()+wkOffset*7);var end=new Date(base);end.setDate(base.getDate()+6);var bs=iso(base),es=iso(end);var rows=entries.filter(function(e){return e.date>=bs&&e.date<=es}).sort(function(a,b){return a.date<b.date?-1:1});var tot=rows.reduce(function(a,b){return a+(Number(b.take)||0)},0);return{rows:rows,tot:tot,label:fmtDMY(base)+' \u2013 '+fmtDMY(end),range:fmtDayDMY(base)+' \u2013 '+fmtDayDMY(end)}}
+function weekData(){var base=weekStartOf(new Date());base.setDate(base.getDate()+wkOffset*7);var end=new Date(base);end.setDate(base.getDate()+6);var bs=iso(base),es=iso(end);var rows=entries.filter(function(e){return e.date>=bs&&e.date<=es}).sort(function(a,b){return a.date<b.date?-1:1});var tot=rows.reduce(function(a,b){return a+(Number(b.take)||0)},0);return{rows:rows,tot:tot,days:weekDays(base),label:fmtDMY(base)+' \u2013 '+fmtDMY(end),range:fmtDayDMY(base)+' \u2013 '+fmtDayDMY(end)}}
 function buildWeekImage(){return new Promise(function(res){try{
   var W=weekData(),dpr=2,pad=32,rowH=44,headH=70,colH=32,footH=58,WD=720;
-  var n=Math.max(W.rows.length,1);
+  var T0=todayStr(),lines=[];W.days.forEach(function(ds){var r=W.rows.filter(function(e){return e.date===ds});if(r.length)r.forEach(function(e){lines.push({e:e})});else if(ds<=T0)lines.push({off:ds})});
+  var n=Math.max(lines.length,1);
   var H=headH+colH+n*rowH+footH;
   var c=document.createElement('canvas');c.width=WD*dpr;c.height=H*dpr;var x=c.getContext('2d');x.scale(dpr,dpr);
   x.fillStyle='#FFFFFF';x.fillRect(0,0,WD,H);
@@ -5450,9 +5478,10 @@ function buildWeekImage(){return new Promise(function(res){try{
   x.strokeStyle='#E5E7EB';x.lineWidth=1;x.beginPath();x.moveTo(pad,y+10);x.lineTo(WD-pad,y+10);x.stroke();
   y=headH+colH;
   var days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  if(!W.rows.length){x.fillStyle='#6B7280';x.font='500 15px system-ui,sans-serif';x.fillText('No shifts',pad,y+18);}
-  W.rows.forEach(function(e){
-    var d=asDate(e.date);
+  if(!lines.length){x.fillStyle='#6B7280';x.font='500 15px system-ui,sans-serif';x.fillText('No shifts',pad,y+18);}
+  lines.forEach(function(L){
+    if(L.off){var od=asDate(L.off);x.fillStyle='#9CA3AF';x.font='600 15px system-ui,sans-serif';x.fillText(days[od.getDay()],pad,y+20);x.font='500 15px system-ui,sans-serif';x.fillText(fmtDMY(L.off),pad+78,y+20);x.fillText('\u2014',pad+248,y+20);x.font='700 13px system-ui,sans-serif';x.textAlign='right';x.fillText('OFF',WD-pad,y+20);x.textAlign='left';y+=rowH;return}
+    var e=L.e,d=asDate(e.date);
     x.fillStyle='#111827';x.font='600 15px system-ui,sans-serif';
     x.fillText(days[d.getDay()],pad,y+20);
     x.font='500 15px system-ui,sans-serif';
@@ -5598,6 +5627,8 @@ if($('#wkAdd'))$('#wkAdd').onclick=openAddEntry;
 if($('#wkRows'))$('#wkRows').addEventListener('click',function(ev){
   var sh=ev.target.closest&&ev.target.closest('[data-share]');
   if(sh){ev.preventDefault();ev.stopPropagation();var e=entries.filter(function(x){return String(x.id)===String(sh.dataset.share)})[0];if(e)shareEntry(e);return;}
+  var lg=ev.target.closest&&ev.target.closest('.wk-off[data-day]');
+  if(lg){var ds=lg.dataset.day;go('shift');setTimeout(function(){setDraftDate(ds);toast('Logging a shift for '+fmtDayDMY(ds))},120);return}
   var row=ev.target.closest&&ev.target.closest('.wk-row');
   if(row)openEntry(row.dataset.id);
 });
