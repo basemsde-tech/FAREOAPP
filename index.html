@@ -1986,6 +1986,62 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
 .bk-empty .bk-ico svg{width:16px;height:16px}
 .bk-empty>span:not(.bk-ico){flex:1}
 .bk-empty i{font-size:18px}
+/* ---------- Fareo 15.6 · maxi van animations ---------- */
+.van-fx{position:fixed;left:0;right:0;bottom:140px;height:150px;z-index:120;pointer-events:none;display:none;overflow:hidden}
+.van-fx::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 0,color-mix(in srgb,var(--pg) 88%,transparent) 30%,color-mix(in srgb,var(--pg) 96%,transparent) 62%,transparent 100%)}
+.van-fx.play{display:block;animation:vfFade 2.7s linear both}
+@keyframes vfFade{0%{opacity:0}4%{opacity:1}90%{opacity:1}100%{opacity:0}}
+.vf-drive{position:absolute;left:50%;bottom:0;width:236px;margin-left:-118px}
+.van-fx.play .vf-drive{animation:vfTrip 2.7s both}
+@keyframes vfTrip{0%{transform:translateX(-100vw);animation-timing-function:cubic-bezier(.15,.75,.25,1)}20%{transform:translateX(0)}64%{transform:translateX(0);animation-timing-function:cubic-bezier(.55,0,.85,.35)}90%,100%{transform:translateX(105vw)}}
+.vf-svg{width:236px;height:auto;display:block;overflow:visible}
+.vf-road{stroke:var(--bd2);stroke-width:1.4;stroke-dasharray:7 6}
+.van-fx.play .vf-road{animation:vfRoad .5s linear infinite}
+@keyframes vfRoad{to{stroke-dashoffset:-13}}
+.vf-shell{fill:color-mix(in srgb,var(--head) 94%,var(--pg));stroke:color-mix(in srgb,var(--head) 70%,var(--pg));stroke-width:.8}
+.vf-stripe{fill:var(--accent)}
+.vf-glass{fill:color-mix(in srgb,var(--pg) 82%,#5a7ea8)}
+.vf-sign{fill:var(--accent)}.vf-sign-t{font:800 5.6px/1 var(--mono);fill:var(--accent-ink);letter-spacing:.06em}
+.vf-isa{fill:#2563EB}.vf-isa-w{fill:#fff}.vf-isa-l{fill:none;stroke:#fff;stroke-width:1;stroke-linecap:round;stroke-linejoin:round}
+.vf-head{fill:#FDE68A}.vf-tail{fill:#EF4444}
+.vf-tyre{fill:#15171c}.vf-hub{fill:#9aa3ae}.vf-spoke{stroke:#5b636e;stroke-width:1.2}
+.vf-spin{transform-box:fill-box;transform-origin:center}
+.van-fx.play .vf-spin{animation:vfWheels 2.7s both}
+@keyframes vfWheels{0%{transform:rotate(0)}20%{transform:rotate(900deg);animation-timing-function:linear}64%{transform:rotate(900deg);animation-timing-function:cubic-bezier(.55,0,.85,.35)}90%,100%{transform:rotate(2200deg)}}
+.vf-bob{transform-box:view-box;transform-origin:66px 55px}
+.van-fx.play .vf-bob{animation:vfBob 2.7s both}
+@keyframes vfBob{0%,18%{transform:none}21%{transform:translateY(1.6px) rotate(.8deg)}25%{transform:translateY(-.6px) rotate(-.3deg)}28%,64%{transform:none}67%{transform:rotate(-1.4deg)}72%,100%{transform:none}}
+.vf-ramp{fill:color-mix(in srgb,var(--head) 55%,var(--pg));stroke:var(--accent);stroke-width:.8;transform-box:view-box;transform-origin:6px 50px}
+.van-fx.play .vf-ramp{animation:vfRamp 2.7s both}
+@keyframes vfRamp{0%,25%{transform:rotate(0)}34%{transform:rotate(-116deg)}37%{transform:rotate(-112deg)}39%,52%{transform:rotate(-116deg)}60%,100%{transform:rotate(0)}}
+.vf-chair{opacity:0}
+.van-fx.play .vf-chair{animation:vfChair 2.7s both}
+@keyframes vfChair{0%,33%{opacity:0;transform:translate(-56px,63.5px)}35%{opacity:1;transform:translate(-50px,63.5px)}41%{transform:translate(-22px,63.5px) rotate(0)}43%{transform:translate(-19px,62px) rotate(-25deg)}49%{opacity:1;transform:translate(4px,51px) rotate(-25deg)}51%{transform:translate(9px,50px) rotate(0)}54%,100%{opacity:0;transform:translate(22px,50px)}}
+.vf-cw{fill:none;stroke:var(--head);stroke-width:1.4}.vf-ch{fill:var(--head)}.vf-cf{fill:none;stroke:var(--head);stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.vf-cp{fill:var(--accent)}.vf-cp-s{fill:none;stroke:var(--accent);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.vf-puffs circle{fill:var(--mut);opacity:0}
+.van-fx.play .vf-puffs circle{animation:vfPuff 2.7s both}
+.van-fx.play .vf-puffs circle:nth-child(2){animation-delay:.06s}.van-fx.play .vf-puffs circle:nth-child(3){animation-delay:.12s}
+@keyframes vfPuff{0%,63%{opacity:0;transform:none}68%{opacity:.5}80%,100%{opacity:0;transform:translate(-14px,-6px) scale(2.2)}}
+.vf-bubble{position:absolute;left:50%;top:0;transform:translateX(-50%) translateY(8px) scale(.85);opacity:0;display:flex;flex-direction:column;align-items:center;gap:1px;padding:7px 14px;border-radius:14px;background:var(--accent);color:var(--accent-ink);white-space:nowrap;box-shadow:0 10px 26px -10px color-mix(in srgb,var(--accent) 70%,transparent)}
+.vf-bubble b{font-size:13.5px;font-weight:800}.vf-bubble span{font-family:var(--mono);font-size:10.5px;font-weight:600;opacity:.85}
+.vf-bubble span[hidden]{display:none}
+.vf-bubble::after{content:"";position:absolute;left:50%;bottom:-5px;width:10px;height:10px;margin-left:-5px;background:var(--accent);transform:rotate(45deg);border-radius:2px}
+.van-fx.play .vf-bubble{animation:vfBubble 2.7s both}
+@keyframes vfBubble{0%,30%{opacity:0;transform:translateX(-50%) translateY(8px) scale(.85)}36%{opacity:1;transform:translateX(-50%) translateY(-2px) scale(1.04)}40%,62%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}70%,100%{opacity:0;transform:translateX(-50%) translateY(-10px) scale(.95)}}
+/* calculating: a mini maxi drives along the scan line */
+.calc-van{position:absolute;top:6px;left:0;right:0;height:16px;z-index:3;pointer-events:none}
+.calc-van svg{position:absolute;top:0;left:-34px;width:28px;height:16px;display:block;animation:calcVan .85s cubic-bezier(.45,.05,.35,1) both,calcVanBob .18s linear infinite alternate}
+.calc-van .vm-b{fill:var(--accent)}.calc-van .vm-g{fill:var(--pg);opacity:.75}.calc-van .vm-w{fill:var(--head);stroke:var(--pg);stroke-width:.8}
+@keyframes calcVan{to{left:calc(100% + 8px)}}
+@keyframes calcVanBob{to{transform:translateY(-.9px)}}
+/* success toasts: the dot becomes a little maxi that parks */
+.vanfx .toast.k-success i::before{width:14px;height:9px;border-radius:0;background:var(--accent-ink);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 15'%3E%3Cpath d='M1.5 3.2A2.2 2.2 0 0 1 3.7 1h12.6c.7 0 1.3.3 1.7.8l3 3.8 2 .5c.9.2 1.5 1 1.5 1.9v2.6c0 .6-.5 1.1-1.1 1.1h-1a2.6 2.6 0 0 0-5.2 0H9a2.6 2.6 0 0 0-5.2 0H2.6c-.6 0-1.1-.5-1.1-1.1z'/%3E%3Ccircle cx='6.4' cy='12.4' r='2.2'/%3E%3Ccircle cx='19.6' cy='12.4' r='2.2'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 15'%3E%3Cpath d='M1.5 3.2A2.2 2.2 0 0 1 3.7 1h12.6c.7 0 1.3.3 1.7.8l3 3.8 2 .5c.9.2 1.5 1 1.5 1.9v2.6c0 .6-.5 1.1-1.1 1.1h-1a2.6 2.6 0 0 0-5.2 0H9a2.6 2.6 0 0 0-5.2 0H2.6c-.6 0-1.1-.5-1.1-1.1z'/%3E%3Ccircle cx='6.4' cy='12.4' r='2.2'/%3E%3Ccircle cx='19.6' cy='12.4' r='2.2'/%3E%3C/svg%3E") center/contain no-repeat}
+.vanfx .toast.show.k-success i{overflow:hidden}
+.vanfx .toast.show.k-success i::before{animation:vanPark .55s cubic-bezier(.2,.9,.3,1.3) both}
+@keyframes vanPark{0%{transform:translateX(-18px)}70%{transform:translateX(1.5px)}85%{transform:translateX(-.5px) rotate(-3deg)}100%{transform:none}}
+@media (prefers-reduced-motion:reduce){.van-fx,.calc-van{display:none!important}}
+.calm .van-fx,.calm .calc-van{display:none!important}
 </style>
 </head>
 <body>
@@ -2483,6 +2539,7 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
       <div class="set"><div class="sl"><b>Open on</b><p>Screen shown when the app starts</p></div><select id="setStart"><option value="hub">Home</option><option value="shift">Log Shift</option><option value="weekly">Weekly</option></select></div>
       <div class="set"><div class="sl"><b>Sound effects</b><p>Soft tones for taps, saves and alerts</p></div><button class="tgl" id="setSounds" aria-label="Toggle sound effects"></button></div>
       <div class="set"><div class="sl"><b>Haptics</b><p>Light vibration on taps &amp; saves</p></div><button class="tgl" id="setHaptics" aria-label="Toggle haptics"></button></div>
+      <div class="set"><div class="sl"><b>Maxi van animations</b><p>A wheelchair-accessible maxi drives through when you save or Fareo calculates</p></div><button class="tgl" id="setVanFx" aria-label="Toggle maxi van animations"></button></div>
       <div class="set"><div class="sl"><b>Reduce motion</b><p>Turn off animations</p></div><button class="tgl" id="setCalm" aria-label="Toggle reduce motion"></button></div>
     </div>
         </div>
@@ -2637,6 +2694,25 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
   <div class="two" style="margin-top:14px"><button type="button" class="btn neutral" id="bkCancel">Close</button><button type="button" class="btn" id="bkSave">Save booking</button></div>
   <div class="bk-ed-danger" id="bkEdDanger" hidden><button type="button" id="bkEdShare" class="share">Share trip</button><button type="button" id="bkEdCancelBk">Cancel booking</button><button type="button" id="bkEdDelete">Delete</button></div>
 </div></div>
+<div class="van-fx" id="vanFx" aria-hidden="true"><div class="vf-bubble" id="vfBubble"><b id="vfTitle">Saved</b><span id="vfSub"></span></div><div class="vf-drive"><svg class="vf-svg" viewBox="-64 -6 196 76" aria-hidden="true">
+      <line class="vf-road" x1="-64" y1="63.5" x2="132" y2="63.5"/>
+      <g class="vf-puffs"><circle cx="-2" cy="58" r="3"/><circle cx="-9" cy="55" r="4"/><circle cx="-17" cy="57" r="2.6"/></g>
+      <g class="vf-chair"><g class="vf-chair-in"><circle cx="0" cy="-5.2" r="5.2" class="vf-cw"/><circle cx="0" cy="-5.2" r="1.6" class="vf-ch"/><path d="M-2-6 h6 v-7" class="vf-cf"/><path d="M-1-13 v-6" class="vf-cf"/><circle cx="-1" cy="-21.5" r="2.4" class="vf-cp"/><path d="M-1-17 h5 l2 5" class="vf-cp-s"/><circle cx="6.5" cy="-1.8" r="1.6" class="vf-cw"/></g></g>
+      <rect class="vf-ramp" x="3.5" y="19" width="5" height="31" rx="1.2"/>
+      <g class="vf-bob">
+        <rect x="58" y="2" width="24" height="8" rx="2.2" class="vf-sign"/><text x="70" y="8.4" text-anchor="middle" class="vf-sign-t">TAXI</text>
+        <path class="vf-shell" d="M10 15Q10 10 15 10H87Q92 10 95 14L109 31Q121 33 123 39.5V51Q123 55 119 55H14Q10 55 10 51Z"/>
+        <rect x="10" y="40" width="113" height="3.6" class="vf-stripe"/>
+        <path class="vf-glass" d="M88 15H92.5L104.5 31H88Z"/>
+        <rect x="59" y="15" width="25" height="16" rx="2.4" class="vf-glass"/>
+        <rect x="32" y="15" width="24" height="16" rx="2.4" class="vf-glass"/>
+        <rect x="14" y="15" width="14" height="16" rx="2.4" class="vf-glass"/>
+        <g transform="translate(15 34)"><rect width="10" height="10" rx="1.6" class="vf-isa"/><circle cx="4.6" cy="2.3" r="1" class="vf-isa-w"/><path d="M4.4 3.6v2.6h2.4l1.2 2.2M6.4 6.2a2.3 2.3 0 1 1-3.1-1.9" class="vf-isa-l"/></g>
+        <rect x="119" y="42" width="4" height="3.2" rx="1" class="vf-head"/><rect x="10" y="33" width="2.6" height="6" rx=".8" class="vf-tail"/>
+      </g>
+      <g transform="translate(32 55)"><g class="vf-spin"><circle r="8.5" class="vf-tyre"/><circle r="3.6" class="vf-hub"/><path d="M0-6.6V6.6M-6.6 0H6.6" class="vf-spoke"/></g></g>
+      <g transform="translate(101 55)"><g class="vf-spin"><circle r="8.5" class="vf-tyre"/><circle r="3.6" class="vf-hub"/><path d="M0-6.6V6.6M-6.6 0H6.6" class="vf-spoke"/></g></g>
+    </svg></div></div>
 <div class="modal" id="bkCancelModal"><div class="sheet">
   <div class="grip"></div>
   <span class="eyebrow" id="bkcEyebrow">Booking</span>
@@ -2981,8 +3057,11 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='15.5';
+var APP_VERSION='15.6';
 var CHANGELOG=[
+  {v:'15.6',date:'November 7, 2026',notes:[
+    ['UI/UX','Maxi van animations: when you save a shift or a booking, or mark a trip done, a wheelchair-accessible maxi drives in, lowers its ramp, a wheelchair rolls aboard, and it beeps off with your take-home. A mini maxi rides along while Home, Weekly and Reports calculate, and success messages park a little maxi. Turn it off in Settings \u2192 Appearance, or with Reduce motion.'],
+  ]},
   {v:'15.5',date:'November 4, 2026',notes:[
     ['Feature','Cancel or delete a taxi booking from Home, the Bookings list or the booking itself. Cancel stops the reminder, keeps it under Past as cancelled and offers a ready-made cancellation text (SMS or WhatsApp) to the customer. Delete removes it completely. Both can be undone.'],
     ['UI/UX','Past bookings show Done or Cancelled, and Delete all past bookings clears the list in one go.'],
@@ -3396,6 +3475,7 @@ function migrateSettings(){
   if(typeof settings.driverName!=='string')settings.driverName='';
   if(settings.haptics==null)settings.haptics=true;
   if(settings.calm==null)settings.calm=false;
+  if(settings.vanFx==null)settings.vanFx=true;
   if(['hub','shift','weekly'].indexOf(settings.startTab)<0)settings.startTab='hub';
   if(['auto','fixed','off'].indexOf(settings.taxMode)<0)settings.taxMode='auto';
   if(!settings.accent)settings.accent='signal';
@@ -3422,7 +3502,7 @@ function acctHistory(){
 function acctNames(){if(!Array.isArray(settings.accountNames))settings.accountNames=acctHistory().slice(0,12).map(function(h){return h.name});return settings.accountNames}
 function addAcctName(n){n=String(n||'').trim().slice(0,40);if(!n)return false;var L=acctNames();if(L.some(function(x){return x.toLowerCase()===n.toLowerCase()}))return false;L.push(n);persist();return true}
 function buzz(ms){if(settings.haptics===false||!navigator.vibrate)return;try{navigator.vibrate(ms||8)}catch(_){}}
-function applyCalm(){document.documentElement.classList.toggle('calm',!!settings.calm)}
+function applyCalm(){document.documentElement.classList.toggle('calm',!!settings.calm);document.documentElement.classList.toggle('vanfx',vanOn())}
 migrateSettings();
 var SHIFT_FIELD_BUILTINS=['fuel','cash','square','runs','accounts'];
 function shiftFieldKeys(){
@@ -4370,11 +4450,35 @@ function tally(el,val,opts){
 function resetTally(root){$$('.tally',root||document).forEach(function(el){el.dataset.v=0})}
 /* Short "calculating" pass when a figures screen opens: shimmer skeletons,
    a scan line, then every .tally rolls up from zero. */
+/* ---------- Maxi van animations ----------
+   A wheelchair-accessible maxi: drives in, lowers the ramp, a wheelchair
+   rolls aboard, ramp up, beep beep, off it goes. Used for saves and
+   confirmations; a mini maxi rides the scan line while figures calculate. */
+function vanOn(){return settings.vanFx!==false&&!motionOff()}
+var VAN_MINI='<svg viewBox="0 0 26 15" aria-hidden="true"><path d="M1.5 3.2A2.2 2.2 0 0 1 3.7 1h12.6c.7 0 1.3.3 1.7.8l3 3.8 2 .5c.9.2 1.5 1 1.5 1.9v2.6c0 .6-.5 1.1-1.1 1.1h-1a2.6 2.6 0 0 0-5.2 0H9a2.6 2.6 0 0 0-5.2 0H2.6c-.6 0-1.1-.5-1.1-1.1z" class="vm-b"/><path d="M12.6 2.6h3.5l2.7 3.2h-6.2z" class="vm-g"/><rect x="4" y="2.6" width="7" height="3.2" rx=".7" class="vm-g"/><circle cx="6.4" cy="11.8" r="2" class="vm-w"/><circle cx="19.6" cy="11.8" r="2" class="vm-w"/></svg>';
+var vanFxT=[];
+function vanFx(title,sub){
+  if(!vanOn())return false;var el=$('#vanFx');if(!el)return false;
+  vanFxT.forEach(clearTimeout);vanFxT=[];
+  $('#vfTitle').textContent=title||'Saved';$('#vfSub').textContent=sub||'';$('#vfSub').hidden=!sub;
+  el.classList.remove('play');void el.offsetWidth;el.classList.add('play');
+  vanFxT.push(setTimeout(function(){sfx('ramp')},700));
+  vanFxT.push(setTimeout(function(){sfx('pop');buzz(8)},1180));
+  vanFxT.push(setTimeout(function(){sfx('honk');buzz([10,60,10])},1720));
+  vanFxT.push(setTimeout(function(){el.classList.remove('play')},2700));
+  return true}
+function calcVan(sec){if(!vanOn()||!sec)return;
+  var host=sec.querySelector('.exec,.glance,.wk-hero,.card');if(!host||host.offsetParent===null)return;
+  if(getComputedStyle(host).position==='static')host.style.position='relative';
+  var old=host.querySelector('.calc-van');if(old)old.remove();
+  var v=document.createElement('span');v.className='calc-van';v.innerHTML=VAN_MINI;host.appendChild(v);
+  setTimeout(function(){v.remove()},900)}
 function calcIn(sec){
   if(!sec)return 0;resetTally(sec);
   if(motionOff())return 0;
   sec.classList.add('calculating');clearTimeout(sec._calc);
   sec._calc=setTimeout(function(){sec.classList.remove('calculating')},540);
+  calcVan(sec);
   return 540;
 }
 /* ---------- UI sound effects (Web Audio, synthesised, no files) ---------- */
@@ -4403,6 +4507,8 @@ var SFX=(function(){
     error:function(){tone(233,185,0.16,'sawtooth',0.05,0,900);tone(175,131,0.24,'sawtooth',0.05,0.14,900)},
     coin:function(){tone(1975,1975,0.05,'square',0.022,0,3200);tone(2637,2637,0.16,'triangle',0.05,0.045)},
     pop:function(){tone(520,980,0.07,'sine',0.07);tone(1320,1320,0.06,'triangle',0.035,0.05)},
+    honk:function(){tone(415,415,0.08,'square',0.03,0,1900);tone(415,415,0.13,'square',0.03,0.13,1900)},
+    ramp:function(){tone(150,230,0.42,'sine',0.035);tone(300,460,0.42,'triangle',0.01)},
     celebrate:function(){[784,1046.5,1318.5,1568,2093].forEach(function(f,i){tone(f,f,0.26,'triangle',0.055,i*0.06)});tone(3136,3136,0.5,'sine',0.02,0.32)}
   };
   return{
@@ -5221,6 +5327,7 @@ function saveShift(shared){
   entries.push(e);save('fareo_entries',entries);
   archiveShiftAttachments(e,eosReceipts.slice(),fuelReceipts.slice());
   toast(shared?'Saved & sharing…':'Saved to Weekly');
+  vanFx('Shift saved',money(nn(e.take))+' take-home \u00b7 '+fmtDayDMY(e.date));
   var savedDate=e.date;
   draft=freshDraft('');
   clearReceiptAttach();
@@ -7274,7 +7381,7 @@ function renderSettings(){
   var stm=$('#setTaxMode');if(stm)stm.value=settings.taxMode||'auto';
   var stp=$('#setTaxPct');if(stp&&document.activeElement!==stp)stp.value=settings.taxPct;
   syncTaxModeUI();
-  var scm=$('#setCalm');if(scm)scm.classList.toggle('on',!!settings.calm);
+  var scm=$('#setCalm');if(scm)scm.classList.toggle('on',!!settings.calm);var svf=$('#setVanFx');if(svf)svf.classList.toggle('on',settings.vanFx!==false);
   var so=$('#setOcrHail');if(so)so.classList.toggle('on',settings.ocrHail!==false);
   $('#regoChips').innerHTML=settings.regos.map(function(r){return '<span class="chip">'+esc(r)+'<button data-rr="'+esc(r)+'">&times;</button></span>'}).join('');
   $$('#regoChips [data-rr]').forEach(function(b){b.onclick=function(){var snap=snapState();setTimeout(function(){offerUndo(snap,'Rego removed')},0);settings.regos=settings.regos.filter(function(x){return x!==b.dataset.rr});if(!settings.regos.length)settings.regos=['5088M'];persist();renderSettings();rowInputs()}});
@@ -7324,6 +7431,7 @@ if($('#setSounds'))$('#setSounds').onclick=function(){settings.sounds=!(settings
 if($('#setTaxMode'))$('#setTaxMode').onchange=function(){settings.taxMode=this.value;persist();syncTaxModeUI()};
 if($('#setTaxPct'))$('#setTaxPct').oninput=function(){var v=parseFloat(this.value);settings.taxPct=isFinite(v)?Math.max(0,Math.min(60,v)):0;persist();syncTaxModeUI()};
 if($('#setCalm'))$('#setCalm').onclick=function(){settings.calm=!settings.calm;persist();this.classList.toggle('on',settings.calm);applyCalm()};
+if($('#setVanFx'))$('#setVanFx').onclick=function(){settings.vanFx=settings.vanFx===false;persist();this.classList.toggle('on',settings.vanFx);applyCalm();if(settings.vanFx)vanFx('Maxi ready','Wheelchair on board \u2014 let\u2019s roll')};
 if($('#advToggle'))$('#advToggle').onclick=function(){var w=$('#advWrap');var open=w.style.display==='none';w.style.display=open?'block':'none';this.classList.toggle('open',open)};
 if($('#archiveLink'))$('#archiveLink').onclick=openArchive;
 if($('#jarOpen'))$('#jarOpen').onclick=openArchive;
@@ -7825,7 +7933,7 @@ function bkSaveDraft(){
   if(isNew){bkDraft.id='bk'+Date.now().toString(36);bkDraft.createdAt=Date.now();bkDraft.status='upcoming';bookings.push(bkDraft)}
   else{if(prev&&(prev.date!==bkDraft.date||prev.time!==bkDraft.time||prev.remind!==bkDraft.remind))bkDraft.alerted=false;if(at>Date.now())bkDraft.status='upcoming';bookings=bookings.map(function(x){return x.id===bkDraft.id?bkDraft:x})}
   settings.bkRemind=bkDraft.remind;save('fareo_settings',settings);
-  saveBookings();closeModal('bkModal');sfx('success');buzz(10);
+  saveBookings();closeModal('bkModal');sfx('success');buzz(10);vanFx(isNew?'Booking saved':'Booking updated',bkClock(bkAt(bkDraft))+' '+bkDayLbl(bkDraft.date)+' \u00b7 '+bkShort(bkDraft.from));
   if(bkDraft.remind&&typeof Notification!=='undefined'&&Notification.permission==='default'){try{Notification.requestPermission()}catch(_){}}
   renderBkHome();if(curTab==='bookings')renderBookings();
   var saved=bkDraft;setTimeout(function(){openBkShare(saved.id,isNew?'Booking saved':'Booking updated')},280)}
@@ -7881,7 +7989,7 @@ setInterval(bkTick,30000);
 document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')setTimeout(bkTick,800)});
 setTimeout(function(){try{bkTick();renderBkHome()}catch(_){}},1500);
 /* ---------- events ---------- */
-function bkMark(id,st){bookings=bookings.map(function(b){if(b.id===id){b=Object.assign({},b,{status:st})}return b});saveBookings();renderBkHome();if(curTab==='bookings')renderBookings()}
+function bkMark(id,st){if(st==='done'){var bm=bookings.filter(function(b){return b.id===id})[0];if(bm)vanFx('Trip done','Dropped off'+(bm.to?' at '+bkShort(bm.to):'')+' \u2014 nice one')}bookings=bookings.map(function(b){if(b.id===id){b=Object.assign({},b,{status:st})}return b});saveBookings();renderBkHome();if(curTab==='bookings')renderBookings()}
 document.addEventListener('click',function(e){var t=e.target,c=function(sel){return t.closest&&t.closest(sel)};
   if(c('#bkNew')||c('#bkHomeNew')||c('#bkEmptyNew')){openBooking(null);sfx('tap');return}
   if(c('#bkHomeAll')||c('#bkHomeAll2')){go('bookings');return}
