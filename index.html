@@ -2056,6 +2056,26 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
 .wk-up{opacity:.45}
 .wk-up .am{color:var(--mut)!important;font-weight:500}
 .wk-days{display:block;margin-top:3px;font-family:var(--mono);font-size:10.5px;font-weight:500;color:var(--mut);letter-spacing:0;text-transform:none}
+/* ---------- Fareo 15.8 · account job receipts ---------- */
+.qa-rc{display:inline-flex;align-items:center;gap:5px;margin-left:auto;flex:none;border:1px dashed var(--bd2);background:transparent;color:var(--mut);border-radius:999px;padding:5px 10px 5px 7px;font-size:11.5px;font-weight:650;cursor:pointer;white-space:nowrap;transition:color .2s,border-color .2s,background .2s}
+.qa-rc svg{width:14px;height:14px}
+.qa-rc img{width:18px;height:18px;border-radius:5px;object-fit:cover}
+.qa-rc.has{border-style:solid;border-color:color-mix(in srgb,var(--acct) 55%,transparent);color:var(--acct);background:color-mix(in srgb,var(--acct) 10%,transparent)}
+.qa-rc:active{transform:scale(.95)}
+.arc-sub{font-size:12px;color:var(--mut);margin:-2px 0 8px;line-height:1.45}
+.arc-row{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--bd);animation:riseIn .35s var(--ease) both}
+#acctRcList .arc-row:first-child{border-top:0}
+.arc-th{width:44px;height:44px;border-radius:10px;overflow:hidden;border:1px solid var(--bd2);background:var(--field);display:grid;place-items:center;padding:0;cursor:pointer;color:var(--mut);font:700 10px var(--mono)}
+.arc-th img{width:100%;height:100%;object-fit:cover}
+.arc-th.empty{border-style:dashed;cursor:default}.arc-th.empty svg{width:18px;height:18px}
+.arc-row.has .arc-th{border-color:color-mix(in srgb,var(--acct) 55%,transparent)}
+.arc-info{min-width:0}.arc-info b{display:block;font-size:13.5px;color:var(--head);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.arc-info small{display:block;font-family:var(--mono);font-size:10.5px;color:var(--mut);margin-top:2px}
+.arc-row.has .arc-info small{color:var(--acct)}
+.arc-add{border:1px dashed var(--bd2);background:transparent;color:var(--body);border-radius:10px;padding:8px 12px;font-size:12px;font-weight:650;cursor:pointer;white-space:nowrap}
+.arc-acts{display:flex;gap:6px}
+.arc-share{border:1px solid var(--accent);background:transparent;color:var(--accent);border-radius:10px;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer}
+.arc-x{width:34px;border:1px solid var(--bd2);background:transparent;color:var(--mut);border-radius:10px;font-size:16px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -2187,6 +2207,7 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
         <div class="card attach-compact">
           <h5><span class="dot" style="background:var(--fuel-fill)"></span>Fuel receipts <span class="help" data-help="Optional. If you attach a fuel receipt, a fuel amount is required on Log. Fuel snaps are stored for the shift but are not added to the share collage (EOS only)." aria-label="Help">?</span></h5>
           <button class="att" id="fuelRcpt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg><span id="fuelRcptTxt">Add fuel receipt</span></button>
+          <input id="acctRcFile" type="file" accept="image/*,image/jpeg,image/png,image/heic,image/heif,application/pdf" style="display:none">
           <input id="fuelRcptFile" type="file" accept="image/*,image/jpeg,image/png,image/heic,image/heif,application/pdf" multiple style="display:none">
           <div class="shift-rcpt-thumbs" id="fuelRcptThumbs"></div>
           <div class="shift-rcpt-frame" id="fuelRcptPreview" style="display:none">
@@ -2196,6 +2217,11 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
             <button type="button" class="btn neutral" id="fuelRcptAddMore" style="margin:0;padding:10px;font-size:12px">+ Add another fuel</button>
             <button type="button" class="btn neutral" id="fuelRcptRemove" style="margin:0;padding:10px;font-size:12px;border-color:var(--dgr);color:var(--dgr)">Remove current</button>
           </div>
+        </div>
+        <div class="card attach-compact acct-rc-card" id="acctRcCard" hidden>
+          <h5><span class="dot" style="background:var(--acct)"></span>Account receipts <span style="font-size:10px;margin-left:auto;color:var(--mut)">optional</span><span class="help" data-help="One optional receipt per account job, labelled with the account name. Share sends the photo with the date, account name and amount. Receipts are kept in your Receipts archive when you save the shift." aria-label="Help">?</span></h5>
+          <p class="arc-sub" id="acctRcSub">Got a receipt or docket for these account jobs? Attach it here.</p>
+          <div id="acctRcList"></div>
         </div>
       </div>
       <div class="review-share">
@@ -2864,7 +2890,8 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
   <div class="grip"></div><h3 id="rvTitle">Receipt</h3>
   <p class="csub" id="rvMeta"></p>
   <div id="rvBody" style="text-align:center;margin:10px 0"></div>
-  <div class="two" style="margin-top:12px"><button class="btn neutral" id="rvDelete" style="border-color:var(--dgr);color:var(--dgr)">Delete</button><button class="btn neutral" id="rvClose">Close</button></div>
+  <button type="button" class="btn" id="rvShare" style="margin-top:12px">Share receipt</button>
+  <div class="two" style="margin-top:10px"><button class="btn neutral" id="rvDelete" style="border-color:var(--dgr);color:var(--dgr)">Delete</button><button class="btn neutral" id="rvClose">Close</button></div>
 </div></div>
 <div id="rcptZoom" class="rcpt-zoom" aria-hidden="true">
   <div class="rcpt-zoom-top">
@@ -3071,8 +3098,12 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='15.7';
+var APP_VERSION='15.8';
 var CHANGELOG=[
+  {v:'15.8',date:'November 9, 2026',notes:[
+    ['Feature','Account job receipts: every account job gets an optional Receipt button, and the Share page lists your account jobs so you can attach a receipt to each, labelled by account name. Share sends the receipt photo with the date, name and amount.'],
+    ['Feature','Account receipts are kept in the Receipts archive (under Account jobs) when you save the shift, and any archived receipt can now be shared from the receipt viewer.'],
+  ]},
   {v:'15.7',date:'November 7, 2026',notes:[
     ['Bug Fix','The credited banner on Weekly showed \u201cu2014\u201d instead of a dash.'],
     ['UI/UX','Weekly now lists every day of your pay week. Days with no shift show as Off (tap + Log if you forgot one), days still to come show as Not yet, and the total shows how many days you worked and had off. The shared week image includes your days off too.'],
@@ -3746,6 +3777,7 @@ if(!draftHasWork(draft)){draft.date=suggestShiftDate();draft.rego='';draft.dateS
 draft.receipt=false;draft.receiptName='';
 /* In-memory attachments. EOS optional (confirm if skipped); fuel optional but locks fuel amount if present. */
 var eosReceipts=[]; /* [{id,file,name,type,url,ocrHail,ocrDone}] */
+var acctRcpts={},acctRcTarget=null; /* account job receipts by account row id */
 var fuelReceipts=[];
 var shiftRcptIdx=0, fuelRcptIdx=0;
 function allShiftAttach(){return eosReceipts.concat(fuelReceipts)}
@@ -3759,6 +3791,7 @@ function syncDraftReceiptFlag(){
 function revokeList(list){list.forEach(function(r){if(r.url){try{URL.revokeObjectURL(r.url)}catch(_){}}})}
 function clearReceiptAttach(){
   revokeList(eosReceipts);revokeList(fuelReceipts);
+  Object.keys(acctRcpts).forEach(acctRcDrop);var af=$('#acctRcFile');if(af)af.value='';
   eosReceipts=[];fuelReceipts=[];shiftRcptIdx=0;fuelRcptIdx=0;
   syncDraftReceiptFlag();
   var f1=$('#rcptFile');if(f1)f1.value='';
@@ -4907,18 +4940,20 @@ function buildPreview(){
 
 /* ---------- Accounts: smart dropdown, quick add, quick amounts ---------- */
 var AC_CHEV='<svg class="ac-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
-function qaChips(i,cur){var v=nn(cur);return '<div class="qa-row" role="group" aria-label="Quick amounts">'+settings.quickAmts.map(function(a,k){return '<button type="button" class="qa'+(v===a?' on':'')+'" data-qa="'+i+'" data-v="'+a+'" style="--k:'+k+'">$'+a+'</button>'}).join('')+'</div>'}
+function qaChips(i,cur,id){var v=nn(cur),rc=id&&acctRcpts[id];return '<div class="qa-row" role="group" aria-label="Quick amounts">'+settings.quickAmts.map(function(a,k){return '<button type="button" class="qa'+(v===a?' on':'')+'" data-qa="'+i+'" data-v="'+a+'" style="--k:'+k+'">$'+a+'</button>'}).join('')
+  +(id?'<button type="button" class="qa-rc'+(rc?' has':'')+'" data-arc-add="'+id+'" aria-label="'+(rc?'Receipt attached, tap to view':'Attach receipt (optional)')+'">'+(rc&&rc.url&&!/pdf/.test(rc.type)?'<img src="'+rc.url+'" alt="">':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg>')+'<span>'+(rc?'Receipt \u2713':'Receipt')+'</span></button>':'')+'</div>'}
 function renderAcctRows(){
   var host=$('#acctRows');if(!host)return;
   host.innerHTML=draft.accounts.map(function(r,i){
+    if(!r.id)r.id='ac'+Date.now().toString(36)+i+Math.random().toString(36).slice(2,5);
     return '<div class="acct-row" data-ai="'+i+'">'
       +'<div class="acct-top"><div class="ac-wrap"><input class="ac-input" data-an="'+i+'" value="'+esc(r.name||'')+'" placeholder="Account" autocomplete="off" autocapitalize="words" role="combobox" aria-autocomplete="list" aria-expanded="false">'+AC_CHEV+'</div>'
       +'<div class="amt-wrap"><span>$</span><input type="number" min="0" step="0.01" inputmode="decimal" data-aa="'+i+'" value="'+esc(r.amount||'')+'" placeholder="0.00"></div>'
       +'<button class="x" data-da="'+i+'" aria-label="Remove account">&times;</button></div>'
       +'<div class="ac-strip" data-acc="'+i+'" role="listbox" aria-label="Account suggestions" hidden></div>'
-      +qaChips(i,r.amount)+'</div>';
+      +qaChips(i,r.amount,r.id)+'</div>';
   }).join('');
-  renderAcctQuick();
+  renderAcctQuick();renderAcctRc();
 }
 /* One-tap chips for saved accounts not already on this shift. */
 function renderAcctQuick(){
@@ -5030,8 +5065,8 @@ document.addEventListener('input',function(e){
   else if(d.ca!=null)draft.cash[d.ca].amount=v;
   else if(d.sn!=null)draft.square[d.sn].name=v;
   else if(d.sa!=null)draft.square[d.sa].amount=v;
-  else if(d.an!=null){draft.accounts[d.an].name=v;acOpen(e.target)}
-  else if(d.aa!=null){draft.accounts[d.aa].amount=v;$$('#acctRows [data-qa="'+d.aa+'"]').forEach(function(b){b.classList.toggle('on',Number(b.dataset.v)===nn(v))})}
+  else if(d.an!=null){draft.accounts[d.an].name=v;acOpen(e.target);renderAcctRc()}
+  else if(d.aa!=null){draft.accounts[d.aa].amount=v;renderAcctRc();$$('#acctRows [data-qa="'+d.aa+'"]').forEach(function(b){b.classList.toggle('on',Number(b.dataset.v)===nn(v))})}
   else if(d.custom!=null){draft.custom[d.custom]=v;render();return;}
   else if(d.fa!=null)draft.fuel[d.fa].amount=v;
   else if(e.target.id==='runs')draft.runs=v;
@@ -5062,7 +5097,7 @@ document.addEventListener('click',function(e){
     if(d.deos!=null){draft.eos.splice(d.deos,1);if(!draft.eos.length)draft.eos=['']}
     if(d.dc!=null){draft.cash.splice(d.dc,1);if(!draft.cash.length)draft.cash=[{name:'',amount:0}]}
     if(d.ds!=null){draft.square.splice(d.ds,1);if(!draft.square.length)draft.square=[{name:'',amount:0}]}
-    if(d.da!=null)draft.accounts.splice(d.da,1);
+    if(d.da!=null){var gone=draft.accounts[d.da];if(gone&&gone.id)acctRcDrop(gone.id);draft.accounts.splice(d.da,1)}
     if(d.df!=null){draft.fuel.splice(d.df,1);if(!draft.fuel.length)draft.fuel=[{amount:0,type:settings.fuel,opPaid:false}]}
     rowInputs();render();return;}
 });
@@ -5303,8 +5338,53 @@ $('#saveOnly').onclick=function(){
   saveShift(false)
 };
 
-function archiveShiftAttachments(entry,eosList,fuelList){
+/* ---------- account job receipts ----------
+   One optional receipt per account job, labelled with the account name.
+   Held in memory like EOS slips until the shift is saved, then archived
+   (kind 'account'). Share = photo + date, name and amount. */
+function acctRcDrop(id){var r=acctRcpts[id];if(r&&r.url){try{URL.revokeObjectURL(r.url)}catch(_){}}delete acctRcpts[id]}
+function acctById(id){return (draft.accounts||[]).filter(function(a){return a.id===id})[0]}
+function acctRcName(acct,amount,date,type){var ext=/pdf/.test(type||'')?'pdf':'jpg';return ('Fareo '+(acct||'Account')+' '+money(nn(amount)).replace('$','')+' '+(date||todayStr())).replace(/[^\w.\- ]+/g,'').replace(/\s+/g,'-')+'.'+ext}
+function acctRcList(date){return (draft.accounts||[]).filter(function(a){return a.id&&acctRcpts[a.id]}).map(function(a){var r=acctRcpts[a.id];return {file:r.file,type:r.type,acct:String(a.name||'Account').trim()||'Account',amount:nn(a.amount),fileName:acctRcName(a.name,a.amount,date,r.type)}})}
+function acctRcText(date,name,amount,kind){return (kind==='account'||kind==null?'Account job receipt':'Receipt')+'\nDate: '+fmtDayDMY(date)+'\nName: '+(name||'Account')+'\nAmount: '+money(nn(amount))}
+function renderAcctRc(){var card=$('#acctRcCard'),list=$('#acctRcList');if(!card||!list)return;
+  var rows=(draft.accounts||[]).filter(function(a){return a.id&&(String(a.name||'').trim()||nn(a.amount)>0)});
+  card.hidden=!rows.length;if(!rows.length){list.innerHTML='';return}
+  var have=rows.filter(function(a){return acctRcpts[a.id]}).length;
+  var sub=$('#acctRcSub');if(sub)sub.textContent=have===rows.length?'Every account job has a receipt.':have?have+' of '+rows.length+' attached. The rest are optional.':'Got a receipt or docket for '+(rows.length===1?'this account job':'these account jobs')+'? Attach it here.';
+  list.innerHTML=rows.map(function(a){var r=acctRcpts[a.id],nm=String(a.name||'').trim()||'Account';
+    var th=r?(r.url&&!/pdf/.test(r.type)?'<button type="button" class="arc-th" data-arc-view="'+a.id+'" aria-label="View receipt"><img src="'+r.url+'" alt=""></button>':'<button type="button" class="arc-th pdf" data-arc-view="'+a.id+'">PDF</button>'):'<span class="arc-th empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg></span>';
+    return '<div class="arc-row'+(r?' has':'')+'">'+th+'<div class="arc-info"><b>'+esc(nm)+'</b><small>'+money(nn(a.amount))+' \u00b7 '+(r?'receipt attached':'no receipt yet')+'</small></div>'
+      +(r?'<div class="arc-acts"><button type="button" class="arc-share" data-arc-share="'+a.id+'">Share</button><button type="button" class="arc-x" data-arc-del="'+a.id+'" aria-label="Remove receipt">\u00d7</button></div>'
+         :'<button type="button" class="arc-add" data-arc-add="'+a.id+'">+ Receipt</button>')+'</div>'}).join('')}
+async function shareReceiptFile(file,txt,title){
+  try{if(navigator.share){var r=await shareFilesAndText(file,txt,title);if(r&&r.ok){if(r.mode==='ios-photo'&&r.copied)toast('Receipt shared \u2014 details copied, paste if needed');return}}}catch(e){if(e&&e.name==='AbortError')return}
+  await copyTextQuiet(txt);downloadShareFile(file);toast('Receipt saved \u2014 details copied to paste','success')}
+function acctRcShare(id){var r=acctRcpts[id],a=acctById(id);if(!r||!a)return;
+  var f=new File([r.file],acctRcName(a.name,a.amount,draft.date,r.type),{type:r.type||'image/jpeg'});
+  shareReceiptFile(f,acctRcText(draft.date,String(a.name||'').trim()||'Account',a.amount,'account'),'Account receipt')}
+document.addEventListener('click',function(e){var t=e.target,x;
+  if((x=t.closest&&t.closest('[data-arc-add]'))){var id=x.dataset.arcAdd;if(acctRcpts[id]){var r0=acctRcpts[id],a0=acctById(id);if(r0.url&&!/pdf/.test(r0.type))openReceiptZoom(r0.url,(a0&&a0.name||'Account')+' \u00b7 '+money(nn(a0&&a0.amount)));return}
+    acctRcTarget=id;var fi=$('#acctRcFile');if(fi){fi.value='';fi.click()}return}
+  if((x=t.closest&&t.closest('[data-arc-view]'))){var r1=acctRcpts[x.dataset.arcView],a1=acctById(x.dataset.arcView);if(r1&&r1.url){if(/pdf/.test(r1.type))window.open(r1.url,'_blank');else openReceiptZoom(r1.url,(a1&&a1.name||'Account')+' \u00b7 '+money(nn(a1&&a1.amount)))}return}
+  if((x=t.closest&&t.closest('[data-arc-share]'))){acctRcShare(x.dataset.arcShare);return}
+  if((x=t.closest&&t.closest('[data-arc-del]'))){acctRcDrop(x.dataset.arcDel);renderAcctRows();sfx('tap');toast('Receipt removed');return}
+});
+document.addEventListener('change',function(e){if(e.target.id!=='acctRcFile')return;var f=e.target.files&&e.target.files[0],id=acctRcTarget;acctRcTarget=null;if(!f||!id||!acctById(id))return;
+  acctRcDrop(id);acctRcpts[id]={file:f,name:f.name,type:f.type||'image/jpeg',url:URL.createObjectURL(f)};
+  var a=acctById(id);renderAcctRows();sfx('success');buzz(8);toast('Receipt attached to '+(String(a.name||'').trim()||'account'),'success');e.target.value=''});
+/* archived receipts: Share from the receipt viewer */
+if($('#rvShare'))$('#rvShare').onclick=function(){var r=getReceipt(rvCurrent);if(!r)return;
+  fetch(r.dataUrl).then(function(x){return x.blob()}).then(function(b){var type=b.type||(r.type==='pdf'?'application/pdf':'image/jpeg');
+    var f=new File([b],r.kind==='account'?acctRcName(r.desc,r.amount,r.date,type):(r.name||'receipt.jpg'),{type:type});
+    shareReceiptFile(f,acctRcText(r.date,r.desc||catLabel(jarCatOf(r)),r.amount,r.kind),r.kind==='account'?'Account receipt':'Receipt')}).catch(function(){toast('Couldn\u2019t prepare that receipt','error')})};
+function archiveShiftAttachments(entry,eosList,fuelList,acctList){
   var jobs=[];
+  (acctList||[]).forEach(function(a){
+    jobs.push(compressImage(a.file).then(function(data){
+      return storeReceipt(data,a.fileName,a.type==='application/pdf'?'pdf':'image',{kind:'account',category:'Account',desc:a.acct,amount:a.amount,date:entry.date});
+    }));
+  });
   (eosList||[]).forEach(function(r,i){
     if(!r||!r.file)return;
     jobs.push(compressImage(r.file).then(function(data){
@@ -5343,7 +5423,7 @@ function saveShift(shared){
     return !(x.date===e.date&&x.rego===e.rego);
   });
   entries.push(e);save('fareo_entries',entries);
-  archiveShiftAttachments(e,eosReceipts.slice(),fuelReceipts.slice());
+  archiveShiftAttachments(e,eosReceipts.slice(),fuelReceipts.slice(),acctRcList(e.date));
   toast(shared?'Saved & sharing…':'Saved to Weekly');
   vanFx('Shift saved',money(nn(e.take))+' take-home \u00b7 '+fmtDayDMY(e.date));
   var savedDate=e.date;
@@ -6651,6 +6731,7 @@ function catLabel(c){
     Cleaning: 'Wash & Detailing',
     Insurance: 'Insurance & Rego',
     Phone: 'Phone & Tech',
+    Account: 'Account jobs',
     Other: 'Other Business Costs'
   };
   return map[c] || c || 'Other Business Costs';
