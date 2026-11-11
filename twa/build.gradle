@@ -1,0 +1,8 @@
+// Fareo for Android: a Trusted Web Activity around https://basemsde-tech.github.io/FAREOAPP/
+buildscript {
+    repositories { google(); mavenCentral() }
+    dependencies { classpath 'com.android.tools.build:gradle:8.7.2' }
+}
+allprojects {
+    repositories { google(); mavenCentral() }
+}
