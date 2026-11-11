@@ -16,7 +16,8 @@ android {
         versionName name
         resValue 'string', 'launchUrl', twaUrl + '?src=apk#hub'
         resValue 'string', 'providerAuthority', 'au.fareo.app.fileprovider'
-        resValue 'string', 'asset_statements', '[{ "relation": ["delegate_permission/common.handle_all_urls"], "target": { "namespace": "web", "site": "https://basemsde-tech.github.io" } }]'
+        // Quotes are escaped so aapt keeps them (the statement must stay valid JSON).
+        resValue 'string', 'asset_statements', '[{ \\"relation\\": [\\"delegate_permission/common.handle_all_urls\\"], \\"target\\": { \\"namespace\\": \\"web\\", \\"site\\": \\"https://basemsde-tech.github.io\\" } }]'
     }
     buildTypes {
         release {
