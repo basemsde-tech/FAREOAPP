@@ -1,13 +1,14 @@
 # Builds the Fareo Android app (Trusted Web Activity in ./twa).
-# Push a tag like android-v16.0 (or run manually). The workflow builds an
-# unsigned release APK and attaches it to a GitHub release of that tag; it is
-# signed afterwards with the Fareo key, which never lives in this repo.
+# Runs when twa/ changes on main (or manually). Builds an unsigned release APK
+# and attaches it to a GitHub release tagged android-v<twa/version.txt>-b<run>;
+# it is signed afterwards with the Fareo key, which never lives in this repo.
 name: Build Fareo Android
 
 on:
   workflow_dispatch:
   push:
-    tags: ['android-v*']
+    branches: [main]
+    paths: ['twa/**', '.github/workflows/build-android.yml']
 
 permissions:
   contents: write
@@ -26,19 +27,18 @@ jobs:
         working-directory: twa
         env:
           FAREO_VERSION_CODE: ${{ github.run_number }}
-          FAREO_VERSION_NAME: ${{ github.ref_type == 'tag' && github.ref_name || 'dev' }}
         run: |
+          export FAREO_VERSION_NAME="$(cat version.txt)"
+          echo "TAG=android-v$(cat version.txt)-b${GITHUB_RUN_NUMBER}" >> "$GITHUB_ENV"
           chmod +x gradlew
           ./gradlew assembleRelease --no-daemon --stacktrace
           ls -la app/build/outputs/apk/release/
       - name: Publish to release
-        if: github.ref_type == 'tag'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           cp twa/app/build/outputs/apk/release/app-release-unsigned.apk Fareo-unsigned.apk
-          gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 || gh release create "$GITHUB_REF_NAME" --title "Fareo for Android ${GITHUB_REF_NAME#android-v}" --notes "Building…" --prerelease
-          gh release upload "$GITHUB_REF_NAME" Fareo-unsigned.apk --clobber
+          gh release create "$TAG" Fareo-unsigned.apk --target "$GITHUB_SHA" --title "Fareo for Android ${TAG#android-v}" --notes "Unsigned build. The signed Fareo.apk is added to this release." --prerelease
       - uses: actions/upload-artifact@v4
         with:
           name: Fareo-unsigned-apk
