@@ -87,3 +87,22 @@ The Google Drive API must be enabled for the Firebase project
 
 **Export backup** / **Restore backup** still work with a JSON file, receipts
 included.
+
+
+## Android app (Galaxy Z Fold and other phones)
+
+`twa/` is a Trusted Web Activity: a small Android app that opens the live
+site in Chrome, full-screen. It shares Chrome's storage, so the data already
+on the phone, Google Drive backup and offline mode all work as in the browser.
+It is resizable and keeps running through fold / unfold.
+
+- **Build:** any change under `twa/` on `main` runs *Build Fareo Android* and
+  publishes `Fareo-unsigned.apk` to a release `android-v<version>-b<run>`.
+  Bump `twa/version.txt` for a new version name.
+- **Sign:** with the Fareo key (kept outside this repo), e.g.
+  `java -jar uber-apk-signer.jar --apks Fareo-unsigned.apk --ks fareo-release.jks --ksAlias fareo`.
+  Every update must be signed with the same key to install over the old one.
+- **Full screen:** `https://basemsde-tech.github.io/.well-known/assetlinks.json`
+  (repo `basemsde-tech.github.io`) must list package `au.fareo.app` and the
+  key's SHA-256 fingerprint:
+  `3E:4C:DB:64:E0:8A:4E:6B:87:1F:05:2B:3F:73:3A:FD:AF:A5:E3:59:EE:10:24:D6:B0:9A:FF:BD:F5:0A:34:17`
