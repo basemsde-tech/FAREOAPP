@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut android:shortcutId="shift" android:enabled="true" android:icon="@mipmap/ic_shortcut" android:shortcutShortLabel="@string/sc_shift" android:shortcutLongLabel="@string/sc_shift">
+        <intent android:action="android.intent.action.VIEW" android:targetPackage="au.fareo.app" android:targetClass="com.google.androidbrowserhelper.trusted.LauncherActivity" android:data="https://basemsde-tech.github.io/FAREOAPP/?src=apk#shift" />
+    </shortcut>
+    <shortcut android:shortcutId="weekly" android:enabled="true" android:icon="@mipmap/ic_shortcut" android:shortcutShortLabel="@string/sc_weekly" android:shortcutLongLabel="@string/sc_weekly">
+        <intent android:action="android.intent.action.VIEW" android:targetPackage="au.fareo.app" android:targetClass="com.google.androidbrowserhelper.trusted.LauncherActivity" android:data="https://basemsde-tech.github.io/FAREOAPP/?src=apk#weekly" />
+    </shortcut>
+    <shortcut android:shortcutId="bookings" android:enabled="true" android:icon="@mipmap/ic_shortcut" android:shortcutShortLabel="@string/sc_bookings" android:shortcutLongLabel="@string/sc_bookings">
+        <intent android:action="android.intent.action.VIEW" android:targetPackage="au.fareo.app" android:targetClass="com.google.androidbrowserhelper.trusted.LauncherActivity" android:data="https://basemsde-tech.github.io/FAREOAPP/?src=apk#bookings" />
+    </shortcut>
+    <shortcut android:shortcutId="reports" android:enabled="true" android:icon="@mipmap/ic_shortcut" android:shortcutShortLabel="@string/sc_reports" android:shortcutLongLabel="@string/sc_reports">
+        <intent android:action="android.intent.action.VIEW" android:targetPackage="au.fareo.app" android:targetClass="com.google.androidbrowserhelper.trusted.LauncherActivity" android:data="https://basemsde-tech.github.io/FAREOAPP/?src=apk#reports" />
+    </shortcut>
+</shortcuts>

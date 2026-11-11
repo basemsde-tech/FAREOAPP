@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Fareo</string>
+    <string name="sc_shift">Log shift</string>
+    <string name="sc_weekly">Weekly</string>
+    <string name="sc_bookings">Bookings</string>
+    <string name="sc_reports">Reports</string>
+</resources>

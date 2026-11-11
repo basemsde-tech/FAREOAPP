@@ -1,0 +1,35 @@
+apply plugin: 'com.android.application'
+
+def twaUrl = 'https://basemsde-tech.github.io/FAREOAPP/'
+def code = (System.getenv('FAREO_VERSION_CODE') ?: '1') as Integer
+def name = System.getenv('FAREO_VERSION_NAME') ?: '1.0'
+
+android {
+    namespace 'au.fareo.app'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'au.fareo.app'
+        minSdk 21
+        targetSdk 35
+        versionCode code
+        versionName name
+        resValue 'string', 'launchUrl', twaUrl + '?src=apk#hub'
+        resValue 'string', 'providerAuthority', 'au.fareo.app.fileprovider'
+        resValue 'string', 'asset_statements', '[{ "relation": ["delegate_permission/common.handle_all_urls"], "target": { "namespace": "web", "site": "https://basemsde-tech.github.io" } }]'
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    lint { abortOnError false; checkReleaseBuilds false }
+}
+
+dependencies {
+    implementation 'com.google.androidbrowserhelper:androidbrowserhelper:2.5.0'
+}
