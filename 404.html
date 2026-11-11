@@ -1755,6 +1755,7 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
 .rp-btn{border:1px solid var(--accent);background:transparent;color:var(--accent);border-radius:9px;padding:8px 12px;font-weight:700;font-size:12px;cursor:pointer}
 .rp-row.more .rp-btn{background:var(--accent);color:var(--accent-ink)}
 .sm-opt small em.warn{all:unset;color:var(--dgr);font-weight:600}
+.sm-opt[hidden]{display:none}
 /* ---------- Fareo 15.0 · Google Drive backup ---------- */
 .gd-local{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;font-size:12.5px;line-height:1.45;color:var(--mut);border-bottom:1px solid var(--bd)}
 .gd-local i{flex:none;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:var(--accent-dim);color:var(--accent)}
@@ -2202,6 +2203,7 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
 #taxEngCard .basguide-toggle{margin-top:10px}
 #taxEngCard .tc-head{display:none}
 #taxEngCard .te-head .ph-t b{font-size:15.5px}
+.cat-more{display:block;width:100%;margin:6px 0 2px;padding:10px;border:1px dashed var(--bd2);border-radius:10px;background:transparent;color:var(--body);font-size:12.5px;font-weight:650;cursor:pointer}
 /* costs: claimed by category */
 .cost-bars{margin:2px 0 12px}
 .cb-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
@@ -2881,8 +2883,9 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
   <span class="eyebrow" id="rcEyebrow">Backup from &hellip;</span>
   <h3>What do you want to restore?</h3>
   <p class="csub" id="rcSub"></p>
-  <button type="button" class="sm-opt rec" data-rcm="photos"><b>Add receipts &amp; EOS photos only <em>Keeps your shifts</em></b><small id="rcPhotosSub">Adds the photos from the backup. Your shifts, costs and settings stay as they are.</small></button>
+  <button type="button" class="sm-opt rec" data-rcm="merge"><b>Add what&rsquo;s missing <em>Recommended</em></b><small id="rcMergeSub">Keeps everything on this device and adds the shifts, costs, clients, bookings and photos from the backup that it doesn&rsquo;t have.</small></button>
   <button type="button" class="sm-opt" data-rcm="all"><b>Restore everything</b><small id="rcAllSub">Replaces this device&rsquo;s shifts and costs with the backup and adds its photos. A copy of what you have now is kept under Recovery.</small></button>
+  <button type="button" class="sm-opt" data-rcm="photos" id="rcPhotosOpt"><b>Receipts &amp; EOS photos only</b><small id="rcPhotosSub">Adds the photos from the backup. Your shifts, costs and settings stay as they are.</small></button>
   <button type="button" class="btn neutral" id="rcmCancel" style="margin-top:10px">Cancel</button>
 </div></div>
 <div class="modal" id="bkModal"><div class="sheet bk-sheet">
@@ -3270,8 +3273,12 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='16.0';
+var APP_VERSION='16.1';
 var CHANGELOG=[
+  {v:'16.1',date:'November 12, 2026',notes:[
+    ['Bug Fix','Restoring a backup on a device that already had shifts recommended \u201cphotos only\u201d, which left your shifts unchanged. Restore now recommends Add what\u2019s missing (keeps this device\u2019s data and adds every shift, cost, client, booking and photo it doesn\u2019t have), with Restore everything and Photos only as options, for backup files and Google Drive.'],
+    ['UI/UX','Faster Reports on long ranges: each cost category shows its newest 40 entries with Show older (All Time with 4 years of data is about 9\u00d7 faster). Totals, tax checks and exports still use every entry.'],
+  ]},
   {v:'16.0',date:'November 9, 2026',notes:[
     ['Feature','Reports rebuilt. One Overview card replaces the old summary and This range cards: kept after tax, gross, your share, set aside, where each fare dollar goes, quick stats and an 8-week trend.'],
     ['Feature','Tax & BAS engine: GST to pay or refund, income-tax set-aside (ATO rates, annualised), levy, deductions and a weekly put-aside amount, with the quarter countdown. Smart checks flag BAS due dates, missing receipts, tax invoices over $82.50 and common driver deductions you haven\u2019t logged this year. Copy onto your BAS is one tap away.'],
@@ -7022,7 +7029,6 @@ function renderReports(){
     var on=opts.claimed!==false;
     var kill=opts.delAttr?'<button class="ded-x kill" '+opts.delAttr+' aria-label="Remove">&times;</button>':'<span></span>';
     if(opts.line){var L=opts.line,c=L.c,mm=costMath(c);
-      costLines.push(L);
       var badges=[];
       if(c.edited)badges.push('<span class="cb adj">Adjusted</span>');
       if(L.opPaid)badges.push('<span class="cb op">Operator paid</span>');
@@ -7046,9 +7052,12 @@ function renderReports(){
       +'<div class="ded-acts">'+adjB+kill+'</div></div>';
   }
   var grouped={},order=['Levy','Fuel','Tolls','Maintenance','Cleaning','Insurance','Phone','Other'];
+  /* Long ranges: draw the newest rows per category and offer "Show all" (fast on phones). */
+  var ROW_CAP=40;if(!window.dedShowAll)window.dedShowAll={};
   function pushG(key,html,amt,cnt,claimedAmt,claimKey){
-    if(!grouped[key])grouped[key]={html:'',amt:0,count:0,claimed:0,claimedN:0,keys:[]};
-    grouped[key].html+=html;
+    if(!grouped[key])grouped[key]={html:'',amt:0,count:0,claimed:0,claimedN:0,keys:[],rows:0,hidden:0};
+    var G=grouped[key];
+    if(typeof html==='function'){if(G.rows<ROW_CAP||window.dedShowAll[key]){G.html+=html();G.rows++}else G.hidden++}else G.html+=html;
     grouped[key].amt+=nn(amt);
     grouped[key].count+=(cnt||1);
     grouped[key].claimed+=nn(claimedAmt);
@@ -7060,16 +7069,16 @@ function renderReports(){
     pushG('Levy',dedRow({key:'levy',name:'Hail / CPV levy',meta:(a.hailN||0)+' hail trip'+(a.hailN!==1?'s':'')+' \u00d7 '+money(levyRate())+' \u00b7 SRO',amt:a.levy,claimed:levyOn,sub:'from income \u00b7 tax-free \u00b7 deduct '+money(a.levy)}),a.levy,1,levyOn?a.levy:0,'levy');
     costLines.push({key:'levy',kind:'levy',cat:'Levy',name:'Hail / CPV levy',date:repRange.to,c:{amount:a.levy,gst:false,bu:100,edited:false,orig:{amount:a.levy,gst:false,bu:100}},claimed:levyOn,receipt:true,paidBy:'You (SRO)'});
   }
-  (a.sfItems||[]).forEach(function(it){
+  (a.sfItems||[]).slice().sort(function(x,y){return x.date<y.date?1:-1}).forEach(function(it){
     var on=costClaimed(it.key),c=it.eff||effCost(it.key,{amount:it.amount,gst:true,bu:100});
     var rc=receipts.some(function(r){return r.kind==='fuel'&&r.date===it.date});
-    var L=costLine(it.key,'sf','Fuel','Fuel ('+it.type+')',it.date,c,on,rc,it.opPaid?'Operator card':'You');L.opPaid=!!it.opPaid;
-    pushG('Fuel',dedRow({key:it.key,fuel:true,name:'Fuel ('+esc(it.type)+')',meta:fmtDayDMY(it.date)+(it.rego?' \u00b7 '+esc(it.rego):'')+' \u00b7 shift',claimed:on,line:L}),c.amount,1,on?costMath(c).claim:0,it.key);
+    var L=costLine(it.key,'sf','Fuel','Fuel ('+it.type+')',it.date,c,on,rc,it.opPaid?'Operator card':'You');L.opPaid=!!it.opPaid;costLines.push(L);
+    pushG('Fuel',function(){return dedRow({key:it.key,fuel:true,name:'Fuel ('+esc(it.type)+')',meta:fmtDayDMY(it.date)+(it.rego?' \u00b7 '+esc(it.rego):'')+' \u00b7 shift',claimed:on,line:L})},c.amount,1,on?costMath(c).claim:0,it.key);
   });
   a.fmList.slice().sort(function(x,y){return x.date<y.date?1:-1}).forEach(function(m){
     var k='fm:'+m.id,on=costClaimed(k),c=effCost(k,{amount:m.amount,gst:true,bu:100});
-    var L=costLine(k,'fm','Fuel','Fuel ('+(m.type||'Fuel')+')',m.date,c,on,!!m.receiptId,'You');
-    pushG('Fuel',dedRow({key:k,fuel:true,name:'Fuel ('+esc(m.type)+')',meta:fmtDayDMY(m.date)+' \u00b7 added in Reports',claimed:on,line:L,delAttr:'data-delfm="'+esc(m.id)+'"',rid:m.receiptId||''}),c.amount,1,on?costMath(c).claim:0,k);
+    var L=costLine(k,'fm','Fuel','Fuel ('+(m.type||'Fuel')+')',m.date,c,on,!!m.receiptId,'You');costLines.push(L);
+    pushG('Fuel',function(){return dedRow({key:k,fuel:true,name:'Fuel ('+esc(m.type)+')',meta:fmtDayDMY(m.date)+' \u00b7 added in Reports',claimed:on,line:L,delAttr:'data-delfm="'+esc(m.id)+'"',rid:m.receiptId||''})},c.amount,1,on?costMath(c).claim:0,k);
   });
   var ds=a.allDed.sort(function(x,y){return x.date<y.date?1:-1});
   ds.forEach(function(d){
@@ -7077,8 +7086,8 @@ function renderReports(){
     if(order.indexOf(key)<0&&!grouped[key])order.push(key);
     var ck=recCostKey(d),on=costClaimed(ck),c=effCost(ck,{amount:d.amount,gst:d.gst,bu:d.bu});
     var del=d._recurring?'':(d.id!=null?'data-deld="'+esc(d.id)+'"':'');
-    var L=costLine(ck,d._recurring?'rec':'exp',key,d.name||catLabel(key),d.date,c,on,!!d.receiptId,'You');
-    pushG(key,dedRow({key:ck,name:esc(d.name),meta:fmtDayDMY(d.date)+(d._recurring?' \u00b7 repeats':''),claimed:on,line:L,delAttr:del,rid:d.receiptId||'',fuel:false}),c.amount,1,on?costMath(c).claim:0,ck);
+    var L=costLine(ck,d._recurring?'rec':'exp',key,d.name||catLabel(key),d.date,c,on,!!d.receiptId,'You');costLines.push(L);
+    pushG(key,function(){return dedRow({key:ck,name:esc(d.name),meta:fmtDayDMY(d.date)+(d._recurring?' \u00b7 repeats':''),claimed:on,line:L,delAttr:del,rid:d.receiptId||'',fuel:false})},c.amount,1,on?costMath(c).claim:0,ck);
   });
   var keys=order.filter(function(k){return grouped[k]&&grouped[k].count>0});
   Object.keys(grouped).forEach(function(k){if(keys.indexOf(k)<0&&grouped[k]&&grouped[k].count>0)keys.push(k)});
@@ -7114,7 +7123,7 @@ function renderReports(){
             +'<span class="cat-chev">&rsaquo;</span>'
           +'</div>'
         +'</div>'
-        +'<div class="cat-body">'+(CAT_TIPS[k]?'<p class="cat-tip">'+esc(CAT_TIPS[k])+'</p>':'')+g.html+'</div>'
+        +'<div class="cat-body">'+(CAT_TIPS[k]?'<p class="cat-tip">'+esc(CAT_TIPS[k])+'</p>':'')+g.html+(g.hidden?'<button type="button" class="cat-more" data-cat-more="'+esc(k)+'">Show '+g.hidden+' older</button>':'')+'</div>'
       +'</div>';
     }).join('');
   }
@@ -7144,6 +7153,7 @@ function renderReports(){
       }
     };
   });
+  $$('#dedRows [data-cat-more]').forEach(function(b){b.onclick=function(e){e.stopPropagation();window.dedShowAll[b.dataset.catMore]=true;renderReports()}});
   $$('#dedRows [data-cat-all]').forEach(function(b){
     b.onclick=function(e){
       e.stopPropagation();
@@ -7946,13 +7956,13 @@ function doRestoreBackup(d,opts){
   if(lostCore.length){toast('Couldn’t restore '+lostCore.join(', ').replace(/fareo_/g,'')+' — storage is full','error');return}
   if(opts&&opts.fromDrive)gdMarkInSync(opts.fromDrive);
   Promise.all([receiptsWrite,rpWrite]).then(function(){
-    toast((opts&&opts.fromDrive?'Restored from Google Drive':'Backup restored')+((failed.length||!receiptsOk)?' (receipt photos didn\u2019t fit)':''),'success');setTimeout(function(){location.reload()},900)});
+    toast((opts&&opts.merged?'Backup merged':opts&&opts.fromDrive?'Restored from Google Drive':'Backup restored')+((failed.length||!receiptsOk)?' (receipt photos didn\u2019t fit)':''),'success');setTimeout(function(){location.reload()},900)});
 }
 $('#importFile').onchange=function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();
   r.onerror=function(){toast('Couldn’t open that file','error')};
   r.onload=function(){var b;try{b=parseBackup(r.result)}catch(err){toast('That file isn’t a Fareo backup'+(f.name?' ('+f.name+')':''),'error');return}
     var c=backupCounts(b.data),obj=b.obj||{},when=obj.exported?new Date(obj.exported).toLocaleString('en-AU',{day:'numeric',month:'short',year:'numeric',hour:'numeric',minute:'2-digit'}):'an unknown date',cur=dataSummary(allData());
-    if(c.receipts&&cur.shifts){restoreChooser(b.data,'From '+when,{});return}
+    if(cur.shifts){restoreChooser(b.data,'From '+when,{});return}
     ask('Restore this backup?','From '+when+(obj.ver?' (Fareo '+obj.ver+')':'')+': '+c.shifts+' shifts, '+c.costs+' costs, '+c.clients+' clients, '+c.receipts+' receipts. It replaces the '+cur.shifts+' shifts on this device. A copy of what you have now is kept under Recovery.','Restore',function(){doRestoreBackup(b.data)},{danger:false,noLbl:'Cancel',noUndo:true})};
   r.readAsText(f);e.target.value=''};
 /* ---------- restore chooser: everything, or only add photos ---------- */
@@ -7963,11 +7973,19 @@ function restoreChooser(data,from,opts){var c=backupCounts(data),cur=dataSummary
   $('#rcEyebrow').textContent=from;
   $('#rcSub').textContent='Backup: '+c.shifts+' shifts, '+c.costs+' costs, '+c.receipts+' photos. This device: '+cur.shifts+' shifts, '+receipts.length+' photos.';
   $('#rcPhotosSub').textContent=fresh?('Adds '+fresh+' photo'+(fresh===1?'':'s')+' this device doesn’t have. Your shifts, costs and settings stay as they are.'):'This device already has every photo in this backup.';
+  $('#rcPhotosOpt').hidden=!c.receipts;
+  /* what a merge would add */
+  var m=mergeData(allData(),data),J=function(d,k){try{var v=d[k];return Array.isArray(v)?v:JSON.parse(v||'[]')}catch(_){return []}};
+  var addS=J(m,'fareo_entries').length-J(allData(),'fareo_entries').length,addC=J(m,'fareo_deductions').length-J(allData(),'fareo_deductions').length;
+  var bits=[];if(addS)bits.push(addS+' shift'+(addS===1?'':'s'));if(addC)bits.push(addC+' cost'+(addC===1?'':'s'));if(fresh)bits.push(fresh+' photo'+(fresh===1?'':'s'));
+  $('#rcMergeSub').textContent=bits.length?('Keeps everything on this device and adds '+bits.join(', ')+' from the backup.'):'This device already has everything in this backup.';
+  rcmPending.merged=m;
   showModal('restoreChoiceModal');sfx('warn')}
 document.addEventListener('click',function(e){
   var b=e.target.closest&&e.target.closest('[data-rcm]');
   if(b&&rcmPending){var p=rcmPending;rcmPending=null;closeModal('restoreChoiceModal');
     if(b.dataset.rcm==='all'){doRestoreBackup(p.data,p.opts);return}
+    if(b.dataset.rcm==='merge'){var m=p.merged||mergeData(allData(),p.data);if(p.data.fareo_receipts)m.fareo_receipts=p.data.fareo_receipts;saveRecoveryPoint('Before merging a backup');doRestoreBackup(m,Object.assign({merged:true},p.opts));return}
     var added=addReceiptsFrom(p.data.fareo_receipts);
     receiptsWrite.then(function(){try{renderJarMeta()}catch(_){}try{renderRecovery()}catch(_){}
       if(!receiptsOk)return;toast(added?('Added '+added+' receipt & EOS photo'+(added===1?'':'s')):'No new photos — you already have them all','success')});return}
@@ -8109,7 +8127,7 @@ function gdShowChoice(){var st=gdState(),ds=st.conflict;if(!ds)return;var L=data
 async function gdDownload(tok){var m=await gdLocate(tok);if(!m)throw {message:'No Fareo backup in your Google Drive yet'};var txt=await gdApi('GET','/drive/v3/files/'+encodeURIComponent(m.id)+'?alt=media',tok);return {meta:m,backup:parseBackup(typeof txt==='string'?txt:JSON.stringify(txt))}}
 function gdRestoreFlow(){
   gdTokenOrSignIn().then(gdDownload).then(function(r){var b=r.backup,c=backupCounts(b.data),cur=dataSummary(allData());
-    if(c.receipts&&cur.shifts){restoreChooser(b.data,'Google Drive \u00b7 saved '+gdAgo(Date.parse(r.meta.modifiedTime)),{fromDrive:r.meta.id});return}
+    if(cur.shifts){restoreChooser(b.data,'Google Drive \u00b7 saved '+gdAgo(Date.parse(r.meta.modifiedTime)),{fromDrive:r.meta.id});return}
     ask('Restore from Google Drive?','Backup saved '+gdAgo(Date.parse(r.meta.modifiedTime))+': '+c.shifts+' shifts, '+c.costs+' costs, '+c.clients+' clients, '+c.receipts+' receipts. It replaces the '+cur.shifts+' shifts on this device. A copy of what you have now is kept under Recovery.','Restore',function(){doRestoreBackup(b.data,{fromDrive:r.meta.id})},{danger:false,noLbl:'Cancel',noUndo:true})
   }).catch(function(e){if(e&&e.code&&/cancel|closed/.test(e.code))return;toast(gdErrMsg(e),'error')})}
 document.addEventListener('click',function(e){
