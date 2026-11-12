@@ -3322,8 +3322,13 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='16.2';
+var APP_VERSION='16.3';
 var CHANGELOG=[
+  {v:'16.3',date:'November 12, 2026',notes:[
+    ['Bug Fix','EOS photos are archived with the right amounts: one photo per slip gets that slip\u2019s amount, and front/back or multi-slip photos carry the shift total once (labelled photo 1 of 2, and so on) instead of $0 or a single slip.'],
+    ['Bug Fix','Changing a shift\u2019s date or rego (Edit shift or Quick edit) now moves its archived EOS, fuel and account photos too, so the archive always matches the shift. Photos are linked to their shift, so two cars on one day never mix.'],
+    ['UI/UX','After saving a shift Fareo confirms what was archived, e.g. \u201c2 EOS + 1 fuel photos archived to Thu 12/11/2026\u201d, or tells you if any photo couldn\u2019t be saved.'],
+  ]},
   {v:'16.2',date:'November 12, 2026',notes:[
     ['Feature','Shift preview: tap a shift in Weekly to see everything from that day \u2014 take-home, gross and your share, each EOS slip, cash and Square by name, every account job (with its receipt), runs and custom types, each fuel fill and who paid, hail trips and levy, how the payout adds up, all the day\u2019s photos, and that day\u2019s bookings and expenses. Swipe or use the arrows for the previous or next shift; Share, Edit shift, Quick edit and Delete are at the bottom.'],
   ]},
@@ -4873,6 +4878,7 @@ function storeReceipt(dataUrl,name,type,meta){
   if(!dataUrl)return null;
   var rec={id:'r'+Date.now()+Math.random().toString(36).slice(2,6),dataUrl:dataUrl,name:name||'receipt',type:type||'image',
     kind:meta.kind||'expense',desc:meta.desc||'',amount:meta.amount||0,date:meta.date||todayStr(),category:meta.category||'',createdAt:Date.now()};
+  ['entryId','rego','part','parts','slips','hail'].forEach(function(k){if(meta[k]!=null)rec[k]=meta[k]});
   receipts.push(rec);
   try{saveReceipts()}catch(e){receipts.pop();toast('Storage full — receipt not saved');return null}
   return rec.id;
@@ -5615,34 +5621,56 @@ if($('#rvShare'))$('#rvShare').onclick=function(){var r=getReceipt(rvCurrent);if
   fetch(r.dataUrl).then(function(x){return x.blob()}).then(function(b){var type=b.type||(r.type==='pdf'?'application/pdf':'image/jpeg');
     var f=new File([b],r.kind==='account'?acctRcName(r.desc,r.amount,r.date,type):(r.name||'receipt.jpg'),{type:type});
     shareReceiptFile(f,acctRcText(r.date,r.desc||catLabel(jarCatOf(r)),r.amount,r.kind),r.kind==='account'?'Account receipt':'Receipt')}).catch(function(){toast('Couldn\u2019t prepare that receipt','error')})};
+/* Archive the shift's photos with the shift's own date, rego and amounts.
+   Photos are matched to amounts by count, not position: one photo per slip
+   gets that slip; otherwise the first photo carries the shift total and the
+   rest are labelled "photo 2 of 3". Every photo keeps entryId so a later
+   change of date or rego moves it too. */
 function archiveShiftAttachments(entry,eosList,fuelList,acctList){
-  var jobs=[];
+  var sp=entry.snap||{},rego=entry.rego||'No rego',jobs=[],kinds={eos:0,fuel:0,acct:0};
+  var eosPics=(eosList||[]).filter(function(r){return r&&r.file});
+  var slips=(sp.eos||[]).map(nn).filter(function(v){return v>0});var eosTot=slips.reduce(function(a,b){return a+b},0)||nn(entry.eos);
+  var fills=(sp.fuel||[]).filter(function(f){return nn(f.amount)>0});var fuelTot=fills.reduce(function(a,f){return a+nn(f.amount)},0)||nn(entry.fuel);
+  function plan(pics,vals,total){var n=pics.length;return pics.map(function(r,i){
+    if(n&&n===vals.length)return {amount:vals[i],part:i+1,parts:n,perItem:true};
+    return {amount:i===0?total:0,part:i+1,parts:n,perItem:false}})}
+  function job(r,meta,kind){jobs.push(compressImage(r.file).then(function(data){var id=storeReceipt(data,r.name,r.type==='application/pdf'?'pdf':'image',meta);if(id)kinds[kind]++;return id}))}
+  var ep=plan(eosPics,slips,eosTot);
+  eosPics.forEach(function(r,i){var q=ep[i];
+    job(r,{kind:'shift',category:'EOS',entryId:entry.id,rego:entry.rego||'',part:q.part,parts:q.parts,slips:slips.length,hail:nn(sp.hail!=null&&sp.hail!==''?sp.hail:entry.hail),
+      desc:'End of Shift · '+rego+(q.parts>1?(q.perItem?' · slip '+q.part+' of '+q.parts:' · photo '+q.part+' of '+q.parts):''),amount:q.amount,date:entry.date},'eos')});
+  var fuelPics=(fuelList||[]).filter(function(r){return r&&r.file}),fp=plan(fuelPics,fills.map(function(f){return nn(f.amount)}),fuelTot);
+  fuelPics.forEach(function(r,i){var q=fp[i],f=q.perItem?fills[i]:null;
+    job(r,{kind:'fuel',category:'Fuel',entryId:entry.id,rego:entry.rego||'',part:q.part,parts:q.parts,
+      desc:'Shift fuel · '+rego+(f&&f.type?' · '+f.type:'')+(f&&f.opPaid?' · operator card':'')+(q.parts>1&&!q.perItem?' · photo '+q.part+' of '+q.parts:''),amount:q.amount,date:entry.date},'fuel')});
   (acctList||[]).forEach(function(a){
-    jobs.push(compressImage(a.file).then(function(data){
-      return storeReceipt(data,a.fileName,a.type==='application/pdf'?'pdf':'image',{kind:'account',category:'Account',desc:a.acct,amount:a.amount,date:entry.date});
-    }));
-  });
-  (eosList||[]).forEach(function(r,i){
-    if(!r||!r.file)return;
-    jobs.push(compressImage(r.file).then(function(data){
-      return storeReceipt(data,r.name,r.type==='application/pdf'?'pdf':'image',{
-        kind:'shift',category:'EOS',desc:'End of Shift · '+(entry.rego||'No rego'),
-        amount:nn(entry.snap&&entry.snap.eos&&entry.snap.eos[i]),date:entry.date
-      });
-    }));
-  });
-  (fuelList||[]).forEach(function(r,i){
-    if(!r||!r.file)return;
-    jobs.push(compressImage(r.file).then(function(data){
-      var fill=entry.snap&&entry.snap.fuel&&entry.snap.fuel[i];
-      return storeReceipt(data,r.name,r.type==='application/pdf'?'pdf':'image',{
-        kind:'fuel',category:'Fuel',desc:'Shift fuel · '+(entry.rego||'No rego'),
-        amount:fill?nn(fill.amount):(i===0?nn(entry.fuel):0),date:entry.date
-      });
-    }));
-  });
-  if(jobs.length)Promise.all(jobs).catch(function(){toast('A shift receipt could not be archived')});
+    job({file:a.file,name:a.fileName,type:a.type},{kind:'account',category:'Account',entryId:entry.id,rego:entry.rego||'',desc:a.acct,amount:a.amount,date:entry.date},'acct')});
+  if(!jobs.length)return;
+  Promise.all(jobs).then(function(){return receiptsWrite}).then(function(){
+    var n=kinds.eos+kinds.fuel+kinds.acct,want=jobs.length;
+    if(n<want){toast((want-n)+' shift photo'+(want-n===1?'':'s')+' couldn’t be archived — storage may be full','error');return}
+    if(!receiptsOk){storageWarn('shift photos');return}
+    var bits=[];if(kinds.eos)bits.push(kinds.eos+' EOS');if(kinds.fuel)bits.push(kinds.fuel+' fuel');if(kinds.acct)bits.push(kinds.acct+' account');
+    toast(bits.join(' + ')+' photo'+(n===1?'':'s')+' archived to '+fmtDayDMY(entry.date),'success');try{renderJarMeta()}catch(_){}
+  }).catch(function(){toast('Shift photos couldn’t be archived','error')});
 }
+/* Keep archived shift photos in step when a shift's date or rego changes.
+   Linked photos move by entryId; older photos (saved before the link existed)
+   move when they match the shift's previous date and rego. */
+function relinkShiftReceipts(entry,oldDate,oldRego){
+  if(!entry)return 0;var n=0,rego=entry.rego||'No rego';
+  receipts.forEach(function(r){
+    var linked=r.entryId!=null&&String(r.entryId)===String(entry.id);
+    var legacy=r.entryId==null&&oldDate&&(r.kind==='shift'||r.kind==='fuel')&&r.date===oldDate&&(!oldRego||String(r.desc||'').indexOf(oldRego)>=0);
+    if(!linked&&!legacy)return;
+    var changed=false;
+    if(r.date!==entry.date){r.date=entry.date;changed=true}
+    if((r.kind==='shift'||r.kind==='fuel')&&oldRego!==entry.rego&&r.desc){var nd=oldRego?String(r.desc).split(oldRego).join(rego):r.desc;if(nd!==r.desc){r.desc=nd;changed=true}}
+    if(r.rego!==entry.rego&&(r.kind==='shift'||r.kind==='fuel'||linked)){r.rego=entry.rego||'';changed=true}
+    if(legacy){r.entryId=entry.id;changed=true}
+    if(changed)n++});
+  if(n){saveReceipts();try{renderJarMeta()}catch(_){}}
+  return n}
 
 function saveShift(shared){
   var g=grossT();
@@ -5655,11 +5683,13 @@ function saveShift(shared){
     snap:JSON.parse(JSON.stringify({date:draft.date,rego:draft.rego,eos:draft.eos,cash:draft.cash,square:draft.square,accounts:draft.accounts,runs:draft.runs,fuel:draft.fuel,hail:draft.hail,custom:draft.custom}))};
   draft.fuel.forEach(function(f){e.fuelByType[f.type]=(e.fuelByType[f.type]||0)+nn(f.amount)});
   draft.cash.forEach(function(c){addName(c.name)});draft.square.forEach(function(c){addName(c.name)});draft.accounts.forEach(function(a){addName(a.name)});
+  var prevE=srcId!=null?entries.filter(function(x){return String(x.id)===String(srcId)})[0]:null,prevDate=prevE&&prevE.date,prevRego=prevE&&prevE.rego;
   entries=entries.filter(function(x){
     if(srcId!=null&&String(x.id)===String(srcId))return false;
     return !(x.date===e.date&&x.rego===e.rego);
   });
   entries.push(e);save('fareo_entries',entries);
+  if(prevE&&(prevDate!==e.date||prevRego!==e.rego)){var moved=relinkShiftReceipts(e,prevDate,prevRego);if(moved)setTimeout(function(){toast(moved+' shift photo'+(moved===1?'':'s')+' moved to '+fmtDayDMY(e.date))},1600)}
   archiveShiftAttachments(e,eosReceipts.slice(),fuelReceipts.slice(),acctRcList(e.date));
   toast(shared?'Saved & sharing…':'Saved to Weekly');
   vanFx('Shift saved',money(nn(e.take))+' take-home \u00b7 '+fmtDayDMY(e.date));
@@ -5966,7 +5996,7 @@ function renderShiftView(first){
   if(levy>0)m+=svRow('Levy to remit',money(levy),hail+' hail trip'+(hail===1?'':'s')+' × '+money(levyRate())+' · SRO','mut');
   body+=svSec(IC.math,'How the payout adds up',null,m,i++);
   /* photos */
-  var pics=receipts.filter(function(r){if(r.date!==e.date)return false;if(r.kind==='account')return true;if(r.kind==='shift'||r.kind==='fuel')return !e.rego||String(r.desc||'').indexOf(e.rego)>=0||same.length===1;return false});
+  var pics=receipts.filter(function(r){if(r.entryId!=null)return String(r.entryId)===String(e.id);if(r.date!==e.date)return false;if(r.kind==='account')return true;if(r.kind==='shift'||r.kind==='fuel')return !e.rego||String(r.desc||'').indexOf(e.rego)>=0||same.length===1;return false});
   if(pics.length)body+=svSec(IC.pic,'Photos',pics.length+'',
     '<div class="sv-pics">'+pics.map(function(r){var lab=r.kind==='shift'?'EOS':r.kind==='fuel'?'Fuel':esc(r.desc||'Account');return '<button type="button" class="sv-pic" data-rid="'+r.id+'">'+(r.type==='pdf'?'<span class="pdf">PDF</span>':'<img loading="lazy" src="'+r.dataUrl+'" alt="">')+'<small>'+lab+(nn(r.amount)?' · '+money(r.amount):'')+'</small></button>'}).join('')+'</div>',i++);
   /* same day */
@@ -6032,7 +6062,9 @@ if($('#wkRows'))$('#wkRows').addEventListener('click',function(ev){
 });
 if($('#enSave'))$('#enSave').onclick=function(){var date=$('#enDate').value,rego=$('#enRego').value,amt=nn($('#enAmt').value);if(!date){toast('Pick a date');return}if(!rego){toast('Choose a rego');return}
   if(curEntryId!=null){var e=entries.filter(function(x){return String(x.id)===String(curEntryId)})[0];if(e){entries=entries.filter(function(x){return !(x.date===date&&x.rego===rego&&String(x.id)!==String(curEntryId))});
-    e.date=date;e.rego=rego;
+    var oD=e.date,oR=e.rego;
+    e.date=date;e.rego=rego;if(e.snap){e.snap.date=date;e.snap.rego=rego}
+    if(oD!==date||oR!==rego){var mv=relinkShiftReceipts(e,oD,oR);if(mv)setTimeout(function(){toast(mv+' shift photo'+(mv===1?'':'s')+' moved with the shift')},900)}
     /* [F16] keep gross/share/GST consistent when the amount is edited by hand */
     if(Math.abs((Number(e.take)||0)-amt)>0.005){
       var held=entryDriverHeld(e);
