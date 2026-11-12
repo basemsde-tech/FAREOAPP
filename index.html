@@ -2215,6 +2215,47 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
 .cb-r>i>i{display:block;height:100%;width:0;border-radius:4px;background:var(--fuel);animation:teBar .8s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--i)*60ms)}
 .cb-r b{font-family:var(--mono);font-size:12px;color:var(--head)}
 @media (prefers-reduced-motion:reduce){.screen[data-tab="reports"] *{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+/* ---------- Fareo 16.2 · shift preview ---------- */
+.sv-sheet{max-height:92vh;overflow-y:auto}
+.sv-top{display:grid;grid-template-columns:36px 1fr 36px;align-items:center;gap:6px}
+.sv-tt{text-align:center;min-width:0}.sv-tt h3{margin:2px 0 0;font-size:17px}
+.sv-nav{width:36px;height:36px;border-radius:11px;border:1px solid var(--bd2);background:transparent;color:var(--body);display:grid;place-items:center;cursor:pointer}
+.sv-nav svg{width:18px;height:18px}.sv-nav:disabled{opacity:.25;cursor:default}
+.sv-regos{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:8px}.sv-regos:empty{display:none}
+.sv-regos button{border:1px solid var(--bd2);background:var(--card2);color:var(--body);border-radius:999px;padding:6px 12px;font-size:12px;font-weight:650;cursor:pointer}
+.sv-regos button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+#svBody.sv-swap{animation:svSwap .35s var(--ease)}
+@keyframes svSwap{from{opacity:.2;transform:translateX(10px)}to{opacity:1;transform:none}}
+.sv-hero{margin-top:12px;padding:14px 16px;border-radius:16px;background:linear-gradient(135deg,var(--accent-dim),transparent 70%),var(--card2);border:1px solid var(--accent-line)}
+.sv-hero small{display:block;font-size:12px;color:var(--mut);font-weight:600}
+.sv-hero b{display:block;font-family:var(--mono);font-size:32px;font-weight:700;color:var(--head);letter-spacing:-.02em;margin-top:2px}
+.sv-hero span{display:block;font-size:11.5px;color:var(--mut);margin-top:2px}
+.sv-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.sv-kpis div{background:var(--card2);border:1px solid var(--bd);border-radius:12px;padding:8px 10px;min-width:0}
+.sv-kpis small{display:block;font-size:10px;color:var(--mut);font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sv-kpis b{display:block;font-family:var(--mono);font-size:13px;color:var(--head);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sv-sec{margin-top:12px;border:1px solid var(--bd);border-radius:14px;padding:4px 12px 6px;animation:rpIn .4s var(--ease) both;animation-delay:calc(var(--i)*45ms)}
+.sv-sh{display:flex;align-items:center;gap:8px;padding:8px 0 6px;border-bottom:1px solid var(--bd)}
+.sv-ic{font-size:15px;line-height:1}.sv-sh b{font-size:13.5px;color:var(--head)}
+.sv-tot{margin-left:auto;font-family:var(--mono);font-size:13px;font-weight:700;color:var(--head)}
+.sv-r{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed var(--bd)}
+.sv-r:last-child{border-bottom:0}
+.sv-l{font-size:13px;color:var(--body);min-width:0}.sv-l small{display:block;font-size:10.5px;color:var(--mut);margin-top:1px}
+.sv-r>b{font-family:var(--mono);font-size:13px;color:var(--head);flex:none}
+.sv-r.mut .sv-l,.sv-r.mut>b{color:var(--mut)}
+.sv-r.tot{border-top:1px solid var(--bd2);border-bottom:0;margin-top:2px;padding-top:10px}
+.sv-r.tot .sv-l{font-weight:700;color:var(--head)}.sv-r.tot>b{font-size:15px;color:var(--accent)}
+.sv-rc{margin-left:6px;border:1px solid var(--acct);background:transparent;color:var(--acct);border-radius:999px;padding:1px 7px;font-size:10px;font-weight:700;cursor:pointer}
+.sv-pics{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px;padding:8px 0 4px}
+.sv-pic{display:flex;flex-direction:column;gap:4px;border:0;background:transparent;padding:0;cursor:pointer;text-align:left}
+.sv-pic img,.sv-pic .pdf{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:10px;border:1px solid var(--bd2);background:var(--field)}
+.sv-pic .pdf{display:grid;place-items:center;font:700 12px var(--mono);color:var(--mut)}
+.sv-pic small{font-size:10px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sv-acts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.sv-acts2{display:flex;justify-content:space-between;margin-top:8px}
+.sv-acts2 button{border:0;background:transparent;color:var(--mut);font-size:12.5px;font-weight:650;padding:8px 2px;cursor:pointer}
+.sv-acts2 #svDelete{color:var(--dgr)}
+@media (min-width:700px){.sv-sheet #svBody{display:grid;grid-template-columns:1fr 1fr;gap:0 12px;align-items:start}.sv-sheet .sv-hero,.sv-sheet .sv-kpis{grid-column:1/-1}}
 </style>
 </head>
 <body>
@@ -2995,6 +3036,14 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
   <button class="pickopt" id="pickIncome"><span><b>Smart summary</b><small>Income overview &amp; totals</small></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></button>
   <button class="pickopt" id="pickBas"><span><b>BAS prep (ATO)</b><small>Copy G1, 1A and 1B as whole dollars</small></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></button>
 </div></div>
+<div class="modal" id="svModal"><div class="sheet sv-sheet">
+  <div class="grip"></div>
+  <div class="sv-top"><button type="button" class="sv-nav" id="svPrev" aria-label="Previous shift"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><div class="sv-tt"><span class="eyebrow" id="svEyebrow">Shift</span><h3 id="svTitle">Shift</h3></div><button type="button" class="sv-nav" id="svNext" aria-label="Next shift"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
+  <div class="sv-regos" id="svRegos"></div>
+  <div id="svBody"></div>
+  <div class="sv-acts"><button type="button" class="btn neutral" id="svShare">Share</button><button type="button" class="btn" id="svEdit">Edit shift</button></div>
+  <div class="sv-acts2"><button type="button" id="svQuick">Quick edit amount</button><button type="button" id="svDelete">Delete shift</button></div>
+</div></div>
 <div class="modal" id="entryModal"><div class="sheet">
   <div class="grip"></div><h3 id="entryTitle">Edit entry</h3>
   <div class="exprow"><label>Date</label><div class="er-r"><input id="enDate" type="date"></div></div>
@@ -3273,8 +3322,11 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='16.1';
+var APP_VERSION='16.2';
 var CHANGELOG=[
+  {v:'16.2',date:'November 12, 2026',notes:[
+    ['Feature','Shift preview: tap a shift in Weekly to see everything from that day \u2014 take-home, gross and your share, each EOS slip, cash and Square by name, every account job (with its receipt), runs and custom types, each fuel fill and who paid, hail trips and levy, how the payout adds up, all the day\u2019s photos, and that day\u2019s bookings and expenses. Swipe or use the arrows for the previous or next shift; Share, Edit shift, Quick edit and Delete are at the bottom.'],
+  ]},
   {v:'16.1',date:'November 12, 2026',notes:[
     ['Bug Fix','Restoring a backup on a device that already had shifts recommended \u201cphotos only\u201d, which left your shifts unchanged. Restore now recommends Add what\u2019s missing (keeps this device\u2019s data and adds every shift, cost, client, booking and photo it doesn\u2019t have), with Restore everything and Photos only as options, for backup files and Google Drive.'],
     ['UI/UX','Faster Reports on long ranges: each cost category shows its newest 40 entries with Show older (All Time with 4 years of data is about 9\u00d7 faster). Totals, tax checks and exports still use every entry.'],
@@ -5858,6 +5910,87 @@ async function shareEntry(e){
   copyToClipboard(txt,'Shift '+fmtDMY(e.date)+' copied');
 }
 
+/* ================= Shift preview =================
+   One tap on a shift in Weekly: everything logged that day, how the payout
+   was worked out, photos, and the day's bookings and expenses. */
+var svId=null;
+function svSorted(){return entries.slice().sort(function(a,b){return a.date===b.date?String(a.rego||'').localeCompare(String(b.rego||'')):(a.date<b.date?-1:1)})}
+function svSum(arr,f){return (arr||[]).reduce(function(s2,x){return s2+nn(f?f(x):x)},0)}
+function svRow(label,val,sub,cls){return '<div class="sv-r'+(cls?' '+cls:'')+'"><span class="sv-l">'+label+(sub?'<small>'+sub+'</small>':'')+'</span><b>'+val+'</b></div>'}
+function svSec(icon,title,total,rows,i){if(!rows)return '';return '<section class="sv-sec" style="--i:'+i+'"><div class="sv-sh"><span class="sv-ic">'+icon+'</span><b>'+title+'</b>'+(total!=null?'<span class="sv-tot">'+total+'</span>':'')+'</div>'+rows+'</section>'}
+function openShiftView(id){var e=entries.filter(function(x){return String(x.id)===String(id)})[0];if(!e)return;svId=e.id;renderShiftView(true);showModal('svModal');sfx('tap')}
+function renderShiftView(first){
+  var e=entries.filter(function(x){return String(x.id)===String(svId)})[0];if(!e){closeModal('svModal');return}
+  var sp=e.snap||{},p=settings.pct/100,body='',i=0,pc=Math.round(settings.pct*10)/10;
+  var L=svSorted(),ix=L.map(function(x){return String(x.id)}).indexOf(String(e.id));
+  $('#svPrev').disabled=ix<=0;$('#svNext').disabled=ix<0||ix>=L.length-1;
+  $('#svTitle').textContent=fmtDayLong(e.date);
+  $('#svEyebrow').textContent='Shift · '+(e.rego||'no rego')+(e.manual?' · edited by hand':'');
+  var same=entries.filter(function(x){return x.date===e.date});
+  $('#svRegos').innerHTML=same.length>1?same.map(function(x){return '<button type="button" class="'+(String(x.id)===String(e.id)?'on':'')+'" data-svid="'+x.id+'">'+esc(x.rego||'no rego')+' · '+money(x.take)+'</button>'}).join(''):'';
+  /* amounts */
+  var eosL=(sp.eos||[]).map(nn).filter(function(v){return v>0});if(!eosL.length&&nn(e.eos)>0)eosL=[nn(e.eos)];
+  var cashL=(sp.cash||[]).filter(function(c){return nn(c.amount)>0});if(!cashL.length&&nn(e.cash)>0)cashL=[{name:'Cash',amount:e.cash}];
+  var sqL=(sp.square||[]).filter(function(c){return nn(c.amount)>0});if(!sqL.length&&nn(e.square)>0)sqL=[{name:'Square',amount:e.square}];
+  var acL=(sp.accounts||[]).filter(function(c){return nn(c.amount)>0});if(!acL.length&&entryAccounts(e)>0)acL=[{name:'Account jobs',amount:entryAccounts(e)}];
+  var runs=sp.runs!=null?nn(sp.runs):nn(e.runs);
+  var fuelL=(sp.fuel||[]).filter(function(f){return nn(f.amount)>0});
+  if(!fuelL.length&&nn(e.fuel)>0)fuelL=[{type:'Fuel',amount:e.fuel,opPaid:nn(e.fuelOpPaid)>0&&nn(e.fuelIPaid)===0}];
+  var custom=e.custom||{},custL=Object.keys(custom).filter(function(k){return nn(custom[k])}).map(function(k){var pt=settings.payTypes.filter(function(q){return String(q.id)===String(k)})[0];return {name:pt?pt.name:k,amount:nn(custom[k]),driver:pt&&pt.collector==='driver'}});
+  var hail=nn(sp.hail!=null&&sp.hail!==''?sp.hail:e.hail),levy=entryLevy(e);
+  var gross=nn(e.gross),share=entryShare(e),held=entryDriverHeld(e);
+  var fuelI=e.fuelIPaid!=null?nn(e.fuelIPaid):svSum(fuelL.filter(function(f){return !f.opPaid}),function(f){return f.amount});
+  var fuelOp=svSum(fuelL.filter(function(f){return f.opPaid}),function(f){return f.amount});
+  /* hero */
+  body+='<div class="sv-hero"><div><small>Take-home</small><b class="tally" id="svTake">'+money(e.take)+'</b><span>paid by the operator'+(held>0?' · plus '+money(held)+' you already hold':'')+'</span></div></div>';
+  body+='<div class="sv-kpis"><div><small>Gross fares</small><b>'+money(gross)+'</b></div><div><small>Your share · '+pc+'%</small><b>'+money(share)+'</b></div><div><small>Hail · levy</small><b>'+hail+' · '+money(levy)+'</b></div></div>';
+  /* income */
+  var IC={eos:'🧾',cash:'💵',sq:'💳',acct:'🏢',fuel:'⛽',hail:'🚕',math:'🧮',pic:'📷',day:'📅'};
+  var acRc=receipts.filter(function(r){return r.kind==='account'&&r.date===e.date});
+  body+=svSec(IC.eos,'EOS slips',money(svSum(eosL)),eosL.length?eosL.map(function(v,k){return svRow('Slip '+(k+1),money(v),'operator collects')}).join(''):'',i++);
+  body+=svSec(IC.cash,'Cash',money(svSum(cashL,function(c){return c.amount})),cashL.length?cashL.map(function(c){return svRow(esc(c.name||'Cash'),money(c.amount),'you hold it')}).join(''):'',i++);
+  body+=svSec(IC.sq,'Square',money(svSum(sqL,function(c){return c.amount})),sqL.length?sqL.map(function(c){return svRow(esc(c.name||'Square'),money(c.amount),'you hold it')}).join(''):'',i++);
+  body+=svSec(IC.acct,'Account jobs',money(svSum(acL,function(c){return c.amount})),acL.length?acL.map(function(c){var nm=String(c.name||'Account').trim()||'Account',rc=acRc.filter(function(r){return String(r.desc||'').toLowerCase()===nm.toLowerCase()})[0];
+      return svRow(esc(nm)+(rc?' <button type="button" class="sv-rc" data-rid="'+rc.id+'">receipt</button>':''),money(c.amount),'operator collects')}).join(''):'',i++);
+  var other='';if(runs>0)other+=svRow('Runs',money(runs*RUN),runs+' × '+money(RUN));custL.forEach(function(c){other+=svRow(esc(c.name),money(c.amount),c.driver?'you hold it':'operator collects')});
+  body+=svSec('➕','Other income',null,other,i++);
+  body+=svSec(IC.fuel,'Fuel',money(svSum(fuelL,function(f){return f.amount})),fuelL.length?fuelL.map(function(f,k){return svRow(esc(f.type||'Fuel')+' fill'+(fuelL.length>1?' '+(k+1):''),money(f.amount),f.opPaid?'operator’s card':'you paid · reimbursed')}).join(''):'',i++);
+  /* settlement */
+  var calc=share-held+fuelI,diff=nn(e.take)-calc;
+  var m=svRow('Your share','+'+money(share),pc+'% of '+money(gross)+' gross');
+  if(held>0)m+=svRow('Cash &amp; Square you hold','−'+money(held),'already in your pocket');
+  if(fuelI>0)m+=svRow('Fuel you paid','+'+money(fuelI),'reimbursed');
+  if(fuelOp>0)m+=svRow('Fuel on operator’s card',''+money(fuelOp),'not added — operator paid','mut');
+  if(Math.abs(diff)>=0.01)m+=svRow(e.manual?'Edited by hand':'Formula adjustments',(diff>0?'+':'−')+money(Math.abs(diff)),e.manual?'amount changed in Weekly':'custom pay types');
+  m+=svRow('Take-home',money(e.take),'what the operator pays you','tot');
+  if(levy>0)m+=svRow('Levy to remit',money(levy),hail+' hail trip'+(hail===1?'':'s')+' × '+money(levyRate())+' · SRO','mut');
+  body+=svSec(IC.math,'How the payout adds up',null,m,i++);
+  /* photos */
+  var pics=receipts.filter(function(r){if(r.date!==e.date)return false;if(r.kind==='account')return true;if(r.kind==='shift'||r.kind==='fuel')return !e.rego||String(r.desc||'').indexOf(e.rego)>=0||same.length===1;return false});
+  if(pics.length)body+=svSec(IC.pic,'Photos',pics.length+'',
+    '<div class="sv-pics">'+pics.map(function(r){var lab=r.kind==='shift'?'EOS':r.kind==='fuel'?'Fuel':esc(r.desc||'Account');return '<button type="button" class="sv-pic" data-rid="'+r.id+'">'+(r.type==='pdf'?'<span class="pdf">PDF</span>':'<img loading="lazy" src="'+r.dataUrl+'" alt="">')+'<small>'+lab+(nn(r.amount)?' · '+money(r.amount):'')+'</small></button>'}).join('')+'</div>',i++);
+  /* same day */
+  var dayBk=(typeof bookings!=='undefined'?bookings:[]).filter(function(b){return b.date===e.date}),dayEx=deductions.filter(function(d){return d.date===e.date});
+  var dd='';dayBk.forEach(function(b){dd+=svRow(esc(b.time)+' · '+esc(bkShort(b.from))+(b.to?' → '+esc(bkShort(b.to)):''),b.status==='done'?'Done':b.status==='cancelled'?'Cancelled':'Booked',b.name?esc(b.name):'booking')});
+  dayEx.forEach(function(d){dd+=svRow(esc(d.name||catLabel(d.category||'Other')),money(d.amount),esc(catLabel(d.category||'Other'))+' · expense')});
+  body+=svSec(IC.day,'Same day',null,dd,i++);
+  $('#svBody').innerHTML=body;
+  if(!first){var sb=$('#svBody');sb.classList.remove('sv-swap');void sb.offsetWidth;sb.classList.add('sv-swap')}
+}
+function svGo(n){var L=svSorted(),ix=L.map(function(x){return String(x.id)}).indexOf(String(svId));var nx=L[ix+n];if(!nx)return;svId=nx.id;renderShiftView(false);sfx('tap');var sh=$('#svModal .sheet');if(sh)sh.scrollTop=0}
+document.addEventListener('click',function(e){var t=e.target,x;
+  if(t.closest&&t.closest('#svPrev')){svGo(-1);return}
+  if(t.closest&&t.closest('#svNext')){svGo(1);return}
+  if((x=t.closest&&t.closest('#svRegos [data-svid]'))){svId=Number(x.dataset.svid)||x.dataset.svid;renderShiftView(false);return}
+  if((x=t.closest&&t.closest('#svBody [data-rid]'))){viewReceipt(x.dataset.rid);return}
+  if(t.id==='svShare'){var en=entries.filter(function(q){return String(q.id)===String(svId)})[0];if(en)shareEntry(en);return}
+  if(t.id==='svEdit'){var en2=entries.filter(function(q){return String(q.id)===String(svId)})[0];if(!en2)return;closeModal('svModal');loadEntryToCalc(en2);go('shift');setSub(1);toast('Loaded — adjust & save');return}
+  if(t.id==='svQuick'){var id=svId;closeModal('svModal');setTimeout(function(){openEntry(id)},220);return}
+  if(t.id==='svDelete'){var en3=entries.filter(function(q){return String(q.id)===String(svId)})[0];if(!en3)return;
+    ask('Delete this shift?',fmtDayLong(en3.date)+' · '+(en3.rego||'')+' · '+money(en3.take)+'. You can undo straight after.','Delete',function(){entries=entries.filter(function(q){return String(q.id)!==String(en3.id)});save('fareo_entries',entries);closeModal('svModal');renderWeekly();toast('Shift deleted')});return}
+});
+(function(){var x0=0,y0=0,on=false;document.addEventListener('touchstart',function(e){on=!!(e.target.closest&&e.target.closest('#svBody'));if(on){x0=e.touches[0].clientX;y0=e.touches[0].clientY}},{passive:true});
+  document.addEventListener('touchend',function(e){if(!on)return;on=false;var dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.6)svGo(dx<0?1:-1)},{passive:true})})();
 /* ---------- weekly override / edit ---------- */
 var curEntryId=null;
 function fillEnRego(sel){$('#enRego').innerHTML='<option value="">Choose rego...</option>'+settings.regos.map(function(r){return '<option value="'+esc(r)+'"'+(r===sel?' selected':'')+'>'+esc(r)+'</option>'}).join('')}
@@ -5895,7 +6028,7 @@ if($('#wkRows'))$('#wkRows').addEventListener('click',function(ev){
   var lg=ev.target.closest&&ev.target.closest('.wk-off[data-day]');
   if(lg){var ds=lg.dataset.day;go('shift');setTimeout(function(){setDraftDate(ds);toast('Logging a shift for '+fmtDayDMY(ds))},120);return}
   var row=ev.target.closest&&ev.target.closest('.wk-row');
-  if(row)openEntry(row.dataset.id);
+  if(row)openShiftView(row.dataset.id);
 });
 if($('#enSave'))$('#enSave').onclick=function(){var date=$('#enDate').value,rego=$('#enRego').value,amt=nn($('#enAmt').value);if(!date){toast('Pick a date');return}if(!rego){toast('Choose a rego');return}
   if(curEntryId!=null){var e=entries.filter(function(x){return String(x.id)===String(curEntryId)})[0];if(e){entries=entries.filter(function(x){return !(x.date===date&&x.rego===rego&&String(x.id)!==String(curEntryId))});
