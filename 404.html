@@ -33,8 +33,10 @@
 <meta name="apple-mobile-web-app-title" content="Fareo">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="apple-touch-icon-v100.png">
-<link rel="icon" type="image/png" href="favicon-64-v100.png">
+<meta name="application-name" content="Fareo">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-v100.png">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon-64-v100.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192-v100.png">
 <title>Fareo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1432,6 +1434,37 @@ html.calm .tally{transition:none}
 .set .qa-in input{width:66px;padding:8px 8px 8px 20px;text-align:left;font-family:var(--mono);font-size:13px}
 #qaReset{font-size:12px;margin-left:4px}
 @media (max-width:360px){.qa{font-size:11px}.acct-top{grid-template-columns:minmax(0,1fr) 92px 38px}}
+/* ---------- Fareo 16.5 · Install app + press-and-hold actions ---------- */
+.inst-bar{display:grid;grid-template-columns:40px minmax(0,1fr) auto 34px;align-items:center;gap:10px;margin:0 0 12px;padding:10px 8px 10px 10px;border-radius:var(--radius);background:var(--card);border:1px solid var(--accent-line);box-shadow:var(--shadow);animation:riseIn .4s var(--ease) both}
+.inst-bar[hidden]{display:none}
+.inst-ico img{width:40px;height:40px;border-radius:11px;display:block}
+.inst-txt b{display:block;font-size:14px;color:var(--head)}
+.inst-txt small{display:block;font-size:11.5px;color:var(--mut);margin-top:2px;line-height:1.3}
+.inst-go{border:0;border-radius:10px;padding:9px 14px;font-weight:700;font-size:13px;background:var(--btn-bg,var(--accent));color:var(--btn-ink,var(--accent-ink));cursor:pointer}
+.inst-x{width:34px;height:34px;border-radius:50%;border:0;background:transparent;color:var(--mut);font-size:20px;cursor:pointer}
+.inst-steps{margin:4px 0 12px;padding:0;list-style:none;counter-reset:is}
+.inst-steps li{counter-increment:is;display:grid;grid-template-columns:26px 1fr;gap:10px;align-items:start;padding:9px 0;border-top:1px dashed var(--bd);font-size:14px;color:var(--body);line-height:1.45}
+.inst-steps li:first-child{border-top:0}
+.inst-steps li::before{content:counter(is);width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--accent-dim);color:var(--accent);font:700 12px var(--mono)}
+.inst-steps b{color:var(--head)}
+.inst-note{font-size:12px;color:var(--mut);margin:0 0 12px;line-height:1.45}
+.inst-note:empty{display:none}
+.hub-sat,.hub-core,.glance,#homeBtn,.wk-row,[data-bkopen],.rcpt-row,.cli-main,.acct-row{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+.holding{scale:.96;transition:scale .45s var(--ease)}
+.hold-target{animation:holdPulse .5s var(--ease)}
+@keyframes holdPulse{0%{scale:.96}60%{scale:1.03}100%{scale:1}}
+.hold-sheet .eyebrow{color:var(--accent)}
+.hold-sheet h3{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hold-list{display:grid;gap:6px;margin-top:10px}
+.hold-it{display:grid;grid-template-columns:38px minmax(0,1fr);gap:12px;align-items:center;width:100%;text-align:left;padding:10px 12px;min-height:54px;border-radius:13px;border:1px solid var(--bd2);background:transparent;color:var(--head);cursor:pointer;font:inherit;animation:riseIn .3s var(--ease) both;animation-delay:calc(var(--k,0) * 35ms)}
+.hold-it:active{scale:.98}
+.hold-it i{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:var(--field);color:var(--head)}
+.hold-it i svg{width:19px;height:19px}
+.hold-it b{display:block;font-size:14.5px;font-weight:650}
+.hold-it small{display:block;font-size:11.5px;color:var(--mut);margin-top:2px;line-height:1.3}
+.hold-it.danger b,.hold-it.danger i{color:var(--dgr)}
+.hold-it.danger i{background:color-mix(in srgb,var(--dgr) 12%,transparent)}
+@media (min-width:700px){.hold-list{grid-template-columns:1fr 1fr}}
 /* ---------- Fareo 16.4 · Accounts step (Log → Accounts → Share) ---------- */
 .acct-head{margin-bottom:10px}
 .ah-top{display:grid;grid-template-columns:42px minmax(0,1fr) auto;gap:12px;align-items:center}
@@ -2317,6 +2350,7 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
       <div><p class="hub-date" id="today">Today</p><h1 class="hub-greet" id="greet">Welcome back</h1></div>
     </div>
     <button type="button" class="gd-due" id="gdDue" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#0F9D58" d="M8.3 3h7.4l7 12-3.7 6.4-7-12z"/><path fill="#FFC107" d="M8.3 3 1.3 15l3.7 6.4 7-12z"/><path fill="#4285F4" d="M5 21.4h14l3.7-6.4H8.7z"/></svg><span><b>Backup due</b><small id="gdDueSub">Tap to back up to Google Drive</small></span><i aria-hidden="true">&rsaquo;</i></button>
+    <div class="inst-bar" id="installBar" hidden><span class="inst-ico"><img src="icon-192-v100.png" alt=""></span><div class="inst-txt"><b>Install Fareo</b><small>Home-screen app &middot; full screen &middot; works offline</small></div><button type="button" class="inst-go" id="installGo">Install</button><button type="button" class="inst-x" id="installX" aria-label="Not now">&times;</button></div>
     <div class="bk-home" id="bkHome"></div>
     <div class="hub">
       <div class="hub-wheel">
@@ -2892,6 +2926,7 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
         <header class="sp-head"><button type="button" class="sp-back" aria-label="All settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><span class="sp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14M12 17.5v.01"/></svg></span><h2>Help &amp; updates</h2></header>
         <div class="sp-sec">
         <div class="card set-card">
+      <div class="set" id="installApp"><div class="sl"><b>Install Fareo app</b><p id="installSub">Add to your home screen or desktop</p></div><span class="chev">&darr;</span></div>
       <div class="set" id="clearCache"><div class="sl"><b>Check for updates</b><p>Clears the app cache and reloads &middot; data is kept</p></div><span class="chev">&rsaquo;</span></div>
       <div class="set" id="rollbackUpdate"><div class="sl"><b>Roll back last update</b><p>Go back one version if this one misbehaves</p></div><span class="chev">&larr;</span></div>
       <div class="set" id="newFy"><div class="sl"><b class="danger">Start new financial year</b><p>Clears shifts &amp; income &middot; keeps settings and clients</p></div><span class="chev danger">&rsaquo;</span></div>
@@ -3320,6 +3355,23 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
   <button class="btn" id="updNow">Update now</button>
   <button class="btn neutral" id="updLater" style="margin-top:9px">Later</button>
 </div></div>
+<div class="modal" id="installModal"><div class="sheet">
+  <div class="grip"></div>
+  <span class="eyebrow">Install app</span>
+  <h3 id="instTitle">Add Fareo to your home screen</h3>
+  <p class="csub" id="instSub"></p>
+  <ol class="inst-steps" id="instSteps"></ol>
+  <p class="inst-note" id="instNote"></p>
+  <button class="btn" id="instDone">Got it</button>
+</div></div>
+<div class="modal" id="holdModal"><div class="sheet hold-sheet">
+  <div class="grip"></div>
+  <span class="eyebrow" id="holdEyebrow">Quick actions</span>
+  <h3 id="holdTitle">Actions</h3>
+  <p class="csub" id="holdSub"></p>
+  <div class="hold-list" id="holdList" role="menu"></div>
+  <button class="btn neutral" id="holdClose" style="margin-top:12px">Close</button>
+</div></div>
 <div class="sfoot" id="sfoot">
   <button type="button" class="btn neutral sback" id="sback" aria-label="Back">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg>
@@ -3373,8 +3425,14 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='16.4';
+var APP_VERSION='16.5';
 var CHANGELOG=[
+  {v:'16.5',date:'November 14, 2026',notes:[
+    ['Feature','Install Fareo as an app from any browser. Chrome, Edge and Samsung Internet get a one-tap Install button on Home; iPhone, Firefox and others get the exact steps for that browser (Settings \u2192 Help & updates \u2192 Install Fareo app). In-app browsers like Instagram or WhatsApp tell you to open Fareo in Chrome or Safari first.'],
+    ['Feature','Press and hold for more actions: hold a Home tile, the Home button, a Weekly shift, a booking, an archived receipt, an account job or a client for a pop-up of extra actions (preview, edit, share, mark done, duplicate, delete and more). Normal taps work as before; right-click does the same on a computer.'],
+    ['Integration','Install dialog shows app screenshots in Chrome and Edge, and the installed app has shortcuts for Log Shift, Bookings, Weekly and Clients (long-press the app icon). Re-opening Fareo from a link reuses the open app window.'],
+    ['Bug Fix','The app ID now points at Fareo itself instead of the whole github.io site, so browsers identify and install it correctly.'],
+  ]},
   {v:'16.4',date:'November 14, 2026',notes:[
     ['UI/UX','Log shift now has three steps: Log \u2192 Accounts \u2192 Share. Account jobs have their own roomy page instead of being squeezed in with the other fields.'],
     ['UI/UX','Each account job is its own card with a full-width name, a big amount box, its Receipt button beside the amount, and quick amounts in one tidy row. Fold inner screen shows two jobs side by side.'],
@@ -10505,6 +10563,154 @@ rpLoaded.then(function(){try{dailyRecoveryPoint()}catch(_){}});
   document.addEventListener('focusout',function(){setTimeout(syncShiftDock,0)});
   try{if(screen.orientation&&screen.orientation.unlock)screen.orientation.unlock()}catch(_){}
 })();
+/* ---------- Fareo 16.5 · Install as an app from any browser ---------- */
+var instPrompt=null;
+function isStandalone(){try{return ['standalone','fullscreen','minimal-ui','window-controls-overlay'].some(function(m){return matchMedia('(display-mode: '+m+')').matches})||navigator.standalone===true||String(document.referrer).indexOf('android-app://')===0}catch(_){return false}}
+function instEnv(){var ua=navigator.userAgent||'',ios=/iPad|iPhone|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1);
+  return {ios:ios,android:/Android/.test(ua),inapp:/FBAN|FBAV|FB_IAB|Instagram|Line\/|WhatsApp|Snapchat|MicroMessenger|TikTok|; wv\)/.test(ua),
+    samsung:/SamsungBrowser/.test(ua),firefox:/Firefox|FxiOS/.test(ua),edge:/Edg(A|iOS)?\//.test(ua),otherIOS:/CriOS|FxiOS|EdgiOS|OPiOS/.test(ua),
+    macSafari:!ios&&/Macintosh/.test(ua)&&/Safari/.test(ua)&&!/Chrome|Chromium|Edg\/|OPR|Firefox/.test(ua)}}
+function instGuide(){var v=instEnv();
+  if(isStandalone())return {title:'Fareo is installed',sub:'You’re using Fareo as an app on this device. Open it from its icon any time; it works offline.',steps:[]};
+  if(v.inapp)return {sub:'This page is open inside another app’s browser, which can’t install web apps.',steps:[v.ios?'Tap the <b>…</b> or <b>Share</b> menu and choose <b>Open in Safari</b>.':'Tap the <b>⋮</b> menu and choose <b>Open in Chrome</b>.','In the browser, open Settings → Help &amp; updates → <b>Install Fareo app</b>.']};
+  if(v.ios)return {sub:'On iPhone and iPad, web apps are added from the Share menu.',steps:['Tap the <b>Share</b> button '+(v.otherIOS?'in the address bar':'(the square with an arrow)')+'.','Scroll down and tap <b>Add to Home Screen</b>.','If you see <b>Open as Web App</b>, leave it on, then tap <b>Add</b>.'],note:'Fareo then opens full screen from its icon, like any other app.'};
+  if(v.samsung)return {sub:'Samsung Internet',steps:['Tap the <b>install icon</b> in the address bar if you see one, or open the <b>☰ menu</b>.','Tap <b>Add page to</b> → <b>Home screen</b>.','Tap <b>Add</b>. Fareo opens full screen from its icon.'],note:'Chrome works too and installs Fareo into your app drawer.'};
+  if(v.android&&v.firefox)return {sub:'Firefox for Android',steps:['Tap the <b>⋮ menu</b>.','Tap <b>Add app to Home screen</b> (or <b>Install</b>).','Confirm with <b>Add</b>.']};
+  if(v.android&&v.edge)return {sub:'Microsoft Edge',steps:['Tap the <b>… menu</b> at the bottom.','Tap <b>Add to phone</b>.','Tap <b>Install</b>.']};
+  if(v.android)return {sub:'Chrome for Android',steps:['Tap the <b>⋮ menu</b> (top right).','Tap <b>Add to Home screen</b>, then <b>Install</b>.','Fareo appears in your app drawer and opens full screen.'],note:'If Chrome says <b>Open app</b> instead, the Fareo Android app is already installed. You only need one of them.'};
+  if(v.macSafari)return {sub:'Safari on Mac',steps:['In the menu bar choose <b>File</b> → <b>Add to Dock</b>.','Click <b>Add</b>. Fareo opens in its own window.']};
+  if(v.firefox)return {sub:'Firefox on computers can’t install web apps yet.',steps:['Open this page in <b>Chrome</b> or <b>Edge</b>.','Click the <b>install icon</b> at the right of the address bar.']};
+  if(v.edge)return {sub:'Microsoft Edge',steps:['Click the <b>App available</b> icon at the right of the address bar,','or open the <b>… menu</b> → <b>Apps</b> → <b>Install this site as an app</b>.']};
+  return {sub:'Chrome',steps:['Click the <b>install icon</b> at the right of the address bar,','or open the <b>⋮ menu</b> → <b>Cast, save and share</b> → <b>Install page as app</b>.']};
+}
+function openInstall(){
+  if(!isStandalone()&&instPrompt){var ev=instPrompt;instPrompt=null;
+    try{ev.prompt();(ev.userChoice||Promise.resolve({})).then(function(c){if(c&&c.outcome==='accepted'){sfx('success');toast('Installing Fareo…','success')}updateInstallUI()})}catch(_){showInstallSteps()}
+    updateInstallUI();return}
+  showInstallSteps();
+}
+function showInstallSteps(){var g=instGuide();
+  $('#instTitle').textContent=g.title||'Add Fareo to your home screen';$('#instSub').textContent=g.sub||'';
+  $('#instSteps').innerHTML=g.steps.map(function(t){return '<li><span>'+t+'</span></li>'}).join('');
+  $('#instNote').innerHTML=g.note||'';showModal('installModal');
+}
+function installSnoozed(){try{return Number(localStorage.getItem('fareo_installSnooze')||0)>Date.now()}catch(_){return false}}
+function updateInstallUI(){var st=isStandalone(),v=instEnv();
+  var sub=$('#installSub');if(sub)sub.textContent=st?'Installed ✓ · running as an app':(instPrompt?'One tap · full screen, works offline':'Add to your home screen · steps for this browser');
+  var bar=$('#installBar');if(bar)bar.hidden=st||installSnoozed()||!(instPrompt||(v.ios&&!v.inapp));
+}
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();instPrompt=e;updateInstallUI()});
+window.addEventListener('appinstalled',function(){instPrompt=null;try{localStorage.setItem('fareo_installSnooze',String(Date.now()+3650*864e5))}catch(_){}updateInstallUI();toast('Fareo installed — open it from your home screen','success')});
+try{matchMedia('(display-mode: standalone)').addEventListener('change',updateInstallUI)}catch(_){}
+if($('#installApp'))$('#installApp').onclick=openInstall;
+if($('#installGo'))$('#installGo').onclick=function(){sfx('tap');openInstall()};
+if($('#installX'))$('#installX').onclick=function(){try{localStorage.setItem('fareo_installSnooze',String(Date.now()+21*864e5))}catch(_){}updateInstallUI();toast('Hidden — install any time from Settings → Help & updates')};
+if($('#instDone'))$('#instDone').onclick=function(){closeModal('installModal')};
+updateInstallUI();
+
+/* ---------- Fareo 16.5 · Press and hold for more actions ----------
+   Hold a Home tile, the Home button, a Weekly shift, a booking, an archived
+   receipt, an account job or a client for a pop-up of extra actions. Taps
+   still do what they always did; right-click does the same on a computer. */
+var HOLD_ICO={open:'M5 12h14M13 6l6 6-6 6',edit:'M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z',share:'M4 12v8h16v-8M12 3v13M7 8l5-5 5 5',del:'M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6',
+  eye:'M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12zM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z',plus:'M12 5v14M5 12h14',cal:'M3 5h18v16H3zM3 10h18M8 3v4M16 3v4',check:'M5 12l5 5L20 7',nav:'M3 11l19-9-9 19-2-8z',
+  cash:'M2 6h20v12H2zM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z',again:'M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5',dl:'M12 3v12M7 10l5 5 5-5M4 21h16',upd:'M21 12a9 9 0 1 1-3-6.7L21 8M21 3v5h-5',home:'M3 11l9-8 9 8v10H3z',
+  copy:'M8 8h12v12H8zM4 16V4h12',cam:'M3 7h4l2-3h6l2 3h4v13H3zM12 10a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z',x:'M6 6l12 12M18 6L6 18',car:'M5 17h14M6 17l1.5-6h9L18 17M7 17v2M17 17v2M8 14h.01M16 14h.01',chart:'M3 3v18h18M7 15l4-4 3 3 5-7',
+  users:'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.9',gear:'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15l1.6 1-2 3.4-1.8-.6a7 7 0 0 1-2 1.2L15 22h-4l-.3-2a7 7 0 0 1-2-1.2l-1.8.6-2-3.4 1.6-1a7 7 0 0 1 0-2.4L4.6 11l2-3.4 1.8.6a7 7 0 0 1 2-1.2L11 5h4l.3 2a7 7 0 0 1 2 1.2l1.8-.6 2 3.4-1.6 1a7 7 0 0 1 0 2.4z',
+  week:'M4 19V9M10 19V5M16 19v-8M22 19V3',box:'M21 8v13H3V8M1 3h22v5H1zM10 12h4'};
+function holdIco(k){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="'+(HOLD_ICO[k]||HOLD_ICO.open)+'"/></svg>'}
+function holdFire(attr,val){var b=document.createElement('button');b.type='button';b.hidden=true;b.setAttribute('data-'+attr,val);document.body.appendChild(b);b.click();b.remove()}
+function holdEntry(id){return entries.filter(function(x){return String(x.id)===String(id)})[0]}
+function holdSv(id,btn){var e=holdEntry(id);if(!e)return;svId=e.id;var b=$('#'+btn);if(b)b.click()}
+function latestEntry(){var l=null;entries.forEach(function(e){if(!l||e.date>l.date||(e.date===l.date&&Number(e.id)>Number(l.id)))l=e});return l}
+var TAB_NAMES={hub:['Home','home'],shift:['Log shift','car'],weekly:['Weekly','week'],bookings:['Bookings','cal'],runs:['Clients','users'],reports:['Reports','chart'],settings:['Settings','gear']};
+function hubItems(tab){
+  var it=[{t:'Open '+TAB_NAMES[tab][0],i:TAB_NAMES[tab][1],fn:function(){go(tab)}}];
+  if(tab==='shift'){it=[{t:'Log today’s shift',i:'car',fn:function(){go('shift');setTimeout(function(){setDraftDate(todayStr())},120)}},
+    {t:'Log yesterday',s:fmtDayLong(yesterdayStr()),i:'cal',fn:function(){go('shift');setTimeout(function(){setDraftDate(yesterdayStr())},120)}},
+    {t:'New booking',s:'Taxi booking reminder',i:'plus',fn:function(){openBooking(null)}}];
+    var le=latestEntry();if(le)it.push({t:'Preview last shift',s:fmtDayLong(le.date)+' · '+money(le.take),i:'eye',fn:function(){openShiftView(le.id)}})}
+  if(tab==='weekly'){var l2=latestEntry();if(l2)it.push({t:'Preview last shift',s:fmtDayLong(l2.date)+' · '+money(l2.take),i:'eye',fn:function(){openShiftView(l2.id)}});
+    it.push({t:'Add a past shift',s:'Enter a total by hand',i:'plus',fn:function(){go('weekly');setTimeout(openAddEntry,150)}})}
+  if(tab==='reports')it.push({t:'Receipts & EOS archive',i:'box',fn:openArchive});
+  if(tab==='runs')it.push({t:'Add client',i:'plus',fn:function(){go('runs');setTimeout(function(){openClient(null)},150)}});
+  if(tab==='settings'){it.push({t:'Back up now',s:'Save everything to a file',i:'dl',fn:function(){var b=$('#exportBtn');if(b)b.click()}});
+    it.push({t:'Check for updates',s:'Data is kept',i:'upd',fn:fullRefresh});
+    if(!isStandalone())it.push({t:'Install Fareo app',s:'Home screen · works offline',i:'dl',fn:openInstall})}
+  return it;
+}
+var HOLD=[
+  {sel:'#homeBtn',get:function(){return {eb:'Jump to',t:'Go anywhere',items:Object.keys(TAB_NAMES).filter(function(k){return k!==curTab}).map(function(k){return {t:TAB_NAMES[k][0],i:TAB_NAMES[k][1],fn:function(){go(k)}}})}}},
+  {sel:'[data-hub]',get:function(el){var tab=el.dataset.hub;if(!TAB_NAMES[tab])return null;return {t:TAB_NAMES[tab][0],items:hubItems(tab)}}},
+  {sel:'#wkRows .wk-row',get:function(el){var id=el.dataset.id,e=holdEntry(id);if(!e)return null;
+    return {eb:'Shift',t:fmtDayLong(e.date)+' · '+money(e.take),s:e.rego||'',items:[
+      {t:'Preview',s:'Everything logged for this shift',i:'eye',fn:function(){openShiftView(id)}},
+      {t:'Edit shift',s:'Load it into Log shift',i:'edit',fn:function(){holdSv(id,'svEdit')}},
+      {t:'Quick edit amount',i:'cash',fn:function(){openEntry(id)}},
+      {t:'Share',s:'EOS summary and photos',i:'share',fn:function(){shareEntry(e)}},
+      {t:'Delete shift',s:'You can undo straight after',i:'del',danger:1,fn:function(){holdSv(id,'svDelete')}}]}}},
+  {sel:'[data-bkopen]',get:function(el){var id=el.dataset.bkopen,b=bookings.filter(function(x){return x.id===id})[0];if(!b)return null;var up=b.status!=='done'&&b.status!=='cancelled';
+    var it=[{t:'Open booking',i:'edit',fn:function(){openBooking(id)}},{t:'Share trip',s:'SMS or WhatsApp',i:'share',fn:function(){openBkShare(id,'Share trip')}}];
+    if(up)it.push({t:'Mark done',i:'check',fn:function(){bkMark(id,'done');toast('Marked done','success')}});
+    it.push({t:'Book again',s:'Same trip, new time',i:'again',fn:function(){holdFire('bkagain',id)}});
+    it.push({t:up?'Cancel or delete':'Delete',i:'del',danger:1,fn:function(){openBkCancel(id)}});
+    return {eb:'Booking',t:bkClock(bkAt(b))+' · '+bkDayLbl(b.date),s:(b.name?b.name+' · ':'')+bkShort(b.from)+(b.to?' → '+bkShort(b.to):''),items:it}}},
+  {sel:'#archiveList .rcpt-row',get:function(el){var id=el.dataset.rid,r=getReceipt(id);if(!r)return null;
+    return {eb:'Receipt',t:r.desc||'Receipt',s:catLabel(jarCatOf(r))+' · '+fmtDayDMY(r.date)+' · '+money(r.amount),items:[
+      {t:'View',i:'eye',fn:function(){viewReceipt(id)}},
+      {t:'Share',i:'share',fn:function(){rvCurrent=id;$('#rvShare').click()}},
+      {t:'Delete',i:'del',danger:1,fn:function(){rvCurrent=id;$('#rvDelete').click()}}]}}},
+  {sel:'#acctRows .acct-row',get:function(el){var i=Number(el.dataset.ai),r=draft.accounts[i];if(!r)return null;
+    return {eb:'Account job '+(i+1),t:(r.name||'Unnamed job')+(nn(r.amount)?' · '+money(nn(r.amount)):''),items:[
+      {t:acctRcpts[r.id]?'Change receipt':'Attach receipt',i:'cam',fn:function(){var b=el.querySelector('.qa-rc');if(b)b.click()}},
+      {t:'Duplicate job',s:'Same account and amount',i:'copy',fn:function(){draft.accounts.splice(i+1,0,{name:r.name||'',amount:r.amount||''});renderAcctRows();render();persist();focusAcct(i+1,'amt');toast('Job duplicated')}},
+      {t:'Clear amount',i:'x',fn:function(){r.amount='';renderAcctRows();render();persist();focusAcct(i,'amt')}},
+      {t:'Remove job',i:'del',danger:1,fn:function(){var b=el.querySelector('[data-da]');if(b)b.click()}}]}}},
+  {sel:'#cliList .cli-main',get:function(el){var card=el.closest('.cli'),id=card&&card.dataset.cid,c=id&&findClient(id);if(!c)return null;
+    return {eb:'Client',t:clientLabel(c),items:[
+      {t:'Open client',i:'edit',fn:function(){openClient(id)}},
+      {t:'Navigate',s:'Open the first address in Maps',i:'nav',fn:function(){openMaps(firstFilledAddr(c))}},
+      {t:'Share address',i:'share',fn:function(){openSharePicker(c)}}]}}}
+];
+var holdActs=[];
+function openHold(menu,el){if(!menu||!menu.items||!menu.items.length)return;holdActs=menu.items;
+  $('#holdEyebrow').textContent=menu.eb||'Quick actions';$('#holdTitle').textContent=menu.t||'Actions';
+  var sb=$('#holdSub');sb.textContent=menu.s||'';sb.style.display=menu.s?'':'none';
+  $('#holdList').innerHTML=menu.items.map(function(a,k){return '<button type="button" role="menuitem" class="hold-it'+(a.danger?' danger':'')+'" data-hold="'+k+'" style="--k:'+k+'"><i>'+holdIco(a.i)+'</i><span><b>'+esc(a.t)+'</b>'+(a.s?'<small>'+esc(a.s)+'</small>':'')+'</span></button>'}).join('');
+  if(el){el.classList.remove('hold-target');void el.offsetWidth;el.classList.add('hold-target');setTimeout(function(){el.classList.remove('hold-target')},600)}
+  showModal('holdModal');
+  try{if(!localStorage.getItem('fareo_holdTip'))localStorage.setItem('fareo_holdTip','1')}catch(_){}
+}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#holdList [data-hold]');if(b){var a=holdActs[Number(b.dataset.hold)];closeModal('holdModal');sfx('tap');if(a&&a.fn)setTimeout(a.fn,170);return}
+  if(e.target.id==='holdClose')closeModal('holdModal')});
+(function(){
+  var T=null,x0=0,y0=0,tgt=null,ent=null,fired=false,held=null,supUntil=0;
+  function find(el){if(!el||!el.closest)return null;if(el.closest('#holdModal'))return null;for(var i=0;i<HOLD.length;i++){var m=el.closest(HOLD[i].sel);if(m)return [m,HOLD[i]]}return null}
+  function cancel(){clearTimeout(T);T=null;if(tgt)tgt.classList.remove('holding')}
+  function fire(){T=null;if(!tgt)return;tgt.classList.remove('holding');var menu=null;try{menu=ent.get(tgt)}catch(_){}
+    if(!menu)return;fired=true;held=tgt;supUntil=Infinity;buzz(18);openHold(menu,tgt)}
+  document.addEventListener('pointerdown',function(e){
+    if(e.button>0||(e.pointerType==='mouse'&&e.button!==0))return;
+    if(e.target.closest&&e.target.closest('input,textarea,select,[contenteditable],.ac-strip'))return;
+    var f=find(e.target);if(!f)return;
+    tgt=f[0];ent=f[1];x0=e.clientX;y0=e.clientY;fired=false;
+    clearTimeout(T);T=setTimeout(fire,460);
+    setTimeout(function(){if(T&&tgt)tgt.classList.add('holding')},120);
+  },{passive:true});
+  document.addEventListener('pointermove',function(e){if(T&&(Math.abs(e.clientX-x0)>10||Math.abs(e.clientY-y0)>10))cancel()},{passive:true});
+  document.addEventListener('pointerup',function(){if(T)cancel();if(fired)supUntil=Date.now()+400},{passive:true});
+  document.addEventListener('pointercancel',function(){if(T)cancel();if(fired)supUntil=Date.now()+400},{passive:true});
+  window.addEventListener('scroll',function(){if(T)cancel()},{passive:true});
+  document.addEventListener('click',function(e){if(fired&&held&&Date.now()<supUntil&&held.contains(e.target)){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();fired=false;held=null}},true);
+  document.addEventListener('contextmenu',function(e){var f=find(e.target);if(!f)return;
+    if(e.target.closest('input,textarea,select'))return;
+    e.preventDefault();if(fired&&Date.now()<supUntil)return;
+    if(T)cancel();var menu=null;try{menu=f[1].get(f[0])}catch(_){}
+    if(menu){tgt=f[0];openHold(menu,f[0])}
+  });
+})();
+/* One gentle hint so people find it. */
+setTimeout(function(){try{if(localStorage.getItem('fareo_holdTip'))return;if(curTab!=='hub'||anyModal())return;localStorage.setItem('fareo_holdTip','1');toast('Tip: press and hold tiles, shifts and bookings for more actions')}catch(_){}},6000);
 if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').then(function(reg){bindUpdateReg(reg)}).catch(function(){})})}
 </script>
 </body>
