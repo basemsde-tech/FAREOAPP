@@ -2328,6 +2328,86 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
 .sv-acts2 button{border:0;background:transparent;color:var(--mut);font-size:12.5px;font-weight:650;padding:8px 2px;cursor:pointer}
 .sv-acts2 #svDelete{color:var(--dgr)}
 @media (min-width:700px){.sv-sheet #svBody{display:grid;grid-template-columns:1fr 1fr;gap:0 12px;align-items:start}.sv-sheet .sv-hero,.sv-sheet .sv-kpis{grid-column:1/-1}}
+
+/* ---------- Fareo 16.6 · Cleaner Reports ---------- */
+[data-tab="reports"] .rep-sub{align-items:center;margin-bottom:10px}
+.rep-tool.icon{width:40px;height:40px;padding:0;justify-content:center;border-radius:12px}
+.rep-tool.icon svg{width:18px;height:18px}
+#filterRow{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;padding:4px;margin:0 0 8px;border-radius:14px;background:var(--card);border:1px solid var(--bd)}
+#filterRow .filt{border:0;background:transparent;min-height:38px;border-radius:10px;font-family:inherit;font-size:12.5px;font-weight:650;letter-spacing:0;color:var(--mut);padding:8px 2px}
+#filterRow .filt.on{background:var(--accent);color:var(--accent-ink);-webkit-text-fill-color:var(--accent-ink)}
+#filterRow .filt[data-k="today"]{display:none}
+.rep-rangebar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 12px;min-height:34px}
+.rep-rangebar .filt-range{margin:0;font-family:var(--mono);font-size:11px}
+.rep-rangebar .rf-bar{margin:0;min-height:0;flex:1 1 auto;justify-content:flex-end;min-width:0}
+.rep-rangebar .rf-chips{order:-1;min-width:0;flex:0 1 auto;overflow-x:auto;scrollbar-width:none}
+.rep-rangebar .rf-chips:empty{display:none}
+.rep-rangebar .filt-range{flex:none}
+.rep-rangebar .rf-btn{height:32px;padding:0 11px;font-size:12px}
+#alertStrip .pay-alert{margin-bottom:12px}
+#alertStrip .pay-alert-k{padding:8px 12px 4px}
+#alertStrip .pay-alert-row{padding:8px 10px 8px 12px}
+#alertStrip .alert.info{display:none}
+[data-tab="reports"] > .card{padding:16px}
+/* overview */
+.ov-head .ov-range{display:none}
+.ov-hero{margin:10px 0 14px}
+.ov-hero b{font-size:clamp(34px,10vw,44px)}
+.ov-kpis{gap:8px}
+.ov-k{padding:11px 11px 10px;border-radius:14px}
+.ov-k small{font-size:11px}
+.ov-k b{font-size:clamp(15px,4.4vw,18px);margin-top:4px}
+.ov-k span{display:none}
+.ov-trend{margin-top:16px}
+.ov-trend-h small{letter-spacing:.06em}
+.rep-more{margin-top:14px;border-radius:13px}
+.rep-more>summary{padding:11px 14px;font-size:13px}
+.rep-more>summary span{flex:none}
+.rep-more>summary small{flex:1;text-align:right;min-width:0}
+.rep-more .rm-in{padding:2px 14px 14px;animation:rpIn .35s var(--ease) both}
+.rep-more .ov-split{margin-top:4px}
+.rep-more .ov-stats{grid-template-columns:1fr 1fr;margin-top:12px}
+.rep-more.warn>summary small{color:#F0B44C}
+.rep-more[hidden]{display:none}
+/* tax */
+#teSub,.te-head .help{display:none}
+.te-hero{padding:14px}
+.te-hero-t b{font-size:30px}
+.te-rows{margin-top:6px}
+.te-row{padding:12px 2px 13px}
+.te-row-t small{display:none}
+.te-row-t b{font-size:14px}
+.te-row-v{font-size:15px}
+.te-qwrap{margin:12px 0 2px}
+.te-qwrap p{font-size:11px}
+#teChkDet #teFinder .tf:first-child{margin-top:0}
+.basguide-toggle{border-style:solid;border-width:1px;border-color:var(--bd);padding:11px 14px;border-radius:13px}
+#teBasDet{margin-top:10px}
+#basGuideToggle{margin-top:10px}
+/* costs */
+#taxCard .ph-head .help{display:none}
+#taxCard .cost-bars{margin:12px 0 12px}
+#taxCard .tax-actions{margin:0}
+#costDet .ded-claim-hint{font-size:11.5px;margin:2px 0 10px}
+#costDet #dedRows{margin-top:4px}
+#taxCard .jar-btn{margin-top:12px;border-width:1px;border-color:var(--bd);border-radius:13px}
+#taxCard .ded-empty{margin-top:12px}
+/* export */
+.ex-head{margin-bottom:10px;align-items:center}
+.ex-head .eyebrow{display:none}
+.ex-head b{margin-top:0;font-size:15px}
+.ex-grid{gap:6px}
+.ex{padding:11px 12px;gap:9px;border-radius:12px}
+.ex small{display:none}
+.ex svg{width:19px;height:19px}
+.ex b{font-size:13px}
+.ex-summ{margin-top:8px;min-height:42px;padding:10px}
+.rep-hidden-chip{margin-top:4px}
+@media (min-width:700px){.ex-grid{grid-template-columns:repeat(4,1fr)}.rep-more .ov-stats{grid-template-columns:repeat(4,1fr)}}
+.screen[data-tab="reports"] > .rep-rangebar,.screen[data-tab="reports"] > .rf-panel{grid-column:1/-1}
+.ov-head,.ex-head{justify-content:flex-start;align-items:center}
+.ov-head .ov-shifts,.ex-head .tag{margin-left:auto}
+.ov-head .fold-tg,.ex-head .fold-tg{margin-left:8px}
 </style>
 </head>
 <body>
@@ -2596,19 +2676,18 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
   </section>
 
   <section class="screen" data-tab="reports">
-    <div class="sub rep-sub"><span>Reports <small>Overview · tax engine · costs</small></span>
-      <span class="rep-tools"><button type="button" class="rep-tool" id="repFoldAll" aria-label="Collapse all cards"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5M7 9l5-5 5 5"/></svg><span id="repFoldAllLbl">Collapse</span></button><button type="button" class="rep-tool" id="repCustom" aria-label="Customise Reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg><span>Customise</span></button></span></div>
+    <div class="sub rep-sub"><span>Reports</span>
+      <span class="rep-tools"><button type="button" class="rep-tool icon" id="repCustom" aria-label="Show or hide cards" title="Show or hide cards"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg></button></span></div>
 
     <div class="filterrow" id="filterRow">
-      <button data-k="week" class="filt on">Cycle</button>
-      <button data-k="today" class="filt">Today</button>
-      <button data-k="quarter" class="filt">Qtr</button>
+      <button data-k="week" class="filt on">Week</button>
+      <button data-k="quarter" class="filt">Quarter</button>
       <button data-k="fy" class="filt">FY</button>
       <button data-k="all" class="filt">All</button>
       <button data-k="custom" class="filt">Dates</button>
     </div>
-    <p class="filt-range" id="filtRange"></p>
-    <div class="rf-bar"><button type="button" class="rf-btn" id="rfBtn" aria-expanded="false" aria-controls="rfPanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18l-7 8.5V19l-4 2v-7.5z"/></svg><span>Filters</span><span class="rf-n" id="rfN" hidden></span></button><div class="rf-chips" id="rfChips"></div></div>
+    <div class="rep-rangebar"><p class="filt-range" id="filtRange"></p>
+    <div class="rf-bar"><button type="button" class="rf-btn" id="rfBtn" aria-expanded="false" aria-controls="rfPanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18l-7 8.5V19l-4 2v-7.5z"/></svg><span>Filters</span><span class="rf-n" id="rfN" hidden></span></button><div class="rf-chips" id="rfChips"></div></div></div>
     <div class="rf-panel" id="rfPanel"><div class="rf-in">
       <div class="rf-grp"><small>Vehicle</small><div class="rf-opts" id="rfRego"></div></div>
       <div class="rf-grp"><small>Days <span class="rf-quick"><button type="button" data-rfq="wd">Weekdays</button><button type="button" data-rfq="we">Weekends</button></span></small><div class="rf-opts rf-days" id="rfDays"></div></div>
@@ -2624,18 +2703,19 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
         <div class="ov-k"><small>Your share</small><b class="tally" id="ovShare">$0.00</b><span id="ovShareSub"></span></div>
         <div class="ov-k ov-set"><small>Set aside</small><b class="tally" id="ovSet">$0.00</b><span id="ovSetSub"></span></div>
       </div>
-      <div class="ov-split"><div class="ov-split-h"><small>Where each fare dollar goes</small></div><div class="ov-bar" id="ovBar"></div><div class="ov-leg" id="ovLeg"></div></div>
-      <div class="ov-stats" id="ovStats"></div>
-      <div class="ov-trend"><div class="ov-trend-h"><small>8 weeks &middot; your share</small><span id="ovTrendD"></span></div><div class="ov-bars" id="ovBars"></div></div>
+      <div class="ov-trend"><div class="ov-trend-h"><small>Last 8 weeks</small><span id="ovTrendD"></span></div><div class="ov-bars" id="ovBars"></div></div>
+      <details class="te-det rep-more" id="ovMore"><summary><span>Where the money goes</span><small id="ovMoreSum"></small></summary><div class="rm-in">
+      <div class="ov-split"><div class="ov-bar" id="ovBar"></div><div class="ov-leg" id="ovLeg"></div></div>
+      <div class="ov-stats" id="ovStats"></div></div></details>
     </div>
     <div class="card te-card" id="taxEngCard">
       <div class="ph-head te-head"><span class="ph-ico te-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg></span><div class="ph-t"><b>Tax &amp; BAS engine <span class="help" data-help="Fareo works out GST (1A and 1B), the levy you remit, your claimed deductions and an income-tax set-aside from ATO resident rates, all automatically from your shifts and costs. Smart checks flag missing records and common driver deductions you haven&rsquo;t logged this financial year. It&rsquo;s an estimate to plan with, not tax advice." aria-label="Help">?</span></b><p id="teSub">Automatic</p></div><span class="te-q" id="teQ"></span></div>
       <div class="te-hero"><div class="te-hero-t"><small>Put aside</small><b class="tally" id="teSet">$0.00</b><span id="teSetSub"></span></div><div class="te-ring" id="teRing"><svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="18" class="te-ring-bg"/><circle cx="22" cy="22" r="18" class="te-ring-fg" id="teRingFg"/></svg><span id="teRingPct">0%</span></div></div>
       <div class="te-rows" id="teRows"></div>
       <div class="te-qwrap"><div class="te-qbar"><i id="teQFill"></i></div><p id="teQLbl"></p></div>
-      <div class="te-sec-h"><span>Smart checks</span><small id="teChkN"></small></div>
+      <details class="te-det rep-more" id="teChkDet"><summary><span>Smart checks</span><small id="teChkN"></small></summary><div class="rm-in">
       <div id="teFinder"></div>
-      <div class="tax-check" id="taxCheck"></div>
+      <div class="tax-check" id="taxCheck"></div></div></details>
       <details class="te-det" id="teBasDet"><summary><span>Copy onto your BAS</span><small id="teBasSum"></small></summary>
       <div class="bas-in" id="basCopyCard">
       <div class="ph-head">
@@ -2655,7 +2735,7 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
       <div class="bas-copy-pay" id="basCopyPay" role="button" tabindex="0"><small id="taxNetLabel">Pay ATO</small><b id="taxNetAmt">$0.00</b></div>
     </div>
       </details>
-      <button class="basguide-toggle" id="basGuideToggle" type="button"><span><b>How to lodge your BAS</b><small>Hidden until you need it · simple steps</small></span><span class="chev">&rsaquo;</span></button>
+      <button class="basguide-toggle" id="basGuideToggle" type="button"><span><b>How to lodge your BAS</b></span><span class="chev">&rsaquo;</span></button>
       <div id="basGuide" style="display:none"></div>
     </div>
 
@@ -2681,16 +2761,18 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
         <button type="button" class="adj-reset-all" id="adjResetAll">Reset all</button>
       </div>
       
-      <p class="ded-claim-hint" id="dedClaimHint">Tick to claim &middot; tap <b>Adjust</b> to try a different amount, GST or business use &mdash; you can always reset to the original.</p>
       <div class="tax-actions">
         <button class="tax-add fuel" id="addFuelExp" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg>+ Fuel</button>
         <button class="tax-add" id="addExp" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>+ Expense</button>
       </div>
+      <details class="te-det rep-more" id="costDet" hidden><summary><span>Tick what to claim</span><small id="costDetSum"></small></summary><div class="rm-in">
+      <p class="ded-claim-hint" id="dedClaimHint">Tick to claim &middot; tap <b>Adjust</b> to try a different amount, GST or business use &mdash; you can always reset to the original.</p>
       <div id="recurSection" style="display:none;margin-top:10px">
         <div class="explabel">Repeats every period</div>
         <div id="recurRows"></div>
       </div>
       <div id="dedRows"></div>
+      </div></details>
       <div class="ded-empty" id="dedEmpty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.2L14 21l-2-1.2L10 21l-2-1.2L6 21z"/><path d="M9 8h6M9 12h6"/></svg><b>Nothing to claim yet</b><span>Add fuel or a cost (tolls, wash, repairs). Snap the receipt if you have it.</span></div>
       <button class="jar-btn" id="jarOpen" type="button"><span><b>Receipt jar</b><span id="jarMeta">Empty — snap receipts as you go</span></span><span class="chev" style="color:var(--mut);font-size:20px">&rsaquo;</span></button>
       
@@ -3425,8 +3507,13 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='16.5';
+var APP_VERSION='16.6';
 var CHANGELOG=[
+  {v:'16.6',date:'November 14, 2026',notes:[
+    ['UI/UX','Cleaner Reports: about half the length on a phone. Each card leads with its main figure; the details sit behind a single tap (Where the money goes, Smart checks, Copy onto your BAS, Tick what to claim).'],
+    ['UI/UX','Simpler range tabs (Week, Quarter, FY, All, Dates) with the dates and Filters on one line. One button to show or hide cards.'],
+    ['UI/UX','Less small print: shorter labels, no repeated date ranges, and the export buttons fit on one row on bigger screens. Costs without a receipt photo are counted on the claim list instead of a separate banner.'],
+  ]},
   {v:'16.5',date:'November 14, 2026',notes:[
     ['Feature','Install Fareo as an app from any browser. Chrome, Edge and Samsung Internet get a one-tap Install button on Home; iPhone, Firefox and others get the exact steps for that browser (Settings \u2192 Help & updates \u2192 Install Fareo app). In-app browsers like Instagram or WhatsApp tell you to open Fareo in Chrome or Safari first.'],
     ['Feature','Press and hold for more actions: hold a Home tile, the Home button, a Weekly shift, a booking, an archived receipt, an account job or a client for a pop-up of extra actions (preview, edit, share, mark done, duplicate, delete and more). Normal taps work as before; right-click does the same on a computer.'],
@@ -7275,7 +7362,6 @@ function renderAlerts(a){
   var noN=0,noAmt=0;
   a.allDed.forEach(function(d){if(!d._recurring&&!d.receiptId){noN++;noAmt+=nn(d.amount)}});
   a.fmList.forEach(function(m){if(!m.receiptId){noN++;noAmt+=nn(m.amount)}});
-  if(noN)items.push({id:null,cls:'info',act:null,title:noN+' cost'+(noN===1?'':'s')+' with no snap',sub:money(noAmt)+' \u00b7 add a photo in the receipt jar'});
   html+=items.map(function(x){
     return '<div class="alert '+x.cls+'"><div class="alert-body"><b>'+esc(x.title)+'</b><span>'+esc(x.sub)+'</span></div></div>';
   }).join('');
@@ -7545,7 +7631,7 @@ function renderOverview(){var card=$('#ovCard');if(!card)return;
   var fon=filtActive(),a=withFilt(rangeAgg);
   if(fon)a=Object.assign({},a,{expDed:0,expCred:0,fuelManualDed:0,fuelManualCred:0,oneB:(a.fuelShiftCred||0)});
   var x=execFigures(a),dl=repTallyDelay;
-  $('#ovEyebrow').textContent=fon?'Filtered · '+filtLabel():'Overview · '+(repRange.name||'Range');
+  $('#ovEyebrow').textContent=fon?'Filtered · '+filtLabel():(repRange.name||'Range');
   card.classList.toggle('filtered',fon);
   $('#ovRange').textContent=fmtDMY(repRange.from)+' – '+fmtDMY(repRange.to);
   $('#ovShifts').textContent=x.shifts+(x.shifts===1?' shift':' shifts');
@@ -7554,11 +7640,11 @@ function renderOverview(){var card=$('#ovCard');if(!card)return;
   tally($('#ovKept'),x.kept,{delay:dl});tally($('#ovGross'),x.gross,{delay:dl+50,fmt:wd});tally($('#ovShare'),x.share,{delay:dl+100,fmt:wd});tally($('#ovSet'),x.setAside,{delay:dl+150,fmt:wd});
   $('#ovGrossSub').textContent=x.shifts?money(x.gross/x.shifts)+' / shift':'on the meter';
   $('#ovShareSub').textContent=pctTxt(x.pctShare)+' of gross';
-  $('#ovSetSub').textContent='GST '+money(Math.max(0,x.gstNet))+' · tax '+money(x.tax);
+  $('#ovSetSub').textContent='GST + tax';
   /* vs the previous equal-length range */
   var dEl=$('#ovDelta'),pr=repRange.name==='All Time'?null:prevRangeOf(repRange.from,repRange.to);
   if(dEl){if(pr){var pa=withFilt(function(){return aggBetween(pr[0],pr[1])});if(fon)pa=Object.assign({},pa,{expDed:0,expCred:0,fuelManualDed:0,fuelManualCred:0,oneB:(pa.fuelShiftCred||0)});var px=execFigures(pa),dv=x.kept-px.kept;
-      dEl.className='ov-delta '+(Math.abs(dv)<0.5?'flat':dv>0?'up':'down');dEl.textContent=px.shifts?((dv>=0?'▲ ':'▼ ')+money(Math.abs(dv))+' vs previous '+(repRange.name==='Fin Year'?'year':repRange.name==='Quarter'?'quarter':'period')):'';if(!px.shifts)dEl.className='ov-delta'}else{dEl.textContent='';dEl.className='ov-delta'}}
+      dEl.className='ov-delta '+(Math.abs(dv)<0.5?'flat':dv>0?'up':'down');dEl.textContent=px.shifts?((dv>=0?'▲ ':'▼ ')+money(Math.abs(dv))+' vs last '+(repRange.name==='Fin Year'?'year':repRange.name==='Quarter'?'quarter':repRange.name==='Pay Week'||repRange.name==='This Week'?'week':'period')):'';if(!px.shifts)dEl.className='ov-delta'}else{dEl.textContent='';dEl.className='ov-delta'}}
   /* where each fare dollar goes */
   var segs=[['Operator',x.operator,'var(--ov-op)'],['Levy',x.levy,'var(--hail)'],['GST',Math.max(0,x.gstNet),'var(--ov-gst)'],['Costs',x.costs,'var(--fuel)'],['Tax',x.tax,'var(--ov-tax)'],['Kept',Math.max(0,x.kept),'var(--accent)']].filter(function(g){return g[1]>0.004});
   var tot=segs.reduce(function(s2,g){return s2+g[1]},0)||1,bar=$('#ovBar');
@@ -7590,11 +7676,11 @@ function renderTaxEngine(){var card=$('#taxEngCard');if(!card)return;
   var q=$('#teQ'),bd=dl.basDays;q.textContent=dl.q+' · '+(bd<0?'overdue':bd===0?'due today':bd+'d');q.title='BAS '+(bd<0?'overdue':bd===0?'due today':'due in '+bd+' days')+' · '+dl.basDueFmt;q.className='te-q '+(bd<=7?'hot':bd<=21?'warn':'');
   var now=new Date();now.setHours(0,0,0,0);var tot=Math.round((dl.to-dl.from)/864e5)+1,el=Math.max(0,Math.min(tot,Math.round((now-dl.from)/864e5)+1));
   $('#teQFill').style.width=(tot?el/tot*100:0).toFixed(1)+'%';
-  $('#teQLbl').textContent=dl.q+' '+dl.months+' · '+(now>dl.to?'closed · lodge by '+dl.basDueFmt:'day '+el+' of '+tot)+' · quarter BAS '+(dl.netGst>=0?'pay ':'refund ')+money(Math.abs(dl.netGst));
+  $('#teQLbl').textContent=dl.q+' '+dl.months+' · '+(now>dl.to?'lodge by '+dl.basDueFmt:'day '+el+' of '+tot);
   /* put aside */
   tally($('#teSet'),x.setAside,{delay:del});
   var wk=Math.max(1,(asDate(repRange.to)-asDate(repRange.from))/864e5/7+1/7);
-  $('#teSetSub').textContent='GST + income tax · ≈ '+money(x.setAside/wk)+' a week';
+  $('#teSetSub').textContent='≈ '+money(x.setAside/wk)+' a week for GST and tax';
   var pct=x.share>0?Math.min(1,x.setAside/x.share):0,C=2*Math.PI*18,fg=$('#teRingFg');
   fg.style.strokeDasharray=C.toFixed(2);fg.style.strokeDashoffset=C.toFixed(2);requestAnimationFrame(function(){fg.style.strokeDashoffset=(C*(1-pct)).toFixed(2)});
   $('#teRingPct').textContent=Math.round(pct*100)+'%';$('#teRing').title=Math.round(pct*100)+'% of your share';
@@ -7627,7 +7713,15 @@ function renderCostBars(){var box=$('#costBars');if(!box)return;var g={};
   if(!ks.length){box.innerHTML='';return}
   var mx=g[ks[0]],tot=ks.reduce(function(s2,k){return s2+g[k]},0);
   box.innerHTML='<div class="cb-h"><small>Claimed by category</small><b>'+money(tot)+'</b></div>'+ks.map(function(k,i){return '<div class="cb-r" style="--i:'+i+'"><span>'+esc(catLabel(k))+'</span><i><i style="--w:'+(g[k]/mx*100).toFixed(1)+'%"></i></i><b>'+money(g[k])+'</b></div>'}).join('')}
-(function(){var orig=renderReports;renderReports=function(){var r=orig.apply(this,arguments);try{renderFilters();renderOverview();renderTaxEngine();renderCostBars()}catch(err){console.error(err)}try{repFoldPeek()}catch(_){}return r}})();
+function repMoreSums(){
+  var om=$('#ovMoreSum');if(om){var kp=$('#ovLeg b:last-child');var leg=$$('#ovLeg span');var k=leg.filter(function(sp){return /Kept/.test(sp.textContent)})[0];om.textContent=k?'You keep '+k.querySelector('b').textContent:''}
+  var cd=$('#costDet'),rows=$$('#dedRows .ded-item, #dedRows [data-claim]').length,cs=$('#costDetSum');
+  if(cd){var any=$('#dedRows')&&$('#dedRows').children.length>0;cd.hidden=!any;
+    if(cs){var noRc=0;$$('#dedRows *').forEach(function(el){if(el.children.length===0&&/^no receipt$/i.test(el.textContent.trim()))noRc++});var t=($('#taxRangeLbl')||{}).textContent||'';var nItems=$$('#dedRows [data-claim]').length;cs.textContent=noRc?noRc+' need a photo':(nItems?nItems+' item'+(nItems===1?'':'s'):t.split(' \u00b7 ')[0])}}
+  var ex=$('#exRangeLbl');if(ex)ex.textContent='Export & print';
+  var ck=$('#teChkDet');if(ck){var n=$$('#teFinder .tf').length+$$('#taxCheck .tcx').length;ck.hidden=!n;ck.classList.toggle('warn',/review/.test(($('#teChkN')||{}).textContent||''))}
+}
+(function(){var orig=renderReports;renderReports=function(){var r=orig.apply(this,arguments);try{renderFilters();renderOverview();renderTaxEngine();renderCostBars();repMoreSums()}catch(err){console.error(err)}try{repFoldPeek()}catch(_){}return r}})();
 /* ---------- Reports: fold, hide and focus cards ----------
    Each card's header folds it. Folded cards show one key figure. Cards can
    be hidden from Customise, and "one at a time" keeps a single card open.
