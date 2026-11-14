@@ -106,7 +106,9 @@ input:disabled,select:disabled{background:var(--disbg);color:var(--disink);-webk
 .btn.neutral{background:transparent;border:1.5px solid var(--bd2);color:var(--head);box-shadow:none}
 .btn:active,.add:active,.att:active,.sst:active,.step button:active{transform:scale(.98)}
 .prev{white-space:pre-wrap;font-family:ui-monospace,monospace;font-size:10.5px;line-height:1.55;color:var(--body)}
-.steps{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:2px 0 13px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:2px 0 13px}
+.stp em{font-style:normal}
+.stp em:not(:empty){display:inline-grid;place-items:center;min-width:16px;height:16px;padding:0 4px;margin-left:5px;border-radius:999px;background:var(--acct-bg);color:var(--acct);font:700 10px var(--mono);vertical-align:1px}
 .stp{cursor:pointer;text-align:center;background:transparent;border:0;padding:0}
 .stp i{display:block;height:5px;border-radius:999px;background:var(--bd2);transition:background .28s var(--ease),transform .28s var(--ease)}
 .stp span{display:block;font-size:11px;font-weight:700;color:var(--mut);margin-top:7px;transition:color var(--dur)}
@@ -962,9 +964,11 @@ button,a,.tgl,.chip,.filt,.preset,.sst,.stp,.cli,.tr,.run-client-chip{-webkit-ta
 }
 @media (min-width:700px) and (min-height:560px){
   [data-pane="1"] .shift-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  [data-pane="2"]{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
-  [data-pane="2"] .review-sum{grid-column:1/-1}
-  [data-pane="2"] .review-attach{margin-bottom:0}
+  [data-pane="3"]{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
+  [data-pane="3"] .review-sum{grid-column:1/-1}
+  [data-pane="3"] .review-attach{margin-bottom:0}
+  .acct-list{grid-template-columns:1fr 1fr}
+  .acct-list .acct-empty{grid-column:1/-1}
   .attach-compact .shift-rcpt-frame img{max-height:180px}
   .modal.show{align-items:center}
   .modal.show .sheet{border-radius:20px;max-height:min(86dvh,820px);animation:none}
@@ -1428,6 +1432,41 @@ html.calm .tally{transition:none}
 .set .qa-in input{width:66px;padding:8px 8px 8px 20px;text-align:left;font-family:var(--mono);font-size:13px}
 #qaReset{font-size:12px;margin-left:4px}
 @media (max-width:360px){.qa{font-size:11px}.acct-top{grid-template-columns:minmax(0,1fr) 92px 38px}}
+/* ---------- Fareo 16.4 · Accounts step (Log → Accounts → Share) ---------- */
+.acct-head{margin-bottom:10px}
+.ah-top{display:grid;grid-template-columns:42px minmax(0,1fr) auto;gap:12px;align-items:center}
+.ah-ico{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:var(--acct-bg);color:var(--acct)}
+.ah-ico svg{width:21px;height:21px}
+.ah-txt b{display:block;font-size:16px;color:var(--head);line-height:1.2}
+.ah-txt small{display:block;font-size:12px;color:var(--mut);margin-top:3px;line-height:1.35}
+.ah-amt{text-align:right}
+.ah-amt span{display:block;font-family:var(--mono);font-size:21px;font-weight:700;color:var(--acct);font-variant-numeric:tabular-nums;line-height:1.1}
+.ah-amt small{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.acct-head .acct-quick{margin:14px 0 0;padding-top:12px;border-top:1px dashed var(--bd)}
+.acct-head .aq{padding:9px 13px 9px 9px;font-size:13.5px}
+.acct-list{display:grid;gap:10px;align-items:start}
+.acct-pane .acct-row{background:var(--card);border:1px solid var(--bd);border-radius:var(--radius);padding:12px;box-shadow:var(--shadow);min-width:0}
+.acct-pane .acct-row:last-child{border-bottom:1px solid var(--bd)}
+.acct-pane .acct-row:focus-within{border-color:color-mix(in srgb,var(--acct) 60%,transparent)}
+.ar-top{display:grid;grid-template-columns:28px minmax(0,1fr) 46px;gap:8px;align-items:center}
+.ar-n{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--acct-bg);color:var(--acct);font:700 12px var(--mono)}
+.ar-top .x{height:48px;width:46px}
+.acct-pane .ac-input{height:48px;font-size:16px}
+.ar-amt{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:stretch;margin-top:9px}
+.acct-pane .amt-wrap span{left:14px;font-size:18px}
+.acct-pane .amt-wrap input{height:54px;padding-left:32px;font-family:var(--mono);font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
+.ar-amt .qa-rc{margin:0;height:54px;border-radius:12px;padding:0 13px;font-size:12.5px}
+.ar-amt .qa-rc img{width:26px;height:26px}
+.acct-pane .qa-row{margin-top:9px}
+.acct-pane .qa{height:42px;font-size:13.5px;border-radius:11px}
+.acct-pane .acct-add{margin-top:10px;padding:14px;font-size:14px;border-color:color-mix(in srgb,var(--acct) 45%,var(--bd2));color:var(--acct)}
+.acct-empty{border:1.5px dashed var(--bd2);border-radius:var(--radius);padding:22px 16px;text-align:center;color:var(--mut);font-size:13px;line-height:1.5;animation:riseIn .35s var(--ease) both}
+.acct-empty b{display:block;color:var(--head);font-size:15px;margin-bottom:4px}
+.acct-net{display:grid;grid-template-columns:1fr auto;align-items:center;gap:3px 10px;margin:14px 0 0;padding:13px 15px;border-radius:var(--radius);background:var(--field);border:1px solid var(--bd)}
+.acct-net span{font-size:12px;color:var(--mut);font-weight:600}
+.acct-net b{font-family:var(--mono);font-size:19px;color:var(--head);font-variant-numeric:tabular-nums}
+.acct-net small{grid-column:1/-1;font-size:11.5px;color:var(--mut)}
+@media (max-width:360px){.acct-pane .qa{font-size:12px}.ah-amt span{font-size:18px}}
 /* ---------- Fareo 12.2 · Hail step pop-up ---------- */
 .log-dictate-row{grid-template-columns:1fr!important}
 .log-hail-dictate{display:none!important}
@@ -2300,7 +2339,8 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
   <section class="screen" data-tab="shift">
     <div class="steps" id="steps">
       <button class="stp lit on" data-sub="1"><i></i><span>Log</span></button>
-      <button class="stp" data-sub="2"><i></i><span>Share</span></button>
+      <button class="stp" data-sub="2"><i></i><span>Accounts<em id="stpAcctN"></em></span></button>
+    <button class="stp" data-sub="3"><i></i><span>Share</span></button>
     </div>
     <div class="msg" id="msg"></div>
     <div data-pane="1">
@@ -2345,8 +2385,6 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
         <div id="squareRows"></div><button class="add" id="addSquare">+ Add Square Payer</button></div>
       <div class="card tx-runs shift-field" data-field="runs"><h5 class="sf-h5"><button type="button" class="sf-grip" aria-label="Drag to reorder" title="Drag to reorder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></button><span class="dot" style="background:var(--hail-fill)"></span>Passenger Runs<span class="help" data-help="Short fixed-price passenger runs at $5 each. Enter how many you did." aria-label="Help">?</span><span class="sub-amt" id="runsSub">$0</span></h5>
         <label class="fl">Runs (&#36;5 each)</label><input id="runs" type="number" min="0" inputmode="numeric" placeholder="0"></div>
-      <div class="card tx-acct shift-field" data-field="accounts"><h5 class="sf-h5"><button type="button" class="sf-grip" aria-label="Drag to reorder" title="Drag to reorder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></button><span class="dot" style="background:var(--acct)"></span>Accounts<span class="help" data-help="Invoiced or account jobs billed through the operator. Counted in gross; operator pays your share." aria-label="Help">?</span><span class="sub-amt" id="acctSub">$0</span></h5>
-        <div id="acctQuick" class="acct-quick"></div><div id="acctRows"></div><button class="add" id="addAcct">+ Add Account</button></div>
       </div>
       <div class="card hero shift-net">
         <div class="lbl">Net take-home</div>
@@ -2358,7 +2396,20 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
         </div>
       </div>
     </div>
-    <div data-pane="2" style="display:none">
+    <div data-pane="2" class="acct-pane" style="display:none">
+      <div class="card tx-acct acct-head">
+        <div class="ah-top">
+          <span class="ah-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 13h18"/></svg></span>
+          <div class="ah-txt"><b>Account jobs</b><small id="acctHeadSub">Optional &middot; skip if you had none</small></div>
+          <div class="ah-amt"><span id="acctSub">$0.00</span><small id="acctCnt">0 jobs</small></div>
+        </div>
+        <div id="acctQuick" class="acct-quick"></div>
+      </div>
+      <div id="acctRows" class="acct-list"></div>
+      <button type="button" class="add acct-add" id="addAcct">+ Add account job</button>
+      <div class="acct-net"><span>Net take-home</span><b id="acctNet">$0.00</b><small>Tap Next to attach slips &amp; share</small></div>
+    </div>
+    <div data-pane="3" style="display:none">
       <div class="review-sum" id="reviewSum">
         <span class="rs-date" id="reviewSumDate">Today</span>
         <span class="rs-take" id="reviewSumTake">$0.00</span>
@@ -3322,8 +3373,14 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='16.3';
+var APP_VERSION='16.4';
 var CHANGELOG=[
+  {v:'16.4',date:'November 14, 2026',notes:[
+    ['UI/UX','Log shift now has three steps: Log \u2192 Accounts \u2192 Share. Account jobs have their own roomy page instead of being squeezed in with the other fields.'],
+    ['UI/UX','Each account job is its own card with a full-width name, a big amount box, its Receipt button beside the amount, and quick amounts in one tidy row. Fold inner screen shows two jobs side by side.'],
+    ['Feature','Faster entry: tap a saved account to add it with the amount box ready, Enter jumps from name to amount to the next job, and the field you\u2019re typing in stays above the keyboard. Live total, job count and net take-home on the page; the Accounts tab shows how many jobs you\u2019ve added.'],
+    ['Bug Fix','Fixed the account rows jumping about: the receipt button no longer wraps under the quick amounts, and adding or removing a job only redraws the accounts, not the whole Log page.'],
+  ]},
   {v:'16.3',date:'November 12, 2026',notes:[
     ['Bug Fix','EOS photos are archived with the right amounts: one photo per slip gets that slip\u2019s amount, and front/back or multi-slip photos carry the shift total once (labelled photo 1 of 2, and so on) instead of $0 or a single slip.'],
     ['Bug Fix','Changing a shift\u2019s date or rego (Edit shift or Quick edit) now moves its archived EOS, fuel and account photos too, so the archive always matches the shift. Photos are linked to their shift, so two cars on one day never mix.'],
@@ -3795,7 +3852,7 @@ function addAcctName(n){n=String(n||'').trim().slice(0,40);if(!n)return false;va
 function buzz(ms){if(settings.haptics===false||!navigator.vibrate)return;try{navigator.vibrate(ms||8)}catch(_){}}
 function applyCalm(){document.documentElement.classList.toggle('calm',!!settings.calm);document.documentElement.classList.toggle('vanfx',vanOn())}
 migrateSettings();
-var SHIFT_FIELD_BUILTINS=['fuel','cash','square','runs','accounts'];
+var SHIFT_FIELD_BUILTINS=['fuel','cash','square','runs'];
 function shiftFieldKeys(){
   return SHIFT_FIELD_BUILTINS.concat(settings.payTypes.map(function(pt){return 'pt:'+pt.id}));
 }
@@ -5161,6 +5218,9 @@ function render(){
   $('#squareSub').textContent=money(squareT());
   $('#runsSub').textContent=money(nn(draft.runs)*RUN);
   $('#acctSub').textContent=money(acctT());
+  var acN=acctCount(),acC=$('#acctCnt');if(acC)acC.textContent=acN+(acN===1?' job':' jobs');
+  var acB=$('#stpAcctN');if(acB)acB.textContent=acN?String(acN):'';
+  var acNet=$('#acctNet');if(acNet)acNet.textContent=money(takeT());
   $('#fuelSub').textContent=money(fuelT());
   settings.payTypes.forEach(function(pt){
     var el=document.querySelector('#shiftFields .shift-field[data-field="pt:'+String(pt.id).replace(/"/g,'')+'"] .sub-amt');
@@ -5183,20 +5243,36 @@ function buildPreview(){
 
 /* ---------- Accounts: smart dropdown, quick add, quick amounts ---------- */
 var AC_CHEV='<svg class="ac-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
-function qaChips(i,cur,id){var v=nn(cur),rc=id&&acctRcpts[id];return '<div class="qa-row" role="group" aria-label="Quick amounts">'+settings.quickAmts.map(function(a,k){return '<button type="button" class="qa'+(v===a?' on':'')+'" data-qa="'+i+'" data-v="'+a+'" style="--k:'+k+'">$'+a+'</button>'}).join('')
-  +(id?'<button type="button" class="qa-rc'+(rc?' has':'')+'" data-arc-add="'+id+'" aria-label="'+(rc?'Receipt attached, tap to view':'Attach receipt (optional)')+'">'+(rc&&rc.url&&!/pdf/.test(rc.type)?'<img src="'+rc.url+'" alt="">':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg>')+'<span>'+(rc?'Receipt \u2713':'Receipt')+'</span></button>':'')+'</div>'}
+function qaChips(i,cur){var v=nn(cur);return '<div class="qa-row" role="group" aria-label="Quick amounts">'+settings.quickAmts.map(function(a,k){return '<button type="button" class="qa'+(v===a?' on':'')+'" data-qa="'+i+'" data-v="'+a+'" style="--k:'+k+'">$'+a+'</button>'}).join('')+'</div>'}
+function acctRcBtn(id){var rc=id&&acctRcpts[id];return ''+(id?'<button type="button" class="qa-rc'+(rc?' has':'')+'" data-arc-add="'+id+'" aria-label="'+(rc?'Receipt attached, tap to view':'Attach receipt (optional)')+'">'+(rc&&rc.url&&!/pdf/.test(rc.type)?'<img src="'+rc.url+'" alt="">':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg>')+'<span>'+(rc?'Receipt \u2713':'Receipt')+'</span></button>':'')}
 function renderAcctRows(){
   var host=$('#acctRows');if(!host)return;
+  if(acState.input&&host.contains(acState.input))acState.input=null;
+  if(!draft.accounts.length){
+    host.innerHTML='<div class="acct-empty"><b>No account jobs yet</b>'+(acctNames().length?'Tap a saved account above, or add one below.':'Tap <i>+ Add account job</i> below.')+'<br>Nothing to add? Just tap Next.</div>';
+    renderAcctQuick();renderAcctRc();return;
+  }
   host.innerHTML=draft.accounts.map(function(r,i){
     if(!r.id)r.id='ac'+Date.now().toString(36)+i+Math.random().toString(36).slice(2,5);
     return '<div class="acct-row" data-ai="'+i+'">'
-      +'<div class="acct-top"><div class="ac-wrap"><input class="ac-input" data-an="'+i+'" value="'+esc(r.name||'')+'" placeholder="Account" autocomplete="off" autocapitalize="words" role="combobox" aria-autocomplete="list" aria-expanded="false">'+AC_CHEV+'</div>'
-      +'<div class="amt-wrap"><span>$</span><input type="number" min="0" step="0.01" inputmode="decimal" data-aa="'+i+'" value="'+esc(r.amount||'')+'" placeholder="0.00"></div>'
-      +'<button class="x" data-da="'+i+'" aria-label="Remove account">&times;</button></div>'
+      +'<div class="ar-top"><span class="ar-n" aria-hidden="true">'+(i+1)+'</span><div class="ac-wrap"><input class="ac-input" data-an="'+i+'" value="'+esc(r.name||'')+'" placeholder="Account name" autocomplete="off" autocapitalize="words" enterkeyhint="next" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-label="Account '+(i+1)+' name">'+AC_CHEV+'</div>'
+      +'<button class="x" data-da="'+i+'" aria-label="Remove account '+(i+1)+'">&times;</button></div>'
       +'<div class="ac-strip" data-acc="'+i+'" role="listbox" aria-label="Account suggestions" hidden></div>'
-      +qaChips(i,r.amount,r.id)+'</div>';
+      +'<div class="ar-amt"><div class="amt-wrap"><span>$</span><input type="number" min="0" step="0.01" inputmode="decimal" enterkeyhint="done" data-aa="'+i+'" value="'+esc(nn(r.amount)?r.amount:'')+'" placeholder="0.00" aria-label="Account '+(i+1)+' amount"></div>'+acctRcBtn(r.id)+'</div>'
+      +qaChips(i,r.amount)+'</div>';
   }).join('');
   renderAcctQuick();renderAcctRc();
+}
+function acctCount(){return draft.accounts.filter(function(a){return nn(a.amount)>0||String(a.name||'').trim()!==''}).length}
+function acctAdd(name){
+  var idx=-1;
+  if(name){idx=draft.accounts.findIndex(function(a){return !String(a.name||'').trim()&&!nn(a.amount)});if(idx>=0)draft.accounts[idx].name=name}
+  if(idx<0){draft.accounts.push({name:name||'',amount:''});idx=draft.accounts.length-1}
+  if(name)addName(name);
+  renderAcctRows();render();persist();
+  var row=$('#acctRows [data-ai="'+idx+'"]');if(row)row.classList.add('enter');
+  focusAcct(idx,name?'amt':'name');
+  return idx;
 }
 /* One-tap chips for saved accounts not already on this shift. */
 function renderAcctQuick(){
@@ -5273,11 +5349,7 @@ document.addEventListener('click',function(e){
     qa.classList.remove('pop');void qa.offsetWidth;qa.classList.add('pop');
     sfx('coin');buzz(8);render();persist();return}
   var aq=e.target.closest&&e.target.closest('[data-aq]');
-  if(aq){var n=aq.dataset.aq;var empty=draft.accounts.findIndex(function(a){return !String(a.name||'').trim()&&!nn(a.amount)});
-    if(empty>=0)draft.accounts[empty].name=n;else draft.accounts.push({name:n,amount:''});
-    var idx=empty>=0?empty:draft.accounts.length-1;addName(n);
-    sfx('pop');buzz(6);rowInputs();render();persist();
-    var row=$('#acctRows [data-ai="'+idx+'"]');if(row)row.classList.add('enter');focusAcct(idx,'amt');return}
+  if(aq){sfx('pop');buzz(6);acctAdd(aq.dataset.aq);return}
   if(e.target.closest&&e.target.closest('#acctQuick [data-go-acct-settings]')){go('settings');setTimeout(function(){revealSetting('#newAcctName',true)},300)}
 });
 /* settings: account names + quick amounts */
@@ -5342,7 +5414,8 @@ document.addEventListener('click',function(e){
     if(d.ds!=null){draft.square.splice(d.ds,1);if(!draft.square.length)draft.square=[{name:'',amount:0}]}
     if(d.da!=null){var gone=draft.accounts[d.da];if(gone&&gone.id)acctRcDrop(gone.id);draft.accounts.splice(d.da,1)}
     if(d.df!=null){draft.fuel.splice(d.df,1);if(!draft.fuel.length)draft.fuel=[{amount:0,type:settings.fuel,opPaid:false}]}
-    rowInputs();render();return;}
+    if(d.da!=null){acClose();renderAcctRows()}else rowInputs();
+    render();return;}
 });
 function freshDraft(keepRego){return {dateSet:false,date:suggestShiftDate(),eos:[''],cash:[{name:'',amount:0}],square:[{name:'',amount:0}],runs:0,accounts:[],fuel:[{amount:0,type:settings.fuel,opPaid:false}],hail:'',rego:keepRego||'',receipt:false,receiptName:'',custom:{}}}
 /* Date picker handlers */
@@ -5352,7 +5425,7 @@ $('#shiftDate').onchange=function(){if(this.value)setDraftDate(this.value)};
 
 $('#addCash').onclick=function(){draft.cash.push({name:'',amount:0});rowInputs();render()};
 $('#addSquare').onclick=function(){draft.square.push({name:'',amount:0});rowInputs();render()};
-$('#addAcct').onclick=function(){draft.accounts.push({name:'',amount:0});rowInputs();render();focusAcct(draft.accounts.length-1,'name')};
+$('#addAcct').onclick=function(){sfx('tap');acctAdd('')};
 $('#addFuel').onclick=function(){draft.fuel.push({amount:0,type:settings.fuel,opPaid:false});rowInputs();render()};
 if($('#addEos'))$('#addEos').onclick=function(){draft.eos.push('');rowInputs();render()};
 $('#hailMinus').onclick=function(){draft.hail=Math.max(0,nn(draft.hail)-1);var h=$('#hail');if(h)h.value=draft.hail;render()};
@@ -5424,20 +5497,22 @@ function updateReviewSum(){
   m.textContent=bits.join(' · ');
 }
 function setSub(n){
-  n=n<1?1:(n>2?2:n);
-  if(n===2){
+  n=n<1?1:(n>3?3:n);
+  if(n===3){
     var g=gateFailMsg();
     if(g){n=g.pane||1;var m=$('#msg');m.textContent=g.text;m.className='msg err';toast(g.toast)}
     else{$('#msg').className='msg'}
   }else{$('#msg').className='msg'}
   curSub=n;
-  [1,2].forEach(function(k){
+  if(n!==2)acClose();
+  [1,2,3].forEach(function(k){
     var el=$('[data-pane="'+k+'"]');
     if(el)el.style.display=k===n?'':'none';
   });
   $$('.stp').forEach(function(el){var k=+el.dataset.sub;el.classList.toggle('lit',k<=n);el.classList.toggle('on',k===n)});
   if(n===1)rowInputs();
-  if(n===2){ensureShiftRego();rowInputs();buildPreview()}
+  if(n===2)renderAcctRows();
+  if(n===3){ensureShiftRego();rowInputs();buildPreview()}
   updateReceiptUI();
   updateReviewSum();
   updateFooter();window.scrollTo({top:0,behavior:'smooth'});
@@ -5448,11 +5523,12 @@ function updateFooter(){
   back.classList.toggle('off',!showBack);
   back.setAttribute('aria-hidden',showBack?'false':'true');
   back.tabIndex=showBack?0:-1;
-  var share=curSub===2;
+  var share=curSub===3;
+  var lbl=share?'Share End of Shift':(curSub===2?'Next: Attach & share':'Next: Accounts');
   next.classList.toggle('share',share);
-  next.setAttribute('aria-label',share?'Share End of Shift':'Next: Attach & share');
-  next.setAttribute('title',share?'Share End of Shift':'Next: Attach & share');
-  var blocked=(curSub===1&&(!draft.dateSet||!fuelReceiptRequiredOk()))||(curSub===2&&(!docsOk()||!draft.rego));
+  next.setAttribute('aria-label',lbl);
+  next.setAttribute('title',lbl);
+  var blocked=(curSub===1&&(!draft.dateSet||!fuelReceiptRequiredOk()))||(curSub===3&&(!docsOk()||!draft.rego));
   next.classList.toggle('faded',blocked);
 }
 function syncShiftDock(){
@@ -5461,7 +5537,7 @@ function syncShiftDock(){
   document.documentElement.classList.toggle('kb-open',kb);
 }
 /* ---------- hail pop-up: mandatory step between Log and Share ---------- */
-var hmVal=null;
+var hmVal=null,hmTarget=2;
 function hmRender(bump){
   var inp=$('#hmInput'),has=hmVal!=null&&hmVal!=='';
   if(inp&&document.activeElement!==inp)inp.value=has?hmVal:'';
@@ -5488,7 +5564,8 @@ function hmContinue(){
   if(hmVal==null){var w=$('.hm-num');w.classList.remove('shake');void w.offsetWidth;w.classList.add('shake');setTimeout(function(){w.classList.remove('shake')},450);toast('Hail required','warn');return}
   draft.hail=hmVal;var h=$('#hail');if(h)h.value=hmVal;persist();render();
   closeModal('hailModal');sfx('success');buzz([8,30,8]);
-  setTimeout(function(){setSub(2)},180);
+  var tgt=hmTarget||2;hmTarget=2;
+  setTimeout(function(){setSub(tgt)},180);
 }
 if($('#hmInput'))$('#hmInput').oninput=function(){hmSet(this.value,false)};
 if($('#hmInput'))$('#hmInput').onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();hmContinue()}};
@@ -5511,7 +5588,8 @@ function nextStep(){
     if(!fuelReceiptRequiredOk()){var m=$('#msg');m.textContent='Fuel receipt attached — enter the fuel amount on Log.';m.className='msg err';toast('Fuel amount required');window.scrollTo({top:0,behavior:'smooth'});return}
     $('#msg').className='msg';openHailStep();return;
   }
-  if(curSub===2){
+  if(curSub===2){acClose();setSub(3);return}
+  if(curSub===3){
     var g2=gateFailMsg();
     if(g2){var m2=$('#msg');m2.textContent=g2.text;m2.className='msg err';toast(g2.toast);setSub(g2.pane||1);return}
     if(!draft.rego){var m3=$('#msg');m3.textContent='Choose a vehicle rego to share.';m3.className='msg err';toast('Rego required');return}
@@ -5520,7 +5598,18 @@ function nextStep(){
 }
 $('#snext').onclick=nextStep;
 $('#sback').onclick=function(){if(curSub>1)setSub(curSub-1)};
-$$('.stp').forEach(function(b){b.onclick=function(){var n=+b.dataset.sub;if(n===2&&curSub===1){nextStep();return}setSub(n)}});
+$$('.stp').forEach(function(b){b.onclick=function(){var n=+b.dataset.sub;if(n>=2&&curSub===1){hmTarget=n;nextStep();return}setSub(n)}});
+/* Accounts step: keep the field being typed in clear of the keyboard, and let
+   Enter walk name → amount → next job without reaching for the screen. */
+document.addEventListener('focusin',function(e){
+  var t=e.target;if(!t.closest||!t.closest('.acct-pane')||t.tagName!=='INPUT')return;
+  setTimeout(function(){if(document.activeElement===t){var r=t.getBoundingClientRect(),vh=window.visualViewport?window.visualViewport.height:window.innerHeight;if(r.top<70||r.bottom>vh-90)t.scrollIntoView({block:'center',behavior:motionOff()?'auto':'smooth'})}},320);
+});
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Enter')return;var t=e.target,d=t.dataset||{};
+  if(d.an!=null&&!(acState.input===t&&acState.idx>=0)){e.preventDefault();acClose();focusAcct(Number(d.an),'amt');return}
+  if(d.aa!=null){e.preventDefault();var nx=Number(d.aa)+1;if(draft.accounts[nx])focusAcct(nx,'name');else t.blur()}
+});
 
 function downloadShareFile(file){
   if(!file)return;
