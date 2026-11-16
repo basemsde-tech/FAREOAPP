@@ -2408,6 +2408,34 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
 .ov-head,.ex-head{justify-content:flex-start;align-items:center}
 .ov-head .ov-shifts,.ex-head .tag{margin-left:auto}
 .ov-head .fold-tg,.ex-head .fold-tg{margin-left:8px}
+
+/* ---------- Fareo 16.7 · WhatsApp quick share ---------- */
+.wa-edit{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.wa-edit input{min-width:0}
+@media (max-width:380px){.wa-edit{grid-template-columns:1fr}}
+.wa-hint{font-size:12px;color:var(--mut);margin:8px 0 0;line-height:1.4}
+.wa-hint.ok{color:#25D366}
+.wa-hint.bad{color:var(--dgr)}
+.wa-acts{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px}
+.wa-acts[hidden]{display:none}
+.wa-acts .add{display:inline-flex;align-items:center;gap:7px}
+.wa-acts .add .wa-ico{width:16px;height:16px;color:#25D366}
+.btn.wa-send{display:flex;align-items:center;justify-content:center;gap:9px;background:#25D366;border-color:#25D366;color:#06301A;-webkit-text-fill-color:#06301A;font-weight:700}
+.btn.wa-send[hidden]{display:none}
+.btn.wa-send .wa-ico{width:20px;height:20px;flex:none}
+.btn.wa-send:active{filter:brightness(.92)}
+.btn.wa-send .wa-lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+[data-pane="3"] > .wa-send{margin:0 0 12px}
+@media (min-width:700px) and (min-height:560px){[data-pane="3"] > .wa-send{grid-column:1/-1}}
+.wa-acts .linkish{font-size:12.5px;font-weight:600;color:var(--mut);text-decoration:underline;background:none;border:0;padding:6px 0}
+.wa-pair{display:flex;gap:9px}
+.wa-pair>.btn{flex:1;min-width:0;margin:0}
+.wa-pair>.wa-send{flex:0 1 46%}
+.wa-eb{display:inline-flex;align-items:center;gap:6px;color:#25D366}
+.wa-eb .wa-ico{width:14px;height:14px}
+.wa-ph-th{display:flex;gap:8px;margin:4px 0 14px;overflow-x:auto}
+.wa-ph-th img{height:96px;border-radius:10px;border:1px solid var(--bd);display:block}
+.hold-it.wa i{background:color-mix(in srgb,#25D366 16%,transparent);color:#25D366}
 </style>
 </head>
 <body>
@@ -2529,6 +2557,7 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
         <span class="rs-take" id="reviewSumTake">$0.00</span>
         <span class="rs-meta" id="reviewSumMeta">Hail not set · no slips</span>
       </div>
+      <button type="button" class="btn wa-send" id="waShift" hidden><svg class="wa-ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3.9 2.5 1 2.7.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg><span class="wa-lbl">Send on WhatsApp</span></button>
       <div class="review-attach">
         <div class="card attach-compact">
           <h5><span class="dot" style="background:var(--inc)"></span>EOS slips <span style="font-size:10px;margin-left:auto;color:var(--mut)">optional</span><span class="help" id="eosAttachHelp" data-help="Attach EOS slip photo(s) if you have them. You can share without a photo — Fareo will ask you to confirm. When Hail OCR is on, Rank/Hail is read automatically." aria-label="Help">?</span></h5>
@@ -2584,7 +2613,7 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
     <div class="wknav"><button id="wkPrev">&lsaquo;</button><span class="wl" id="wkLabel">This week</span><button id="wkNext">&rsaquo;</button></div>
     <div class="card" id="wkCard"><div id="wkRows"></div>
       <div class="totrow" id="wkTotalRow"><span style="color:var(--mut);font-size:12px;font-weight:600">TOTAL <span id="wkPaidStamp" class="paid-stamp" style="display:none">&#10003; PAID</span><small class="wk-days" id="wkDays"></small></span><b class="tally" id="wkTotal">$0.00</b></div></div>
-    <button class="btn neutral" id="shareWeek">Share Week</button>
+    <div class="wa-pair"><button class="btn neutral" id="shareWeek">Share Week</button><button type="button" class="btn wa-send" id="waWeek" hidden><svg class="wa-ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3.9 2.5 1 2.7.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg><span class="wa-lbl">Send</span></button></div>
     <button class="btn neutral" id="wkAdd" style="margin-top:9px">+ Add / override entry</button>
   </section>
 
@@ -2905,6 +2934,10 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
       <div class="set" style="display:block"><div class="sl"><b>Vehicle regos</b><p>Pick one on each shift</p></div>
         <div class="rego-add"><input id="newRego" placeholder="e.g. 5088M" autocapitalize="characters"><button class="add" id="addRego">Add</button></div>
         <div class="chips" id="regoChips"></div></div>
+      <div class="set wa-set" style="display:block" id="waSet"><div class="sl"><b>WhatsApp quick share <span class="help" data-help="Save the person you send shift summaries to (owner, base or partner). A green Send button then appears when you share a shift, a week or a summary, and opens your WhatsApp chat with them with the message ready to send. WhatsApp links can only carry text, so if a shift has EOS photos Fareo offers to send the photo straight after." aria-label="Help">?</span></b><p>One tap sends shift summaries to this person</p></div>
+        <div class="wa-edit"><input id="waName" type="text" placeholder="Name e.g. Ali (owner)" maxlength="30" autocomplete="off" autocapitalize="words"><input id="waPhone" type="tel" inputmode="tel" placeholder="Mobile e.g. 0412 345 678" maxlength="20" autocomplete="off"></div>
+        <p class="wa-hint" id="waHint"></p>
+        <div class="wa-acts" id="waActs" hidden><button type="button" class="add" id="waTest"><svg class="wa-ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3.9 2.5 1 2.7.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>Send a test</button><button type="button" class="linkish" id="waClear">Remove contact</button></div></div>
     </div>
         </div>
       </section>
@@ -3040,6 +3073,7 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
   <button class="basguide-toggle" id="basHowToggle" type="button" style="display:none"><span><b>How to copy these into the ATO form</b><small>Tap to show · plain English</small></span><span class="chev">&rsaquo;</span></button>
   <div id="basHowBody" style="display:none"></div>
   <div class="two" style="margin-top:14px"><button class="btn neutral" id="shareSummary">Share</button><button class="btn" id="pdfBtn">Save as PDF</button></div>
+  <button type="button" class="btn wa-send" id="waSummary" hidden style="margin-top:9px"><svg class="wa-ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3.9 2.5 1 2.7.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg><span class="wa-lbl">Send on WhatsApp</span></button>
   <button class="btn neutral" id="closeSummary" style="margin-top:9px">Close</button>
 </div></div>
 <div id="printRoot"></div>
@@ -3210,6 +3244,7 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
   <div class="sv-regos" id="svRegos"></div>
   <div id="svBody"></div>
   <div class="sv-acts"><button type="button" class="btn neutral" id="svShare">Share</button><button type="button" class="btn" id="svEdit">Edit shift</button></div>
+  <button type="button" class="btn wa-send" id="waSv" hidden style="margin-top:9px"><svg class="wa-ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3.9 2.5 1 2.7.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg><span class="wa-lbl">Send on WhatsApp</span></button>
   <div class="sv-acts2"><button type="button" id="svQuick">Quick edit amount</button><button type="button" id="svDelete">Delete shift</button></div>
 </div></div>
 <div class="modal" id="entryModal"><div class="sheet">
@@ -3446,6 +3481,15 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
   <p class="inst-note" id="instNote"></p>
   <button class="btn" id="instDone">Got it</button>
 </div></div>
+<div class="modal" id="waPhotoModal"><div class="sheet">
+  <div class="grip"></div>
+  <span class="eyebrow wa-eb"><svg class="wa-ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3.9 2.5 1 2.7.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>WhatsApp</span>
+  <h3 id="waPhTitle">Send the EOS photo too?</h3>
+  <p class="csub" id="waPhSub">WhatsApp opened with your summary. Links can only carry text, so send the photo next: tap below, choose WhatsApp, then pick the same chat (it&rsquo;s at the top).</p>
+  <div class="wa-ph-th" id="waPhTh"></div>
+  <button type="button" class="btn wa-send" id="waPhGo"><svg class="wa-ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3.9 2.5 1 2.7.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg><span>Send photo</span></button>
+  <button type="button" class="btn neutral" id="waPhSkip" style="margin-top:9px">Skip</button>
+</div></div>
 <div class="modal" id="holdModal"><div class="sheet hold-sheet">
   <div class="grip"></div>
   <span class="eyebrow" id="holdEyebrow">Quick actions</span>
@@ -3507,8 +3551,13 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='16.6';
+var APP_VERSION='16.7';
 var CHANGELOG=[
+  {v:'16.7',date:'November 17, 2026',notes:[
+    ['Feature','WhatsApp quick share: save one contact (owner, base or partner) in Settings \u2192 Profile. A green Send to <name> button then appears on the Share step, in Weekly, in shift previews, in summaries and in the press-and-hold menu for a shift, and opens your WhatsApp chat with them with the message ready.'],
+    ['Feature','WhatsApp links can only carry text, so when a shift has EOS photos Fareo offers to send the photo straight after \u2014 pick WhatsApp and the same chat sits at the top.'],
+    ['Integration','Australian numbers can be typed as 04\u2026, 4\u2026 or +61; overseas numbers with + and the country code. Send a test from Settings to check it.'],
+  ]},
   {v:'16.6',date:'November 14, 2026',notes:[
     ['UI/UX','Cleaner Reports: about half the length on a phone. Each card leads with its main figure; the details sit behind a single tap (Where the money goes, Smart checks, Copy onto your BAS, Tick what to claim).'],
     ['UI/UX','Simpler range tabs (Week, Quarter, FY, All, Dates) with the dates and Filters on one line. One button to show or hide cards.'],
@@ -8193,7 +8242,7 @@ $('#csvBtn').onclick=function(){
   deliverFile(csvBlob(shiftsCsvRows()),'Fareo-shifts_'+fileStamp()+'.csv','Fareo shifts','Shifts CSV ready');
 };
 /* ---------- settings ---------- */
-function renderSettings(){
+function renderSettings(){try{updateWaUI()}catch(_){}
   $('#setPct').value=settings.pct;$('#setLevy').value=settings.levy;$('#setFuel').value=settings.fuel;$('#setTheme').value=settings.theme;
   $('#setGstBase').value=settings.gstBase;
   var stState=$('#setState');if(stState)stState.value=settings.state||'VIC';
@@ -10770,7 +10819,7 @@ var holdActs=[];
 function openHold(menu,el){if(!menu||!menu.items||!menu.items.length)return;holdActs=menu.items;
   $('#holdEyebrow').textContent=menu.eb||'Quick actions';$('#holdTitle').textContent=menu.t||'Actions';
   var sb=$('#holdSub');sb.textContent=menu.s||'';sb.style.display=menu.s?'':'none';
-  $('#holdList').innerHTML=menu.items.map(function(a,k){return '<button type="button" role="menuitem" class="hold-it'+(a.danger?' danger':'')+'" data-hold="'+k+'" style="--k:'+k+'"><i>'+holdIco(a.i)+'</i><span><b>'+esc(a.t)+'</b>'+(a.s?'<small>'+esc(a.s)+'</small>':'')+'</span></button>'}).join('');
+  $('#holdList').innerHTML=menu.items.map(function(a,k){return '<button type="button" role="menuitem" class="hold-it'+(a.danger?' danger':'')+(a.wa?' wa':'')+'" data-hold="'+k+'" style="--k:'+k+'"><i>'+holdIco(a.i)+'</i><span><b>'+esc(a.t)+'</b>'+(a.s?'<small>'+esc(a.s)+'</small>':'')+'</span></button>'}).join('');
   if(el){el.classList.remove('hold-target');void el.offsetWidth;el.classList.add('hold-target');setTimeout(function(){el.classList.remove('hold-target')},600)}
   showModal('holdModal');
   try{if(!localStorage.getItem('fareo_holdTip'))localStorage.setItem('fareo_holdTip','1')}catch(_){}
@@ -10805,6 +10854,73 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
 })();
 /* One gentle hint so people find it. */
 setTimeout(function(){try{if(localStorage.getItem('fareo_holdTip'))return;if(curTab!=='hub'||anyModal())return;localStorage.setItem('fareo_holdTip','1');toast('Tip: press and hold tiles, shifts and bookings for more actions')}catch(_){}},6000);
+/* ---------- Fareo 16.7 · WhatsApp quick share ----------
+   One saved contact (settings.waName / settings.waPhone). Text goes through a
+   WhatsApp link straight into that chat; a link can't carry pictures, so when
+   a shift has EOS photos we offer the photo via the share sheet right after. */
+function waNum(){var d=String(settings.waPhone||'').replace(/[^\d+]/g,'');if(!d)return '';
+  if(d.indexOf('00')===0)d='+'+d.slice(2);
+  if(d[0]==='+')d=d.slice(1);else if(/^0\d{9}$/.test(d))d='61'+d.slice(1);else if(/^4\d{8}$/.test(d))d='614'+d.slice(1);
+  return /^\d{8,15}$/.test(d)?d:''}
+function waPretty(n){if(/^614\d{8}$/.test(n))return '+61 '+n.slice(2,5)+' '+n.slice(5,8)+' '+n.slice(8);return '+'+n}
+function waFirst(){var n=String(settings.waName||'').trim();return n?n.split(/[\s(]/)[0]:''}
+function waLabel(){var f=waFirst();return f?'Send to '+f:'Send on WhatsApp'}
+function waReady(){return !!waNum()}
+function updateWaUI(){var ok=waReady();
+  ['#waShift','#waWeek','#waSummary','#waSv'].forEach(function(id){var b=$(id);if(!b)return;b.hidden=!ok;var l=b.querySelector('.wa-lbl');if(l)l.textContent=id==='#waWeek'?(waFirst()?'Send to '+waFirst():'WhatsApp'):waLabel()});
+  var h=$('#waHint');if(h){var raw=String(settings.waPhone||'').trim();
+    h.className='wa-hint'+(ok?' ok':raw?' bad':'');
+    h.textContent=ok?'✓ Opens your WhatsApp chat with '+(String(settings.waName||'').trim()||'this contact')+' · '+waPretty(waNum()):raw?'That doesn’t look like a mobile number. Use 04… or +country code.':'Add a mobile number that has WhatsApp.'}
+  var a=$('#waActs');if(a)a.hidden=!ok;
+  var n=$('#waName');if(n&&document.activeElement!==n)n.value=settings.waName||'';
+  var ph=$('#waPhone');if(ph&&document.activeElement!==ph)ph.value=settings.waPhone||'';
+}
+function waOpen(text){var n=waNum();
+  if(!n){toast('Add a WhatsApp contact in Settings → Profile first');go('settings');setTimeout(function(){if(typeof openSetPane==='function')openSetPane('profile',true);var w=$('#waSet');if(w)w.scrollIntoView({block:'center'})},250);return false}
+  var L=waLinks(n,text);window.__waLast=L;
+  try{if(L.how==='nav')location.href=L.url;else window.open(L.url,'_blank','noopener')}catch(_){window.open(L.web,'_blank','noopener')}
+  sfx('pop');buzz(10);return true}
+function waLinks(n,text){var enc=encodeURIComponent(String(text||'')),web='https://wa.me/'+n+'?text='+enc,ua=navigator.userAgent||'';
+  if(/Android/.test(ua))return {how:'nav',web:web,url:'intent://send?phone='+n+'&text='+enc+'#Intent;scheme=whatsapp;S.browser_fallback_url='+encodeURIComponent(web)+';end'};
+  if(isAppleTouch()||/iPhone|iPad|iPod/.test(ua))return {how:'nav',web:web,url:web};
+  return {how:'win',web:web,url:web}}
+var waPhotoFile=null;
+function waOfferPhoto(file,title){if(!file)return;waPhotoFile=file;
+  $('#waPhTitle').textContent=title||'Send the EOS photo too?';
+  var th=$('#waPhTh');th.innerHTML='';
+  if(!/pdf/.test(file.type||'')){try{var u=URL.createObjectURL(file);th.innerHTML='<img alt="" src="'+u+'">'}catch(_){}}
+  setTimeout(function(){showModal('waPhotoModal')},400)}
+if($('#waPhGo'))$('#waPhGo').onclick=async function(){var f=waPhotoFile;closeModal('waPhotoModal');if(!f)return;
+  try{if(navigator.share){var r=await shareFilesAndText(f,'','Fareo');if(r&&r.ok){waPhotoFile=null;return}}}catch(e){if(e&&e.name==='AbortError')return}
+  downloadShareFile(f);toast('Photo saved — attach it in WhatsApp')};
+if($('#waPhSkip'))$('#waPhSkip').onclick=function(){waPhotoFile=null;closeModal('waPhotoModal')};
+
+async function waShareShift(){
+  var g=gateFailMsg();if(g){toast(g.toast);if(g.pane)setSub(g.pane);return}
+  if(!draft.rego){toast('Choose a rego first');return}
+  var txt=buildShareLines().join('\n');
+  var f=null;
+  if(eosReceipts.length){try{f=await buildReceiptCollageFile()}catch(_){f=null}
+    if(!f)eosReceipts.some(function(r){if(r&&r.file){f=r.file;return true}return false})}
+  if(!waOpen(txt))return;
+  saveShift(true);
+  if(f)waOfferPhoto(f,'Send the EOS photo to '+(waFirst()||'them')+' too?');
+}
+function waWeekText(){var W=weekData();if(!W.rows.length)return '';
+  return [W.label].concat(W.rows.map(function(e){return fmtDayLong(e.date)+' — '+money(e.take)+(e.rego?' ('+e.rego+')':'')})).concat(['Total '+money(W.tot)]).join('\n')}
+if($('#waShift'))$('#waShift').onclick=waShareShift;
+if($('#waWeek'))$('#waWeek').onclick=function(){var t=waWeekText();if(!t){toast('No shifts this week to send');return}waOpen(t)};
+if($('#waSummary'))$('#waSummary').onclick=function(){waOpen(summaryText(curSummaryMode))};
+if($('#waSv'))$('#waSv').onclick=function(){var e=holdEntry(svId);if(e)waOpen(entryShareText(e))};
+if($('#waName'))$('#waName').oninput=function(){settings.waName=this.value.trim().slice(0,30);persist();updateWaUI()};
+if($('#waPhone'))$('#waPhone').oninput=function(){settings.waPhone=this.value.trim().slice(0,20);persist();updateWaUI()};
+if($('#waPhone'))$('#waPhone').onblur=function(){var n=waNum();if(n&&/^614\d{8}$/.test(n)){settings.waPhone='0'+n.slice(2,5)+' '+n.slice(5,8)+' '+n.slice(8);persist()}updateWaUI()};
+if($('#waTest'))$('#waTest').onclick=function(){waOpen('Fareo test — quick share is set up 🚕')};
+if($('#waClear'))$('#waClear').onclick=function(){ask('Remove WhatsApp contact?','The green Send buttons will disappear. You can add a contact again any time.','Remove',function(){settings.waName='';settings.waPhone='';persist();updateWaUI();toast('WhatsApp contact removed')})};
+/* add "Send to …" to the press-and-hold menu for Weekly shifts */
+(function(){var h=HOLD.filter(function(x){return x.sel==='#wkRows .wk-row'})[0];if(!h)return;var g=h.get;
+  h.get=function(el){var m=g(el);if(m&&waReady()){var e=holdEntry(el.dataset.id);m.items.splice(4,0,{t:waLabel(),s:'WhatsApp · '+waPretty(waNum()),i:'share',wa:1,fn:function(){waOpen(entryShareText(e))}})}return m}})();
+updateWaUI();
 if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').then(function(reg){bindUpdateReg(reg)}).catch(function(){})})}
 </script>
 </body>
