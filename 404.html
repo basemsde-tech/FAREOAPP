@@ -2436,6 +2436,10 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
 .wa-ph-th{display:flex;gap:8px;margin:4px 0 14px;overflow-x:auto}
 .wa-ph-th img{height:96px;border-radius:10px;border:1px solid var(--bd);display:block}
 .hold-it.wa i{background:color-mix(in srgb,#25D366 16%,transparent);color:#25D366}
+
+/* ---------- Fareo 16.8 · Levy as a dollar amount ---------- */
+.hm-num.money input{font-size:clamp(34px,10vw,46px)}
+#levyRateRow.dim{opacity:.6}
 </style>
 </head>
 <body>
@@ -2946,7 +2950,8 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
         <div class="sp-sec">
         <div class="card set-card">
       <div class="set hot"><div class="sl"><b>Driver share</b><p>% of takings you keep &middot; used everywhere</p></div><div class="unit-in"><input id="setPct" type="number" min="0" max="100" inputmode="decimal"><i>%</i></div></div>
-      <div class="set"><div class="sl"><b>Hail trip levy <span class="help" data-help="When you add this levy to the passenger fare it becomes part of the taxable supply — GST is 1/11 of the full fare. The amount you remit to SRO Victoria comes off your take-home (no GST credit). Set 0 if your BSP pays it." aria-label="Help">?</span></b><p>Per hail trip &middot; set 0 if your BSP pays</p></div><div class="unit-in pre"><i>$</i><input id="setLevy" type="number" min="0" step="0.01" inputmode="decimal"></div></div>
+      <div class="set"><div class="sl"><b>Levy entry <span class="help" data-help="How you enter the hail / CPV levy at the end of each shift. Hail trips: enter the number of trips and Fareo multiplies by the rate below. Dollar amount: enter the levy in dollars straight off your EOS. Shifts you already logged keep the way they were entered." aria-label="Help">?</span></b><p id="levyModeSub">Ask for the number of hail trips</p></div><select id="setLevyMode"><option value="trips">Hail trips</option><option value="amount">Dollar amount</option></select></div>
+      <div class="set" id="levyRateRow"><div class="sl"><b>Hail trip levy <span class="help" data-help="When you add this levy to the passenger fare it becomes part of the taxable supply — GST is 1/11 of the full fare. The amount you remit to SRO Victoria comes off your take-home (no GST credit). Set 0 if your BSP pays it." aria-label="Help">?</span></b><p id="levyRateSub">Per hail trip &middot; set 0 if your BSP pays</p></div><div class="unit-in pre"><i>$</i><input id="setLevy" type="number" min="0" step="0.01" inputmode="decimal"></div></div>
       <div class="set"><div class="sl"><b>Cash &amp; Square tax-free <span class="help" data-help="When on, cash and Square are not taxable income. They are left out of G1 and 1A. You still keep that money in take-home and Weekly. EFTPOS, accounts and runs stay in G1 (GST 1/11). Turn off if GST applies to cash too." aria-label="Help">?</span></b><p>Left out of G1 and 1A &middot; still in take-home</p></div><button class="tgl" id="setCashGst" aria-label="Toggle cash tax-free"></button></div>
       <div class="set"><div class="sl"><b>GST base <span class="help" data-help="Whether GST (1/11) is set aside on taxable sales (G1) — full fare or only your driver share. Tax-free cash/Square is left out of G1. Levy passed on in taxable fares stays in G1. The SRO levy payment is separate (no GST credit). Match this to your bailment agreement \u2014 ask your operator or tax agent which applies." aria-label="Help">?</span></b><p>What GST is set aside on</p></div><select id="setGstBase"><option value="gross">Full gross</option><option value="share">Driver share</option></select></div>
       <div class="set"><div class="sl"><b>Income tax set-aside <span class="help" data-help="How much of your taxable profit Reports puts aside for income tax. ATO estimate annualises this financial year and applies the current ATO resident rates, low income tax offset and Medicare levy. Fixed % uses your own rate. This is an estimate, not tax advice." aria-label="Help">?</span></b><p id="taxModeSub">Estimate from ATO rates</p></div><select id="setTaxMode"><option value="auto">ATO estimate</option><option value="fixed">Fixed %</option><option value="off">Off</option></select></div>
@@ -3198,8 +3203,8 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
 <div class="modal hail-modal" id="hailModal"><div class="sheet">
   <div class="grip"></div>
   <span class="eyebrow hm-eyebrow"><i></i>Required before you continue</span>
-  <h3>How many hail trips?</h3>
-  <p class="csub">Rank and street-hail trips this shift, for the CPV levy.</p>
+  <h3 id="hmTitle">How many hail trips?</h3>
+  <p class="csub" id="hmSub">Rank and street-hail trips this shift, for the CPV levy.</p>
   <div class="hm-counter">
     <button type="button" class="hm-step" id="hmMinus" aria-label="One less">&minus;</button>
     <div class="hm-num"><input id="hmInput" type="number" min="0" max="199" inputmode="numeric" placeholder="&ndash;" autocomplete="off" aria-label="Hail trips"><span id="hmUnit">trips</span></div>
@@ -3551,8 +3556,12 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='16.7';
+var APP_VERSION='16.8';
 var CHANGELOG=[
+  {v:'16.8',date:'November 17, 2026',notes:[
+    ['Feature','Levy as a dollar amount: Settings \u2192 Pay & tax \u2192 Levy entry lets you choose Hail trips or Dollar amount. The end-of-shift levy pop-up then asks for whichever you chose \u2014 in dollar mode you type the levy straight off your EOS, with quick amounts and +/- in steps of your per-trip rate.'],
+    ['Integration','Each shift keeps the way its levy was entered, so switching the setting never changes shifts you already logged. Reports, BAS, the tax card, shift previews and shared summaries all use the entered amount.'],
+  ]},
   {v:'16.7',date:'November 17, 2026',notes:[
     ['Feature','WhatsApp quick share: save one contact (owner, base or partner) in Settings \u2192 Profile. A green Send to <name> button then appears on the Share step, in Weekly, in shift previews, in summaries and in the press-and-hold menu for a shift, and opens your WhatsApp chat with them with the message ready.'],
     ['Feature','WhatsApp links can only carry text, so when a shift has EOS photos Fareo offers to send the photo straight after \u2014 pick WhatsApp and the same chat sits at the top.'],
@@ -4170,7 +4179,7 @@ function draftHasWork(d){
   return !!(d&&(
     d._edit||String(d.rego||'').trim()!==''||nn(d.runs)>0||
     (d.eos||[]).some(function(v){return nn(v)>0})||
-    String(d.hail==null?'':d.hail).trim()!==''||
+    String(d.hail==null?'':d.hail).trim()!==''||String(d.levyAmt==null?'':d.levyAmt).trim()!==''||
     rowsHave(d.cash)||rowsHave(d.square)||rowsHave(d.accounts)||rowsHave(d.fuel)||
     Object.keys(d.custom||{}).some(function(k){return nn(d.custom[k])>0})
   ));
@@ -4181,7 +4190,7 @@ function draftHasOpenLog(d){
   return !!(d&&(
     d._edit||nn(d.runs)>0||
     (d.eos||[]).some(function(v){return nn(v)>0})||
-    String(d.hail==null?'':d.hail).trim()!==''||
+    String(d.hail==null?'':d.hail).trim()!==''||String(d.levyAmt==null?'':d.levyAmt).trim()!==''||
     rowsHave(d.cash)||rowsHave(d.square)||rowsHave(d.accounts)||rowsHave(d.fuel)||
     Object.keys(d.custom||{}).some(function(k){return nn(d.custom[k])>0})||
     (typeof eosReceipts!=='undefined'&&eosReceipts&&eosReceipts.length)||
@@ -4302,6 +4311,7 @@ function syncEosFieldsToAttachCount(){
   while(draft.eos.length<n)draft.eos.push('');
 }
 function hailEnteredOk(){
+  if(levyByAmount())return String(draft.levyAmt==null?'':draft.levyAmt).trim()!=='';
   return String(draft.hail==null?'':draft.hail).trim()!=='';
 }
 function fuelReceiptRequiredOk(){
@@ -5250,7 +5260,9 @@ function fareShareT(){
   if(!(isFinite(s)&&s>=0))return grossT()*(settings.pct/100);
   return s;
 }
-function levyT(){return nn(draft.hail)*levyRate()}
+function levyByAmount(){return settings.levyMode==='amount'}
+function round2(n){return Math.round((Number(n)||0)*100)/100}
+function levyT(){return levyByAmount()?nn(draft.levyAmt):nn(draft.hail)*levyRate()}
 /* Driver-held income deducted from settlement (cash, Square, custom driver types). */
 function heldT(){
   var h=cashT()+squareT();
@@ -5283,7 +5295,10 @@ function entryDriverHeld(e){
   });
   return h;
 }
-function entryLevy(e){return (Number(e.hail)||0)*levyRate()}
+function entryLevy(e){if(e&&e.levyMode==='amount')return nn(e.levyAmt);return (Number(e&&e.hail)||0)*levyRate()}
+/* How a range's levy was worked out, for labels. */
+function levyBasis(a){var h=a&&a.hailN||0,m=a&&a.levyAmtN||0,t=h+' hail trip'+(h===1?'':'s')+' \u00d7 '+money(levyRate());
+  if(!m)return t;if(!h)return 'entered as dollar amount'+(m===1?'':'s');return t+' + entered amounts'}
 /* ATO BAS: "round down to whole dollars (don't show cents)". Truncates toward zero.
    Source: ato.gov.au > Completing your BAS for GST > Complete your BAS. */
 function roundAtoDollar(n){
@@ -5421,7 +5436,7 @@ function render(){
     if(el)el.textContent=money(customAmt(pt));
   });
   $('#levyTag').textContent=money(levyT())+' levy';
-  $('#levyRate').textContent=money(levyRate())+' / trip';
+  $('#levyRate').textContent=levyByAmount()?'entered amount':money(levyRate())+' / trip';
   var la=$('#levyAmt');if(la)la.textContent=money(levyT());
   renderHailSum();
   updateFooter();
@@ -5683,7 +5698,7 @@ function updateReviewSum(){
   var t=$('#reviewSumTake');if(t)t.textContent=money(takeT());
   var m=$('#reviewSumMeta');if(!m)return;
   var bits=[];
-  bits.push(hailEnteredOk()?('Hail '+String(draft.hail)):'Hail not set');
+  bits.push(levyByAmount()?(hailEnteredOk()?'Levy '+money(levyT()):'Levy not set'):(hailEnteredOk()?('Hail '+String(draft.hail)):'Hail not set'));
   if(eosReceipts.length)bits.push(eosReceipts.length+' EOS');
   else bits.push('No EOS slip');
   if(fuelReceipts.length)bits.push(fuelReceipts.length+' fuel');
@@ -5732,39 +5747,51 @@ function syncShiftDock(){
 }
 /* ---------- hail pop-up: mandatory step between Log and Share ---------- */
 var hmVal=null,hmTarget=2;
+function hmStepAmt(){var r=levyRate();return r>0?r:1}
 function hmRender(bump){
-  var inp=$('#hmInput'),has=hmVal!=null&&hmVal!=='';
-  if(inp&&document.activeElement!==inp)inp.value=has?hmVal:'';
+  var inp=$('#hmInput'),has=hmVal!=null&&hmVal!=='',amt=levyByAmount();
+  if(inp&&document.activeElement!==inp)inp.value=has?(amt?String(round2(hmVal)):hmVal):'';
   var n=has?Number(hmVal):0;
-  $('#hmUnit').textContent=has?(n===1?'trip':'trips'):'enter a number';
-  tally($('#hmLevy'),n*levyRate(),{dur:260});
-  $('#hmRate').textContent=money(levyRate())+' / trip';
-  $$('#hmPicks button').forEach(function(b){b.classList.toggle('on',has&&Number(b.dataset.hp)===n)});
+  $('#hmUnit').textContent=amt?(has?'dollars':'enter the amount'):(has?(n===1?'trip':'trips'):'enter a number');
+  tally($('#hmLevy'),amt?n:n*levyRate(),{dur:260});
+  $('#hmRate').textContent=amt?'dollar amount':money(levyRate())+' / trip';
+  $$('#hmPicks button').forEach(function(b){b.classList.toggle('on',has&&Math.abs(Number(b.dataset.hp)-n)<0.005)});
   var go=$('#hmGo');go.disabled=!has;go.classList.toggle('ready',has);
   $('#hmMinus').disabled=!has||n<=0;
   if(bump){var w=$('.hm-num');w.classList.remove('bump');void w.offsetWidth;w.classList.add('bump')}
 }
-function hmSet(v,bump){var w0=$('.hm-num');if(w0)w0.classList.remove('shake');v=v===''||v==null?null:Math.max(0,Math.min(199,Math.round(Number(v))));if(v!=null&&!isFinite(v))v=null;hmVal=v;hmRender(bump)}
+function hmSet(v,bump){var w0=$('.hm-num');if(w0)w0.classList.remove('shake');
+  if(levyByAmount())v=v===''||v==null?null:Math.max(0,Math.min(9999,round2(Number(v))));
+  else v=v===''||v==null?null:Math.max(0,Math.min(199,Math.round(Number(v))));
+  if(v!=null&&!isFinite(v))v=null;hmVal=v;hmRender(bump)}
 function openHailStep(){
-  hmVal=hailEnteredOk()?nn(draft.hail):null;
-  var picks=[0,1,2,3,4,5,6,8,10,12];
-  $('#hmPicks').innerHTML=picks.map(function(n,k){return '<button type="button" data-hp="'+n+'" style="--k:'+k+'">'+n+'</button>'}).join('');
-  var ocr=$('#hmOcr'),fromOcr=eosReceipts.some(function(r){return r&&r.ocrHail!=null});
+  var amt=levyByAmount(),inp=$('#hmInput');
+  hmVal=hailEnteredOk()?nn(amt?draft.levyAmt:draft.hail):null;
+  $('#hmTitle').textContent=amt?'How much levy?':'How many hail trips?';
+  $('#hmSub').textContent=amt?'Hail / CPV levy for this shift in dollars, as shown on your EOS.':'Rank and street-hail trips this shift, for the CPV levy.';
+  if(inp){inp.max=amt?'9999':'199';inp.step=amt?'0.01':'1';inp.inputMode=amt?'decimal':'numeric';inp.placeholder=amt?'0.00':'\u2013';inp.setAttribute('aria-label',amt?'Levy amount in dollars':'Hail trips')}
+  $('.hm-num').classList.toggle('money',amt);
+  $('#hmMinus').setAttribute('aria-label',amt?'Less '+money(hmStepAmt()):'One less');$('#hmPlus').setAttribute('aria-label',amt?'More '+money(hmStepAmt()):'One more');
+  var r=hmStepAmt(),picks=amt?[0,1,2,3,4,5,6,8,10,12].map(function(k){return round2(k*r)}):[0,1,2,3,4,5,6,8,10,12];
+  $('#hmPicks').innerHTML=picks.map(function(n,k){return '<button type="button" data-hp="'+n+'" style="--k:'+k+'">'+(amt?(n?'$'+n.toFixed(2):'$0'):n)+'</button>'}).join('');
+  var ocr=$('#hmOcr'),fromOcr=!amt&&eosReceipts.some(function(r){return r&&r.ocrHail!=null});
   ocr.hidden=!(fromOcr&&hmVal!=null);ocr.textContent='Read from your EOS slip'+(eosReceipts.length>1?'s':'')+' — check it matches.';
   hmRender(false);showModal('hailModal');
   setTimeout(function(){var i=$('#hmInput');if(i&&hmVal==null)i.focus()},280);
 }
 function hmContinue(){
-  if(hmVal==null){var w=$('.hm-num');w.classList.remove('shake');void w.offsetWidth;w.classList.add('shake');setTimeout(function(){w.classList.remove('shake')},450);toast('Hail required','warn');return}
-  draft.hail=hmVal;var h=$('#hail');if(h)h.value=hmVal;persist();render();
+  if(hmVal==null){var w=$('.hm-num');w.classList.remove('shake');void w.offsetWidth;w.classList.add('shake');setTimeout(function(){w.classList.remove('shake')},450);toast(levyByAmount()?'Levy amount required':'Hail required','warn');return}
+  if(levyByAmount())draft.levyAmt=String(round2(hmVal));
+  else{draft.hail=hmVal;var h=$('#hail');if(h)h.value=hmVal}
+  persist();render();
   closeModal('hailModal');sfx('success');buzz([8,30,8]);
   var tgt=hmTarget||2;hmTarget=2;
   setTimeout(function(){setSub(tgt)},180);
 }
 if($('#hmInput'))$('#hmInput').oninput=function(){hmSet(this.value,false)};
 if($('#hmInput'))$('#hmInput').onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();hmContinue()}};
-if($('#hmMinus'))$('#hmMinus').onclick=function(){hmSet(Math.max(0,(hmVal||0)-1),true);sfx('tap')};
-if($('#hmPlus'))$('#hmPlus').onclick=function(){hmSet((hmVal==null?0:hmVal)+1,true);sfx('tap')};
+if($('#hmMinus'))$('#hmMinus').onclick=function(){hmSet(Math.max(0,(hmVal||0)-(levyByAmount()?hmStepAmt():1)),true);sfx('tap')};
+if($('#hmPlus'))$('#hmPlus').onclick=function(){hmSet((hmVal==null?0:hmVal)+(levyByAmount()?hmStepAmt():1),true);sfx('tap')};
 if($('#hmPicks'))$('#hmPicks').onclick=function(e){var b=e.target.closest('[data-hp]');if(!b)return;hmSet(b.dataset.hp,true);sfx('pop');buzz(6);b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop')};
 if($('#hmBack'))$('#hmBack').onclick=function(){closeModal('hailModal')};
 if($('#hmGo'))$('#hmGo').onclick=hmContinue;
@@ -5772,8 +5799,13 @@ if($('#hailSum'))$('#hailSum').onclick=function(){openHailStep()};
 function renderHailSum(){
   var b=$('#hailSum');if(!b)return;var ok=hailEnteredOk(),n=nn(draft.hail);
   b.classList.toggle('set',ok);
+  if(levyByAmount()){
+    $('#hailSumT').textContent=ok?'Levy '+money(levyT()):'Levy amount';
+    $('#hailSumS').textContent=ok?'Dollar amount · tap to change':'Required · you’ll enter it when you tap Next';
+  }else{
   $('#hailSumT').textContent=ok?(n+(n===1?' hail trip':' hail trips')):'Hail trips';
   $('#hailSumS').textContent=ok?'Levy '+money(levyT())+' · tap to change':'Required · you’ll enter these when you tap Next';
+  }
   $('#hailSumA').textContent=ok?'Edit':'';
 }
 function nextStep(){
@@ -5961,9 +5993,9 @@ function saveShift(shared){
   var srcId=draft._sourceEntryId;
   var e={id:srcId||Date.now(),date:draft.date,rego:draft.rego,take:takeT(),gross:g,share:fareShareT(),cash:cashT(),square:squareT(),
     accounts:acctT(),fuel:fuelT(),fuelIPaid:fuelIPaidT(),fuelOpPaid:fuelOpPaidT(),fuelByType:{Diesel:0,Petrol:0,LPG:0},
-    custom:custom,hail:nn(draft.hail),eos:eosT(),runs:nn(draft.runs),receipt:draft.receipt,
+    custom:custom,hail:nn(draft.hail),levyMode:levyByAmount()?'amount':'trips',levyAmt:levyByAmount()?round2(nn(draft.levyAmt)):round2(nn(draft.hail)*levyRate()),eos:eosT(),runs:nn(draft.runs),receipt:draft.receipt,
     fuelCount:draft.fuel.filter(function(f){return nn(f.amount)>0}).length,
-    snap:JSON.parse(JSON.stringify({date:draft.date,rego:draft.rego,eos:draft.eos,cash:draft.cash,square:draft.square,accounts:draft.accounts,runs:draft.runs,fuel:draft.fuel,hail:draft.hail,custom:draft.custom}))};
+    snap:JSON.parse(JSON.stringify({date:draft.date,rego:draft.rego,eos:draft.eos,cash:draft.cash,square:draft.square,accounts:draft.accounts,runs:draft.runs,fuel:draft.fuel,hail:draft.hail,levyAmt:draft.levyAmt,custom:draft.custom}))};
   draft.fuel.forEach(function(f){e.fuelByType[f.type]=(e.fuelByType[f.type]||0)+nn(f.amount)});
   draft.cash.forEach(function(c){addName(c.name)});draft.square.forEach(function(c){addName(c.name)});draft.accounts.forEach(function(a){addName(a.name)});
   var prevE=srcId!=null?entries.filter(function(x){return String(x.id)===String(srcId)})[0]:null,prevDate=prevE&&prevE.date,prevRego=prevE&&prevE.rego;
@@ -6208,7 +6240,8 @@ function entryShareText(e){
   var fuelI=e.fuelIPaid!=null?nn(e.fuelIPaid):(sp.fuel?sp.fuel.filter(function(f){return !f.opPaid}).reduce(function(s,f){return s+nn(f.amount)},0):nn(e.fuel));
   if(fuelI>0)L.push('Fuel: '+money(fuelI));
   var hail=sp.hail!=null?sp.hail:e.hail;
-  if(hail!=null&&String(hail)!=='')L.push('Hail trips: '+hail);
+  if(e.levyMode==='amount'){if(entryLevy(e)>0)L.push('Levy: '+money(entryLevy(e)))}
+  else if(hail!=null&&String(hail)!=='')L.push('Hail trips: '+hail);
   L.push('*Take-home: '+money(e.take)+'*');
   L.push('Fareo \u00b7 '+fmtDMY(e.date));
   return L.join('\n');
@@ -6276,7 +6309,7 @@ function renderShiftView(first){
   if(fuelOp>0)m+=svRow('Fuel on operator’s card',''+money(fuelOp),'not added — operator paid','mut');
   if(Math.abs(diff)>=0.01)m+=svRow(e.manual?'Edited by hand':'Formula adjustments',(diff>0?'+':'−')+money(Math.abs(diff)),e.manual?'amount changed in Weekly':'custom pay types');
   m+=svRow('Take-home',money(e.take),'what the operator pays you','tot');
-  if(levy>0)m+=svRow('Levy to remit',money(levy),hail+' hail trip'+(hail===1?'':'s')+' × '+money(levyRate())+' · SRO','mut');
+  if(levy>0)m+=svRow('Levy to remit',money(levy),(e.levyMode==='amount'?'Entered amount':hail+' hail trip'+(hail===1?'':'s')+' × '+money(levyRate()))+' · SRO','mut');
   body+=svSec(IC.math,'How the payout adds up',null,m,i++);
   /* photos */
   var pics=receipts.filter(function(r){if(r.entryId!=null)return String(r.entryId)===String(e.id);if(r.date!==e.date)return false;if(r.kind==='account')return true;if(r.kind==='shift'||r.kind==='fuel')return !e.rego||String(r.desc||'').indexOf(e.rego)>=0||same.length===1;return false});
@@ -6332,6 +6365,7 @@ function loadEntryToCalc(e){var sp=e.snap;
       return src;
     })()};
   }
+  draft.levyAmt=(e.levyMode==='amount')?String(nn(e.levyAmt)):(levyByAmount()&&(e.hail!=null&&String(e.hail)!=='')?String(round2(entryLevy(e))):'');
   clearReceiptAttach();
   persist();rowInputs();render();}
 if($('#wkAdd'))$('#wkAdd').onclick=openAddEntry;
@@ -6815,7 +6849,7 @@ function rangeAgg(){
   var gstBaseAmt=es.reduce(function(a,b){return a+entryGstBase(b)},0);
   if(gstBaseAmt<0)gstBaseAmt=0;
   var gst=gstBaseAmt/11;
-  var hailN=es.reduce(function(a,b){return a+(Number(b.hail)||0)},0),levy=es.reduce(function(a,b){return a+entryLevy(b)},0);
+  var hailN=es.reduce(function(a,b){return a+(b.levyMode==='amount'?0:(Number(b.hail)||0))},0),levy=es.reduce(function(a,b){return a+entryLevy(b)},0),levyAmtN=es.filter(function(b){return b.levyMode==='amount'}).length;
   var fD=es.reduce(function(a,b){return a+(b.fuelByType?(Number(b.fuelByType.Diesel)||0):0)},0),fP=es.reduce(function(a,b){return a+(b.fuelByType?(Number(b.fuelByType.Petrol)||0):0)},0),fL=es.reduce(function(a,b){return a+(b.fuelByType?(Number(b.fuelByType.LPG)||0):0)},0);
   var fuel=es.reduce(function(a,b){return a+(Number(b.fuel)||0)},0);
   /* Fuel split by who paid (display only). opPaid fuel is excluded from settlement.
@@ -6882,7 +6916,7 @@ function rangeAgg(){
   var dedTotal=expDed+fuelDed+levyDed;
   var pocket=inc-levy;
   var net=inc-(gst-oneB)-dedTotal;
-  return{fuelManualClaim:fuelManualClaim,fuelManualCred:fuelManualCred,fuelManualDed:fuelManualDed,fuelShiftClaim:fuelShiftClaim,fuelShiftCred:fuelShiftCred,fuelShiftDed:fuelShiftDed,editsN:editsN,editKeys:editKeys,es:es,inc:inc,pocket:pocket,gross:gross,share:share,gstBaseAmt:gstBaseAmt,gst:gst,hailN:hailN,levy:levy,fD:fD,fP:fP,fL:fL,fuel:fuelAll,fuelShift:fuel,fuelManual:fuelManualTotal,fmCount:fmCount,fmList:fmList,fuelIPaid:fuelIPaid,fuelOpPaid:fuelOpPaid,fc:fc+fmCount,fcShift:fc,expCred:expCred,expDed:expDed,fuelCred:fuelCred,fuelDed:fuelDed,oneB:oneB,dedTotal:dedTotal,dn:dn,dnClaim:dnClaim,net:net,shifts:es.length,allDed:allDed,sfItems:sfItems,fuelClaimAll:fuelClaimAll,levyDed:levyDed,mixEftpos:mixEftpos,mixCash:mixCash,mixSquare:mixSquare,mixRuns:mixRuns,mixCustom:mixCustom,mixAcct:mixAcct}}
+  return{levyAmtN:levyAmtN,fuelManualClaim:fuelManualClaim,fuelManualCred:fuelManualCred,fuelManualDed:fuelManualDed,fuelShiftClaim:fuelShiftClaim,fuelShiftCred:fuelShiftCred,fuelShiftDed:fuelShiftDed,editsN:editsN,editKeys:editKeys,es:es,inc:inc,pocket:pocket,gross:gross,share:share,gstBaseAmt:gstBaseAmt,gst:gst,hailN:hailN,levy:levy,fD:fD,fP:fP,fL:fL,fuel:fuelAll,fuelShift:fuel,fuelManual:fuelManualTotal,fmCount:fmCount,fmList:fmList,fuelIPaid:fuelIPaid,fuelOpPaid:fuelOpPaid,fc:fc+fmCount,fcShift:fc,expCred:expCred,expDed:expDed,fuelCred:fuelCred,fuelDed:fuelDed,oneB:oneB,dedTotal:dedTotal,dn:dn,dnClaim:dnClaim,net:net,shifts:es.length,allDed:allDed,sfItems:sfItems,fuelClaimAll:fuelClaimAll,levyDed:levyDed,mixEftpos:mixEftpos,mixCash:mixCash,mixSquare:mixSquare,mixRuns:mixRuns,mixCustom:mixCustom,mixAcct:mixAcct}}
 /* ---------- executive figures (single source for the dashboard) ----------
    Cash view of a range, from gross fares down to what you keep:
      operator  = gross − driver share
@@ -7513,7 +7547,7 @@ function renderReports(){
   }
   if(a.levy>0){
     var levyOn=costClaimed('levy');
-    pushG('Levy',dedRow({key:'levy',name:'Hail / CPV levy',meta:(a.hailN||0)+' hail trip'+(a.hailN!==1?'s':'')+' \u00d7 '+money(levyRate())+' \u00b7 SRO',amt:a.levy,claimed:levyOn,sub:'from income \u00b7 tax-free \u00b7 deduct '+money(a.levy)}),a.levy,1,levyOn?a.levy:0,'levy');
+    pushG('Levy',dedRow({key:'levy',name:'Hail / CPV levy',meta:levyBasis(a)+' \u00b7 SRO',amt:a.levy,claimed:levyOn,sub:'from income \u00b7 tax-free \u00b7 deduct '+money(a.levy)}),a.levy,1,levyOn?a.levy:0,'levy');
     costLines.push({key:'levy',kind:'levy',cat:'Levy',name:'Hail / CPV levy',date:repRange.to,c:{amount:a.levy,gst:false,bu:100,edited:false,orig:{amount:a.levy,gst:false,bu:100}},claimed:levyOn,receipt:true,paidBy:'You (SRO)'});
   }
   (a.sfItems||[]).slice().sort(function(x,y){return x.date<y.date?1:-1}).forEach(function(it){
@@ -7736,7 +7770,7 @@ function renderTaxEngine(){var card=$('#taxEngCard');if(!card)return;
   var pay=b.net>=0,rows=[
     ['gst','BAS · GST',(pay?'Pay ':'Refund ')+money(Math.abs(b.net)),'1A '+money(b.oneA)+' − 1B '+money(b.oneB)+' · G1 '+money(b.g1),pay?'pay':'ref'],
     ['tax','Income tax set-aside',money(x.tax),(r.mode==='auto'&&r.annual!=null?'FY taxable ≈ '+money(r.annual).replace(/\.\d\d$/,'')+' · '+(r.label||''):(r.label||'Off'))+' · incl. Medicare',''],
-    ['levy','Levy remitted',money(x.levy),(a.hailN||0)+' hail trip'+((a.hailN||0)===1?'':'s')+' · SRO · due '+dl.levyDueFmt,''],
+    ['levy','Levy remitted',money(x.levy),levyBasis(a)+' · SRO · due '+dl.levyDueFmt,''],
     ['ded','Deductions claimed',money(a.dedTotal||0),'costs ex-GST'+(a.levyDed>0?' + levy':'')+' · lowers taxable income','ok']];
   var mx=Math.max.apply(null,[Math.abs(b.net),x.tax,x.levy,a.dedTotal||0,1]);
   $('#teRows').innerHTML=rows.map(function(rw,i){var v=[Math.abs(b.net),x.tax,x.levy,a.dedTotal||0][i];return '<div class="te-row '+rw[4]+'" style="--i:'+i+'"><div class="te-row-t"><b>'+rw[1]+'</b><small>'+esc(rw[3])+'</small></div><span class="te-row-v">'+rw[2]+'</span><i class="te-row-bar" style="--w:'+(v/mx*100).toFixed(1)+'%"></i></div>'}).join('');
@@ -8243,7 +8277,7 @@ $('#csvBtn').onclick=function(){
 };
 /* ---------- settings ---------- */
 function renderSettings(){try{updateWaUI()}catch(_){}
-  $('#setPct').value=settings.pct;$('#setLevy').value=settings.levy;$('#setFuel').value=settings.fuel;$('#setTheme').value=settings.theme;
+  $('#setPct').value=settings.pct;$('#setLevy').value=settings.levy;if($('#setLevyMode'))$('#setLevyMode').value=levyByAmount()?'amount':'trips';levyModeUI();$('#setFuel').value=settings.fuel;$('#setTheme').value=settings.theme;
   $('#setGstBase').value=settings.gstBase;
   var stState=$('#setState');if(stState)stState.value=settings.state||'VIC';
   $('#setCashGst').classList.toggle('on',!!settings.cashGstFree);
@@ -8295,6 +8329,15 @@ $('#ptSave').onclick=function(){
 $('#setPct').oninput=function(){var v=parseFloat(this.value);settings.pct=isFinite(v)?Math.max(0,Math.min(100,v)):55;persist();render()};
 /* [F1] 0 is a legitimate levy rate */
 $('#setLevy').oninput=function(){var v=parseFloat(this.value);settings.levy=(isFinite(v)&&v>=0)?v:0;persist();render()};
+function levyModeUI(){var amt=levyByAmount(),s1=$('#levyModeSub'),s2=$('#levyRateSub');
+  if(s1)s1.textContent=amt?'Ask for the levy in dollars':'Ask for the number of hail trips';
+  if(s2)s2.innerHTML=amt?'Only used for shifts logged as hail trips':'Per hail trip &middot; set 0 if your BSP pays';
+  var rr=$('#levyRateRow');if(rr)rr.classList.toggle('dim',amt)}
+if($('#setLevyMode'))$('#setLevyMode').onchange=function(){var was=levyByAmount();settings.levyMode=this.value==='amount'?'amount':'trips';
+  /* carry an already-entered value across so the open shift isn't suddenly "not set" */
+  if(!was&&levyByAmount()&&String(draft.hail==null?'':draft.hail).trim()!==''&&String(draft.levyAmt==null?'':draft.levyAmt).trim()==='')draft.levyAmt=String(round2(nn(draft.hail)*levyRate()));
+  persist();levyModeUI();render();try{renderHailSum()}catch(_){}
+  toast(levyByAmount()?'Levy: you\u2019ll enter a dollar amount each shift':'Levy: you\u2019ll enter hail trips each shift','success')};
 $('#setFuel').onchange=function(){settings.fuel=this.value;persist()};
 /* Fuel mode removed — always reimbursed */
 $('#setGstBase').onchange=function(){settings.gstBase=this.value;persist();toast(this.value==='share'?'GST set aside on driver share':'GST set aside on full gross')};
