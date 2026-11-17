@@ -3564,8 +3564,11 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='16.9';
+var APP_VERSION='16.10';
 var CHANGELOG=[
+  {v:'16.10',date:'November 17, 2026',notes:[
+    ['Feature','Press and hold the Log Shift button on Home for a new Clear all fields action. It shows what\u2019s in the form (date, take-home, photos, account jobs), asks before clearing, and you can undo straight after.'],
+  ]},
   {v:'16.9',date:'November 17, 2026',notes:[
     ['Feature','WhatsApp quick send now includes the EOS photo. Tap Send to <name>: the photo and shift summary go together through the share sheet \u2014 pick WhatsApp, then your contact (usually first in the row). The summary rides along as the photo caption and is copied too, just in case.'],
     ['Feature','Works for a shift you are logging and for saved shifts (shift preview and the press-and-hold menu in Weekly), using the EOS photos stored with that shift.'],
@@ -10822,13 +10825,26 @@ function holdFire(attr,val){var b=document.createElement('button');b.type='butto
 function holdEntry(id){return entries.filter(function(x){return String(x.id)===String(id)})[0]}
 function holdSv(id,btn){var e=holdEntry(id);if(!e)return;svId=e.id;var b=$('#'+btn);if(b)b.click()}
 function latestEntry(){var l=null;entries.forEach(function(e){if(!l||e.date>l.date||(e.date===l.date&&Number(e.id)>Number(l.id)))l=e});return l}
+/* Short "what's in the form" line for the Clear all fields action. */
+function clearFieldsSummary(){var b=[];
+  if(draft.dateSet&&draft.date)b.push(fmtDayLong(draft.date));
+  var t=takeT();if(eosT()>0||t)b.push(money(t)+' take-home');
+  var ph=(eosReceipts||[]).length+(fuelReceipts||[]).length+Object.keys(acctRcpts||{}).length;if(ph)b.push(ph+' photo'+(ph===1?'':'s'));
+  var ac=draft.accounts.filter(function(a){return nn(a.amount)>0}).length;if(ac)b.push(ac+' account job'+(ac===1?'':'s'));
+  return b.length?b.join(' \u00b7 '):'everything entered so far'}
 var TAB_NAMES={hub:['Home','home'],shift:['Log shift','car'],weekly:['Weekly','week'],bookings:['Bookings','cal'],runs:['Clients','users'],reports:['Reports','chart'],settings:['Settings','gear']};
 function hubItems(tab){
   var it=[{t:'Open '+TAB_NAMES[tab][0],i:TAB_NAMES[tab][1],fn:function(){go(tab)}}];
   if(tab==='shift'){it=[{t:'Log today’s shift',i:'car',fn:function(){go('shift');setTimeout(function(){setDraftDate(todayStr())},120)}},
     {t:'Log yesterday',s:fmtDayLong(yesterdayStr()),i:'cal',fn:function(){go('shift');setTimeout(function(){setDraftDate(yesterdayStr())},120)}},
     {t:'New booking',s:'Taxi booking reminder',i:'plus',fn:function(){openBooking(null)}}];
-    var le=latestEntry();if(le)it.push({t:'Preview last shift',s:fmtDayLong(le.date)+' · '+money(le.take),i:'eye',fn:function(){openShiftView(le.id)}})}
+    var le=latestEntry();if(le)it.push({t:'Preview last shift',s:fmtDayLong(le.date)+' · '+money(le.take),i:'eye',fn:function(){openShiftView(le.id)}});
+    var open=draftHasOpenLog(draft)||(draft&&draft.dateSet);
+    it.push({t:'Clear all fields',s:open?clearFieldsSummary():'Nothing entered yet',i:'del',danger:1,fn:function(){
+      if(!(draftHasOpenLog(draft)||(draft&&draft.dateSet))){toast('Log shift is already empty');return}
+      ask('Clear all fields?','Empties the shift you\u2019re logging'+(draft._edit?' (your saved shift in Weekly stays as it is)':'')+': '+clearFieldsSummary()+'. You can undo straight after.','Clear',function(){
+        draft=freshDraft('');clearReceiptAttach();persist();rowInputs();render();if(curTab==='shift')setSub(1);sfx('pop');buzz(10);
+      })}})}
   if(tab==='weekly'){var l2=latestEntry();if(l2)it.push({t:'Preview last shift',s:fmtDayLong(l2.date)+' · '+money(l2.take),i:'eye',fn:function(){openShiftView(l2.id)}});
     it.push({t:'Add a past shift',s:'Enter a total by hand',i:'plus',fn:function(){go('weekly');setTimeout(openAddEntry,150)}})}
   if(tab==='reports')it.push({t:'Receipts & EOS archive',i:'box',fn:openArchive});
