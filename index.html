@@ -2447,6 +2447,35 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
 .wa-photo-opt b{display:block;font-size:13px;color:var(--head)}
 .wa-photo-opt small{display:block;font-size:11.5px;color:var(--mut);margin-top:2px}
 .wa-photo-opt select{max-width:52%}
+
+/* ---------- Fareo 16.11 · Hail card on the Accounts step ---------- */
+.hail-inl{margin-top:12px;padding:14px;border-radius:var(--radius);background:var(--card);border:1px solid var(--bd);box-shadow:var(--shadow);transition:border-color .25s}
+.hail-inl.is-set{border-color:color-mix(in srgb,var(--hail) 45%,var(--bd))}
+.hail-inl.is-need{border-color:#F0B44C;animation:hiShake .45s var(--ease)}
+@keyframes hiShake{0%,100%{translate:0}20%{translate:-6px}40%{translate:5px}60%{translate:-3px}80%{translate:2px}}
+.hi-top{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:10px;align-items:center}
+.hi-ico{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font:800 15px var(--mono);background:color-mix(in srgb,var(--hail) 16%,transparent);color:var(--hail)}
+.hi-t b{display:block;font-size:15px;color:var(--head);line-height:1.2}
+.hi-t small{display:block;font-size:11.5px;color:var(--mut);margin-top:2px}
+.hi-tag{font:700 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:5px 8px;border-radius:999px;background:color-mix(in srgb,#F0B44C 16%,transparent);color:#F0B44C}
+.hail-inl.is-set .hi-tag{background:color-mix(in srgb,var(--hail) 16%,transparent);color:var(--hail)}
+.hi-row{display:grid;grid-template-columns:52px minmax(0,1fr) 52px;gap:10px;align-items:center;margin-top:12px}
+.hi-btn{height:52px;border-radius:14px;border:1px solid var(--bd2);background:var(--field);color:var(--head);font:600 24px/1 var(--mono);cursor:pointer}
+.hi-btn:disabled{opacity:.35}
+.hi-btn:active{scale:.95}
+.hi-num{text-align:center;min-width:0}
+.hi-num input{width:100%;height:52px;border-radius:14px;text-align:center;font:700 28px var(--mono);font-variant-numeric:tabular-nums;padding:0 6px;color:var(--head)}
+.hail-inl.is-money .hi-num input{font-size:24px}
+.hi-num small{display:block;margin-top:5px;font:600 11px var(--mono);color:var(--mut);letter-spacing:.02em}
+.hi-num.bump input{animation:hiBump .3s var(--ease)}
+@keyframes hiBump{50%{scale:1.06}}
+.hi-picks{display:grid;grid-template-columns:repeat(var(--n,8),1fr);gap:6px;margin-top:12px}
+.hi-picks button{height:38px;border-radius:11px;border:1px solid var(--bd2);background:transparent;color:var(--body);font:600 13px var(--mono);cursor:pointer;min-width:0;padding:0}
+.hi-picks button.on{background:var(--hail);border-color:var(--hail);color:#0b0d10}
+.hi-picks button.pop{animation:hiBump .3s var(--ease)}
+.hail-inl.is-money .hi-picks button{font-size:12px}
+.hi-ocr{margin:10px 0 0;font-size:11.5px;color:var(--mut)}
+@media (min-width:700px) and (min-height:560px){.acct-pane .hail-inl{max-width:560px}}
 </style>
 </head>
 <body>
@@ -2527,7 +2556,6 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
             <p id="hailOcrHint" style="display:none;margin:6px 0 0;font-size:10.5px;color:var(--on-dgr);line-height:1.35"></p>
           </div>
         </div>
-        <button type="button" class="hail-sum" id="hailSum"><span class="hs-ico" aria-hidden="true">H</span><span class="hs-t"><b id="hailSumT">Hail trips</b><small id="hailSumS">You&rsquo;ll enter these when you tap Next</small></span><span class="hs-amt" id="hailSumA"></span></button>
       </div>
       <div class="shift-fields" id="shiftFields">
       <div class="card tx-fuel shift-field" data-field="fuel"><h5 class="sf-h5"><button type="button" class="sf-grip" aria-label="Drag to reorder" title="Drag to reorder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></button><span class="dot" style="background:var(--fuel-fill)"></span>Fuel <span id="fuelReqBadge" class="danger" style="font-size:10px;margin-left:auto;display:none">required</span><span class="help" data-help="Required when a fuel receipt is attached. Tick Paid by operator for operator card fuel." aria-label="Help">?</span><span class="sub-amt" id="fuelSub">$0</span></h5>
@@ -2560,6 +2588,20 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
       </div>
       <div id="acctRows" class="acct-list"></div>
       <button type="button" class="add acct-add" id="addAcct">+ Add account job</button>
+      <div class="hail-inl" id="hailCard">
+        <div class="hi-top">
+          <span class="hi-ico" aria-hidden="true">H</span>
+          <div class="hi-t"><b id="hiTitle">Hail trips</b><small id="hiSub">Rank &amp; street hails &middot; for the levy</small></div>
+          <span class="hi-tag" id="hiTag">Required</span>
+        </div>
+        <div class="hi-row">
+          <button type="button" class="hi-btn" id="hiMinus" aria-label="One less">&minus;</button>
+          <div class="hi-num"><input id="hiInput" type="number" min="0" max="199" step="1" inputmode="numeric" enterkeyhint="done" placeholder="&ndash;" aria-label="Hail trips"><small id="hiLevy">levy $0.00</small></div>
+          <button type="button" class="hi-btn" id="hiPlus" aria-label="One more">+</button>
+        </div>
+        <div class="hi-picks" id="hiPicks" role="group" aria-label="Quick picks"></div>
+        <p class="hi-ocr" id="hiOcr" hidden></p>
+      </div>
       <div class="acct-net"><span>Net take-home</span><b id="acctNet">$0.00</b><small>Tap Next to attach slips &amp; share</small></div>
     </div>
     <div data-pane="3" style="display:none">
@@ -3564,8 +3606,13 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='16.10';
+var APP_VERSION='16.11';
 var CHANGELOG=[
+  {v:'16.11',date:'November 18, 2026',notes:[
+    ['UI/UX','Hail trips now sit in a neat card at the end of the Accounts step instead of a pop-up when you leave Log. Tap a number (0\u20138), use \u2212 / +, or type it \u2014 it saves as you go and shows the levy straight away.'],
+    ['UI/UX','In Dollar amount mode the same card asks for the levy in dollars, with quick amounts in steps of your per-trip rate. A value read from your EOS slip is filled in and flagged so you can check it.'],
+    ['UI/UX','Hail is still required before Share: Next on Accounts stays faded until it\u2019s set, and if you skip ahead Fareo brings you back to the card and highlights it.'],
+  ]},
   {v:'16.10',date:'November 17, 2026',notes:[
     ['Feature','Press and hold the Log Shift button on Home for a new Clear all fields action. It shows what\u2019s in the form (date, take-home, photos, account jobs), asks before clearing, and you can undo straight after.'],
   ]},
@@ -5454,7 +5501,7 @@ function render(){
   $('#levyTag').textContent=money(levyT())+' levy';
   $('#levyRate').textContent=levyByAmount()?'entered amount':money(levyRate())+' / trip';
   var la=$('#levyAmt');if(la)la.textContent=money(levyT());
-  renderHailSum();
+  renderHailSum();try{hiRender(false)}catch(_){}
   updateFooter();
   if(typeof updateReviewSum==='function')updateReviewSum();
   if(typeof updateLogProgress==='function')updateLogProgress();
@@ -5693,7 +5740,7 @@ $('#clearShift').onclick=function(){
 var curSub=1;
 function gateFailMsg(){
   if(!draft.dateSet)return{text:'Pick the shift date.',toast:'Shift date required',pane:1};
-  if(!hailEnteredOk())return{text:'Enter hail / rank trips (required for levy).',toast:'Hail required',pane:1};
+  if(!hailEnteredOk())return{text:levyByAmount()?'Enter the levy amount at the bottom of Accounts.':'Enter hail trips at the bottom of Accounts.',toast:levyByAmount()?'Levy amount required':'Hail required',pane:2,hail:true};
   if(!fuelReceiptRequiredOk())return{text:'Fuel receipt attached — enter the fuel amount on Log.',toast:'Fuel amount required',pane:1};
   return null;
 }
@@ -5725,7 +5772,7 @@ function setSub(n){
   n=n<1?1:(n>3?3:n);
   if(n===3){
     var g=gateFailMsg();
-    if(g){n=g.pane||1;var m=$('#msg');m.textContent=g.text;m.className='msg err';toast(g.toast)}
+    if(g){n=g.pane||1;if(g.hail)setSub._hail=true;var m=$('#msg');m.textContent=g.text;m.className='msg err';toast(g.toast)}
     else{$('#msg').className='msg'}
   }else{$('#msg').className='msg'}
   curSub=n;
@@ -5736,11 +5783,12 @@ function setSub(n){
   });
   $$('.stp').forEach(function(el){var k=+el.dataset.sub;el.classList.toggle('lit',k<=n);el.classList.toggle('on',k===n)});
   if(n===1)rowInputs();
-  if(n===2)renderAcctRows();
+  if(n===2){renderAcctRows();hiRender(false)}
   if(n===3){ensureShiftRego();rowInputs();buildPreview()}
   updateReceiptUI();
   updateReviewSum();
   updateFooter();window.scrollTo({top:0,behavior:'smooth'});
+  if(n===2&&setSub._hail){setSub._hail=false;setTimeout(hiFlag,350)}
 }
 function updateFooter(){
   var next=$('#snext'),back=$('#sback');if(!next)return;
@@ -5753,7 +5801,7 @@ function updateFooter(){
   next.classList.toggle('share',share);
   next.setAttribute('aria-label',lbl);
   next.setAttribute('title',lbl);
-  var blocked=(curSub===1&&(!draft.dateSet||!fuelReceiptRequiredOk()))||(curSub===3&&(!docsOk()||!draft.rego));
+  var blocked=(curSub===1&&(!draft.dateSet||!fuelReceiptRequiredOk()))||(curSub===2&&!hailEnteredOk())||(curSub===3&&(!docsOk()||!draft.rego));
   next.classList.toggle('faded',blocked);
 }
 function syncShiftDock(){
@@ -5824,13 +5872,58 @@ function renderHailSum(){
   }
   $('#hailSumA').textContent=ok?'Edit':'';
 }
+
+/* ---------- Hail / levy card at the end of the Accounts step ----------
+   Saves as you tap (no pop-up). Trips or dollars per Settings → Levy entry. */
+function hiStep(){return levyByAmount()?hmStepAmt():1}
+function hiVal(){if(!hailEnteredOk())return null;return nn(levyByAmount()?draft.levyAmt:draft.hail)}
+function hiRender(bump){
+  var card=$('#hailCard');if(!card)return;
+  var amt=levyByAmount(),v=hiVal(),has=v!=null,inp=$('#hiInput');
+  $('#hiTitle').textContent=amt?'Levy amount':'Hail trips';
+  $('#hiSub').textContent=amt?'Hail / CPV levy off your EOS':'Rank & street hails · for the levy';
+  if(inp){inp.max=amt?'9999':'199';inp.step=amt?'0.01':'1';inp.inputMode=amt?'decimal':'numeric';inp.placeholder=amt?'0.00':'–';inp.setAttribute('aria-label',amt?'Levy amount in dollars':'Hail trips');
+    if(document.activeElement!==inp)inp.value=has?(amt?String(round2(v)):String(v)):''}
+  card.classList.toggle('is-money',amt);card.classList.toggle('is-set',has);
+  var tag=$('#hiTag');tag.textContent=has?'✓ Set':'Required';
+  $('#hiLevy').textContent=amt?(has?'dollars of levy':'enter the amount'):(has?'levy '+money(v*levyRate()):'tap a number or type it');
+  $('#hiMinus').disabled=!has||v<=0;
+  $('#hiMinus').setAttribute('aria-label',amt?'Less '+money(hiStep()):'One less');$('#hiPlus').setAttribute('aria-label',amt?'More '+money(hiStep()):'One more');
+  var r=hiStep(),picks=amt?[0,1,2,3,4,5].map(function(k){return round2(k*r)}):[0,1,2,3,4,5,6,8];
+  var ph=picks.join(',')+(amt?'$':'');
+  var host=$('#hiPicks');if(host.dataset.k!==ph){host.dataset.k=ph;host.style.setProperty('--n',picks.length);
+    host.innerHTML=picks.map(function(n,k){return '<button type="button" data-hi="'+n+'" style="--k:'+k+'">'+(amt?(n?'$'+n.toFixed(2):'$0'):n)+'</button>'}).join('')}
+  $$('#hiPicks button').forEach(function(b){b.classList.toggle('on',has&&Math.abs(Number(b.dataset.hi)-v)<0.005)});
+  var oc=$('#hiOcr'),fromOcr=!amt&&has&&eosReceipts.some(function(x){return x&&x.ocrHail!=null&&Number(x.ocrHail)===Number(draft.hail)});
+  oc.hidden=!fromOcr;if(fromOcr)oc.textContent='Read from your EOS slip — check it matches.';
+  if(bump){var w=card.querySelector('.hi-num');w.classList.remove('bump');void w.offsetWidth;w.classList.add('bump')}
+  try{updateFooter()}catch(_){}
+}
+function hiSet(v,bump){
+  var amt=levyByAmount();
+  if(v===''||v==null)v=null;
+  else{v=Number(v);if(!isFinite(v))v=null;else v=amt?Math.max(0,Math.min(9999,round2(v))):Math.max(0,Math.min(199,Math.round(v)))}
+  if(amt)draft.levyAmt=v==null?'':String(v);
+  else{draft.hail=v==null?'':v;var h=$('#hail');if(h)h.value=v==null?'':v}
+  $('#hailCard').classList.remove('is-need');
+  persist();render();hiRender(bump);
+}
+function hiFlag(){var c=$('#hailCard');if(!c)return;c.classList.remove('is-need');void c.offsetWidth;c.classList.add('is-need');
+  c.scrollIntoView({block:'center',behavior:motionOff()?'auto':'smooth'});buzz([10,40,10]);
+  setTimeout(function(){var i=$('#hiInput');if(i&&hiVal()==null)i.focus({preventScroll:true})},380)}
+if($('#hiInput')){$('#hiInput').oninput=function(){hiSet(this.value,false)};
+  $('#hiInput').onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();this.blur()}};
+  $('#hiInput').onblur=function(){hiRender(false)}}
+if($('#hiMinus'))$('#hiMinus').onclick=function(){var v=hiVal()||0;hiSet(Math.max(0,v-hiStep()),true);sfx('tap')};
+if($('#hiPlus'))$('#hiPlus').onclick=function(){var v=hiVal();hiSet((v==null?0:v)+hiStep(),true);sfx('tap')};
+if($('#hiPicks'))$('#hiPicks').onclick=function(e){var b=e.target.closest('[data-hi]');if(!b)return;hiSet(b.dataset.hi,true);sfx('pop');buzz(6);b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop')};
 function nextStep(){
   if(curSub===1){
     if(dateGateFail())return;
     if(!fuelReceiptRequiredOk()){var m=$('#msg');m.textContent='Fuel receipt attached — enter the fuel amount on Log.';m.className='msg err';toast('Fuel amount required');window.scrollTo({top:0,behavior:'smooth'});return}
-    $('#msg').className='msg';openHailStep();return;
+    $('#msg').className='msg';setSub(2);return;
   }
-  if(curSub===2){acClose();setSub(3);return}
+  if(curSub===2){acClose();if(!hailEnteredOk()){hiFlag();toast(levyByAmount()?'Levy amount required':'Hail required','warn');return}setSub(3);return}
   if(curSub===3){
     var g2=gateFailMsg();
     if(g2){var m2=$('#msg');m2.textContent=g2.text;m2.className='msg err';toast(g2.toast);setSub(g2.pane||1);return}
@@ -5840,7 +5933,7 @@ function nextStep(){
 }
 $('#snext').onclick=nextStep;
 $('#sback').onclick=function(){if(curSub>1)setSub(curSub-1)};
-$$('.stp').forEach(function(b){b.onclick=function(){var n=+b.dataset.sub;if(n>=2&&curSub===1){hmTarget=n;nextStep();return}setSub(n)}});
+$$('.stp').forEach(function(b){b.onclick=function(){var n=+b.dataset.sub;if(n>=2&&curSub===1){if(dateGateFail())return;if(!fuelReceiptRequiredOk()){nextStep();return}$('#msg').className='msg'}setSub(n)}});
 /* Accounts step: keep the field being typed in clear of the keyboard, and let
    Enter walk name → amount → next job without reaching for the screen. */
 document.addEventListener('focusin',function(e){
