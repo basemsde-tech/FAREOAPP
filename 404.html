@@ -3607,8 +3607,11 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='16.12';
+var APP_VERSION='16.13';
 var CHANGELOG=[
+  {v:'16.13',date:'November 21, 2026',notes:[
+    ['UI/UX','EFTPOS-style amount entry is now on by default: type 1250 and you get $12.50. Prefer typing the decimal point yourself? Settings \u2192 Shifts & accounts \u2192 Amount entry \u2192 Normal.'],
+  ]},
   {v:'16.12',date:'November 21, 2026',notes:[
     ['Feature','EFTPOS-style amount entry (Settings \u2192 Shifts & accounts \u2192 Amount entry). Amounts fill from the cents up like a card machine: type 1, 2, 5, 0 and you get $0.01 \u2192 $0.12 \u2192 $1.25 \u2192 $12.50. No decimal point needed, and the keypad shows digits only.'],
     ['UI/UX','Backspace takes the last digit off ($12.50 \u2192 $1.25). Tapping a box that already has an amount and typing starts a new amount. Pasting $88.9 gives 88.90. Works on EOS, cash, Square, account jobs, fuel, expenses, past-shift totals and the levy in dollar mode; hail trip counts stay whole numbers.'],
@@ -5929,7 +5932,7 @@ if($('#hiPicks'))$('#hiPicks').onclick=function(e){var b=e.target.closest('[data
    keyboards that don't let beforeinput be cancelled. */
 var EFT_SEL='[data-eos],[data-ca],[data-sa],[data-fa],[data-aa],#expAmt,#adjAmt,#enAmt,#fmAmt';
 var EFT_MAX=99999999; /* $999,999.99 */
-function eftOn(){return settings.eftpos===true}
+function eftOn(){return settings.eftpos!==false} /* on unless switched off in Settings */
 function isEftInput(el){
   if(!eftOn()||!el||el.tagName!=='INPUT')return false;
   if(el.matches(EFT_SEL))return true;
