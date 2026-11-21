@@ -2476,6 +2476,15 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
 .hail-inl.is-money .hi-picks button{font-size:12px}
 .hi-ocr{margin:10px 0 0;font-size:11.5px;color:var(--mut)}
 @media (min-width:700px) and (min-height:560px){.acct-pane .hail-inl{max-width:560px}}
+
+/* ---------- Fareo 16.14 · Restore from Drive on Home ---------- */
+.gd-rest{margin-left:auto;flex:none;display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 12px 0 10px;border-radius:999px;border:1px solid var(--bd2);background:var(--card);color:var(--head);font:600 12.5px/1 inherit;font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:border-color .2s}
+.gd-rest svg{width:16px;height:16px;flex:none}
+.gd-rest:active{scale:.96}
+.gd-rest.busy{opacity:.75;pointer-events:none}
+.gd-rest.busy svg{animation:gdSpin 1s linear infinite}
+@keyframes gdSpin{to{rotate:360deg}}
+@media (max-width:360px){.gd-rest span{display:none}.gd-rest{width:36px;padding:0;justify-content:center}}
 </style>
 </head>
 <body>
@@ -2496,6 +2505,7 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
     <div class="hub-hello">
       <div class="av" id="hubAv" aria-hidden="true">F</div>
       <div><p class="hub-date" id="today">Today</p><h1 class="hub-greet" id="greet">Welcome back</h1></div>
+      <button type="button" class="gd-rest" id="gdHomeRestore" title="Restore the newest backup from Google Drive" aria-label="Restore the newest backup from Google Drive"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#0F9D58" d="M8.3 3h7.4l7 12-3.7 6.4-7-12z"/><path fill="#FFC107" d="M8.3 3 1.3 15l3.7 6.4 7-12z"/><path fill="#4285F4" d="M5 21.4h14l3.7-6.4H8.7z"/></svg><span>Restore</span></button>
     </div>
     <button type="button" class="gd-due" id="gdDue" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#0F9D58" d="M8.3 3h7.4l7 12-3.7 6.4-7-12z"/><path fill="#FFC107" d="M8.3 3 1.3 15l3.7 6.4 7-12z"/><path fill="#4285F4" d="M5 21.4h14l3.7-6.4H8.7z"/></svg><span><b>Backup due</b><small id="gdDueSub">Tap to back up to Google Drive</small></span><i aria-hidden="true">&rsaquo;</i></button>
     <div class="inst-bar" id="installBar" hidden><span class="inst-ico"><img src="icon-192-v100.png" alt=""></span><div class="inst-txt"><b>Install Fareo</b><small>Home-screen app &middot; full screen &middot; works offline</small></div><button type="button" class="inst-go" id="installGo">Install</button><button type="button" class="inst-x" id="installX" aria-label="Not now">&times;</button></div>
@@ -3607,8 +3617,11 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='16.13';
+var APP_VERSION='16.14';
 var CHANGELOG=[
+  {v:'16.14',date:'November 22, 2026',notes:[
+    ['Feature','Restore from Google Drive in one tap: a small Restore button at the top of Home fetches your newest Drive backup. If this device already has shifts you can merge (keeps both) or replace; a copy of what you had is kept under Recovery.'],
+  ]},
   {v:'16.13',date:'November 21, 2026',notes:[
     ['UI/UX','EFTPOS-style amount entry is now on by default: type 1250 and you get $12.50. Prefer typing the decimal point yourself? Settings \u2192 Shifts & accounts \u2192 Amount entry \u2192 Normal.'],
   ]},
@@ -8798,7 +8811,7 @@ function gdShowChoice(){var st=gdState(),ds=st.conflict;if(!ds)return;var L=data
   showModal('gdChoiceModal');sfx('warn');}
 async function gdDownload(tok){var m=await gdLocate(tok);if(!m)throw {message:'No Fareo backup in your Google Drive yet'};var txt=await gdApi('GET','/drive/v3/files/'+encodeURIComponent(m.id)+'?alt=media',tok);return {meta:m,backup:parseBackup(typeof txt==='string'?txt:JSON.stringify(txt))}}
 function gdRestoreFlow(){
-  gdTokenOrSignIn().then(gdDownload).then(function(r){var b=r.backup,c=backupCounts(b.data),cur=dataSummary(allData());
+  return gdTokenOrSignIn().then(gdDownload).then(function(r){var b=r.backup,c=backupCounts(b.data),cur=dataSummary(allData());
     if(cur.shifts){restoreChooser(b.data,'Google Drive \u00b7 saved '+gdAgo(Date.parse(r.meta.modifiedTime)),{fromDrive:r.meta.id});return}
     ask('Restore from Google Drive?','Backup saved '+gdAgo(Date.parse(r.meta.modifiedTime))+': '+c.shifts+' shifts, '+c.costs+' costs, '+c.clients+' clients, '+c.receipts+' receipts. It replaces the '+cur.shifts+' shifts on this device. A copy of what you have now is kept under Recovery.','Restore',function(){doRestoreBackup(b.data,{fromDrive:r.meta.id})},{danger:false,noLbl:'Cancel',noUndo:true})
   }).catch(function(e){if(e&&e.code&&/cancel|closed/.test(e.code))return;toast(gdErrMsg(e),'error')})}
@@ -8808,6 +8821,8 @@ document.addEventListener('click',function(e){
   var fq=c('#gdFreq [data-f]');if(fq){gdSet({freq:fq.dataset.f});gdUI();sfx('tap');gdTick();return}
   if(c('#gdNow')||c('#gdDue')){gdBackupNow(true);return}
   if(c('#gdRestore')){gdRestoreFlow();return}
+  var hr=c('#gdHomeRestore');if(hr){if(hr.classList.contains('busy'))return;hr.classList.add('busy');hr.querySelector('span').textContent='Checking\u2026';sfx('tap');
+    Promise.resolve(gdRestoreFlow()).catch(function(){}).then(function(){hr.classList.remove('busy');hr.querySelector('span').textContent='Restore'});return}
   if(c('#gdOff')){ask('Disconnect Google Drive?','Automatic backups stop and Fareo signs out of Google on this device. Your backup file stays in Drive.','Disconnect',function(){gdSet({on:false,due:false,conflict:null,email:''});gdSetToken(null);try{if(fb.auth)fb.authM.signOut(fb.auth)}catch(_){}gdUI();toast('Google Drive disconnected')},{danger:false,noLbl:'Cancel',noUndo:true});return}
   if(t.id==='gdcLater'){closeModal('gdChoiceModal');gdUI();return}
   var g=c('[data-gdc]');if(g){var mode=g.dataset.gdc;closeModal('gdChoiceModal');saveRecoveryPoint('Before Drive choice');
