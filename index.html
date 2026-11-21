@@ -3023,6 +3023,7 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
         <div class="sp-sec"><p class="grp">Shift form</p>
         <div class="card set-card">
       <div class="set"><div class="sl"><b>Default fuel</b><p>Pre-filled on new fill-ups</p></div><select id="setFuel"><option>Diesel</option><option>Petrol</option><option>LPG</option></select></div>
+      <div class="set"><div class="sl"><b>Amount entry <span class="help" data-help="EFTPOS style: amounts fill from the cents up, like a card machine. Type 1, 2, 5, 0 and you get $0.01, $0.12, $1.25, $12.50 &mdash; no decimal point needed, and the keypad shows digits only. Backspace takes the last digit off. When you tap a box that already has an amount, the first digit starts a new amount. Applies to EOS, cash, Square, account jobs, fuel, expenses and other dollar boxes. Normal: type the amount with a decimal point as usual." aria-label="Help">?</span></b><p id="eftSub">Type amounts with a decimal point</p></div><select id="setEftpos"><option value="normal">Normal</option><option value="eftpos">EFTPOS</option></select></div>
       <div class="set"><div class="sl"><b>Name suggestions</b><p>Suggest past payer &amp; account names</p></div><button class="tgl" id="setAuto" aria-label="Toggle name suggestions"></button></div>
       <div class="set"><div class="sl"><b>Read hail count from photos</b><p>Scans EOS slips for Rank / Hail trips</p></div><button class="tgl on" id="setOcrHail" aria-label="Toggle hail OCR"></button></div>
       <div class="set"><div class="sl"><b>Address region <span class="help" data-help="Prioritises and predicts addresses in your Australian state (Victoria by default)." aria-label="Help">?</span></b><p>Focus for address search</p></div><select id="setState"><option value="VIC">VIC (Victoria)</option><option value="NSW">NSW</option><option value="QLD">QLD</option><option value="SA">SA</option><option value="WA">WA</option><option value="TAS">TAS</option><option value="ACT">ACT</option><option value="NT">NT</option><option value="ALL">All Australia</option></select></div>
@@ -3606,8 +3607,12 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='16.11';
+var APP_VERSION='16.12';
 var CHANGELOG=[
+  {v:'16.12',date:'November 21, 2026',notes:[
+    ['Feature','EFTPOS-style amount entry (Settings \u2192 Shifts & accounts \u2192 Amount entry). Amounts fill from the cents up like a card machine: type 1, 2, 5, 0 and you get $0.01 \u2192 $0.12 \u2192 $1.25 \u2192 $12.50. No decimal point needed, and the keypad shows digits only.'],
+    ['UI/UX','Backspace takes the last digit off ($12.50 \u2192 $1.25). Tapping a box that already has an amount and typing starts a new amount. Pasting $88.9 gives 88.90. Works on EOS, cash, Square, account jobs, fuel, expenses, past-shift totals and the levy in dollar mode; hail trip counts stay whole numbers.'],
+  ]},
   {v:'16.11',date:'November 18, 2026',notes:[
     ['UI/UX','Hail trips now sit in a neat card at the end of the Accounts step instead of a pop-up when you leave Log. Tap a number (0\u20138), use \u2212 / +, or type it \u2014 it saves as you go and shows the levy straight away.'],
     ['UI/UX','In Dollar amount mode the same card asks for the levy in dollars, with quick amounts in steps of your per-trip rate. A value read from your EOS slip is filled in and flagged so you can check it.'],
@@ -5882,8 +5887,8 @@ function hiRender(bump){
   var amt=levyByAmount(),v=hiVal(),has=v!=null,inp=$('#hiInput');
   $('#hiTitle').textContent=amt?'Levy amount':'Hail trips';
   $('#hiSub').textContent=amt?'Hail / CPV levy off your EOS':'Rank & street hails · for the levy';
-  if(inp){inp.max=amt?'9999':'199';inp.step=amt?'0.01':'1';inp.inputMode=amt?'decimal':'numeric';inp.placeholder=amt?'0.00':'–';inp.setAttribute('aria-label',amt?'Levy amount in dollars':'Hail trips');
-    if(document.activeElement!==inp)inp.value=has?(amt?String(round2(v)):String(v)):''}
+  if(inp){inp.max=amt?'9999':'199';inp.step=amt?'0.01':'1';inp.inputMode=amt?(eftOn()?'numeric':'decimal'):'numeric';inp.placeholder=amt?'0.00':'–';inp.setAttribute('aria-label',amt?'Levy amount in dollars':'Hail trips');
+    if(document.activeElement!==inp)inp.value=has?(amt?(eftOn()?round2(v).toFixed(2):String(round2(v))):String(v)):''}
   card.classList.toggle('is-money',amt);card.classList.toggle('is-set',has);
   var tag=$('#hiTag');tag.textContent=has?'✓ Set':'Required';
   $('#hiLevy').textContent=amt?(has?'dollars of levy':'enter the amount'):(has?'levy '+money(v*levyRate()):'tap a number or type it');
@@ -5917,6 +5922,61 @@ if($('#hiInput')){$('#hiInput').oninput=function(){hiSet(this.value,false)};
 if($('#hiMinus'))$('#hiMinus').onclick=function(){var v=hiVal()||0;hiSet(Math.max(0,v-hiStep()),true);sfx('tap')};
 if($('#hiPlus'))$('#hiPlus').onclick=function(){var v=hiVal();hiSet((v==null?0:v)+hiStep(),true);sfx('tap')};
 if($('#hiPicks'))$('#hiPicks').onclick=function(e){var b=e.target.closest('[data-hi]');if(!b)return;hiSet(b.dataset.hi,true);sfx('pop');buzz(6);b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop')};
+
+/* ---------- Fareo 16.12 · EFTPOS-style amount entry ----------
+   Digits fill from the cents up (1 → 0.01, 12 → 0.12, 1250 → 12.50).
+   beforeinput does the work; an input-event fallback re-reads the digits for
+   keyboards that don't let beforeinput be cancelled. */
+var EFT_SEL='[data-eos],[data-ca],[data-sa],[data-fa],[data-aa],#expAmt,#adjAmt,#enAmt,#fmAmt';
+var EFT_MAX=99999999; /* $999,999.99 */
+function eftOn(){return settings.eftpos===true}
+function isEftInput(el){
+  if(!eftOn()||!el||el.tagName!=='INPUT')return false;
+  if(el.matches(EFT_SEL))return true;
+  if(el.dataset&&el.dataset.custom!=null)return el.placeholder!=='Count';
+  if(el.id==='hiInput')return levyByAmount();
+  return false;
+}
+function eftCentsOf(v){v=String(v==null?'':v).trim();if(!v)return 0;var n=Number(v);return isFinite(n)&&n>0?Math.round(n*100):0}
+function eftFmt(c){return c>0?(c/100).toFixed(2):''}
+function eftWrite(el,c){c=Math.max(0,Math.min(EFT_MAX,c));var v=eftFmt(c);el._eftPrev=v;el._eftSelf=true;el.value=v;
+  try{el.setSelectionRange(v.length,v.length)}catch(_){}
+  el.dispatchEvent(new Event('input',{bubbles:true}));el._eftSelf=false}
+function eftPrep(el){if(!isEftInput(el))return;
+  el.setAttribute('inputmode','numeric');if(!el.getAttribute('data-ph0'))el.setAttribute('data-ph0',el.placeholder||'');
+  if(!el.placeholder||/^amount$|^0\.00$/i.test(el.placeholder))el.placeholder='0.00';
+  var c=eftCentsOf(el.value);if(c&&el.value!==eftFmt(c))el.value=eftFmt(c);
+  el._eftPrev=el.value;el._eftFresh=!!el.value}
+document.addEventListener('pointerdown',function(e){var el=e.target;if(el&&el.tagName==='INPUT')eftPrep(el)},true);
+document.addEventListener('focusin',function(e){eftPrep(e.target)},true);
+document.addEventListener('focusout',function(e){var el=e.target;if(!isEftInput(el))return;el._eftFresh=false;var c=eftCentsOf(el.value);if(c&&el.value!==eftFmt(c))el.value=eftFmt(c)},true);
+document.addEventListener('beforeinput',function(e){
+  var el=e.target;if(!isEftInput(el))return;
+  var t=e.inputType||'';
+  if(t==='insertText'||t==='insertReplacementText'||t==='insertCompositionText'){
+    var dg=String(e.data||'').replace(/\D/g,'');e.preventDefault();if(!dg)return;
+    var c=el._eftFresh?0:eftCentsOf(el.value);el._eftFresh=false;
+    for(var i=0;i<dg.length;i++)c=c*10+Number(dg[i]);
+    if(c>EFT_MAX){buzz(20);return}
+    eftWrite(el,c);return}
+  if(t==='deleteContentBackward'){e.preventDefault();el._eftFresh=false;eftWrite(el,Math.floor(eftCentsOf(el.value)/10));return}
+  if(t==='deleteContentForward'||t==='deleteByCut'||t==='deleteContent'||t==='deleteWordBackward'||t==='deleteSoftLineBackward'){e.preventDefault();el._eftFresh=false;eftWrite(el,0);return}
+  if(t==='insertFromPaste'||t==='insertFromDrop'){var raw=String(e.data||(e.dataTransfer&&e.dataTransfer.getData('text'))||'');e.preventDefault();
+    var n=parseFloat(raw.replace(/[^\d.]/g,''));el._eftFresh=false;eftWrite(el,isFinite(n)?Math.round(n*100):0);return}
+},true);
+/* Fallback: the keyboard changed the box anyway — rebuild from the digits it now holds. */
+document.addEventListener('input',function(e){
+  var el=e.target;if(el._eftSelf||!isEftInput(el))return;
+  var v=String(el.value||''),prev=String(el._eftPrev||''),c;
+  if(el._eftFresh&&prev&&v.indexOf(prev)===0&&v.length>prev.length){c=Number((v.slice(prev.length).replace(/\D/g,''))||0)}
+  else c=Number(v.replace(/\D/g,'').replace(/^0+/,'')||0);
+  el._eftFresh=false;c=Math.min(EFT_MAX,c);var f=eftFmt(c);el._eftPrev=f;
+  if(v!==f){el.value=f;try{el.setSelectionRange(f.length,f.length)}catch(_){}}
+},true);
+document.addEventListener('keydown',function(e){var el=e.target;if(!isEftInput(el))return;if(e.key==='.'||e.key===','||e.key==='e'||e.key==='E'||e.key==='-'||e.key==='+')e.preventDefault()},true);
+function eftUI(){var s=$('#eftSub');if(s)s.textContent=eftOn()?'EFTPOS style · 1250 = $12.50':'Type amounts with a decimal point';
+  $$('input').forEach(function(el){if(el.matches(EFT_SEL)||el.id==='hiInput'||(el.dataset&&el.dataset.custom!=null)){
+    if(eftOn())eftPrep(el);else{var ph=el.getAttribute('data-ph0');if(ph!=null){el.placeholder=ph;el.removeAttribute('data-ph0')}if(el.id!=='hiInput'||levyByAmount())el.setAttribute('inputmode','decimal')}}})}
 function nextStep(){
   if(curSub===1){
     if(dateGateFail())return;
@@ -8386,7 +8446,7 @@ $('#csvBtn').onclick=function(){
 };
 /* ---------- settings ---------- */
 function renderSettings(){try{updateWaUI()}catch(_){}
-  $('#setPct').value=settings.pct;$('#setLevy').value=settings.levy;if($('#setLevyMode'))$('#setLevyMode').value=levyByAmount()?'amount':'trips';levyModeUI();$('#setFuel').value=settings.fuel;$('#setTheme').value=settings.theme;
+  $('#setPct').value=settings.pct;$('#setLevy').value=settings.levy;if($('#setLevyMode'))$('#setLevyMode').value=levyByAmount()?'amount':'trips';levyModeUI();$('#setFuel').value=settings.fuel;if($('#setEftpos'))$('#setEftpos').value=eftOn()?'eftpos':'normal';eftUI();$('#setTheme').value=settings.theme;
   $('#setGstBase').value=settings.gstBase;
   var stState=$('#setState');if(stState)stState.value=settings.state||'VIC';
   $('#setCashGst').classList.toggle('on',!!settings.cashGstFree);
@@ -8448,6 +8508,8 @@ if($('#setLevyMode'))$('#setLevyMode').onchange=function(){var was=levyByAmount(
   persist();levyModeUI();render();try{renderHailSum()}catch(_){}
   toast(levyByAmount()?'Levy: you\u2019ll enter a dollar amount each shift':'Levy: you\u2019ll enter hail trips each shift','success')};
 $('#setFuel').onchange=function(){settings.fuel=this.value;persist()};
+if($('#setEftpos'))$('#setEftpos').onchange=function(){settings.eftpos=this.value==='eftpos';persist();eftUI();
+  toast(eftOn()?'EFTPOS entry on: type 1250 for $12.50':'Normal entry: type amounts with a decimal point','success')};
 /* Fuel mode removed — always reimbursed */
 $('#setGstBase').onchange=function(){settings.gstBase=this.value;persist();toast(this.value==='share'?'GST set aside on driver share':'GST set aside on full gross')};
 $('#setCashGst').onclick=function(){settings.cashGstFree=!settings.cashGstFree;persist();this.classList.toggle('on',settings.cashGstFree);renderReports();toast(settings.cashGstFree?'Cash & Square: tax-free — not in G1 or 1A':'Cash & Square: GST applies (in G1)')};
