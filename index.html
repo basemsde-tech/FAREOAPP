@@ -2814,12 +2814,12 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
       <div class="ov-head"><div><span class="eyebrow" id="ovEyebrow">Overview</span><div class="ov-range" id="ovRange"></div></div><span class="ov-shifts" id="ovShifts">0 shifts</span></div>
       <div class="ov-hero"><small id="ovKeptLbl">Kept after tax</small><b class="tally" id="ovKept">$0.00</b><span class="ov-delta" id="ovDelta"></span></div>
       <div class="ov-kpis">
-        <div class="ov-k"><small>Gross fares</small><b class="tally" id="ovGross">$0.00</b><span id="ovGrossSub"></span></div>
         <div class="ov-k"><small>Your share</small><b class="tally" id="ovShare">$0.00</b><span id="ovShareSub"></span></div>
+        <div class="ov-k"><small>Per shift</small><b class="tally" id="ovGross">$0.00</b><span id="ovGrossSub"></span></div>
         <div class="ov-k ov-set"><small>Set aside</small><b class="tally" id="ovSet">$0.00</b><span id="ovSetSub"></span></div>
       </div>
       <div class="ov-trend"><div class="ov-trend-h"><small>Last 8 weeks</small><span id="ovTrendD"></span></div><div class="ov-bars" id="ovBars"></div></div>
-      <details class="te-det rep-more" id="ovMore"><summary><span>Where the money goes</span><small id="ovMoreSum"></small></summary><div class="rm-in">
+      <details class="te-det rep-more" id="ovMore"><summary><span>Where your share goes</span><small id="ovMoreSum"></small></summary><div class="rm-in">
       <div class="ov-split"><div class="ov-bar" id="ovBar"></div><div class="ov-leg" id="ovLeg"></div></div>
       <div class="ov-stats" id="ovStats"></div></div></details>
     </div>
@@ -3640,8 +3640,12 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='16.16';
+var APP_VERSION='16.17';
 var CHANGELOG=[
+  {v:'16.17',date:'November 24, 2026',notes:[
+    ['UI/UX','Reports now focus on your share only. Gross fares and the operator share are gone: the overview shows Your share, Per shift and Set aside; \u201cWhere your share goes\u201d splits your share into levy, GST, costs, tax and what you keep.'],
+    ['UI/UX','The PDF report follows suit: no gross or operator figures in the tiles, split or tables. The BAS worksheet still shows G1 because that\u2019s what you copy onto the form.'],
+  ]},
   {v:'16.16',date:'November 24, 2026',notes:[
     ['UI/UX','Run Passengers: separate Morning and Afternoon counters ($5 per passenger). Fareo adds them up \u2014 your summary, shift preview and shared message show only the combined total (e.g. Run (6): $30.00).'],
     ['UI/UX','Renamed from \u201cPassenger Runs\u201d: it counts passengers on your runs. Shifts you already logged move their number into Morning when you edit them.'],
@@ -7242,10 +7246,10 @@ function buildReportPdf(kind){
   function right(idx){var c={};idx.forEach(function(i){c[i]={halign:'right'}});return c}
 
   if(kind!=='bas'){
-    tiles([{l:'Gross fares',v:pm(x.gross),s:X.count?pm(x.gross/X.count)+' per shift':'No shifts'},{l:'Your share',v:pm(x.share),s:Math.round(x.pctShare*1000)/10+'% of gross'},{l:'Payout',v:pm(x.payout),s:'Settlement from operator'},{l:'Kept after tax',v:pm(x.kept),s:'Estimate',hero:true}]);
+    tiles([{l:'Your share',v:pm(x.share),s:X.count?X.count+' shift'+(X.count===1?'':'s'):'No shifts'},{l:'Per shift',v:X.count?pm(x.share/X.count):'-',s:'Your share'},{l:'Payout',v:pm(x.payout),s:'Paid to you'},{l:'Kept after tax',v:pm(x.kept),s:'Estimate',hero:true}]);
     tiles([{l:'Hail levy',v:pm(x.levy),s:(a.hailN||0)+' hail trips'},{l:'GST net',v:pm(x.gstNet),s:'1A minus 1B'},{l:'Claimed costs',v:pm(x.costs),s:'You paid (GST incl.)'},{l:'Tax set-aside',v:pm(x.tax),s:x.taxRate.mode==='off'?'Off':(Math.round(x.taxRate.rate*1000)/10)+'% '+(x.taxRate.mode==='auto'?'ATO estimate':'fixed')}]);
-    section('Where each fare dollar goes','of '+pm(x.gross)+' gross');
-    var segs=[['Operator share',x.operator,[156,163,175]],['Hail levy',x.levy,hexRgb('#7656B5')],['GST net',Math.max(0,x.gstNet),hexRgb('#0A7CC2')],['Claimed costs',x.costs,hexRgb('#B86A00')],['Income tax set-aside',x.tax,hexRgb('#D92D48')],['Kept',Math.max(0,x.kept),ACC]];
+    section('Where your share goes','of '+pm(x.share)+' your share');
+    var segs=[['Hail levy',x.levy,hexRgb('#7656B5')],['GST net',Math.max(0,x.gstNet),hexRgb('#0A7CC2')],['Claimed costs',x.costs,hexRgb('#B86A00')],['Income tax set-aside',x.tax,hexRgb('#D92D48')],['Kept',Math.max(0,x.kept),ACC]];
     var tot=segs.reduce(function(s2,g){return s2+g[1]},0),bx=M,bw=W-2*M;
     if(tot>0){segs.forEach(function(g){var w2=g[1]/tot*bw;if(w2<=0)return;doc.setFillColor(g[2][0],g[2][1],g[2][2]);doc.rect(bx,y,w2,4.2,'F');bx+=w2})}else{doc.setFillColor(SOFT[0],SOFT[1],SOFT[2]);doc.rect(M,y,bw,4.2,'F')}
     y+=7;
@@ -7263,14 +7267,14 @@ function buildReportPdf(kind){
 
   if(kind!=='bas'){
     /* weekly totals by settlement cycle */
-    var wk={};X.rows.forEach(function(r){var c=cycleForDate(r.e.date),k=c.from;if(!wk[k])wk[k]={c:c,n:0,g:0,s:0,t:0,l:0};var o=wk[k];o.n++;o.g+=r.v.gross;o.s+=r.v.share;o.t+=r.v.take;o.l+=r.v.levy});
+    var wk={};X.rows.forEach(function(r){var c=cycleForDate(r.e.date),k=c.from;if(!wk[k])wk[k]={c:c,n:0,s:0,t:0,l:0};var o=wk[k];o.n++;o.s+=r.v.share;o.t+=r.v.take;o.l+=r.v.levy});
     var wkeys=Object.keys(wk).sort();
     if(wkeys.length>1){section('Weekly totals',cycleName()+' cycle');
-      table(['Week','Shifts','Gross','Your share','Payout','Levy','Paid on'],wkeys.map(function(k){var o=wk[k];return [fmtDMY(o.c.from)+' - '+fmtDMY(o.c.to),o.n,pm(o.g),pm(o.s),pm(o.t),pm(o.l),fmtDMY(creditOn(o.c.end))]}),null,right([1,2,3,4,5]))}
+      table(['Week','Shifts','Your share','Payout','Levy','Paid on'],wkeys.map(function(k){var o=wk[k];return [fmtDMY(o.c.from)+' - '+fmtDMY(o.c.to),o.n,pm(o.s),pm(o.t),pm(o.l),fmtDMY(creditOn(o.c.end))]}),null,right([1,2,3,4]))}
   }
   section('Shifts',X.count+' in this range');
   var T=X.T;
-  if(X.count)table(['Date','Rego','Gross','Your share','Cash/Sq','Fuel paid','Payout','Hail','Levy','G1 basis'],X.rows.map(function(r){var v=r.v;return [fmtDayDMY(r.e.date),r.e.rego||'',pm(v.gross),pm(v.share),pm(v.cash+v.square),pm(v.fi),pm(v.take),v.hail,pm(v.levy),pm(v.g1)]}),['Totals','',pm(T.gross),pm(T.share),pm((T.cash||0)+(T.square||0)),pm(T.fi),pm(T.take),T.hail||0,pm(T.levy),pm(T.g1)],right([2,3,4,5,6,7,8,9]));
+  if(X.count)table(['Date','Rego','Your share','Cash/Sq','Fuel paid','Payout','Hail','Levy','G1 basis'],X.rows.map(function(r){var v=r.v;return [fmtDayDMY(r.e.date),r.e.rego||'',pm(v.share),pm(v.cash+v.square),pm(v.fi),pm(v.take),v.hail,pm(v.levy),pm(v.g1)]}),['Totals','',pm(T.share),pm((T.cash||0)+(T.square||0)),pm(T.fi),pm(T.take),T.hail||0,pm(T.levy),pm(T.g1)],right([2,3,4,5,6,7,8]));
   else{doc.setFontSize(9);doc.setTextColor(MUT[0],MUT[1],MUT[2]);doc.text('No shifts in this range.',M,y+2);y+=10}
   section('Costs & credits',lines.length?lines.filter(function(l){return l.claimed}).length+' of '+lines.length+' claimed':'');
   if(lines.length){var tc=0,td=0;
@@ -7953,23 +7957,23 @@ function renderOverview(){var card=$('#ovCard');if(!card)return;
   $('#ovShifts').textContent=x.shifts+(x.shifts===1?' shift':' shifts');
   $('#ovKeptLbl').textContent=fon?'Kept after tax · before costs':'Kept after tax';
   var wd=function(v){return (v<0?'−$':'$')+Math.round(Math.abs(v)).toLocaleString('en-AU')};
-  tally($('#ovKept'),x.kept,{delay:dl});tally($('#ovGross'),x.gross,{delay:dl+50,fmt:wd});tally($('#ovShare'),x.share,{delay:dl+100,fmt:wd});tally($('#ovSet'),x.setAside,{delay:dl+150,fmt:wd});
-  $('#ovGrossSub').textContent=x.shifts?money(x.gross/x.shifts)+' / shift':'on the meter';
-  $('#ovShareSub').textContent=pctTxt(x.pctShare)+' of gross';
+  tally($('#ovKept'),x.kept,{delay:dl});tally($('#ovShare'),x.share,{delay:dl+50,fmt:wd});tally($('#ovGross'),x.shifts?x.share/x.shifts:0,{delay:dl+100,fmt:wd});tally($('#ovSet'),x.setAside,{delay:dl+150,fmt:wd});
+  $('#ovGrossSub').textContent='your share';
+  $('#ovShareSub').textContent=x.shifts+(x.shifts===1?' shift':' shifts');
   $('#ovSetSub').textContent='GST + tax';
   /* vs the previous equal-length range */
   var dEl=$('#ovDelta'),pr=repRange.name==='All Time'?null:prevRangeOf(repRange.from,repRange.to);
   if(dEl){if(pr){var pa=withFilt(function(){return aggBetween(pr[0],pr[1])});if(fon)pa=Object.assign({},pa,{expDed:0,expCred:0,fuelManualDed:0,fuelManualCred:0,oneB:(pa.fuelShiftCred||0)});var px=execFigures(pa),dv=x.kept-px.kept;
       dEl.className='ov-delta '+(Math.abs(dv)<0.5?'flat':dv>0?'up':'down');dEl.textContent=px.shifts?((dv>=0?'▲ ':'▼ ')+money(Math.abs(dv))+' vs last '+(repRange.name==='Fin Year'?'year':repRange.name==='Quarter'?'quarter':repRange.name==='Pay Week'||repRange.name==='This Week'?'week':'period')):'';if(!px.shifts)dEl.className='ov-delta'}else{dEl.textContent='';dEl.className='ov-delta'}}
   /* where each fare dollar goes */
-  var segs=[['Operator',x.operator,'var(--ov-op)'],['Levy',x.levy,'var(--hail)'],['GST',Math.max(0,x.gstNet),'var(--ov-gst)'],['Costs',x.costs,'var(--fuel)'],['Tax',x.tax,'var(--ov-tax)'],['Kept',Math.max(0,x.kept),'var(--accent)']].filter(function(g){return g[1]>0.004});
+  var segs=[['Levy',x.levy,'var(--hail)'],['GST',Math.max(0,x.gstNet),'var(--ov-gst)'],['Costs',x.costs,'var(--fuel)'],['Tax',x.tax,'var(--ov-tax)'],['Kept',Math.max(0,x.kept),'var(--accent)']].filter(function(g){return g[1]>0.004});
   var tot=segs.reduce(function(s2,g){return s2+g[1]},0)||1,bar=$('#ovBar');
   bar.innerHTML=segs.map(function(g,i){return '<i style="--w:'+(g[1]/tot*100).toFixed(2)+'%;--c:'+g[2]+';--i:'+i+'" title="'+g[0]+' '+money(g[1])+'"></i>'}).join('');
   bar.classList.remove('grow');void bar.offsetWidth;bar.classList.add('grow');
   $('#ovLeg').innerHTML=segs.map(function(g){return '<span><i style="background:'+g[2]+'"></i>'+g[0]+' <b>'+Math.round(g[1]/tot*100)+'%</b></span>'}).join('');
   /* quick stats */
   var es=a.es||[],days={},best=null;es.forEach(function(e){days[e.date]=(days[e.date]||0)+entryShare(e)});Object.keys(days).forEach(function(d){if(!best||days[d]>days[best])best=d});
-  var st=[['Per shift',x.shifts?money(x.perShift):'—'],['Days on',String(Object.keys(days).length)],['Best day',best?fmtDayDMY(best).slice(0,9)+' · '+money(days[best]):'—'],['Hail · levy',(a.hailN||0)+' · '+money(x.levy)]];
+  var st=[['Avg per day',(function(){var n=Object.keys(days).length;return n?money(x.share/n):'—'})()],['Days on',String(Object.keys(days).length)],['Best day',best?fmtDayDMY(best).slice(0,9)+' · '+money(days[best]):'—'],['Hail · levy',(a.hailN||0)+' · '+money(x.levy)]];
   $('#ovStats').innerHTML=st.map(function(s2,i){return '<div class="ov-st" style="--i:'+i+'"><small>'+s2[0]+'</small><b>'+esc(s2[1])+'</b></div>'}).join('');
   /* 8-week trend */
   var w=ovWeekShares(),mx=Math.max.apply(null,w.map(function(q){return q.share}).concat([1]));
