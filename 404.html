@@ -2485,6 +2485,11 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
 .gd-rest.busy svg{animation:gdSpin 1s linear infinite}
 @keyframes gdSpin{to{rotate:360deg}}
 @media (max-width:360px){.gd-rest span{display:none}.gd-rest{width:36px;padding:0;justify-content:center}}
+
+/* ---------- Fareo 16.15 · Passenger runs counter ---------- */
+.tx-runs .run-row{margin-top:4px}
+.tx-runs .hi-num input{font-size:26px}
+.tx-runs .hi-picks button.on{background:var(--hail-fill,var(--hail));border-color:var(--hail-fill,var(--hail));color:#0b0d10}
 </style>
 </head>
 <body>
@@ -2575,7 +2580,12 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
       <div class="card tx-square shift-field" data-field="square"><h5 class="sf-h5"><button type="button" class="sf-grip" aria-label="Drag to reorder" title="Drag to reorder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></button><span class="dot" style="background:var(--acct)"></span>Square Payments<span class="help" data-help="Taken on your own Square reader. You hold the money, like cash. When Cash &amp; Square tax-free is on, it is not taxable income — left out of G1 and 1A." aria-label="Help">?</span><span class="sub-amt" id="squareSub">$0</span></h5>
         <div id="squareRows"></div><button class="add" id="addSquare">+ Add Square Payer</button></div>
       <div class="card tx-runs shift-field" data-field="runs"><h5 class="sf-h5"><button type="button" class="sf-grip" aria-label="Drag to reorder" title="Drag to reorder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></button><span class="dot" style="background:var(--hail-fill)"></span>Passenger Runs<span class="help" data-help="Short fixed-price passenger runs at $5 each. Enter how many you did." aria-label="Help">?</span><span class="sub-amt" id="runsSub">$0</span></h5>
-        <label class="fl">Runs (&#36;5 each)</label><input id="runs" type="number" min="0" inputmode="numeric" placeholder="0"></div>
+        <div class="hi-row run-row">
+          <button type="button" class="hi-btn" id="runMinus" aria-label="One less run">&minus;</button>
+          <div class="hi-num"><input id="runs" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" enterkeyhint="done" placeholder="0" aria-label="Number of runs"><small id="runsHint">$5 each</small></div>
+          <button type="button" class="hi-btn" id="runPlus" aria-label="One more run">+</button>
+        </div>
+        <div class="hi-picks run-picks" id="runPicks" role="group" aria-label="Quick picks" style="--n:8"><button type="button" data-run="0">0</button><button type="button" data-run="1">1</button><button type="button" data-run="2">2</button><button type="button" data-run="3">3</button><button type="button" data-run="4">4</button><button type="button" data-run="5">5</button><button type="button" data-run="6">6</button><button type="button" data-run="8">8</button></div></div>
       </div>
       <div class="card hero shift-net">
         <div class="lbl">Net take-home</div>
@@ -3617,8 +3627,12 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='16.14';
+var APP_VERSION='16.15';
 var CHANGELOG=[
+  {v:'16.15',date:'November 24, 2026',notes:[
+    ['UI/UX','Passenger Runs is now a simple counter: \u2212 / number / + and quick picks (0\u20138). Whole numbers only \u2014 no decimals \u2014 and it shows the total as you go (e.g. 3 runs \u00b7 $15.00).'],
+    ['UI/UX','Your own pay types that use a count (flat rate per unit) also take whole numbers only.'],
+  ]},
   {v:'16.14',date:'November 22, 2026',notes:[
     ['Feature','Restore from Google Drive in one tap: a small Restore button at the top of Home fetches your newest Drive backup. If this device already has shifts you can merge (keeps both) or replace; a copy of what you had is kept under Recovery.'],
   ]},
@@ -5477,7 +5491,7 @@ function rowInputs(){
       card.className='card tx-custom shift-field';
       card.setAttribute('data-field','pt:'+pt.id);
       card.innerHTML='<h5 class="sf-h5">'+SF_GRIP+'<span class="dot" style="background:var(--fink)"></span>'+esc(pt.name)+'<span class="help" data-help="'+esc(helpTxt)+'" aria-label="Help">?</span><span class="sub-amt">'+sub+'</span></h5>'
-        +'<input type="number" min="0" inputmode="decimal" data-custom="'+esc(pt.id)+'" value="'+esc(val==null?'':val)+'" placeholder="'+(flat?'Count':'Amount')+'">';
+        +(flat?'<input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" data-custom="'+esc(pt.id)+'" value="'+esc(val==null?'':String(Math.round(Number(val)||0)||''))+'" placeholder="Count">':'<input type="number" min="0" inputmode="decimal" data-custom="'+esc(pt.id)+'" value="'+esc(val==null?'':val)+'" placeholder="Amount">');
       host.appendChild(card);
     });
     applyShiftFieldOrder();
@@ -5489,7 +5503,7 @@ function rowInputs(){
     return '<div class="fuelblock"><div class="mini"><select data-ft="'+i+'">'+o+'</select><input type="number" min="0" inputmode="decimal" data-fa="'+i+'" value="'+esc(r.amount||'')+'" placeholder="Amount"><button class="x" data-df="'+i+'">&times;</button></div>'
       +'<label class="fuel-op'+(op?' on':'')+'" data-fop="'+i+'"><span class="fuel-box'+(op?' on':'')+'">'+(op?'\u2713':'')+'</span>Paid by operator <small>(not added to settlement)</small></label></div>'
   }).join('');
-  $('#runs').value=draft.runs||'';
+  $('#runs').value=draft.runs?String(Math.round(nn(draft.runs))):'';runUI();
   var rg=$('#rego');
   if(rg){
     if(!draft.rego&&settings.regos&&settings.regos.length===1)draft.rego=settings.regos[0];
@@ -5509,7 +5523,7 @@ function render(){
   $('#eosSub').textContent=money(eosT());
   $('#cashSub').textContent=money(cashT());
   $('#squareSub').textContent=money(squareT());
-  $('#runsSub').textContent=money(nn(draft.runs)*RUN);
+  $('#runsSub').textContent=money(Math.round(nn(draft.runs))*RUN);
   $('#acctSub').textContent=money(acctT());
   var acN=acctCount(),acC=$('#acctCnt');if(acC)acC.textContent=acN+(acN===1?' job':' jobs');
   var acB=$('#stpAcctN');if(acB)acB.textContent=acN?String(acN):'';
@@ -5675,9 +5689,9 @@ document.addEventListener('input',function(e){
   else if(d.sa!=null)draft.square[d.sa].amount=v;
   else if(d.an!=null){draft.accounts[d.an].name=v;acOpen(e.target);renderAcctRc()}
   else if(d.aa!=null){draft.accounts[d.aa].amount=v;renderAcctRc();$$('#acctRows [data-qa="'+d.aa+'"]').forEach(function(b){b.classList.toggle('on',Number(b.dataset.v)===nn(v))})}
-  else if(d.custom!=null){draft.custom[d.custom]=v;render();return;}
+  else if(d.custom!=null){if(e.target.placeholder==='Count'){v=runClean(v);if(e.target.value!==v)e.target.value=v}draft.custom[d.custom]=v;render();return;}
   else if(d.fa!=null)draft.fuel[d.fa].amount=v;
-  else if(e.target.id==='runs')draft.runs=v;
+  else if(e.target.id==='runs'){v=runClean(v);if(e.target.value!==v)e.target.value=v;draft.runs=v;runUI()}
   else return;
   render();
 });
@@ -5993,6 +6007,20 @@ document.addEventListener('keydown',function(e){var el=e.target;if(!isEftInput(e
 function eftUI(){var s=$('#eftSub');if(s)s.textContent=eftOn()?'EFTPOS style · 1250 = $12.50':'Type amounts with a decimal point';
   $$('input').forEach(function(el){if(el.matches(EFT_SEL)||el.id==='hiInput'||(el.dataset&&el.dataset.custom!=null)){
     if(eftOn())eftPrep(el);else{var ph=el.getAttribute('data-ph0');if(ph!=null){el.placeholder=ph;el.removeAttribute('data-ph0')}if(el.id!=='hiInput'||levyByAmount())el.setAttribute('inputmode','decimal')}}})}
+
+/* ---------- Passenger runs: whole numbers only ---------- */
+function runClean(v){var d=String(v==null?'':v).replace(/\D/g,'').replace(/^0+(?=\d)/,'').slice(0,2);return d}
+function runUI(){var n=Math.round(nn(draft.runs)),h=$('#runsHint');if(!h)return;
+  h.textContent=n?(n===1?'1 run':n+' runs')+' · '+money(n*RUN):money(RUN)+' each';
+  var m=$('#runMinus');if(m)m.disabled=n<=0;
+  $$('#runPicks [data-run]').forEach(function(b){b.classList.toggle('on',String(draft.runs)!==''&&draft.runs!=null&&Number(b.dataset.run)===n)})}
+function runSet(n,bump){n=Math.max(0,Math.min(99,Math.round(Number(n)||0)));draft.runs=n?String(n):(n===0?'0':'');var i=$('#runs');if(i)i.value=n?String(n):'';
+  persist();render();runUI();
+  if(bump){var w=document.querySelector('.run-row .hi-num');if(w){w.classList.remove('bump');void w.offsetWidth;w.classList.add('bump')}}}
+if($('#runMinus'))$('#runMinus').onclick=function(){runSet(Math.round(nn(draft.runs))-1,true);sfx('tap')};
+if($('#runPlus'))$('#runPlus').onclick=function(){runSet(Math.round(nn(draft.runs))+1,true);sfx('tap')};
+if($('#runPicks'))$('#runPicks').onclick=function(e){var b=e.target.closest('[data-run]');if(!b)return;runSet(b.dataset.run,true);sfx('pop');buzz(6)};
+if($('#runs'))$('#runs').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();this.blur()}});
 function nextStep(){
   if(curSub===1){
     if(dateGateFail())return;
