@@ -2490,6 +2490,22 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
 .tx-runs .run-row{margin-top:4px}
 .tx-runs .hi-num input{font-size:26px}
 .tx-runs .hi-picks button.on{background:var(--hail-fill,var(--hail));border-color:var(--hail-fill,var(--hail));color:#0b0d10}
+
+/* ---------- Fareo 16.16 · Morning / afternoon run passengers ---------- */
+.rp-row{display:grid;grid-template-columns:minmax(0,1fr) 48px 72px 48px;gap:8px;align-items:center;padding:6px 0}
+.card.tx-runs .rp-row{background:none;border:0;border-radius:0;box-shadow:none;margin:0;padding:6px 0}
+.card.tx-runs .rp-row+.rp-row{border-top:1px dashed var(--bd)}
+.rp-l{display:flex;align-items:center;gap:9px;min-width:0}
+.rp-l i{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:color-mix(in srgb,var(--hail-fill,var(--hail)) 14%,transparent);color:var(--hail-fill,var(--hail));flex:none}
+.rp-l i svg{width:17px;height:17px}
+.rp-l b{font-size:14.5px;color:var(--head);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rp-btn{height:46px;font-size:22px}
+.rp-in{width:100%;height:46px;border-radius:13px;text-align:center;font:700 22px var(--mono);font-variant-numeric:tabular-nums;padding:0 4px}
+.rp-row.has .rp-in{border-color:color-mix(in srgb,var(--hail-fill,var(--hail)) 55%,var(--bd))}
+.rp-in.bump{animation:hiBump .3s var(--ease)}
+.rp-total{margin:8px 0 0;font:600 12px var(--mono);color:var(--mut);text-align:right}
+.rp-total b{color:var(--head)}
+@media (max-width:360px){.rp-row{grid-template-columns:minmax(0,1fr) 42px 58px 42px;gap:6px}.rp-l i{display:none}}
 </style>
 </head>
 <body>
@@ -2579,13 +2595,10 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
         <div id="cashRows"></div><button class="add" id="addCash">+ Add Cash Payer</button></div>
       <div class="card tx-square shift-field" data-field="square"><h5 class="sf-h5"><button type="button" class="sf-grip" aria-label="Drag to reorder" title="Drag to reorder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></button><span class="dot" style="background:var(--acct)"></span>Square Payments<span class="help" data-help="Taken on your own Square reader. You hold the money, like cash. When Cash &amp; Square tax-free is on, it is not taxable income — left out of G1 and 1A." aria-label="Help">?</span><span class="sub-amt" id="squareSub">$0</span></h5>
         <div id="squareRows"></div><button class="add" id="addSquare">+ Add Square Payer</button></div>
-      <div class="card tx-runs shift-field" data-field="runs"><h5 class="sf-h5"><button type="button" class="sf-grip" aria-label="Drag to reorder" title="Drag to reorder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></button><span class="dot" style="background:var(--hail-fill)"></span>Passenger Runs<span class="help" data-help="Short fixed-price passenger runs at $5 each. Enter how many you did." aria-label="Help">?</span><span class="sub-amt" id="runsSub">$0</span></h5>
-        <div class="hi-row run-row">
-          <button type="button" class="hi-btn" id="runMinus" aria-label="One less run">&minus;</button>
-          <div class="hi-num"><input id="runs" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" enterkeyhint="done" placeholder="0" aria-label="Number of runs"><small id="runsHint">$5 each</small></div>
-          <button type="button" class="hi-btn" id="runPlus" aria-label="One more run">+</button>
-        </div>
-        <div class="hi-picks run-picks" id="runPicks" role="group" aria-label="Quick picks" style="--n:8"><button type="button" data-run="0">0</button><button type="button" data-run="1">1</button><button type="button" data-run="2">2</button><button type="button" data-run="3">3</button><button type="button" data-run="4">4</button><button type="button" data-run="5">5</button><button type="button" data-run="6">6</button><button type="button" data-run="8">8</button></div></div>
+      <div class="card tx-runs shift-field" data-field="runs"><h5 class="sf-h5"><button type="button" class="sf-grip" aria-label="Drag to reorder" title="Drag to reorder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></button><span class="dot" style="background:var(--hail-fill)"></span>Run Passengers<span class="help" data-help="Passengers on your fixed-price runs, $5 each. Enter the morning run and the afternoon run separately; Fareo adds them up and only the total shows in your summary and shared message." aria-label="Help">?</span><span class="sub-amt" id="runsSub">$0</span></h5>
+        <div class="rp-row" data-rp="am"><span class="rp-l"><i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></i><b>Morning</b></span><button type="button" class="hi-btn rp-btn" data-rpstep="am:-1" aria-label="One less morning passenger">&minus;</button><input id="runAM" class="rp-in" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" enterkeyhint="done" placeholder="0" aria-label="Morning run passengers"><button type="button" class="hi-btn rp-btn" data-rpstep="am:1" aria-label="One more morning passenger">+</button></div>
+        <div class="rp-row" data-rp="pm"><span class="rp-l"><i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 18a5 5 0 0 0-10 0"/><path d="M12 9V3M4.2 10.2l1.4 1.4M1 18h2M21 18h2M18.4 11.6l1.4-1.4M23 22H1"/></svg></i><b>Afternoon</b></span><button type="button" class="hi-btn rp-btn" data-rpstep="pm:-1" aria-label="One less afternoon passenger">&minus;</button><input id="runPM" class="rp-in" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" enterkeyhint="done" placeholder="0" aria-label="Afternoon run passengers"><button type="button" class="hi-btn rp-btn" data-rpstep="pm:1" aria-label="One more afternoon passenger">+</button></div>
+        <p class="rp-total" id="runsHint">$5 per passenger</p></div>
       </div>
       <div class="card hero shift-net">
         <div class="lbl">Net take-home</div>
@@ -3627,8 +3640,12 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='16.15';
+var APP_VERSION='16.16';
 var CHANGELOG=[
+  {v:'16.16',date:'November 24, 2026',notes:[
+    ['UI/UX','Run Passengers: separate Morning and Afternoon counters ($5 per passenger). Fareo adds them up \u2014 your summary, shift preview and shared message show only the combined total (e.g. Run (6): $30.00).'],
+    ['UI/UX','Renamed from \u201cPassenger Runs\u201d: it counts passengers on your runs. Shifts you already logged move their number into Morning when you edit them.'],
+  ]},
   {v:'16.15',date:'November 24, 2026',notes:[
     ['UI/UX','Passenger Runs is now a simple counter: \u2212 / number / + and quick picks (0\u20138). Whole numbers only \u2014 no decimals \u2014 and it shows the total as you go (e.g. 3 runs \u00b7 $15.00).'],
     ['UI/UX','Your own pay types that use a count (flat rate per unit) also take whole numbers only.'],
@@ -5503,7 +5520,7 @@ function rowInputs(){
     return '<div class="fuelblock"><div class="mini"><select data-ft="'+i+'">'+o+'</select><input type="number" min="0" inputmode="decimal" data-fa="'+i+'" value="'+esc(r.amount||'')+'" placeholder="Amount"><button class="x" data-df="'+i+'">&times;</button></div>'
       +'<label class="fuel-op'+(op?' on':'')+'" data-fop="'+i+'"><span class="fuel-box'+(op?' on':'')+'">'+(op?'\u2713':'')+'</span>Paid by operator <small>(not added to settlement)</small></label></div>'
   }).join('');
-  $('#runs').value=draft.runs?String(Math.round(nn(draft.runs))):'';runUI();
+  runMigrate();$('#runAM').value=draft.runsAM?String(Math.round(nn(draft.runsAM))):'';$('#runPM').value=draft.runsPM?String(Math.round(nn(draft.runsPM))):'';runUI();
   var rg=$('#rego');
   if(rg){
     if(!draft.rego&&settings.regos&&settings.regos.length===1)draft.rego=settings.regos[0];
@@ -5691,7 +5708,7 @@ document.addEventListener('input',function(e){
   else if(d.aa!=null){draft.accounts[d.aa].amount=v;renderAcctRc();$$('#acctRows [data-qa="'+d.aa+'"]').forEach(function(b){b.classList.toggle('on',Number(b.dataset.v)===nn(v))})}
   else if(d.custom!=null){if(e.target.placeholder==='Count'){v=runClean(v);if(e.target.value!==v)e.target.value=v}draft.custom[d.custom]=v;render();return;}
   else if(d.fa!=null)draft.fuel[d.fa].amount=v;
-  else if(e.target.id==='runs'){v=runClean(v);if(e.target.value!==v)e.target.value=v;draft.runs=v;runUI()}
+  else if(e.target.id==='runAM'||e.target.id==='runPM'){v=runClean(v);if(e.target.value!==v)e.target.value=v;draft[e.target.id==='runAM'?'runsAM':'runsPM']=v;runSync();runUI()}
   else return;
   render();
 });
@@ -6010,17 +6027,19 @@ function eftUI(){var s=$('#eftSub');if(s)s.textContent=eftOn()?'EFTPOS style · 
 
 /* ---------- Passenger runs: whole numbers only ---------- */
 function runClean(v){var d=String(v==null?'':v).replace(/\D/g,'').replace(/^0+(?=\d)/,'').slice(0,2);return d}
-function runUI(){var n=Math.round(nn(draft.runs)),h=$('#runsHint');if(!h)return;
-  h.textContent=n?(n===1?'1 run':n+' runs')+' · '+money(n*RUN):money(RUN)+' each';
-  var m=$('#runMinus');if(m)m.disabled=n<=0;
-  $$('#runPicks [data-run]').forEach(function(b){b.classList.toggle('on',String(draft.runs)!==''&&draft.runs!=null&&Number(b.dataset.run)===n)})}
-function runSet(n,bump){n=Math.max(0,Math.min(99,Math.round(Number(n)||0)));draft.runs=n?String(n):(n===0?'0':'');var i=$('#runs');if(i)i.value=n?String(n):'';
-  persist();render();runUI();
-  if(bump){var w=document.querySelector('.run-row .hi-num');if(w){w.classList.remove('bump');void w.offsetWidth;w.classList.add('bump')}}}
-if($('#runMinus'))$('#runMinus').onclick=function(){runSet(Math.round(nn(draft.runs))-1,true);sfx('tap')};
-if($('#runPlus'))$('#runPlus').onclick=function(){runSet(Math.round(nn(draft.runs))+1,true);sfx('tap')};
-if($('#runPicks'))$('#runPicks').onclick=function(e){var b=e.target.closest('[data-run]');if(!b)return;runSet(b.dataset.run,true);sfx('pop');buzz(6)};
-if($('#runs'))$('#runs').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();this.blur()}});
+/* Morning + afternoon run passengers; draft.runs keeps the combined total,
+   so the maths, summaries and shared message only ever see one number. */
+function runMigrate(){if(draft.runsAM==null&&draft.runsPM==null){var n=Math.round(nn(draft.runs));draft.runsAM=n?String(n):'';draft.runsPM=''}}
+function runSync(){var t=Math.round(nn(draft.runsAM))+Math.round(nn(draft.runsPM));draft.runs=t?String(t):''}
+function runUI(){var a=Math.round(nn(draft.runsAM)),b=Math.round(nn(draft.runsPM)),n=a+b,h=$('#runsHint');if(!h)return;
+  h.innerHTML=n?'<b>'+n+' passenger'+(n===1?'':'s')+'</b> · '+money(n*RUN):money(RUN)+' per passenger';
+  $$('[data-rpstep]').forEach(function(btn){var k=btn.dataset.rpstep.split(':');if(k[1]==='-1')btn.disabled=(k[0]==='am'?a:b)<=0});
+  $$('.rp-row').forEach(function(r){r.classList.toggle('has',(r.dataset.rp==='am'?a:b)>0)})}
+function runStep(k,d){runMigrate();var key=k==='am'?'runsAM':'runsPM',n=Math.max(0,Math.min(99,Math.round(nn(draft[key]))+d));
+  draft[key]=n?String(n):'';var i=$(k==='am'?'#runAM':'#runPM');if(i)i.value=n?String(n):'';runSync();persist();render();runUI();
+  if(i){i.classList.remove('bump');void i.offsetWidth;i.classList.add('bump')}}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-rpstep]');if(!b)return;var k=b.dataset.rpstep.split(':');runStep(k[0],Number(k[1]));sfx('tap')});
+$$('.rp-in').forEach(function(i){i.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();if(this.id==='runAM'){var p=$('#runPM');if(p)p.focus()}else this.blur()}})});
 function nextStep(){
   if(curSub===1){
     if(dateGateFail())return;
@@ -6208,7 +6227,7 @@ function saveShift(shared){
     accounts:acctT(),fuel:fuelT(),fuelIPaid:fuelIPaidT(),fuelOpPaid:fuelOpPaidT(),fuelByType:{Diesel:0,Petrol:0,LPG:0},
     custom:custom,hail:nn(draft.hail),levyMode:levyByAmount()?'amount':'trips',levyAmt:levyByAmount()?round2(nn(draft.levyAmt)):round2(nn(draft.hail)*levyRate()),eos:eosT(),runs:nn(draft.runs),receipt:draft.receipt,
     fuelCount:draft.fuel.filter(function(f){return nn(f.amount)>0}).length,
-    snap:JSON.parse(JSON.stringify({date:draft.date,rego:draft.rego,eos:draft.eos,cash:draft.cash,square:draft.square,accounts:draft.accounts,runs:draft.runs,fuel:draft.fuel,hail:draft.hail,levyAmt:draft.levyAmt,custom:draft.custom}))};
+    snap:JSON.parse(JSON.stringify({date:draft.date,rego:draft.rego,eos:draft.eos,cash:draft.cash,square:draft.square,accounts:draft.accounts,runs:draft.runs,runsAM:draft.runsAM,runsPM:draft.runsPM,fuel:draft.fuel,hail:draft.hail,levyAmt:draft.levyAmt,custom:draft.custom}))};
   draft.fuel.forEach(function(f){e.fuelByType[f.type]=(e.fuelByType[f.type]||0)+nn(f.amount)});
   draft.cash.forEach(function(c){addName(c.name)});draft.square.forEach(function(c){addName(c.name)});draft.accounts.forEach(function(a){addName(a.name)});
   var prevE=srcId!=null?entries.filter(function(x){return String(x.id)===String(srcId)})[0]:null,prevDate=prevE&&prevE.date,prevRego=prevE&&prevE.rego;
@@ -6578,6 +6597,7 @@ function loadEntryToCalc(e){var sp=e.snap;
       return src;
     })()};
   }
+  draft.runsAM=sp&&sp.runsAM!=null?sp.runsAM:null;draft.runsPM=sp&&sp.runsPM!=null?sp.runsPM:null;runMigrate();runSync();
   draft.levyAmt=(e.levyMode==='amount')?String(nn(e.levyAmt)):(levyByAmount()&&(e.hail!=null&&String(e.hail)!=='')?String(round2(entryLevy(e))):'');
   clearReceiptAttach();
   persist();rowInputs();render();}
