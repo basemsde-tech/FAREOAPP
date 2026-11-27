@@ -3036,7 +3036,7 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
       <div class="set"><div class="sl"><b>Levy entry <span class="help" data-help="How you enter the hail / CPV levy at the end of each shift. Hail trips: enter the number of trips and Fareo multiplies by the rate below. Dollar amount: enter the levy in dollars straight off your EOS. Shifts you already logged keep the way they were entered." aria-label="Help">?</span></b><p id="levyModeSub">Ask for the number of hail trips</p></div><select id="setLevyMode"><option value="trips">Hail trips</option><option value="amount">Dollar amount</option></select></div>
       <div class="set" id="levyRateRow"><div class="sl"><b>Hail trip levy <span class="help" data-help="When you add this levy to the passenger fare it becomes part of the taxable supply — GST is 1/11 of the full fare. The amount you remit to SRO Victoria comes off your take-home (no GST credit). Set 0 if your BSP pays it." aria-label="Help">?</span></b><p id="levyRateSub">Per hail trip &middot; set 0 if your BSP pays</p></div><div class="unit-in pre"><i>$</i><input id="setLevy" type="number" min="0" step="0.01" inputmode="decimal"></div></div>
       <div class="set"><div class="sl"><b>Cash &amp; Square tax-free <span class="help" data-help="When on, cash and Square are not taxable income. They are left out of G1 and 1A. You still keep that money in take-home and Weekly. EFTPOS, accounts and runs stay in G1 (GST 1/11). Turn off if GST applies to cash too." aria-label="Help">?</span></b><p>Left out of G1 and 1A &middot; still in take-home</p></div><button class="tgl" id="setCashGst" aria-label="Toggle cash tax-free"></button></div>
-      <div class="set"><div class="sl"><b>GST base <span class="help" data-help="Whether GST (1/11) is set aside on taxable sales (G1) — full fare or only your driver share. Tax-free cash/Square is left out of G1. Levy passed on in taxable fares stays in G1. The SRO levy payment is separate (no GST credit). Match this to your bailment agreement \u2014 ask your operator or tax agent which applies." aria-label="Help">?</span></b><p>What GST is set aside on</p></div><select id="setGstBase"><option value="gross">Full gross</option><option value="share">Driver share</option></select></div>
+      <div class="set"><div class="sl"><b>GST base <span class="help" data-help="What your BAS sales (G1) and GST (1/11) are worked out from. Weekly totals: your weekly amounts from logged shifts &mdash; your share of EOS, accounts, runs and other operator-paid income &mdash; with cash, Square and fuel left out. Driver share or Full gross: the older options. Tax-free cash/Square is left out of G1. Levy passed on in taxable fares stays in G1. The SRO levy payment is separate (no GST credit). Match this to your bailment agreement \u2014 ask your operator or tax agent which applies." aria-label="Help">?</span></b><p id="gstBaseSub">What BAS sales (G1) are worked out from</p></div><select id="setGstBase"><option value="weekly">Weekly totals</option><option value="share">Driver share</option><option value="gross">Full gross</option></select></div>
       <div class="set"><div class="sl"><b>Income tax set-aside <span class="help" data-help="How much of your taxable profit Reports puts aside for income tax. ATO estimate annualises this financial year and applies the current ATO resident rates, low income tax offset and Medicare levy. Fixed % uses your own rate. This is an estimate, not tax advice." aria-label="Help">?</span></b><p id="taxModeSub">Estimate from ATO rates</p></div><select id="setTaxMode"><option value="auto">ATO estimate</option><option value="fixed">Fixed %</option><option value="off">Off</option></select></div>
       <div class="set" id="taxPctRow" hidden><div class="sl"><b>Set-aside rate</b><p>Of taxable profit</p></div><div class="unit-in"><input id="setTaxPct" type="number" min="0" max="60" step="0.5" inputmode="decimal"><i>%</i></div></div>
       <div class="set" style="display:block"><div class="sl"><b>Payment types <span class="help" data-help="Built-ins are EFTPOS, Cash, Square, Runs and Accounts. Add your own types here (e.g. PayPal, vouchers, tips) and they appear as cards in the calculator." aria-label="Help">?</span></b><p>Extra income cards on the shift form</p></div>
@@ -3640,8 +3640,12 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='16.17';
+var APP_VERSION='16.18';
 var CHANGELOG=[
+  {v:'16.18',date:'November 27, 2026',notes:[
+    ['Tax','BAS now works from your weekly totals: G1 is your weekly amounts from logged shifts (your share of EOS, accounts, runs and other operator-paid income) added up for the quarter. Cash, Square and fuel are left out. GST (1A) is 1/11 of that.'],
+    ['Tax','This is the new GST base setting (Settings \u2192 Pay & tax \u2192 GST base \u2192 Weekly totals) and it\u2019s switched on for you. Driver share and Full gross are still there if your tax agent says otherwise.'],
+  ]},
   {v:'16.17',date:'November 24, 2026',notes:[
     ['UI/UX','Reports now focus on your share only. Gross fares and the operator share are gone: the overview shows Your share, Per shift and Set aside; \u201cWhere your share goes\u201d splits your share into levy, GST, costs, tax and what you keep.'],
     ['UI/UX','The PDF report follows suit: no gross or operator figures in the tiles, split or tables. The BAS worksheet still shows G1 because that\u2019s what you copy onto the form.'],
@@ -4121,13 +4125,15 @@ var CHANGELOG=[
   ]}
 ];
 
-var settings=load('fareo_settings',{pct:55,levy:1.20,fuel:'Diesel',regos:['5088M'],theme:'dark',weekStart:4,creditedDay:5,autocomplete:true,fuelMode:'reimbursed',gstBase:'gross',state:'VIC'});
+var settings=load('fareo_settings',{pct:55,levy:1.20,fuel:'Diesel',regos:['5088M'],theme:'dark',weekStart:4,creditedDay:5,autocomplete:true,fuelMode:'reimbursed',gstBase:'weekly',basWeeklyV1:1,state:'VIC'});
 function migrateSettings(){
   if(!settings.regos||!settings.regos.length)settings.regos=['5088M'];
   if(settings.creditedDay==null)settings.creditedDay=5;
   if(settings.autocomplete==null)settings.autocomplete=true;
   if(settings.fuelMode!=='driver'&&settings.fuelMode!=='reimbursed')settings.fuelMode='reimbursed';
-  if(settings.gstBase!=='share'&&settings.gstBase!=='gross')settings.gstBase='gross';
+  if(settings.gstBase!=='share'&&settings.gstBase!=='gross'&&settings.gstBase!=='weekly')settings.gstBase='weekly';
+  /* 16.18: BAS works from weekly totals (switch once; the driver can change it back in Settings). */
+  if(!settings.basWeeklyV1){settings.gstBase='weekly';settings.basWeeklyV1=1}
   /* Cash & Square fares default to tax-free (left out of G1 and 1A). */
   if(settings.cashGstFree==null)settings.cashGstFree=true;
   /* State focus for address search (defaults to Victoria) */
@@ -5466,7 +5472,15 @@ function entryShareRatio(e){
   return settings.pct/100;
 }
 /* G1 — taxable sales only. Tax-free cash/Square is not included. */
+/* Driver-held income on a saved shift: cash, Square and custom driver-collected types. */
+function entryHeldOf(e){var h=(Number(e.cash)||0)+(Number(e.square)||0),c=e.custom||{};
+  (settings.payTypes||[]).forEach(function(pt){if(!pt.formula&&pt.collector==='driver')h+=Number(c[pt.id])||0});return h>0?h:0}
+/* Weekly-total basis for BAS: your share of operator-paid income only (EOS, accounts,
+   runs, operator custom types). Cash, Square and fuel reimbursement are left out. */
+function entryWeeklyBasis(e){var g=Number(e.gross)||0,sh=entryShare(e),p=g>0?sh/g:(settings.pct/100);var b=sh-entryHeldOf(e)*p;return b>0?b:0}
+function gstBaseLabel(){return settings.gstBase==='weekly'?'weekly totals (no cash, Square or fuel)':settings.gstBase==='share'?'driver share':'full fare'}
 function entrySales(e){
+  if(settings.gstBase==='weekly')return entryWeeklyBasis(e);
   var g=Number(e.gross)||0;
   var t=cashIsTaxFree()?g-entryCashSquare(e):g;
   if(t<0)t=0;
@@ -5475,6 +5489,7 @@ function entrySales(e){
 }
 /* Cash/Square left out of G1 when tax-free (for the copy card — not a BAS G3 box). */
 function entryTaxFreeCashAmt(e){
+  if(settings.gstBase==='weekly')return 0;
   if(!cashIsTaxFree())return 0;
   var n=entryCashSquare(e);
   if(settings.gstBase==='share')n=n*entryShareRatio(e);
@@ -8225,7 +8240,7 @@ function summaryHTML(light){var a=rangeAgg();
     +r('Gross revenue',money(a.gross))
     +r('Driver share',money(a.share))
     +r('Hail levy (expense from income, '+a.hailN+' trips)',money(a.levy))
-    +r('GST on sales (1/11 of taxable '+(settings.gstBase==='share'?'driver share':'fares')+'; tax-free cash/Square left out)',money(basValsFromAgg(a).oneA))
+    +r('GST on sales (1/11 of '+(settings.gstBase==='weekly'?'weekly totals; cash, Square and fuel left out':(settings.gstBase==='share'?'taxable driver share':'taxable fares')+'; tax-free cash/Square left out')+')',money(basValsFromAgg(a).oneA))
     +r('Fuel ('+a.fc+' fills): I paid '+money(a.fuelIPaid)+', operator paid '+money(a.fuelOpPaid),money(a.fuel))
     +r('GST credits (1B)',money(basValsFromAgg(a).oneB))+r('Deductible expenses (incl. levy)',money(a.dedTotal))
     +r('Est. net after GST & expenses',money(a.net),true)
@@ -8333,7 +8348,7 @@ function basSummaryHTML(light){
   var reset=light?'':'<button type="button" class="bas-reset'+(basIsDirty()?' on':'')+'" id="basReset">Reset to Fareo figures</button>';
   var g3Box=showG3?(light?boxStatic('G3','Other GST-free sales',g3):boxEdit('G3','Other GST-free sales',g3,'g3','basG3')):'';
   var freeBox=(cashIsTaxFree()&&(v.taxFree||0)>0)?boxStatic('\u2014','Tax-free cash / Square (not in G1)',v.taxFree):'';
-  var intro='Enter these on your ATO activity statement (whole dollars). Sales base: '+(settings.gstBase==='share'?'driver share':'full fare')+'. G1 is taxable sales only. Tax-free cash/Square is not in G1 or 1A. 1A is 1/11 of G1, including levy in those fares.';
+  var intro='Enter these on your ATO activity statement (whole dollars). Sales base: '+gstBaseLabel()+'. G1 is taxable sales only. Tax-free cash/Square is not in G1 or 1A. 1A is 1/11 of G1, including levy in those fares.';
   var body=
     '<div style="font-family:Inter,system-ui,sans-serif;color:'+c.head+'">'
     +'<h3 style="margin:0 0 2px;font-size:20px;color:'+c.head+'">BAS prep summary'+titleHelp+'</h3>'
@@ -8505,7 +8520,7 @@ function shiftsCsvRows(){
   var X=shiftExport(),out=[X.cols];
   X.rows.forEach(function(r){var e=r.e,v=r.v;out.push([e.date,DAYS[asDate(e.date).getDay()].slice(0,3),e.rego||'',n2(v.gross),n2(v.eos),n2(v.cash),n2(v.square),n2(v.acct),n2(v.runs),n2(v.other),n2(v.share),n2(v.op),n2(v.fi),n2(v.fo),n2(v.take),v.hail,n2(v.levy),n2(v.g1),n2(v.gst)])});
   var T=X.T;if(X.count)out.push(['Totals','',X.count+' shifts',n2(T.gross),n2(T.eos),n2(T.cash),n2(T.square),n2(T.acct),n2(T.runs),n2(T.other),n2(T.share),n2(T.op),n2(T.fi),n2(T.fo),n2(T.take),T.hail,n2(T.levy),n2(T.g1),n2(T.gst)]);
-  out.push([]);out.push(['Range',repRange.from+' to '+repRange.to]);out.push(['Driver share %',settings.pct]);out.push(['Levy per hail trip',n2(levyRate())]);out.push(['Cash & Square tax-free',cashIsTaxFree()?'Yes':'No']);out.push(['GST base',settings.gstBase==='share'?'Driver share':'Full gross']);out.push(['Exported',new Date().toLocaleString('en-AU')+' · Fareo '+APP_VERSION]);
+  out.push([]);out.push(['Range',repRange.from+' to '+repRange.to]);out.push(['Driver share %',settings.pct]);out.push(['Levy per hail trip',n2(levyRate())]);out.push(['Cash & Square tax-free',cashIsTaxFree()?'Yes':'No']);out.push(['GST base',settings.gstBase==='weekly'?'Weekly totals (no cash, Square or fuel)':settings.gstBase==='share'?'Driver share':'Full gross']);out.push(['Exported',new Date().toLocaleString('en-AU')+' · Fareo '+APP_VERSION]);
   return out;
 }
 $('#csvBtn').onclick=function(){
@@ -8515,7 +8530,7 @@ $('#csvBtn').onclick=function(){
 /* ---------- settings ---------- */
 function renderSettings(){try{updateWaUI()}catch(_){}
   $('#setPct').value=settings.pct;$('#setLevy').value=settings.levy;if($('#setLevyMode'))$('#setLevyMode').value=levyByAmount()?'amount':'trips';levyModeUI();$('#setFuel').value=settings.fuel;if($('#setEftpos'))$('#setEftpos').value=eftOn()?'eftpos':'normal';eftUI();$('#setTheme').value=settings.theme;
-  $('#setGstBase').value=settings.gstBase;
+  $('#setGstBase').value=settings.gstBase;gstBaseUI();
   var stState=$('#setState');if(stState)stState.value=settings.state||'VIC';
   $('#setCashGst').classList.toggle('on',!!settings.cashGstFree);
   var ac=$('#archiveCount');if(ac)ac.textContent=receipts.length;
@@ -8579,7 +8594,8 @@ $('#setFuel').onchange=function(){settings.fuel=this.value;persist()};
 if($('#setEftpos'))$('#setEftpos').onchange=function(){settings.eftpos=this.value==='eftpos';persist();eftUI();
   toast(eftOn()?'EFTPOS entry on: type 1250 for $12.50':'Normal entry: type amounts with a decimal point','success')};
 /* Fuel mode removed — always reimbursed */
-$('#setGstBase').onchange=function(){settings.gstBase=this.value;persist();toast(this.value==='share'?'GST set aside on driver share':'GST set aside on full gross')};
+$('#setGstBase').onchange=function(){settings.gstBase=this.value;persist();gstBaseUI();try{renderReports()}catch(_){}toast(this.value==='weekly'?'BAS from weekly totals (no cash, Square or fuel)':this.value==='share'?'GST set aside on driver share':'GST set aside on full gross')};
+function gstBaseUI(){var p=$('#gstBaseSub');if(p)p.textContent=settings.gstBase==='weekly'?'Weekly totals \u00b7 no cash, Square or fuel':'What BAS sales (G1) are worked out from'}
 $('#setCashGst').onclick=function(){settings.cashGstFree=!settings.cashGstFree;persist();this.classList.toggle('on',settings.cashGstFree);renderReports();toast(settings.cashGstFree?'Cash & Square: tax-free — not in G1 or 1A':'Cash & Square: GST applies (in G1)')};
 if($('#setState'))$('#setState').onchange=function(){settings.state=this.value;persist();toast('Address search focused on '+this.value)};
 if($('#setName'))$('#setName').oninput=function(){settings.driverName=this.value.trim().slice(0,24);persist();renderHub()};
@@ -10714,7 +10730,7 @@ function revealSetting(sel,focus){var el=typeof sel==='string'?$(sel):sel;if(!el
 function renderSettingsNav(){
   var S={};
   S.profile=((settings.driverName||'').trim()||'Add your name')+' · '+settings.regos.length+' rego'+(settings.regos.length===1?'':'s');
-  S.pay=settings.pct+'% share · levy '+money(levyRate())+' · GST on '+(settings.gstBase==='share'?'share':'gross');
+  S.pay=settings.pct+'% share · levy '+money(levyRate())+' · BAS on '+(settings.gstBase==='weekly'?'weekly totals':settings.gstBase==='share'?'share':'gross');
   S.shifts='Week starts '+DAYS[settings.weekStart].slice(0,3)+' · paid '+DAYS[settings.creditedDay].slice(0,3)+' · '+acctNames().length+' account'+(acctNames().length===1?'':'s');
   S.look=themeInfo(currentAccent()).n+' · '+{dark:'Dark',light:'Light',system:'Match device'}[settings.theme]+' · sounds '+(settings.sounds!==false?'on':'off')+(settings.calm?' · calm':'');
   var w=wxLoad();S.weather=settings.weather?('On'+(w&&w.place?' · '+w.place:'')):'Off';
