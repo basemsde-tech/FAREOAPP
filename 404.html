@@ -2506,6 +2506,23 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
 .rp-total{margin:8px 0 0;font:600 12px var(--mono);color:var(--mut);text-align:right}
 .rp-total b{color:var(--head)}
 @media (max-width:360px){.rp-row{grid-template-columns:minmax(0,1fr) 42px 58px 42px;gap:6px}.rp-l i{display:none}}
+
+/* ---------- Fareo 16.19 · Levy for several EOS ---------- */
+.hail-inl.is-parts .hi-row,.hail-inl.is-parts .hi-picks{display:none}
+.hi-parts{margin-top:10px}
+.hp-row{display:grid;grid-template-columns:minmax(0,1fr) 44px 76px 44px 30px;gap:7px;align-items:center;padding:5px 0}
+.hp-row+.hp-row{border-top:1px dashed var(--bd)}
+.hp-l{font:700 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.hp-btn{height:44px;font-size:21px}
+.hp-in{width:100%;height:44px;border-radius:12px;text-align:center;font:700 20px var(--mono);font-variant-numeric:tabular-nums;padding:0 4px}
+.hail-inl.is-money .hp-in{font-size:17px}
+.hp-in.bump{animation:hiBump .3s var(--ease)}
+.hp-x{width:30px;height:30px;border-radius:50%;border:0;background:transparent;color:var(--mut);font-size:19px;cursor:pointer}
+.hp-total{margin:8px 0 0;text-align:right;font:600 12.5px var(--mono);color:var(--mut)}
+.hp-total b{color:var(--head)}
+.hi-add{display:block;margin:10px auto 0;padding:6px 10px;border:0;background:transparent;color:var(--hail);font:600 13px inherit;font-family:inherit;cursor:pointer}
+.hi-add[hidden]{display:none}
+@media (max-width:360px){.hp-row{grid-template-columns:minmax(0,1fr) 38px 62px 38px 26px;gap:5px}}
 </style>
 </head>
 <body>
@@ -2633,6 +2650,8 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
           <button type="button" class="hi-btn" id="hiPlus" aria-label="One more">+</button>
         </div>
         <div class="hi-picks" id="hiPicks" role="group" aria-label="Quick picks"></div>
+        <div class="hi-parts" id="hiParts" hidden></div>
+        <button type="button" class="hi-add" id="hiAdd">+ Add another EOS</button>
         <p class="hi-ocr" id="hiOcr" hidden></p>
       </div>
       <div class="acct-net"><span>Net take-home</span><b id="acctNet">$0.00</b><small>Tap Next to attach slips &amp; share</small></div>
@@ -3640,8 +3659,12 @@ var RUN=5, RATE=1.20;
    Single source of truth. APP_VERSION drives the UI; add a new entry at the TOP
    of CHANGELOG for every release. `tag` values: Feature, UI/UX, Integration,
    Bug Fix, Maintenance, Tax. */
-var APP_VERSION='16.18';
+var APP_VERSION='16.19';
 var CHANGELOG=[
+  {v:'16.19',date:'November 28, 2026',notes:[
+    ['Feature','Levy for several EOS in a day: in the hail card at the end of Accounts, tap + Add another EOS to enter hail trips (or levy dollars) for each EOS. Fareo adds them up and uses the total everywhere.'],
+    ['UI/UX','If you\u2019ve entered more than one EOS, the card opens with a row for each one automatically. Remove a row with \u00d7; with one row left it goes back to the simple counter.'],
+  ]},
   {v:'16.18',date:'November 27, 2026',notes:[
     ['Tax','BAS now works from your weekly totals: G1 is your weekly amounts from logged shifts (your share of EOS, accounts, runs and other operator-paid income) added up for the quarter. Cash, Square and fuel are left out. GST (1A) is 1/11 of that.'],
     ['Tax','This is the new GST base setting (Settings \u2192 Pay & tax \u2192 GST base \u2192 Weekly totals) and it\u2019s switched on for you. Driver share and Full gross are still there if your tax agent says otherwise.'],
@@ -5968,8 +5991,56 @@ function hiRender(bump){
   var oc=$('#hiOcr'),fromOcr=!amt&&has&&eosReceipts.some(function(x){return x&&x.ocrHail!=null&&Number(x.ocrHail)===Number(draft.hail)});
   oc.hidden=!fromOcr;if(fromOcr)oc.textContent='Read from your EOS slip — check it matches.';
   if(bump){var w=card.querySelector('.hi-num');w.classList.remove('bump');void w.offsetWidth;w.classList.add('bump')}
+  hpAuto();hpRender();
   try{updateFooter()}catch(_){}
 }
+/* ---- Levy for several EOS in one day: one row per EOS, added up ----
+   draft.hailParts (trips) / draft.levyParts (dollars) feed draft.hail / draft.levyAmt,
+   so every calculation keeps using the single total. */
+function hpKey(){return levyByAmount()?'levyParts':'hailParts'}
+function hpOn(){var a=draft[hpKey()];return Array.isArray(a)&&a.length>=2}
+function hpClean(v){if(levyByAmount()){var n=Number(String(v==null?'':v).replace(/[^\d.]/g,''));return String(v).trim()===''||!isFinite(n)?'':String(Math.min(9999,round2(n)))}
+  return String(v==null?'':v).replace(/\D/g,'').replace(/^0+(?=\d)/,'').slice(0,3)}
+function hpSync(){var a=draft[hpKey()]||[],any=a.some(function(x){return String(x).trim()!==''}),t=a.reduce(function(s2,x){return s2+(levyByAmount()?nn(x):Math.round(nn(x)))},0);
+  if(levyByAmount())draft.levyAmt=any?String(round2(t)):'';else{draft.hail=any?t:'';var h=$('#hail');if(h)h.value=any?t:''}}
+function hpEosCount(){return (draft.eos||[]).filter(function(x){return nn(x)>0}).length}
+function hpAuto(){if(hpOn()||draft._hpAuto||hailEnteredOk())return;var n=hpEosCount();if(n>=2){draft[hpKey()]=Array(Math.min(n,6)).fill('');draft._hpAuto=1}}
+function hpRender(){
+  var card=$('#hailCard'),host=$('#hiParts');if(!card||!host)return;var on=hpOn(),amt=levyByAmount();
+  card.classList.toggle('is-parts',on);host.hidden=!on;
+  var add=$('#hiAdd');add.textContent=on?'+ Add EOS':'+ Add another EOS';add.hidden=on&&draft[hpKey()].length>=6;
+  if(!on)return;
+  var a=draft[hpKey()],sig=a.length+(amt?'$':'#');
+  if(host.dataset.sig!==sig){host.dataset.sig=sig;
+    host.innerHTML=a.map(function(x,i){return '<div class="hp-row" data-hp="'+i+'"><span class="hp-l">EOS '+(i+1)+'</span>'
+      +'<button type="button" class="hi-btn hp-btn" data-hpstep="'+i+':-1" aria-label="Less on EOS '+(i+1)+'">&minus;</button>'
+      +'<input class="hp-in" data-hpi="'+i+'" type="'+(amt?'number':'text')+'" '+(amt?'step="0.01" min="0" inputmode="decimal" placeholder="0.00"':'inputmode="numeric" pattern="[0-9]*" maxlength="3" placeholder="0"')+' autocomplete="off" enterkeyhint="next" aria-label="'+(amt?'Levy dollars':'Hail trips')+' on EOS '+(i+1)+'">'
+      +'<button type="button" class="hi-btn hp-btn" data-hpstep="'+i+':1" aria-label="More on EOS '+(i+1)+'">+</button>'
+      +'<button type="button" class="hp-x" data-hpx="'+i+'" aria-label="Remove EOS '+(i+1)+'">&times;</button></div>'}).join('')+'<p class="hp-total" id="hpTotal"></p>'}
+  $$('#hiParts [data-hpi]').forEach(function(inp){var i=Number(inp.dataset.hpi),v=a[i];if(document.activeElement!==inp)inp.value=v==null?'':(amt&&String(v)!==''&&eftOn()?Number(v).toFixed(2):String(v))});
+  $$('#hiParts [data-hpstep]').forEach(function(b){var k=b.dataset.hpstep.split(':');if(k[1]==='-1')b.disabled=nn(a[Number(k[0])])<=0});
+  var t=a.reduce(function(s2,x){return s2+(amt?nn(x):Math.round(nn(x)))},0),tt=$('#hpTotal');
+  if(tt)tt.innerHTML=amt?'Total levy <b>'+money(t)+'</b>':'Total <b>'+t+' trip'+(t===1?'':'s')+'</b> \u00b7 levy '+money(t*levyRate());
+}
+function hpSetPart(i,v,bump){var a=draft[hpKey()];if(!a)return;a[i]=hpClean(v);hpSync();$('#hailCard').classList.remove('is-need');persist();render();hiRender(false);
+  if(bump){var inp=$('#hiParts [data-hpi="'+i+'"]');if(inp){inp.classList.remove('bump');void inp.offsetWidth;inp.classList.add('bump')}}}
+function hpAdd(){var k=hpKey(),cur=hiVal();
+  if(!hpOn())draft[k]=[cur!=null?String(cur):'',''];else draft[k].push('');
+  draft._hpAuto=1;hpSync();persist();render();hiRender(false);
+  setTimeout(function(){var ins=$$('#hiParts [data-hpi]'),last=ins[ins.length-1];if(last)last.focus()},60)}
+function hpRemove(i){var k=hpKey(),a=draft[k];if(!a)return;a.splice(i,1);
+  if(a.length<2){var only=a[0]||'';draft[k]=null;if(levyByAmount())draft.levyAmt=only;else{draft.hail=only===''?'':Number(only);var h=$('#hail');if(h)h.value=only}}
+  else hpSync();
+  var host=$('#hiParts');if(host)host.dataset.sig='';persist();render();hiRender(false)}
+document.addEventListener('input',function(e){var t=e.target;if(!t.dataset||t.dataset.hpi==null)return;var i=Number(t.dataset.hpi),c=hpClean(t.value);
+  if(!levyByAmount()&&t.value!==c)t.value=c;hpSetPart(i,c,false)});
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-hpstep],[data-hpx],#hiAdd');if(!b)return;
+  if(b.id==='hiAdd'){hpAdd();sfx('tap');return}
+  if(b.dataset.hpx!=null){hpRemove(Number(b.dataset.hpx));sfx('tap');return}
+  var k=b.dataset.hpstep.split(':'),i=Number(k[0]),a=draft[hpKey()];if(!a)return;
+  var step=levyByAmount()?hiStep():1;hpSetPart(i,Math.max(0,nn(a[i])+Number(k[1])*step),true);sfx('tap')});
+document.addEventListener('keydown',function(e){var t=e.target;if(e.key!=='Enter'||!t.dataset||t.dataset.hpi==null)return;e.preventDefault();
+  var nx=$('#hiParts [data-hpi="'+(Number(t.dataset.hpi)+1)+'"]');if(nx)nx.focus();else t.blur()});
 function hiSet(v,bump){
   var amt=levyByAmount();
   if(v===''||v==null)v=null;
@@ -6000,7 +6071,7 @@ function isEftInput(el){
   if(!eftOn()||!el||el.tagName!=='INPUT')return false;
   if(el.matches(EFT_SEL))return true;
   if(el.dataset&&el.dataset.custom!=null)return el.placeholder!=='Count';
-  if(el.id==='hiInput')return levyByAmount();
+  if(el.id==='hiInput'||(el.dataset&&el.dataset.hpi!=null))return levyByAmount();
   return false;
 }
 function eftCentsOf(v){v=String(v==null?'':v).trim();if(!v)return 0;var n=Number(v);return isFinite(n)&&n>0?Math.round(n*100):0}
@@ -6246,7 +6317,7 @@ function saveShift(shared){
     accounts:acctT(),fuel:fuelT(),fuelIPaid:fuelIPaidT(),fuelOpPaid:fuelOpPaidT(),fuelByType:{Diesel:0,Petrol:0,LPG:0},
     custom:custom,hail:nn(draft.hail),levyMode:levyByAmount()?'amount':'trips',levyAmt:levyByAmount()?round2(nn(draft.levyAmt)):round2(nn(draft.hail)*levyRate()),eos:eosT(),runs:nn(draft.runs),receipt:draft.receipt,
     fuelCount:draft.fuel.filter(function(f){return nn(f.amount)>0}).length,
-    snap:JSON.parse(JSON.stringify({date:draft.date,rego:draft.rego,eos:draft.eos,cash:draft.cash,square:draft.square,accounts:draft.accounts,runs:draft.runs,runsAM:draft.runsAM,runsPM:draft.runsPM,fuel:draft.fuel,hail:draft.hail,levyAmt:draft.levyAmt,custom:draft.custom}))};
+    snap:JSON.parse(JSON.stringify({date:draft.date,rego:draft.rego,eos:draft.eos,cash:draft.cash,square:draft.square,accounts:draft.accounts,runs:draft.runs,runsAM:draft.runsAM,runsPM:draft.runsPM,fuel:draft.fuel,hail:draft.hail,levyAmt:draft.levyAmt,hailParts:draft.hailParts||null,levyParts:draft.levyParts||null,custom:draft.custom}))};
   draft.fuel.forEach(function(f){e.fuelByType[f.type]=(e.fuelByType[f.type]||0)+nn(f.amount)});
   draft.cash.forEach(function(c){addName(c.name)});draft.square.forEach(function(c){addName(c.name)});draft.accounts.forEach(function(a){addName(a.name)});
   var prevE=srcId!=null?entries.filter(function(x){return String(x.id)===String(srcId)})[0]:null,prevDate=prevE&&prevE.date,prevRego=prevE&&prevE.rego;
@@ -6616,6 +6687,7 @@ function loadEntryToCalc(e){var sp=e.snap;
       return src;
     })()};
   }
+  draft.hailParts=sp&&Array.isArray(sp.hailParts)?sp.hailParts.slice():null;draft.levyParts=sp&&Array.isArray(sp.levyParts)?sp.levyParts.slice():null;draft._hpAuto=1;
   draft.runsAM=sp&&sp.runsAM!=null?sp.runsAM:null;draft.runsPM=sp&&sp.runsPM!=null?sp.runsPM:null;runMigrate();runSync();
   draft.levyAmt=(e.levyMode==='amount')?String(nn(e.levyAmt)):(levyByAmount()&&(e.hail!=null&&String(e.hail)!=='')?String(round2(entryLevy(e))):'');
   clearReceiptAttach();
